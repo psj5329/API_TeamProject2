@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{35e3e648-b912-43be-8589-79db3819a865}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame">
+      <UniqueIdentifier>{ce38c8ff-4134-4a8d-8e5f-385c95d73302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object">
+      <UniqueIdentifier>{a1e38da1-9017-434c-806f-40ceaaef79c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene">
+      <UniqueIdentifier>{18dcbaef-f43f-46f9-974b-3ec65a15a637}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\Player">
+      <UniqueIdentifier>{8ecce340-2cd4-4f92-b178-9c30c4da888d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\Enemy">
+      <UniqueIdentifier>{d86582af-18f8-45bc-9236-5c25f0a7082f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\Item">
+      <UniqueIdentifier>{e6d51275-99f9-4395-acdf-8969d0a05a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\Effect">
+      <UniqueIdentifier>{2e48b76a-dad6-45a8-a022-14ed06f0fc6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\UI">
+      <UniqueIdentifier>{da73f517-364b-4421-bc02-a1e0d7ece762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Figure">
+      <UniqueIdentifier>{723c8272-fa69-473f-9346-b3d4c9b4cda5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\GameObject">
+      <UniqueIdentifier>{225d969b-4df3-4fe9-84eb-0e95c095d0f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Animation">
+      <UniqueIdentifier>{7d6cfbd4-a803-4db8-b67f-50e1600829b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Camera">
+      <UniqueIdentifier>{26a3b291-46b4-44c8-8d6a-1ae87d253c3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\GameEvent">
+      <UniqueIdentifier>{dc285809-f6a4-4b0b-89f9-83f7f8bfa354}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Input">
+      <UniqueIdentifier>{62682231-f0c6-4f1f-b396-e3a4e8c54792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Image">
+      <UniqueIdentifier>{b83288d9-b807-44b7-b7e1-dcc1d114d16a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Math">
+      <UniqueIdentifier>{720e58c9-ceec-48ba-b92b-dee1aa8ba1eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\ObjectManager">
+      <UniqueIdentifier>{043d6f56-c4fe-4ae2-945d-3303b289c93c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Scene">
+      <UniqueIdentifier>{358068c3-5fb5-43df-9811-ae8672cf036b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Random">
+      <UniqueIdentifier>{c34829a1-5ded-47ba-98c8-4b4c3a44cd2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Time">
+      <UniqueIdentifier>{f242cc04-6896-4910-b734-accd1ec53eab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\SoundManager">
+      <UniqueIdentifier>{7f66de29-675b-4b0c-9640-34d3ab885823}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Unrailed.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DefineHeader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Figure.h">
+      <Filter>Framework\Figure</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Framework\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Framework\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Framework\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>Framework\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEvent.h">
+      <Filter>Framework\GameEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEventManager.h">
+      <Filter>Framework\GameEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Framework\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Framework\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageManager.h">
+      <Filter>Framework\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Framework\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Framework\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Framework\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Framework\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Framework\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Framework\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="MainGame.h">
+      <Filter>MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScene.h">
+      <Filter>Framework\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Framework\SoundManager</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Unrailed.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Framework\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Framework\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Framework\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>Framework\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEvent.cpp">
+      <Filter>Framework\GameEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEventManager.cpp">
+      <Filter>Framework\GameEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Framework\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Framework\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageManager.cpp">
+      <Filter>Framework\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Framework\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Framework\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Framework\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Framework\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>Framework\Random</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Framework\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGame + MainProc.cpp">
+      <Filter>MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGame.cpp">
+      <Filter>MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScene.cpp">
+      <Filter>Framework\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Framework\SoundManager</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Unrailed.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Unrailed.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
