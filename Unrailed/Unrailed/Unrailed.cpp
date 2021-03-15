@@ -4,7 +4,7 @@
 HINSTANCE	_hInstance;		//APP 고유번호
 HWND		_hWnd;			//나중에 (그럴일은 없지만) WinAPI창을 여러개 생성했을 때 각 창을 컨트롤할 수 있는 Hanlder가 필요하다. 그게 바료 요 녀석
 
-wstring _className = L"플밍26기";	//유니코드는 아스키코드랑 다르게 2byte씩 처리한다(한글등등 그런 언어들을 처리하기 위해서) 
+wstring _className = L"Unrailed";	//유니코드는 아스키코드랑 다르게 2byte씩 처리한다(한글등등 그런 언어들을 처리하기 위해서) 
 
 POINT _mousePosition;	//마우스 좌표
 
@@ -82,6 +82,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		{
 			Time::GetInstance()->Update();
 			SoundManager::GetInstance()->Update();
+			Input::GetInstance()->Update();
+
 			_mainGame->Update();
 			_mainGame->Render(hdc);
 		}

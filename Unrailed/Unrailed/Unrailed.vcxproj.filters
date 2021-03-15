@@ -195,6 +195,9 @@
     <ClInclude Include="Sableye.h">
       <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>MainGame\Object\Unit\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -280,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="Sableye.cpp">
       <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>MainGame\Object\Unit\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
