@@ -3,6 +3,25 @@
 
 void Scene2::Init()
 {
+	for (int i = 0; i < 3; i++)
+	{
+		Voltorb* temp = new Voltorb;
+		temp->Init();
+		temp->SetX(WINSIZEX / 2 - 50 * i);
+		mVoltorbVec.push_back(temp);
+	}
+
+	mVoltorbVec[0]->SetImage(0);
+	mVoltorbVec[1]->SetImage(1);
+	mVoltorbVec[2]->SetImage(1);
+
+	mVoltorbVec[0]->SetY(WINSIZEY / 2 - 10);
+
+	mMachop = new Machop;
+	mMachop->Init();
+
+	mAbra = new Abra;
+	mAbra->Init();
 }
 
 void Scene2::Release()
@@ -11,6 +30,14 @@ void Scene2::Release()
 
 void Scene2::Update()
 {
+	for (int i = 0; i < mVoltorbVec.size(); i++)
+	{
+		mVoltorbVec[i]->Update();
+	}
+
+	mMachop->Update();
+
+	mAbra->Update();
 }
 
 void Scene2::Render(HDC hdc)
@@ -29,4 +56,14 @@ void Scene2::Render(HDC hdc)
 
 	wstring strScene = L"ÀÌ°Ç 2¹ø ¾À";
 	TextOut(hdc, WINSIZEX / 2 - 15, WINSIZEY / 2, strScene.c_str(), strScene.length());
+
+
+	for (int i = 0; i < mVoltorbVec.size(); i++)
+	{
+		mVoltorbVec[i]->Render(hdc);
+	}
+
+	mMachop->Render(hdc);
+
+	mAbra->Render(hdc);
 }

@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Abra.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="LoadingScene.h" />
+    <ClInclude Include="Machop.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="MapToolScene.h" />
@@ -189,10 +191,13 @@
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="Train.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Unrailed.h" />
+    <ClInclude Include="Voltorb.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Abra.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -207,6 +212,7 @@
     <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
+    <ClCompile Include="Machop.cpp" />
     <ClCompile Include="MainGame + MainProc.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="MapObject.cpp" />
@@ -229,8 +235,10 @@
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Train.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Unrailed.cpp" />
+    <ClCompile Include="Voltorb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Unrailed.rc" />
