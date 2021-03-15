@@ -32,6 +32,7 @@ private:
 	wstring mFileName;
 	bool mIsTrans;
 	COLORREF mTransColor;
+	wstring mKeyName;
 
 	ImageBuffer* mBlendImageBuffer;
 	BLENDFUNCTION* mBlendFunc;
@@ -43,8 +44,8 @@ public:
 
 public:
 	bool CreateEmpty(int width, int height);
-	bool LoadFromFile(wstring fileName, int width, int height, bool isTrans, COLORREF transColor = RGB(255,0,255));
-	bool LoadFromFile(wstring fileName, int width, int height, int frameX, int frameY, bool isTrans, COLORREF transColor = RGB(255,0,255));
+	bool LoadFromFile(wstring keyName, wstring fileName, int width, int height, bool isTrans, COLORREF transColor = RGB(255,0,255));
+	bool LoadFromFile(wstring keyName, wstring fileName, int width, int height, int frameX, int frameY, bool isTrans, COLORREF transColor = RGB(255,0,255));
 
 public:
 	void Render(HDC hdc, int x, int y);
@@ -65,5 +66,6 @@ public:
 	inline int GetFrameHeight()const { return mImageBuffer->frameHeight; }
 	inline int GetWidth()const { return mImageBuffer->width; }
 	inline int GetHeight()const { return mImageBuffer->height; }
+	inline wstring GetKeyName()const { return mKeyName; }
 };
 

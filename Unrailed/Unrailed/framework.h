@@ -13,6 +13,9 @@
 #include <vector>
 #include <map>
 #include <queue>
+#include <functional>
+#include <fstream>
+#include <stack>
 
 using namespace std;
 
@@ -38,6 +41,7 @@ using namespace std;
 #include "ObjectManager.h"
 #include "SceneManager.h"
 #include "GameEventManager.h"
+#include "Gizmo.h"
 
 extern POINT _mousePosition;	//마우스 좌표
 extern HWND	_hWnd;

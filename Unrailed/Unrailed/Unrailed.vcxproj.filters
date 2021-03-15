@@ -97,6 +97,21 @@
     <Filter Include="MainGame\Scene\Scene4">
       <UniqueIdentifier>{f21fbff4-7488-4660-ad35-df0c856e45d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\MapToolScene">
+      <UniqueIdentifier>{85c0b620-96f0-4063-8591-16441c3b6ba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\MapObject">
+      <UniqueIdentifier>{58872083-43ef-43f7-8a2d-fa92a33667de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\MapRelated">
+      <UniqueIdentifier>{050f3681-9e12-484a-8ee1-63846a60eb49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Button">
+      <UniqueIdentifier>{475ab4c2-251a-42e7-82e2-861c52d48935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Gizmo">
+      <UniqueIdentifier>{f7b6a60f-ea0f-41d7-a495-b76bb0e2f6e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -195,6 +210,27 @@
     <ClInclude Include="Sableye.h">
       <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
     </ClInclude>
+    <ClInclude Include="MapToolScene.h">
+      <Filter>MainGame\Scene\MapToolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="MapObject.h">
+      <Filter>MainGame\Object\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ICommand.h">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Framework\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmo.h">
+      <Filter>Framework\Gizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -280,6 +316,27 @@
     </ClCompile>
     <ClCompile Include="Sableye.cpp">
       <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
+    </ClCompile>
+    <ClCompile Include="MapToolScene.cpp">
+      <Filter>MainGame\Scene\MapToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="MapObject.cpp">
+      <Filter>MainGame\Object\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ICommand.cpp">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Framework\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmo.cpp">
+      <Filter>Framework\Gizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

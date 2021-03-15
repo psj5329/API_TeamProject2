@@ -11,6 +11,7 @@
 #include "Scene2.h"
 #include "Scene3.h"
 #include "Scene4.h"
+#include "MapToolScene.h"
 
 void MainGame::Init()
 {
@@ -22,6 +23,7 @@ void MainGame::Init()
 	SceneManager::GetInstance()->AddScene(L"Scene2", new Scene2);
 	SceneManager::GetInstance()->AddScene(L"Scene3", new Scene3);
 	SceneManager::GetInstance()->AddScene(L"Scene4", new Scene4);
+	SceneManager::GetInstance()->AddScene(L"MapToolScene", new MapToolScene);
 
 	Camera* mainCamera = new Camera;
 	mainCamera->Init();
@@ -62,13 +64,18 @@ void MainGame::Update()
 	}
 	else if (Input::GetInstance()->GetKeyDown('3'))
 	{
+		//SCENEMANAGER->LoadScene(L"MapToolScene");
 		SCENEMANAGER->LoadScene(L"Scene3");
 	}
 	else if (Input::GetInstance()->GetKeyDown('4'))
 	{
 		SCENEMANAGER->LoadScene(L"Scene4");
 	}
-
+	else if (Input::GetInstance()->GetKeyDown('5'))
+	{
+		SCENEMANAGER->LoadScene(L"MapToolScene");
+	}
+	
 	SceneManager::GetInstance()->Update();
 }
 

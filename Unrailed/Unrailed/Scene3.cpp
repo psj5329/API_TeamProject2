@@ -1,8 +1,17 @@
 #include "pch.h"
 #include "Scene3.h"
+//#include "Player.h"
+#include "TileMap.h"
+#include "MapToolScene.h"
 
 void Scene3::Init()
 {
+	//mPlayer = new Player();
+	//mPlayer->Init();
+
+	mTileMap = new TileMap();
+	mTileMap->Init(TileCountX, TileCountY, TileSize);
+	mTileMap->LoadMap();
 }
 
 void Scene3::Release()
@@ -11,6 +20,13 @@ void Scene3::Release()
 
 void Scene3::Update()
 {
+	mTileMap->Update();
+
+	if (Input::GetInstance()->GetKeyDown(VK_SPACE))
+	{
+		mTileMap->LoadMap();
+	}
+
 }
 
 void Scene3::Render(HDC hdc)
@@ -26,7 +42,13 @@ void Scene3::Render(HDC hdc)
 	TextOut(hdc, 10, 25, strDeltaTime.c_str(), strDeltaTime.length());
 	TextOut(hdc, 10, 40, strFPS.c_str(), strFPS.length());
 
+	mTileMap->Render(hdc);
 
-	wstring strScene = L"ÀÌ°Ç 3¹ø ¾À";
-	TextOut(hdc, WINSIZEX / 2 - 15, WINSIZEY / 2, strScene.c_str(), strScene.length());
+	wstring str3 = L"SPACE ¸Ê·Îµå";
+	TextOut(hdc, _mousePosition.x + 10, _mousePosition.y + 40, str3.c_str(), str3.length());
+
+
+
+	//wstring strScene = L"ÀÌ°Ç 3¹ø ¾À";
+	//TextOut(hdc, WINSIZEX / 2 - 15, WINSIZEY / 2, strScene.c_str(), strScene.length());
 }
