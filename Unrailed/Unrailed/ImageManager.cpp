@@ -23,7 +23,7 @@ void ImageManager::LoadFromFile(wstring key, wstring filePath, int width, int he
 	}
 
 	Image* newImage = new Image();
-	newImage->LoadFromFile(filePath, width, height, isTrans, transColor);
+	newImage->LoadFromFile(key, filePath, width, height, isTrans, transColor);
 
 	mImageList.insert(make_pair(key, newImage));
 }
@@ -37,7 +37,7 @@ void ImageManager::LoadFromFile(wstring key, wstring filePath, int width, int he
 	}
 
 	Image* newImage = new Image();
-	newImage->LoadFromFile(filePath, width, height,frameX,frameY, isTrans, transColor);
+	newImage->LoadFromFile(key, filePath, width, height,frameX,frameY, isTrans, transColor);
 
 	mImageList.insert(make_pair(key, newImage));
 }
