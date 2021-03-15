@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "SoundManager.h"
 
+Singleton_NULL(SoundManager)
+
 using namespace FMOD;
 
 SoundManager::SoundManager()

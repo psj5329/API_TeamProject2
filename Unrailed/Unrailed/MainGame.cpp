@@ -2,27 +2,73 @@
 #include "MainGame.h"
 
 #include "Image.h"
+#include "Camera.h"
+
+#include "CameraManager.h"
+#include "ObjectManager.h"
+
+#include "Scene1.h"
+#include "Scene2.h"
+#include "Scene3.h"
+#include "Scene4.h"
 
 void MainGame::Init()
 {
 	mBackBuffer = new Image();
 	mBackBuffer->CreateEmpty(WINSIZEX, WINSIZEY);
 
-	/*SceneManager::GetInstance()->AddScene(L"Scene1", new Scene1);
+	// 나중에 정리하기
+	SceneManager::GetInstance()->AddScene(L"Scene1", new Scene1);
+	SceneManager::GetInstance()->AddScene(L"Scene2", new Scene2);
+	SceneManager::GetInstance()->AddScene(L"Scene3", new Scene3);
+	SceneManager::GetInstance()->AddScene(L"Scene4", new Scene4);
 
-	SceneManager::GetInstance()->LoadScene(L"Scene1");*/
+	Camera* mainCamera = new Camera;
+	mainCamera->Init();
+	mainCamera->SetX(WINSIZEX / 2);
+	mainCamera->SetY(WINSIZEY / 2);
+	
+	CAMERAMANAGER->SetMainCamera(mainCamera);
+
+	//SceneManager::GetInstance()->LoadScene(L"Scene1");
 }
 
 void MainGame::Release()
 {
-	Random::ReleaseInstance();	//싱글톤 인스턴스 삭제
-
 	SafeDelete(mBackBuffer);
 
+	Camera* camera = CAMERAMANAGER->GetMainCamera();
+	SafeDelete(camera);
+	CameraManager::ReleaseInstance();
+
+	ObjectManager::ReleaseInstance();
+	SceneManager::ReleaseInstance();
+	ImageManager::ReleaseInstance();
+
+	Input::ReleaseInstance();
+	Random::ReleaseInstance();
+	Time::ReleaseInstance();
 }
 
 void MainGame::Update()
 {
+	if (Input::GetInstance()->GetKeyDown('1'))
+	{
+		SCENEMANAGER->LoadScene(L"Scene1");
+	}
+	else if (Input::GetInstance()->GetKeyDown('2'))
+	{
+		SCENEMANAGER->LoadScene(L"Scene2");
+	}
+	else if (Input::GetInstance()->GetKeyDown('3'))
+	{
+		SCENEMANAGER->LoadScene(L"Scene3");
+	}
+	else if (Input::GetInstance()->GetKeyDown('4'))
+	{
+		SCENEMANAGER->LoadScene(L"Scene4");
+	}
+
 	SceneManager::GetInstance()->Update();
 }
 
@@ -54,5 +100,9 @@ void MainGame::RenderTime(HDC hdc)
 	TextOut(hdc, 10, 10, strWorldTime.c_str(), strWorldTime.length());
 	TextOut(hdc, 10, 25, strDeltaTime.c_str(), strDeltaTime.length());
 	TextOut(hdc, 10, 40, strFPS.c_str(), strFPS.length());
+
+
+	/*wstring strScene = L"여긴 메인, 1~4 눌러서 씬 넘어가자";
+	TextOut(hdc, WINSIZEX / 2 - 50, WINSIZEY / 2, strScene.c_str(), strScene.length());*/
 }
 

@@ -16,12 +16,27 @@
 }
 
 #define Singleton(ClassName)\
+static ClassName* instance;\
 public:\
-static ClassName* GetInstance()\
-{\
-	static ClassName instance;\
-	return &instance;\
-}
+	static ClassName* GetInstance()\
+	{\
+		if (instance == NULL)\
+		{\
+			instance = new ClassName();\
+		}\
+		return instance;\
+	}\
+	static void ReleaseInstance()\
+	{\
+		if (instance != NULL)\
+		{\
+			delete instance;\
+			instance = NULL;\
+		}\
+	}
+
+#define Singleton_NULL(ClassName)\
+ClassName* ClassName::instance = NULL;
 
 #define Resources(Path) (wstring(L"../Resources/").append(Path).append(L".bmp"))
 

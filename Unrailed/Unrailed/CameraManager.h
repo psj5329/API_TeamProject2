@@ -11,3 +11,4 @@ public:
 	inline class Camera* GetMainCamera()const { return mMainCamera; }
 };
 
+#define CAMERAMANAGER CameraManager::GetInstance()

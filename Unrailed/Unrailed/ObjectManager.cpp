@@ -3,6 +3,8 @@
 
 #include "GameObject.h"
 
+Singleton_NULL(ObjectManager)
+
 ObjectManager::ObjectManager()
 {
 	for (int i = 0; i < (int)ObjectLayer::End; ++i)

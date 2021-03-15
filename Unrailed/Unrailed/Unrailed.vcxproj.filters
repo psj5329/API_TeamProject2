@@ -25,12 +25,6 @@
     <Filter Include="MainGame\Scene">
       <UniqueIdentifier>{18dcbaef-f43f-46f9-974b-3ec65a15a637}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\Object\Player">
-      <UniqueIdentifier>{8ecce340-2cd4-4f92-b178-9c30c4da888d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MainGame\Object\Enemy">
-      <UniqueIdentifier>{d86582af-18f8-45bc-9236-5c25f0a7082f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\Object\Item">
       <UniqueIdentifier>{e6d51275-99f9-4395-acdf-8969d0a05a37}</UniqueIdentifier>
     </Filter>
@@ -78,6 +72,30 @@
     </Filter>
     <Filter Include="Framework\SoundManager">
       <UniqueIdentifier>{7f66de29-675b-4b0c-9640-34d3ab885823}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\Unit">
+      <UniqueIdentifier>{16977e05-987b-4d22-a602-2112979bcb34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\Unit\Enemy">
+      <UniqueIdentifier>{d86582af-18f8-45bc-9236-5c25f0a7082f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\Unit\Enemy\Sableye">
+      <UniqueIdentifier>{89315e1b-212e-41af-9a19-c15b88adcd3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\Unit\Player">
+      <UniqueIdentifier>{8ecce340-2cd4-4f92-b178-9c30c4da888d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Scene1">
+      <UniqueIdentifier>{6dfac4f5-fb19-44e0-be86-a02af50030d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Scene2">
+      <UniqueIdentifier>{58d43f4c-f38e-4e90-8574-eed6a4ba6669}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Scene3">
+      <UniqueIdentifier>{00a6dd87-9bdb-40a2-94ef-bc9d5fad7bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Scene4">
+      <UniqueIdentifier>{f21fbff4-7488-4660-ad35-df0c856e45d8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +174,27 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Framework\SoundManager</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>MainGame\Object\Unit\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>MainGame\Object\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene1.h">
+      <Filter>MainGame\Scene\Scene1</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene2.h">
+      <Filter>MainGame\Scene\Scene2</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene3.h">
+      <Filter>MainGame\Scene\Scene3</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene4.h">
+      <Filter>MainGame\Scene\Scene4</Filter>
+    </ClInclude>
+    <ClInclude Include="Sableye.h">
+      <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -220,6 +259,27 @@
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>Framework\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>MainGame\Object\Unit\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>MainGame\Object\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene1.cpp">
+      <Filter>MainGame\Scene\Scene1</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene2.cpp">
+      <Filter>MainGame\Scene\Scene2</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene3.cpp">
+      <Filter>MainGame\Scene\Scene3</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene4.cpp">
+      <Filter>MainGame\Scene\Scene4</Filter>
+    </ClCompile>
+    <ClCompile Include="Sableye.cpp">
+      <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

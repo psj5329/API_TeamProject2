@@ -1,14 +1,5 @@
 #pragma once
 
-//std::pair가 요런 느낌으로 되어 있다.
-//template<typename First,typename Second>
-//struct Pair
-//{
-//	First first;
-//	Second second;
-//};
-
-//프레임 돌릴 때
 class Animation
 {
 	bool mIsPlay;	//플레이중이냐
