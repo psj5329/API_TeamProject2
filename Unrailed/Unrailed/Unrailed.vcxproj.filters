@@ -230,6 +230,7 @@
     </ClInclude>
     <ClInclude Include="Gizmo.h">
       <Filter>Framework\Gizmo</Filter>
+    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>MainGame\Object\Unit\Player</Filter>
     </ClInclude>
@@ -339,6 +340,7 @@
     </ClCompile>
     <ClCompile Include="Gizmo.cpp">
       <Filter>Framework\Gizmo</Filter>
+    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>MainGame\Object\Unit\Player</Filter>
     </ClCompile>
