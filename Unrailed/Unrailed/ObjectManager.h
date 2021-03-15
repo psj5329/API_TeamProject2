@@ -1,10 +1,11 @@
 #pragma once
 
-enum ObjectLayer { Background,  Player, Enemey, UI, End };
+enum ObjectLayer { Background, PLAYER, ENEMY, UI, End };
 
 class ObjectManager
 {
 	Singleton(ObjectManager)
+
 private:
 	typedef map<ObjectLayer, vector<class GameObject*>>::iterator ObjectIter;
 	map<ObjectLayer, vector<class GameObject*>> mObjectList;
