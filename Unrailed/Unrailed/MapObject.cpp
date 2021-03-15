@@ -29,6 +29,9 @@ void MapObject::Update()
 
 void MapObject::Render(HDC hdc)
 {
-	if (mImage != nullptr)
-		mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+	if (mType != MapObjectType::None)
+	{
+		if (mImage != nullptr)
+			mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+	}
 }

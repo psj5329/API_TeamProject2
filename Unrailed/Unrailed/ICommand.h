@@ -93,6 +93,7 @@ class IPlaceObject : public ICommand
 	wstring mSaveImageKey;
 	int mSaveFrameX;
 	int mSaveFrameY;
+	int mSaveType;
 	//TilePallete mSavePallete;
 
 	MapObjectPallete mExecutePalleteData;
@@ -108,6 +109,7 @@ public:
 			mSaveImageKey = object->GetImage()->GetKeyName();
 		mSaveFrameX = object->GetFrameIndexX();
 		mSaveFrameY = object->GetFrameIndexY();
+		mSaveType = (int)object->GetMapObjectType();
 
 	}
 	void Execute()
@@ -115,6 +117,7 @@ public:
 		mTargetObject->SetImage(ImageManager::GetInstance()->FindImage(mExecutePalleteData.image->GetKeyName()));
 		mTargetObject->SetFrameIndexX(mExecutePalleteData.frameX);
 		mTargetObject->SetFrameIndexY(mExecutePalleteData.frameY);
+		mTargetObject->SetObjectType(mExecutePalleteData.type);
 	}
 	void Reset()override
 	{

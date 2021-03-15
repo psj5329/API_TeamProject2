@@ -94,9 +94,9 @@ void TileMap::LoadMap()
 	ifstream loadStream(L"../Data/Test.txt");
 	if (loadStream.is_open())
 	{
-		for (int y = 0; y < mTileCountY; ++y)
+		for (int y = 0; y < TileCountY; ++y)
 		{
-			for (int x = 0; x < mTileCountX; ++x)
+			for (int x = 0; x < TileCountX; ++x)
 			{
 				string key;
 				int frameX;
@@ -105,6 +105,7 @@ void TileMap::LoadMap()
 				string objectKey;
 				int objectFrameX;
 				int objectFrameY;
+				int objectType;
 				string buffer;
 
 
@@ -122,9 +123,10 @@ void TileMap::LoadMap()
 				objectKey = buffer;
 				getline(loadStream, buffer, ',');
 				objectFrameX = stoi(buffer);
-				getline(loadStream, buffer);
+				getline(loadStream, buffer, ',');
 				objectFrameY = stoi(buffer);
-
+				getline(loadStream, buffer);
+				objectType = stoi(buffer);
 
 				wstring wstr;
 				wstr.assign(key.begin(), key.end());
@@ -142,7 +144,9 @@ void TileMap::LoadMap()
 				}
 				mMapObjectList[y][x]->SetFrameIndexX(objectFrameX);
 				mMapObjectList[y][x]->SetFrameIndexY(objectFrameY);
+				mMapObjectList[y][x]->SetObjectType(objectType);
 			}
 		}
 	}
+
 }
