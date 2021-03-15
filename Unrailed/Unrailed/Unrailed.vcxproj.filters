@@ -97,6 +97,9 @@
     <Filter Include="MainGame\Scene\Scene4">
       <UniqueIdentifier>{f21fbff4-7488-4660-ad35-df0c856e45d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Object\Unit\Train">
+      <UniqueIdentifier>{265683f0-bda7-4a75-b0bb-975a3479a146}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -195,6 +198,18 @@
     <ClInclude Include="Sableye.h">
       <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
     </ClInclude>
+    <ClInclude Include="Abra.h">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClInclude>
+    <ClInclude Include="Machop.h">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClInclude>
+    <ClInclude Include="Voltorb.h">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClInclude>
+    <ClInclude Include="Train.h">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -280,6 +295,18 @@
     </ClCompile>
     <ClCompile Include="Sableye.cpp">
       <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
+    </ClCompile>
+    <ClCompile Include="Abra.cpp">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClCompile>
+    <ClCompile Include="Machop.cpp">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClCompile>
+    <ClCompile Include="Voltorb.cpp">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClCompile>
+    <ClCompile Include="Train.cpp">
+      <Filter>MainGame\Object\Unit\Train</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

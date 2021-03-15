@@ -23,32 +23,32 @@
     <ProjectGuid>{E1E42075-7268-4FCB-B76E-44EB3E2531CF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Unrailed</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Abra.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraManager.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="LoadingScene.h" />
+    <ClInclude Include="Machop.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="ObjectManager.h" />
@@ -181,10 +183,13 @@
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="Train.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Unrailed.h" />
+    <ClInclude Include="Voltorb.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Abra.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraManager.cpp" />
@@ -196,6 +201,7 @@
     <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
+    <ClCompile Include="Machop.cpp" />
     <ClCompile Include="MainGame + MainProc.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Math.cpp" />
@@ -213,8 +219,10 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Train.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Unrailed.cpp" />
+    <ClCompile Include="Voltorb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Unrailed.rc" />

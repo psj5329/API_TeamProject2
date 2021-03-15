@@ -13,7 +13,7 @@
 #include <vector>
 #include <map>
 #include <queue>
-
+#include <functional>
 using namespace std;
 
 //64비트일 경우에는 해당 라이브러리 불러오게
