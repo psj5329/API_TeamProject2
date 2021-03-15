@@ -30,6 +30,8 @@ enum Form
 	FormEnd
 };
 
+#define TileSize 48 // 맵툴씬에 있는 define 이동하면 얘 지우기
+
 class Image;
 class Animation;
 
@@ -71,6 +73,9 @@ class Player : public GameObject
 	float mChangeT;
 
 	float mIsDirectionKeyDown;
+
+	int mTileX;
+	int mTileY;
 
 public:
 	Player(const string& name, float x, float y);

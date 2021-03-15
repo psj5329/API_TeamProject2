@@ -35,6 +35,9 @@ void Player::Init()
 	mChangeT = 0.f;
 
 	mIsDirectionKeyDown = false;
+
+	mTileX = 0;
+	mTileY = 0;
 }
 
 void Player::Release()
@@ -44,6 +47,12 @@ void Player::Release()
 
 void Player::Update()
 {
+	mTileX = (int)(mX / TileSize);
+	mTileY = (int)(mY / TileSize);
+	// 현재 플레이어 사이즈 늘려주면서 mx, my가 제대로 잡히지 않고 있음, 타일은 스케일링 어떻게 하고 있는지 파악하기
+	// 플레이어는 그냥 현재 이미지에 렌더만 배수 늘려줘서 이상함
+	// 원래 크기로는 딱 중심, 2배 크기로는 왼쪽 윗부분 잡힘
+
 	InputDirectionKey();
 
 	ChangeForm();
@@ -165,7 +174,7 @@ void Player::Render(HDC hdc)
 			mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(),
 			mImage->GetFrameWidth() * 2, mImage->GetFrameHeight() * 2);*/
 
-			// 임시로 카메라 고정형 렌더링
+	// 임시로 카메라 고정형 렌더링
 	mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,
 		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(),
 		mImage->GetFrameWidth() * 2, mImage->GetFrameHeight() * 2);
@@ -185,6 +194,9 @@ void Player::Render(HDC hdc)
 	wstring strKeyDown = L"IsKeyDownCheck: " + to_wstring(mIsDirectionKeyDown);
 	TextOut(hdc, _mousePosition.x, _mousePosition.y, strSpeed.c_str(), (int)strSpeed.length());
 	TextOut(hdc, _mousePosition.x, _mousePosition.y + 25, strKeyDown.c_str(), (int)strKeyDown.length());
+
+	wstring strTile = L"타일 x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
+	TextOut(hdc, _mousePosition.x, _mousePosition.y + 50, strTile.c_str(), (int)strTile.length());
 }
 
 void Player::InitAnimation()
