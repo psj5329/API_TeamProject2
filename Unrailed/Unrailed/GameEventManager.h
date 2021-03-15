@@ -1,11 +1,13 @@
 #pragma once
 
+class IEvent;
 class GameEventManager
 {
 	Singleton(GameEventManager)
 
 private:
-	vector<class IEvent*> mEventQueue;
+	queue<IEvent*> mEventQueue;	// 큐로 바꿔보았다
+								// 근데 이벤트 쓰긴 할까?
 
 public:
 	GameEventManager();
@@ -14,6 +16,6 @@ public:
 	void RemoveAllEvent();
 	void Update();
 
-	void PushEvent(class IEvent* event);
+	void PushEvent(IEvent* event);
 };
 

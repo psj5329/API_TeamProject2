@@ -3,6 +3,8 @@
 
 #include "Image.h"
 
+Singleton_NULL(ImageManager)
+
 ImageManager::~ImageManager()
 {
 	ImageIter iter = mImageList.begin();
@@ -47,6 +49,6 @@ Image * ImageManager::FindImage(wstring key)
 	{
 		return iter->second;
 	}
-	//nullptr : 0인데 포인터에서만 쓸 수 있는 0
-	return NULL;
+
+	return nullptr;
 }

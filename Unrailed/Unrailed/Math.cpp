@@ -32,3 +32,8 @@ float Math::Lerp(float start, float end, float ratio)
 {
 	return start + (end - start) * ratio;
 }
+
+float Math::DiagonalLength(float a, float b)
+{
+	return sqrtf(pow(a, 2) + pow(b, 2));
+}

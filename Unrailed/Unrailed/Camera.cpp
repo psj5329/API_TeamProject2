@@ -5,10 +5,7 @@
 
 void Camera::Init()
 {
-	mMode = Mode::Follow;
-	//mTarget = nullptr;
-	//mX = WINSIZEX / 2;
-	//mY = WINSIZEY / 2;
+	mMode = Mode::Free;
 	mSizeX = WINSIZEX;
 	mSizeY = WINSIZEY;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -17,7 +14,6 @@ void Camera::Init()
 
 void Camera::Release()
 {
-	//얘도 쓸일이 없다 . . . 
 }
 
 void Camera::Update()
@@ -27,9 +23,6 @@ void Camera::Update()
 	case Camera::Mode::Follow:
 		if (mTarget)
 		{
-			//mX = mTarget->GetX();
-			//mY = mTarget->GetY();
-			//멀리있으면 빨리 쫓아가야하고 가까이 있으면 천천히 쫓아가야함
 			mX = Math::Lerp(mX, mTarget->GetX(), 2.f * Time::GetInstance()->DeltaTime());
 			mY = Math::Lerp(mY, mTarget->GetY(), 2.f * Time::GetInstance()->DeltaTime());
 
@@ -48,7 +41,6 @@ void Camera::Update()
 
 void Camera::Render(HDC hdc)
 {
-	//쓸일이 없다 . . . . 
 }
 
 void Camera::Render(HDC hdc, Image * image, int x, int y)

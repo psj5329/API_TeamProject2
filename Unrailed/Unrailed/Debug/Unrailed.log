@@ -1,65 +1,10 @@
-﻿  pch.cpp
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\figure.h(46): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\figure.h(47): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Animation.cpp
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\animation.cpp(27): warning C4018: '>=': signed 또는 unsigned가 일치하지 않습니다.
-  Camera.cpp
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\camera.cpp(14): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\camera.cpp(36): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\camera.cpp(44): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\camera.cpp(115): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  CameraManager.cpp
-  GameEvent.cpp
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\gameevent.cpp(67): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\gameevent.cpp(68): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\gameevent.cpp(82): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\gameevent.cpp(81): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  GameEventManager.cpp
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\gameeventmanager.cpp(17): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  GameObject.cpp
-  Image.cpp
-  ImageManager.cpp
-  Input.cpp
-  LoadingScene.cpp
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\loadingscene.cpp(21): warning C4018: '>=': signed 또는 unsigned가 일치하지 않습니다.
-  MainGame + MainProc.cpp
-  MainGame.cpp
-  Math.cpp
-  ObjectManager.cpp
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(19): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(31): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(44): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(67): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(92): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(107): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(124): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(140): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  Random.cpp
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\random.cpp(9): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Scene.cpp
-  SceneManager.cpp
-  SoundManager.cpp
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(14): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(33): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(75): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(110): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(122): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(135): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(139): warning C4244: '초기화 중': 'FMOD_RESULT'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(147): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(153): warning C4244: 'return': 'unsigned int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(160): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(169): warning C4244: 'return': 'unsigned int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(176): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(185): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(189): warning C4244: '인수': 'float'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Time.cpp
-  Unrailed.cpp
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\unrailed.cpp(71): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-  코드를 생성하고 있습니다...
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(143): warning C4715: 'SoundManager::GetVolume': 모든 제어 경로에서 값을 반환하지는 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(156): warning C4715: 'SoundManager::GetPosition': 모든 제어 경로에서 값을 반환하지는 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\soundmanager.cpp(172): warning C4715: 'SoundManager::GetWholePosition': 모든 제어 경로에서 값을 반환하지는 않습니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\camera.cpp(106): warning C4717: 'Camera::RenderRect': 모든 제어 경로에서 재귀적입니다. 함수로 인해 런타임 스택 오버플로가 발생합니다.
-c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\camera.cpp(111): warning C4717: 'Camera::RenderEllipse': 모든 제어 경로에서 재귀적입니다. 함수로 인해 런타임 스택 오버플로가 발생합니다.
+﻿  ObjectManager.cpp
+c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(33): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(46): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(69): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(94): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(109): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(126): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\soojeong\source\repos\api팀플\api_teamproject2\unrailed\unrailed\objectmanager.cpp(142): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   Unrailed.vcxproj -> C:\Users\SooJeong\source\repos\API팀플\API_TeamProject2\Unrailed\Debug\Unrailed.exe

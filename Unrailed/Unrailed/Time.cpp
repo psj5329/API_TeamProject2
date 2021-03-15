@@ -4,6 +4,8 @@
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
 
+Singleton_NULL(Time)
+
 Time::Time()
 {
 	//고성능 하드웨어를 지원하는지 검사한다. 

@@ -4,9 +4,13 @@
 #include "Scene.h"
 #include "LoadingScene.h"
 
+Singleton_NULL(SceneManager)
+
 SceneManager::SceneManager()
-	:mCurrentScene(nullptr),mLoadingThread(nullptr),mTargetScene(nullptr),mLoadingScene(nullptr),
-mIsLoadingEnd(false){}
+	: mCurrentScene(nullptr),mLoadingThread(nullptr),mTargetScene(nullptr),mLoadingScene(nullptr),
+mIsLoadingEnd(false)
+{
+}
 
 SceneManager::~SceneManager()
 {
@@ -33,7 +37,7 @@ void SceneManager::Render(HDC hdc)
 void SceneManager::AddScene(const wstring& sceneName,Scene * scene)
 {
 	SceneIter iter = mSceneList.find(sceneName);
-	//이미 해당이름의 데이터가 맵안에 있다
+
 	if (iter != mSceneList.end())
 		return;
 
@@ -43,7 +47,7 @@ void SceneManager::AddScene(const wstring& sceneName,Scene * scene)
 void SceneManager::LoadScene(const wstring & sceneName)
 {
 	SceneIter iter = mSceneList.find(sceneName);
-	//못찾았으면 return (돌아가라)
+
 	if (iter == mSceneList.end())
 		return;
 
@@ -60,7 +64,6 @@ void SceneManager::LoadScene(const wstring & sceneName)
 	mCurrentScene = targetScene;
 }
 
-//잘 개조해서 써봐. 잘 모르고 괜히 쓰면 면접때 털림
 void SceneManager::LoadScene(const wstring & targetSceneName, const wstring & loadingSceneName)
 {
 	SceneIter iter = mSceneList.find(targetSceneName);
@@ -86,8 +89,6 @@ void SceneManager::LoadScene(const wstring & targetSceneName, const wstring & lo
 
 void SceneManager::LoadingThread()
 {
-	//데드락 주의!! 찾아봐!
-
 	Scene* prevScene = mCurrentScene;
 	
 	mCurrentScene = mLoadingScene;
