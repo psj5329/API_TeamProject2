@@ -14,7 +14,7 @@ bool CollisionManager::IsCollision(RECT * rc1, RECT * rc2)
 {
 	RECT temp;
 
-	if (IntersectRect(&temp, rc1, rc2))		// ÀÌ°Å µü ¸ÂÀ»¶§´Â Ãæµ¹ ¾Æ´Ï¶óÇØ¼­ ºÒÆíÇåµğ
+	if (IntersectRect(&temp, rc1, rc2))		// ì´ê±° ë”± ë§ì„ë•ŒëŠ” ì¶©ëŒ ì•„ë‹ˆë¼í•´ì„œ ë¶ˆí¸í—Œë””
 		return true;
 
 	return false;
@@ -27,10 +27,9 @@ bool CollisionManager::IsCollision(RECT * rc1, RECT * rc2)
 
 void CollisionManager::TileCollision(Player* player, TileMap* tileMap)
 {
-	
-	vector <vector <Tile*>> tileList = tileMap->GetTileList();
+	vector <vector <Tile*>>* tileList = tileMap->GetTileListPtr();
 
-	// ³ªÁß¿¡ À¯ÂùÇü²¨ ¹ŞÀ¸¸é ÇÔ¼ö ¹Ş¾Æ¼­ ÇÏ°Ô °íÄ¡±â
+	// ë‚˜ì¤‘ì— ìœ ì°¬í˜•êº¼ ë°›ìœ¼ë©´ í•¨ìˆ˜ ë°›ì•„ì„œ í•˜ê²Œ ê³ ì¹˜ê¸°
 	int x = player->GetX() / TileSize;
 	int y = player->GetY() / TileSize;
 
@@ -38,30 +37,30 @@ void CollisionManager::TileCollision(Player* player, TileMap* tileMap)
 	{
 		for (int i = x - 1; i <= x + 1; ++i)
 		{
-			// ¹üÀ§ ¾ÈÀÏ ¶§
+			// ë²”ìœ„ ì•ˆì¼ ë•Œ
 			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
 			{
 				RECT temp;
-				if (IntersectRect(&temp, &player->GetRect(), &tileList[j][i]->GetRect()))
+				if (IntersectRect(&temp, &player->GetRect(), &(*tileList)[j][i]->GetRect()))
 				{
 					float width = temp.right - temp.left;
 					float height = temp.bottom - temp.top;
 
-					if (tileList[j][i]->GetTileType() != TileType::Normal)
+					if ((*tileList)[j][i]->GetTileType() != TileType::Normal)
 					{
 						if (width > height)
 						{
-							if (temp.top == tileList[j][i]->GetRect().top)	// ÇÃ¿¡ÀÌ¾î°¡ À§
-								player->SetY(tileList[j][i]->GetRect().top - player->GetSizeY() / 2);
-							else if (temp.bottom == tileList[j][i]->GetRect().bottom)	// ÇÃ¿¡ÀÌ¾î°¡ ¾Æ·¡
-								player->SetY(tileList[j][i]->GetRect().bottom + player->GetSizeY() / 2);
+							if (temp.top == (*tileList)[j][i]->GetRect().top)	// í”Œì—ì´ì–´ê°€ ìœ„
+								player->SetY((*tileList)[j][i]->GetRect().top - player->GetSizeY() / 2);
+							else if (temp.bottom == (*tileList)[j][i]->GetRect().bottom)	// í”Œì—ì´ì–´ê°€ ì•„ë˜
+								player->SetY((*tileList)[j][i]->GetRect().bottom + player->GetSizeY() / 2);
 						}
 						else
 						{
-							if (temp.left == tileList[j][i]->GetRect().left)	// ÇÃ¿¡ÀÌ¾î°¡ ¿ŞÂÊ
-								player->SetX(tileList[j][i]->GetRect().left - player->GetSizeX() / 2);
-							else if (temp.right == tileList[j][i]->GetRect().right)	// ÇÃ¿¡ÀÌ¾î°¡ ¿À¸¥ÂÊ
-								player->SetX(tileList[j][i]->GetRect().right + player->GetSizeX() / 2);
+							if (temp.left == (*tileList)[j][i]->GetRect().left)	// í”Œì—ì´ì–´ê°€ ì™¼ìª½
+								player->SetX((*tileList)[j][i]->GetRect().left - player->GetSizeX() / 2);
+							else if (temp.right == (*tileList)[j][i]->GetRect().right)	// í”Œì—ì´ì–´ê°€ ì˜¤ë¥¸ìª½
+								player->SetX((*tileList)[j][i]->GetRect().right + player->GetSizeX() / 2);
 
 						}
 					}
@@ -71,20 +70,20 @@ void CollisionManager::TileCollision(Player* player, TileMap* tileMap)
 			{
 				if (j >= 0 && j < TileCountY)
 				{
-					// xÃà ¹æÇâÀ¸·Î ³Ñ¾î°¥ ¶§
-					if (player->GetX() < tileList[j][0]->GetRect().left + player->GetSizeX() / 2)
-						player->SetX(tileList[j][0]->GetRect().left + player->GetSizeX() / 2);
-					else if (player->GetX() > tileList[j][TileCountX - 1]->GetRect().right - player->GetSizeX() / 2)
-						player->SetX(tileList[j][TileCountX - 1]->GetRect().right - player->GetSizeX() / 2);
+					// xì¶• ë°©í–¥ìœ¼ë¡œ ë„˜ì–´ê°ˆ ë•Œ
+					if (player->GetX() < (*tileList)[j][0]->GetRect().left + player->GetSizeX() / 2)
+						player->SetX((*tileList)[j][0]->GetRect().left + player->GetSizeX() / 2);
+					else if (player->GetX() > (*tileList)[j][TileCountX - 1]->GetRect().right - player->GetSizeX() / 2)
+						player->SetX((*tileList)[j][TileCountX - 1]->GetRect().right - player->GetSizeX() / 2);
 				}
 
 				if (i >= 0 && i < TileCountX)
 				{
-					// yÃà ¹æÇâÀ¸·Î ³Ñ¾î°¥ ¶§
-					if (player->GetY() < tileList[0][i]->GetRect().top + player->GetSizeY() / 2)
-						player->SetY(tileList[0][i]->GetRect().top + player->GetSizeY() / 2);
-					else if (player->GetY() > tileList[TileCountY - 1][i]->GetRect().bottom - player->GetSizeY() / 2)
-						player->SetY(tileList[TileCountY - 1][i]->GetRect().bottom - player->GetSizeY() / 2);
+					// yì¶• ë°©í–¥ìœ¼ë¡œ ë„˜ì–´ê°ˆ ë•Œ
+					if (player->GetY() < (*tileList)[0][i]->GetRect().top + player->GetSizeY() / 2)
+						player->SetY((*tileList)[0][i]->GetRect().top + player->GetSizeY() / 2);
+					else if (player->GetY() > (*tileList)[TileCountY - 1][i]->GetRect().bottom - player->GetSizeY() / 2)
+						player->SetY((*tileList)[TileCountY - 1][i]->GetRect().bottom - player->GetSizeY() / 2);
 				}
 			}
 		}
@@ -93,11 +92,10 @@ void CollisionManager::TileCollision(Player* player, TileMap* tileMap)
 
 void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 {
-	
-	vector <vector <Tile*>> tileList = tileMap->GetTileList();
-	vector <vector <MapObject*>> mapObjectList = tileMap->GetMapObjectList();
+	vector <vector <Tile*>>* tileList = tileMap->GetTileListPtr();
+	vector <vector <MapObject*>>* mapObjectList = tileMap->GetObjectListPtr();
 
-	// ³ªÁß¿¡ À¯ÂùÇü²¨ ¹ŞÀ¸¸é ÇÔ¼ö ¹Ş¾Æ¼­ ÇÏ°Ô °íÄ¡±â
+	// ë‚˜ì¤‘ì— ìœ ì°¬í˜•êº¼ ë°›ìœ¼ë©´ í•¨ìˆ˜ ë°›ì•„ì„œ í•˜ê²Œ ê³ ì¹˜ê¸°
 	int x = player->GetX() / TileSize;
 	int y = player->GetY() / TileSize;
 
@@ -105,109 +103,79 @@ void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 	{
 		for (int i = x - 1; i <= x + 1; ++i)
 		{
-			// ¹üÀ§ ¾ÈÀÏ ¶§
+			// ë²”ìœ„ ì•ˆì¼ ë•Œ
 			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
 			{
 				RECT temp;
-				if (IntersectRect(&temp, &player->GetRect(), &mapObjectList[j][i]->GetRect()))
+				if (IntersectRect(&temp, &player->GetRect(), &(*mapObjectList)[j][i]->GetRect()))
 				{
 					float width = temp.right - temp.left;
 					float height = temp.bottom - temp.top;
 
-					if (mapObjectList[j][i]->GetMapObjectType() != MapObjectType::None)		// NoneÀÌ ¾Æ´Ï¶ó¸é ±¤¹°ÀÌ ÀÖÀ½
+					if ((*mapObjectList)[j][i]->GetMapObjectType() != MapObjectType::None)		// Noneì´ ì•„ë‹ˆë¼ë©´ ê´‘ë¬¼ì´ ìˆìŒ
 					{
 						if (width > height)
 						{
-							if (temp.top == mapObjectList[j][i]->GetRect().top)	// ÇÃ·¹ÀÌ¾î°¡ À§
+							if (temp.top == (*mapObjectList)[j][i]->GetRect().top)	// í”Œë ˆì´ì–´ê°€ ìœ„
 							{
-								player->SetY(mapObjectList[j][i]->GetRect().top - player->GetSizeY() / 2);
-								mapObjectList[j][i]->DamagedHp();
+								player->SetY((*mapObjectList)[j][i]->GetRect().top - player->GetSizeY() / 2);
+								(*mapObjectList)[j][i]->DeductHp();
 
-								if (mapObjectList[j][i]->GetHp() <= 0)
-								{
-									//SafeDelete(mapObjectList[j][i]);
-									mapObjectList[j][i]->SetHp(3);
-									mapObjectList[j][i]->SetObjectType(0);
-									mapObjectList[j][i]->SetImage(nullptr);
-									mapObjectList[j][i]->SetActive(false);
-									tileList[j][i]->SetTileType(TileType::Normal);
-								}
+								if ((*mapObjectList)[j][i]->GetHp() <= 0)
+									(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
-							else if (temp.bottom == mapObjectList[j][i]->GetRect().bottom)	// ÇÃ·¹ÀÌ¾î°¡ ¾Æ·¡
+							else if (temp.bottom == (*mapObjectList)[j][i]->GetRect().bottom)	// í”Œë ˆì´ì–´ê°€ ì•„ë˜
 							{
-								player->SetY(mapObjectList[j][i]->GetRect().bottom + player->GetSizeY() / 2);
-								mapObjectList[j][i]->DamagedHp();
+								player->SetY((*mapObjectList)[j][i]->GetRect().bottom + player->GetSizeY() / 2);
+								(*mapObjectList)[j][i]->DeductHp();
 
-								if (mapObjectList[j][i]->GetHp() <= 0)
-								{
-									//SafeDelete(mapObjectList[j][i]);
-									mapObjectList[j][i]->SetHp(3);
-									mapObjectList[j][i]->SetObjectType(0);
-									mapObjectList[j][i]->SetImage(nullptr);
-									mapObjectList[j][i]->SetActive(false);
-									tileList[j][i]->SetTileType(TileType::Normal);
-								}
+								if ((*mapObjectList)[j][i]->GetHp() <= 0)
+									(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 						}
 						else
 						{
-							if (temp.left == mapObjectList[j][i]->GetRect().left)	// ÇÃ·¹ÀÌ¾î°¡ ¿ŞÂÊ
+							if (temp.left == (*mapObjectList)[j][i]->GetRect().left)	// í”Œë ˆì´ì–´ê°€ ì™¼ìª½
 							{
-								player->SetX(mapObjectList[j][i]->GetRect().left - player->GetSizeX() / 2);
-								mapObjectList[j][i]->DamagedHp();
+								player->SetX((*mapObjectList)[j][i]->GetRect().left - player->GetSizeX() / 2);
+								(*mapObjectList)[j][i]->DeductHp();
 
-								if (mapObjectList[j][i]->GetHp() <= 0)
-								{
-									//SafeDelete(mapObjectList[j][i]);
-									mapObjectList[j][i]->SetHp(3);
-									mapObjectList[j][i]->SetObjectType(0);
-									mapObjectList[j][i]->SetImage(nullptr);
-									mapObjectList[j][i]->SetActive(false);
-									tileList[j][i]->SetTileType(TileType::Normal);
-								}
+								if ((*mapObjectList)[j][i]->GetHp() <= 0)
+									(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
-							else if (temp.right == mapObjectList[j][i]->GetRect().right)	// ÇÃ·¹ÀÌ¾î°¡ ¿À¸¥ÂÊ
+							else if (temp.right == (*mapObjectList)[j][i]->GetRect().right)	// í”Œë ˆì´ì–´ê°€ ì˜¤ë¥¸ìª½
 							{
-								player->SetX(mapObjectList[j][i]->GetRect().right + player->GetSizeX() / 2);
-								mapObjectList[j][i]->DamagedHp();
+								player->SetX((*mapObjectList)[j][i]->GetRect().right + player->GetSizeX() / 2);
+								(*mapObjectList)[j][i]->DeductHp();
 
-								if (mapObjectList[j][i]->GetHp() <= 0)
-								{
-									//SafeDelete(mapObjectList[j][i]);
-									mapObjectList[j][i]->SetHp(3);
-									mapObjectList[j][i]->SetObjectType(0);
-									mapObjectList[j][i]->SetImage(nullptr);
-									mapObjectList[j][i]->SetActive(false);
-									tileList[j][i]->SetTileType(TileType::Normal);
-								}
+								if ((*mapObjectList)[j][i]->GetHp() <= 0)
+									(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 
 						}
 					}
 				}
 			}
-			//else
-			//{
-			//	if (j >= 0 && j < TileCountY)
-			//	{
-			//		// xÃà ¹æÇâÀ¸·Î ³Ñ¾î°¥ ¶§
-			//		if (player->GetX() < tileList[j][0]->GetRect().left + player->GetSizeX() / 2)
-			//			player->SetX(tileList[j][0]->GetRect().left + player->GetSizeX() / 2);
-			//		else if (player->GetX() > tileList[j][TileCountX - 1]->GetRect().right - player->GetSizeX() / 2)
-			//			player->SetX(tileList[j][TileCountX - 1]->GetRect().right - player->GetSizeX() / 2);
-			//	}
-
-			//	if (i >= 0 && i < TileCountX)
-			//	{
-			//		// yÃà ¹æÇâÀ¸·Î ³Ñ¾î°¥ ¶§
-			//		if (player->GetY() < tileList[0][i]->GetRect().top + player->GetSizeY() / 2)
-			//			player->SetY(tileList[0][i]->GetRect().top + player->GetSizeY() / 2);
-			//		else if (player->GetY() > tileList[TileCountY - 1][i]->GetRect().bottom - player->GetSizeY() / 2)
-			//			player->SetY(tileList[TileCountY - 1][i]->GetRect().bottom - player->GetSizeY() / 2);
-			//	}
-			//}
 		}
 	}
 	
 }
-*/
+
+GameObject * CollisionManager::ItemCollision(GameObject* object)
+{
+	vector<GameObject*> vecItem = OBJECTMANAGER->GetObjectList(ObjectLayer::ITEM);
+	vector<GameObject*>::iterator iter = vecItem.begin();
+
+	for (; iter != vecItem.end();)
+	{
+		RECT temp;
+		if (IntersectRect(&temp, &object->GetRect(), &(*iter)->GetRect()))
+		{
+			return (*iter);
+		}
+		else
+			++iter;
+	}
+
+	return nullptr;
+}

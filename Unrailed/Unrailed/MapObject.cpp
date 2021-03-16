@@ -28,11 +28,12 @@ void MapObject::Release()
 
 void MapObject::Update()
 {
+	//광물 부셔지면 아이템 만들어두기?
 	if (mHp <= 0 && mActive == true)
 	{
 		Ore* ore = new Ore();
 		ore->Drop(mX, mY, (int)mType);
-		ObjectManager::GetInstance()->AddObject(ObjectLayer::Item, ore);
+		ObjectManager::GetInstance()->AddObject(ObjectLayer::ITEM, ore);
 		mImage = nullptr;
 		mType = MapObjectType::None;
 		mActive = false;

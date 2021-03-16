@@ -35,7 +35,12 @@ void Scene1::Release()
 void Scene1::Update()
 {
 	if (INPUT->GetKeyDown(VK_SPACE))
-		SCENEMANAGER->LoadScene(L"Scene2");
+	{
+		//SCENEMANAGER->LoadScene(L"Scene2");
+		GameObject* item = COLLISIONMANAGER->ItemCollision(mPlayer);
+		if(item != nullptr)
+			item->SetIsActive(false);
+	}
 
 	OBJECTMANAGER->Update();
 	mTileMap->Update();

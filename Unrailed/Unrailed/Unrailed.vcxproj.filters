@@ -380,8 +380,6 @@
     <ClCompile Include="Sableye.cpp">
       <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
     </ClCompile>
-    <ClCompile Include="Abra.cpp">
-    </ClCompile>
     <ClCompile Include="MapToolScene.cpp">
       <Filter>MainGame\Scene\MapToolScene</Filter>
     </ClCompile>
@@ -444,6 +442,9 @@
     </ClCompile>
     <ClCompile Include="Scene6.cpp">
       <Filter>MainGame\Scene\Scene6</Filter>
+    </ClCompile>
+    <ClCompile Include="Abra.cpp">
+      <Filter>MainGame\Object\Unit\Train</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
