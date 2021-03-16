@@ -14,14 +14,14 @@ void Machop::Init()
 
 	ReadyAnimation();
 
-	//ºÎ¸ð Å¬·¡½º (GameObject) º¯¼ö
+	//ë¶€ëª¨ í´ëž˜ìŠ¤ (GameObject) ë³€ìˆ˜
 	mX = WINSIZEX / 2 - 135;
 	mY = WINSIZEY / 2;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Machop º¯¼ö
+	//Machop ë³€ìˆ˜
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 	mSpeed = 100.f;
@@ -50,7 +50,7 @@ void Machop::Release()
 
 void Machop::Update()
 {
-	//»óÅÂÁ¤ÇÏ±â
+	//ìƒíƒœì •í•˜ê¸°
 	if (mTimer == 0)
 	{
 		if (mState == State::Sleep)
@@ -65,7 +65,7 @@ void Machop::Update()
 		SetAnimation();
 	}
 
-	//¿òÁ÷ÀÓ
+	//ì›€ì§ìž„
 	if (mState == State::Sleep)
 	{
 		mTimer += Time::GetInstance()->DeltaTime();
@@ -90,7 +90,7 @@ void Machop::Update()
 		}
 	}
 
-	//ÁøÈ­
+	//ì§„í™”
 	switch (mLevel)
 	{
 	case 1:
@@ -116,7 +116,6 @@ void Machop::Update()
 		mLevel = 3;
 	}
 
-	//Æø¹ß
 	if (mX >= WINSIZEX - 400 && mIsExplode == false)
 	{
 		mIsExplode = true;
@@ -163,7 +162,7 @@ void Machop::ReadyAnimation()
 	mRightSleep->InitFrameByStartEnd(2, 5, 3, 5, false);
 	mRightSleep->SetIsLoop(true);
 	mRightSleep->SetFrameUpdateTime(0.2f);
-
+  
 	mExplode = new Animation();
 	mExplode->InitFrameByStartEnd(0, 0, 6, 0, false);
 	mExplode->SetIsLoop(false);

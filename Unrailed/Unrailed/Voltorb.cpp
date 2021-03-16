@@ -14,14 +14,14 @@ void Voltorb::Init()
 
 	ReadyAnimation();
 
-	//ºÎ¸ð Å¬·¡½º (GameObject) º¯¼ö
+	//ë¶€ëª¨ í´ëž˜ìŠ¤ (GameObject) ë³€ìˆ˜
 	mX = WINSIZEX / 2;
 	mY = WINSIZEY / 2;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Electrode º¯¼ö
+	//Electrode ë³€ìˆ˜
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 	mSpeed = 100.f;
@@ -44,7 +44,7 @@ void Voltorb::Release()
 
 void Voltorb::Update()
 {
-	//»óÅÂÁ¤ÇÏ±â
+	//ìƒíƒœì •í•˜ê¸°
 	if (mTimer == 0)
 	{
 		if (mState == State::Sleep)
@@ -59,7 +59,7 @@ void Voltorb::Update()
 		SetAnimation();
 	}
 
-	//¿òÁ÷ÀÓ
+	//ì›€ì§ìž„
 	if (mState == State::Sleep)
 	{
 		mTimer += Time::GetInstance()->DeltaTime();
@@ -84,7 +84,7 @@ void Voltorb::Update()
 		}
 	}
 
-	//Æø¹ß
+	//í­ë°œ
 	if (mX >= WINSIZEX - 400 && mIsExplode == false)
 	{
 		mIsExplode = true;
@@ -170,7 +170,7 @@ void Voltorb::SetAnimation()
 
 void Voltorb::SetImage(int i)
 {
-	if (i == 0) // 0Àº false
+	if (i == 0) // 0ì€ false
 	{
 		mCurrentImage = IMAGEMANAGER->FindImage(L"Electrode");
 	}

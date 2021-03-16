@@ -75,7 +75,7 @@ bool Image::CreateEmpty(int width, int height)
 	return true;
 }
 
-bool Image::LoadFromFile(wstring fileName, int width, int height, bool isTrans, COLORREF transColor)
+bool Image::LoadFromFile(wstring keyName, wstring fileName, int width, int height, bool isTrans, COLORREF transColor)
 {
 	if (fileName.empty() == true)
 	{
@@ -115,6 +115,7 @@ bool Image::LoadFromFile(wstring fileName, int width, int height, bool isTrans, 
 	mBlendImageBuffer->height = WINSIZEY;
 
 	mFileName = fileName;
+	mKeyName = keyName;
 
 	mIsTrans = isTrans;
 	mTransColor = transColor;
@@ -131,7 +132,7 @@ bool Image::LoadFromFile(wstring fileName, int width, int height, bool isTrans, 
 	return true;
 }
 
-bool Image::LoadFromFile(wstring fileName, int width, int height, int frameX, int frameY, bool isTrans, COLORREF transColor)
+bool Image::LoadFromFile(wstring keyName, wstring fileName, int width, int height, int frameX, int frameY, bool isTrans, COLORREF transColor)
 {
 	if (fileName.empty() == true)
 	{
@@ -173,6 +174,7 @@ bool Image::LoadFromFile(wstring fileName, int width, int height, int frameX, in
 	mBlendImageBuffer->height = WINSIZEY;
 
 	mFileName = fileName;
+	mKeyName = keyName;
 
 	mIsTrans = isTrans;
 	mTransColor = transColor;

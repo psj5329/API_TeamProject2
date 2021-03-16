@@ -16,6 +16,9 @@ public:
 		int frameX, int frameY, bool isTrans, COLORREF transColor = RGB(255, 0, 255));
 
 	Image* FindImage(wstring key);
+
+public:
+	wstring GetKeyName(Image* image);
 };
 
 #define IMAGEMANAGER ImageManager::GetInstance()

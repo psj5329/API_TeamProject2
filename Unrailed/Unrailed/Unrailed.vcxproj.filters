@@ -100,6 +100,36 @@
     <Filter Include="MainGame\Object\Unit\Train">
       <UniqueIdentifier>{265683f0-bda7-4a75-b0bb-975a3479a146}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\MapToolScene">
+      <UniqueIdentifier>{85c0b620-96f0-4063-8591-16441c3b6ba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\MapObject">
+      <UniqueIdentifier>{58872083-43ef-43f7-8a2d-fa92a33667de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\MapRelated">
+      <UniqueIdentifier>{050f3681-9e12-484a-8ee1-63846a60eb49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Button">
+      <UniqueIdentifier>{475ab4c2-251a-42e7-82e2-861c52d48935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Gizmo">
+      <UniqueIdentifier>{f7b6a60f-ea0f-41d7-a495-b76bb0e2f6e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\Unit\Train">
+      <UniqueIdentifier>{b072fc35-668d-47f1-b132-98723f7e6e6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\CollisionManager">
+      <UniqueIdentifier>{d921f520-b4fb-42ef-879a-bf826c3ad826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Object\Trail">
+      <UniqueIdentifier>{6469547d-4343-40ea-a1d7-c9f57deed5a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\StringHelper">
+      <UniqueIdentifier>{f9da4a57-0601-4804-8a3b-bcb52c90b1fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Path">
+      <UniqueIdentifier>{a9fcc723-4467-479e-91d1-6b81e40cd708}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -198,6 +228,30 @@
     <ClInclude Include="Sableye.h">
       <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
     </ClInclude>
+    <ClInclude Include="MapToolScene.h">
+      <Filter>MainGame\Scene\MapToolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="MapObject.h">
+      <Filter>MainGame\Object\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ICommand.h">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Framework\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmo.h">
+      <Filter>Framework\Gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>MainGame\Object\Unit\Player</Filter>
+    </ClInclude>
     <ClInclude Include="Abra.h">
       <Filter>MainGame\Object\Unit\Train</Filter>
     </ClInclude>
@@ -209,6 +263,30 @@
     </ClInclude>
     <ClInclude Include="Train.h">
       <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClInclude>
+    <ClInclude Include="Train.h">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClInclude>
+    <ClInclude Include="Voltorb.h">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Framework\CollisionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Ore.h">
+      <Filter>MainGame\Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Trail.h">
+      <Filter>MainGame\Object\Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="TrailManager.h">
+      <Filter>MainGame\Object\Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="StringHelper.h">
+      <Filter>Framework\StringHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Framework\Path</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -297,6 +375,32 @@
       <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
     </ClCompile>
     <ClCompile Include="Abra.cpp">
+    </ClCompile>
+    <ClCompile Include="MapToolScene.cpp">
+      <Filter>MainGame\Scene\MapToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="MapObject.cpp">
+      <Filter>MainGame\Object\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ICommand.cpp">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>MainGame\MapRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Framework\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmo.cpp">
+      <Filter>Framework\Gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>MainGame\Object\Unit\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Train.cpp">
       <Filter>MainGame\Object\Unit\Train</Filter>
     </ClCompile>
     <ClCompile Include="Machop.cpp">
@@ -307,6 +411,30 @@
     </ClCompile>
     <ClCompile Include="Train.cpp">
       <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClCompile>
+    <ClCompile Include="Abra.cpp">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClCompile>
+    <ClCompile Include="Voltorb.cpp">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Framework\CollisionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Ore.cpp">
+      <Filter>MainGame\Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Trail.cpp">
+      <Filter>MainGame\Object\Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="TrailManager.cpp">
+      <Filter>MainGame\Object\Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="StringHelper.cpp">
+      <Filter>Framework\StringHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Framework\Path</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,7 @@ private:
 
 	Scene* mTargetScene;
 	Scene* mLoadingScene;
-	thread* mLoadingThread;
+	thread* mLoadingThread;		// 이 세개가 로딩때 쓴다 고쳐보자
 	bool mIsLoadingEnd;
 
 private:
@@ -29,6 +29,8 @@ public:
 	void AddScene(const wstring& sceneName, Scene* scene);
 	void LoadScene(const wstring& sceneName);
 	void LoadScene(const wstring& targetSceneName, const wstring& loadingSceneName);
+
+	Scene* GetCurrentScene();
 };
 
 #define SCENEMANAGER SceneManager::GetInstance()

@@ -7,7 +7,7 @@ void Scene2::Init()
 	mTileMap = new TileMap();
 	mTileMap->Init(TileCountX, TileCountY, TileSize);
 	mTileMap->LoadMap();
-
+  
 	for (int i = 0; i < 3; i++)
 	{
 		Voltorb* temp = new Voltorb;
@@ -45,6 +45,7 @@ void Scene2::Update()
 	{
 		mVoltorbVec[i]->Update();
 	}
+
 	mMachop->Update();
 	mAbra->Update();
 }
@@ -63,7 +64,7 @@ void Scene2::Render(HDC hdc)
 	TextOut(hdc, 10, 40, strFPS.c_str(), strFPS.length());
 
 
-	wstring strScene = L"ÀÌ°Ç 2¹ø ¾À";
+	wstring strScene = L"Ã€ÃŒÂ°Ã‡ 2Â¹Ã¸ Â¾Ã€";
 	TextOut(hdc, WINSIZEX / 2 - 15, WINSIZEY / 2, strScene.c_str(), strScene.length());
 
 

@@ -12,8 +12,14 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <list>
 #include <queue>
 #include <functional>
+#include <fstream>
+#include <stack>
+#include <list>
+#include <iostream>
+
 using namespace std;
 
 //64비트일 경우에는 해당 라이브러리 불러오게
@@ -36,11 +42,13 @@ using namespace std;
 #include "Time.h"
 #include "SoundManager.h"
 #include "ObjectManager.h"
+#include "CollisionManager.h"
 #include "SceneManager.h"
 #include "GameEventManager.h"
+#include "Gizmo.h"
+
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 extern POINT _mousePosition;	//마우스 좌표
 extern HWND	_hWnd;
 extern HINSTANCE	_hInstance;
-
-
