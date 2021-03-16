@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <list>
 #include <queue>
 #include <functional>
 #include <fstream>

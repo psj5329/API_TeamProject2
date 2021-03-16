@@ -46,7 +46,6 @@ enum class TileType: int
 	ice
 };
 
-
 class Tile
 {
 	class Image* mImage;

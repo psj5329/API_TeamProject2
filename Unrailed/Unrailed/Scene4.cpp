@@ -18,7 +18,7 @@ void Scene4::Init()
 	*/
 
 	// 플레이어도 사실 메인게임으로 가야 함
-	Player* player = new Player("Player", WINSIZEX / 2, WINSIZEY / 2);
+	Player* player = new Player("Player", TileSize * 4.5, TileSize * 4.5);
 	OBJECTMANAGER->AddObject(ObjectLayer::PLAYER, player);
 
 	/* 얘는 메인으로 가야 함
@@ -35,6 +35,11 @@ void Scene4::Init()
 	mTileMap = new TileMap();
 	mTileMap->Init(TileCountX, TileCountY, TileSize);
 	mTileMap->LoadMap();
+
+	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
+	player->SetTileListPtr(tileListPtr);
+	vector<vector<MapObject*>>* mapObjectListPtr = mTileMap->GetObjectListPtr();
+	player->SetMapObjectListPtr(mapObjectListPtr);
 }
 
 void Scene4::Release()

@@ -4,6 +4,8 @@
 #include "Image.h"
 #include "Animation.h"
 #include "Camera.h"
+#include "Tile.h"
+#include "MapObject.h"
 
 Player::Player(const string& name, float x, float y)
 	:GameObject(name, x, y)
@@ -19,14 +21,14 @@ void Player::Init()
 	mCurrentAnimation = mDownIdleAnimation;
 	mCurrentAnimation->Play();
 
-	mSizeX = mImage->GetFrameWidth();
-	mSizeY = mImage->GetFrameHeight();
+	mSizeX = mImage->GetFrameWidth() * 2;
+	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
 	mDir = DirectionEight::Down;
 	mState = State::Idle;
 
-	mSpeed = 100.f;
+	mSpeed = 100.f;	
 
 	mInputType = 0;
 
@@ -38,6 +40,11 @@ void Player::Init()
 
 	mTileX = 0;
 	mTileY = 0;
+
+	mNextTileX = 0;
+	mNextTileY = 0;
+
+	mIsAttackingTemp = false; // 상호작용 전 테스트 변수
 }
 
 void Player::Release()
@@ -54,6 +61,8 @@ void Player::Update()
 	// 원래 크기로는 딱 중심, 2배 크기로는 왼쪽 윗부분 잡힘
 
 	InputDirectionKey();
+
+	InputDiggingKey();
 
 	ChangeForm();
 
@@ -174,10 +183,11 @@ void Player::Render(HDC hdc)
 			mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(),
 			mImage->GetFrameWidth() * 2, mImage->GetFrameHeight() * 2);*/
 
+	//RenderRect(hdc, mRect);
+
 	// 임시로 카메라 고정형 렌더링
 	mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,
-		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(),
-		mImage->GetFrameWidth() * 2, mImage->GetFrameHeight() * 2);
+		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
 	//mImage->FrameRender(hdc,mRect.left,mRect.top, mCurrentAnimation->GetNowFrameX(),
 	//	mCurrentAnimation->GetNowFrameY());
@@ -186,17 +196,22 @@ void Player::Render(HDC hdc)
 	TextOut(hdc, 10, 100, strInput.c_str(), (int)strInput.length());
 
 	wstring strChange = L"포켓몬 변!신! ";
-
 	if (mChangeT)
 		TextOut(hdc, mX - 20, mY - 25, strChange.c_str(), (int)strChange.length());
 
 	wstring strSpeed = L"Speed: " + to_wstring(mSpeed);
 	wstring strKeyDown = L"IsKeyDownCheck: " + to_wstring(mIsDirectionKeyDown);
-	TextOut(hdc, _mousePosition.x, _mousePosition.y, strSpeed.c_str(), (int)strSpeed.length());
-	TextOut(hdc, _mousePosition.x, _mousePosition.y + 25, strKeyDown.c_str(), (int)strKeyDown.length());
-
+	TextOut(hdc, mX, mY + 50, strSpeed.c_str(), (int)strSpeed.length());
+	TextOut(hdc, mX, mY + 75, strKeyDown.c_str(), (int)strKeyDown.length());
 	wstring strTile = L"타일 x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
-	TextOut(hdc, _mousePosition.x, _mousePosition.y + 50, strTile.c_str(), (int)strTile.length());
+	TextOut(hdc, mX, mY + 100, strTile.c_str(), (int)strTile.length());
+
+
+
+
+	wstring strAtk = L"공격 중이다";
+	if (mIsAttackingTemp)
+		TextOut(hdc, mX + 55, mY, strAtk.c_str(), (int)strAtk.length());
 }
 
 void Player::InitAnimation()
@@ -499,30 +514,214 @@ void Player::InputDirectionKey()
 	}
 
 
-
-
+	/*
+	mTileX = (int)(mX / TileSize);
+	mTileY = (int)(mY / TileSize);*/
 
 	if (Input::GetInstance()->GetKey(VK_DOWN))
 	{
 		mState = State::Move;
-		mY += mSpeed * Time::GetInstance()->DeltaTime();
+
+		mNextTileX = mTileX;
+		if (mTileY == TileCountY - 1)
+			mNextTileY = mTileY;
+		else
+			mNextTileY = mTileY + 1;
+
+		if (mY >= TileSize * TileCountY - TileSize / 2)
+		{
+			mY = TileSize * TileCountY - TileSize / 2;
+		}
+		else if ((mY >= TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX]->GetTileType() == TileType::Wall))
+			mY = TileSize * mTileY + TileSize / 2;
+		else if ((mY >= TileSize * mTileY + TileSize / 2) && (mX < TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX - 1]->GetTileType() == TileType::Wall))
+			mY = TileSize * mTileY + TileSize / 2;
+		else if ((mY >= TileSize * mTileY + TileSize / 2) && (mX > TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX + 1]->GetTileType() == TileType::Wall))
+			mY = TileSize * mTileY + TileSize / 2;
+		else
+			mY += mSpeed * Time::GetInstance()->DeltaTime();
 	}
 	if (Input::GetInstance()->GetKey(VK_UP))
 	{
 		mState = State::Move;
-		mY -= mSpeed * Time::GetInstance()->DeltaTime();
+
+		mNextTileX = mTileX;
+		if (mTileY == 0)
+			mNextTileY = mTileY;
+		else
+			mNextTileY = mTileY - 1;
+
+		if (mY <= TileSize / 2)
+		{
+			mY = TileSize / 2;
+		}
+		else if ((mY <= TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX]->GetTileType() == TileType::Wall))
+			mY = TileSize * mTileY + TileSize / 2;
+		else if ((mY <= TileSize * mTileY + TileSize / 2) && (mX < TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX - 1]->GetTileType() == TileType::Wall))
+			mY = TileSize * mTileY + TileSize / 2;
+		else if ((mY <= TileSize * mTileY + TileSize / 2) && (mX > TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX + 1]->GetTileType() == TileType::Wall))
+			mY = TileSize * mTileY + TileSize / 2;
+		else
+			mY -= mSpeed * Time::GetInstance()->DeltaTime();
 	}
 	if (Input::GetInstance()->GetKey(VK_LEFT))
 	{
 		mState = State::Move;
-		mX -= mSpeed * Time::GetInstance()->DeltaTime();
+
+		if (mTileX == 0)
+			mNextTileX = mTileX;
+		else
+			mNextTileX = mTileX - 1;
+		mNextTileY = mTileY;
+
+		if (mX <= TileSize / 2)
+		{
+			mX = TileSize / 2;
+		}
+		else if ((mX <= TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX]->GetTileType() == TileType::Wall))
+			mX = TileSize * mTileX + TileSize / 2;
+		else if((mX <= TileSize * mTileX + TileSize / 2) && (mY < TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY - 1][mNextTileX]->GetTileType() == TileType::Wall))
+			mX = TileSize * mTileX + TileSize / 2;
+		else if ((mX <= TileSize * mTileX + TileSize / 2) && (mY > TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY + 1][mNextTileX]->GetTileType() == TileType::Wall))
+			mX = TileSize * mTileX + TileSize / 2;
+		else
+			mX -= mSpeed * Time::GetInstance()->DeltaTime();
 	}
 	if (Input::GetInstance()->GetKey(VK_RIGHT))
 	{
 		mState = State::Move;
+
+		if (mTileX == TileCountX - 1)
+			mNextTileX = mTileX;
+		else
+			mNextTileX = mTileX + 1;
+		mNextTileY = mTileY;
+
+		if (mX >= TileSize * TileCountX - TileSize / 2)
+		{
+			mX = TileSize * TileCountX - TileSize / 2;
+		}
+		else if ((mX >= TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX]->GetTileType() == TileType::Wall))
+			mX = TileSize * mTileX + TileSize / 2;
+		else if ((mX >= TileSize * mTileX + TileSize / 2) && (mY < TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY - 1][mNextTileX]->GetTileType() == TileType::Wall))
+		mX = TileSize * mTileX + TileSize / 2;
+		else if ((mX >= TileSize * mTileX + TileSize / 2) && (mY > TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY + 1][mNextTileX]->GetTileType() == TileType::Wall))
+		mX = TileSize * mTileX + TileSize / 2;
+		else
 		mX += mSpeed * Time::GetInstance()->DeltaTime();
 	}
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+}
+
+void Player::InputDiggingKey()
+{
+	if (Input::GetInstance()->GetKey(VK_SPACE))
+	{
+		if (mDir == DirectionEight::Down)
+		{
+			mNextTileX = mTileX;
+			mNextTileY = mTileY + 1;
+		}
+		else if (mDir == DirectionEight::Up)
+		{
+			mNextTileX = mTileX;
+			mNextTileY = mTileY - 1;
+		}
+		else if (mDir == DirectionEight::Left)
+		{
+			mNextTileX = mTileX - 1;
+			mNextTileY = mTileY;
+		}
+		else if (mDir == DirectionEight::Right)
+		{
+			mNextTileX = mTileX + 1;
+			mNextTileY = mTileY;
+		}
+		else if (mDir == DirectionEight::LeftDown)
+		{
+			int width = mX - mTileX * TileSize;
+			int height = (mTileY + 1) * TileSize - mY;
+
+			if (width <= height) // left
+			{
+				mNextTileX = mTileX - 1;
+				mNextTileY = mTileY;
+			}
+			else // down
+			{
+				mNextTileX = mTileX;
+				mNextTileY = mTileY + 1;
+			}
+		}
+		else if (mDir == DirectionEight::RightDown)
+		{
+			int width = (mTileX + 1) * TileSize - mX;
+			int height = (mTileY + 1) * TileSize - mY;
+
+			if (width <= height) // right
+			{
+				mNextTileX = mTileX + 1;
+				mNextTileY = mTileY;
+			}
+			else // down
+			{
+				mNextTileX = mTileX;
+				mNextTileY = mTileY + 1;
+			}
+		}
+		else if (mDir == DirectionEight::LeftUp)
+		{
+			int width = mX - mTileX * TileSize;
+			int height = mY - mTileY * TileSize;
+
+			if (width <= height) // left
+			{
+				mNextTileX = mTileX - 1;
+				mNextTileY = mTileY;
+			}
+			else // up
+			{
+				mNextTileX = mTileX;
+				mNextTileY = mTileY - 1;
+			}
+		}
+		else if (mDir == DirectionEight::RightUp)
+		{
+			int width = (mTileX + 1) * TileSize - mX;
+			int height = mY - mTileY * TileSize;
+
+			if (width <= height) // right
+			{
+				mNextTileX = mTileX + 1;
+				mNextTileY = mTileY;
+			}
+			else // up
+			{
+				mNextTileX = mTileX;
+				mNextTileY = mTileY - 1;
+			}
+		}
+
+		if ((mForm == Form::Charmander) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Red))
+		{
+			mIsAttackingTemp = true;
+			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
+		}
+		else if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Green))
+		{
+			mIsAttackingTemp = true;
+			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
+		}
+		else if ((mForm == Form::Totodile) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Blue))
+		{
+			mIsAttackingTemp = true;
+			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
+		}
+		else
+			mIsAttackingTemp = false;
+	}
+	else
+		mIsAttackingTemp = false;
 }
 
 void Player::ChangeForm()
