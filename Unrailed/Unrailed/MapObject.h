@@ -22,8 +22,6 @@ class MapObject
 	bool mActive;
 	int mHp;
 
-	int mHp;
-
 public:
 
 	MapObject(class Image* image, float x, float y, float sizeX, float sizeY,
@@ -32,7 +30,7 @@ public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
 
-	//Â°Ã™
+	//°Ù
 	Image* GetImage()const { return mImage; }
 	float GetX()const { return mX; }
 	float GetY()const { return mY; }
@@ -46,7 +44,7 @@ public:
 	bool GetActive()const { return mActive; }
 	int GetHp()const { return mHp; }
 
-	//Â¼Ã‚
+	//¼Â
 	void SetImage(Image* image) { mImage = image; }
 	void SetX(float x) { mX = x; }
 	void SetY(float y) { mY = y; }
