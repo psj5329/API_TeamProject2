@@ -28,7 +28,6 @@ void MapObject::Release()
 
 void MapObject::Update()
 {
-	//Ã¼·Â 0ÀÌ¸é ore»ý¼º
 	if (mHp <= 0 && mActive == true)
 	{
 		Ore* ore = new Ore();

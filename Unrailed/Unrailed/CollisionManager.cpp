@@ -9,7 +9,7 @@ void CollisionManager::Update()
 {
 
 }
-
+/*
 bool CollisionManager::IsCollision(RECT * rc1, RECT * rc2)
 {
 	RECT temp;
@@ -22,11 +22,12 @@ bool CollisionManager::IsCollision(RECT * rc1, RECT * rc2)
 	/*if (rc1->right < rc2->left || rc1->left > rc2->right)return false;
 	if (rc1->bottom < rc2->top || rc1->top > rc2->bottom)return false;
 
-	return true;*/
+	return true;*//*
 }
 
 void CollisionManager::TileCollision(Player* player, TileMap* tileMap)
 {
+	
 	vector <vector <Tile*>> tileList = tileMap->GetTileList();
 
 	// 나중에 유찬형꺼 받으면 함수 받아서 하게 고치기
@@ -92,6 +93,7 @@ void CollisionManager::TileCollision(Player* player, TileMap* tileMap)
 
 void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 {
+	
 	vector <vector <Tile*>> tileList = tileMap->GetTileList();
 	vector <vector <MapObject*>> mapObjectList = tileMap->GetMapObjectList();
 
@@ -206,4 +208,6 @@ void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 			//}
 		}
 	}
+	
 }
+*/

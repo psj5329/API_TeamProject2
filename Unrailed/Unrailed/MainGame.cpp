@@ -12,6 +12,7 @@
 #include "Scene3.h"
 #include "Scene4.h"
 #include "MapToolScene.h"
+#include "Scene6.h"
 
 void MainGame::Init()
 {
@@ -24,6 +25,7 @@ void MainGame::Init()
 	SceneManager::GetInstance()->AddScene(L"Scene3", new Scene3);
 	SceneManager::GetInstance()->AddScene(L"Scene4", new Scene4);
 	SceneManager::GetInstance()->AddScene(L"MapToolScene", new MapToolScene);
+	SceneManager::GetInstance()->AddScene(L"Scene6", new Scene6);
 
 	// {{ 로딩씬 만들기 전까지 임시로 여기에 시작
 	// 맵 관련 // 남훈
@@ -101,6 +103,10 @@ void MainGame::Update()
 	else if (Input::GetInstance()->GetKeyDown('5'))
 	{
 		SCENEMANAGER->LoadScene(L"MapToolScene");
+	}
+	else if (Input::GetInstance()->GetKeyDown('6'))
+	{
+		SCENEMANAGER->LoadScene(L"Scene6");
 	}
 	
 	SceneManager::GetInstance()->Update();

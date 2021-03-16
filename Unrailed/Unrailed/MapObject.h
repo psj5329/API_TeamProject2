@@ -22,8 +22,6 @@ class MapObject
 	bool mActive;
 	int mHp;
 
-	int mHp;
-
 public:
 
 	MapObject(class Image* image, float x, float y, float sizeX, float sizeY,
