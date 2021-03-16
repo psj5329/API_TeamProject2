@@ -20,6 +20,7 @@ class MapObject
 	int mFrameIndexY;
 	MapObjectType mType;
 	bool mActive;
+	int mHp;
 
 	int mHp;
 
@@ -31,7 +32,7 @@ public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
 
-	//°Ù
+	//Â°Ã™
 	Image* GetImage()const { return mImage; }
 	float GetX()const { return mX; }
 	float GetY()const { return mY; }
@@ -43,8 +44,9 @@ public:
 	int GetIntType()const { return (int)mType; }
 	MapObjectType GetMapObjectType()const { return mType; }
 	bool GetActive()const { return mActive; }
+	int GetHp()const { return mHp; }
 
-	//¼Â
+	//Â¼Ã‚
 	void SetImage(Image* image) { mImage = image; }
 	void SetX(float x) { mX = x; }
 	void SetY(float y) { mY = y; }
@@ -55,10 +57,9 @@ public:
 	void SetFrameIndexY(int indexY) { mFrameIndexY = indexY; }
 	void SetObjectType(int type) { mType = (MapObjectType)type; }
 	void SetActive(bool isActive) { mActive = isActive; }
-
-
+  
+	void DeductHp() { mHp -= 1; }
 	int GetHp() { return mHp; }
 	void SetHp(int hp) { mHp = hp; }
-	void DamagedHp() { mHp -= 1; }
 };
 

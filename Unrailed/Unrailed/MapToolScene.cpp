@@ -3,7 +3,7 @@
 #include "Tile.h"
 #include "Image.h"
 #include "Button.h"
-
+#include "Path.h"
 void MapToolScene::Init()
 {
 	ImageLoad();
@@ -187,6 +187,12 @@ void MapToolScene::Release()
 
 void MapToolScene::Update()
 {
+	if (Input::GetInstance()->GetKeyDown(VK_RETURN))
+	{
+		Path::OpenFileDialog(L"", nullptr, L"../Resources/", nullptr, _hWnd);
+	}
+
+
 	if (Input::GetInstance()->GetKeyDown(VK_LBUTTON))
 	{
 		//ÆÈ·¹Æ® ÇÈ~
@@ -595,3 +601,8 @@ void MapToolScene::ImageLoad()
 	//IMAGEMANAGER->LoadFromFile(L"XTile", Resources(L"/Map/Tool/XTile"), 24, 24, 1, 1, true);
 }
 
+ LRESULT MapToolScene::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) 
+ {
+	//wParam
+	 return 0;
+ }

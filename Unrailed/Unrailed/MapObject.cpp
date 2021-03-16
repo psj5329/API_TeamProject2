@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Image.h"
 #include "MapObject.h"
+#include "Ore.h"
 
 MapObject::MapObject(class Image* image, float x, float y, float sizeX, float sizeY,
 	int frameIndexX, int frameIndexY, int type)
@@ -14,9 +15,9 @@ MapObject::MapObject(class Image* image, float x, float y, float sizeX, float si
 	mFrameIndexX = frameIndexX;
 	mFrameIndexY = frameIndexY;
 	mType = (MapObjectType)type;
-
-
 	mHp = 3;
+
+	mActive = true;
 }
 
 void MapObject::Release()
@@ -27,7 +28,16 @@ void MapObject::Release()
 
 void MapObject::Update()
 {
-
+	//Ã¼·Â 0ÀÌ¸é ore»ý¼º
+	if (mHp <= 0 && mActive == true)
+	{
+		Ore* ore = new Ore();
+		ore->Drop(mX, mY, (int)mType);
+		ObjectManager::GetInstance()->AddObject(ObjectLayer::Item, ore);
+		mImage = nullptr;
+		mType = MapObjectType::None;
+		mActive = false;
+	}
 }
 
 void MapObject::Render(HDC hdc)
@@ -38,3 +48,4 @@ void MapObject::Render(HDC hdc)
 			mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
 	}
 }
+
