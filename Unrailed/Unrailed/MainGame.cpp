@@ -24,6 +24,9 @@ void MainGame::Init()
 	SceneManager::GetInstance()->AddScene(L"Scene3", new Scene3);
 	SceneManager::GetInstance()->AddScene(L"Scene4", new Scene4);
 	SceneManager::GetInstance()->AddScene(L"MapToolScene", new MapToolScene);
+
+	// {{ 로딩씬 만들기 전까지 임시로 여기에 시작
+	// 맵 관련 // 남훈
 	IMAGEMANAGER->LoadFromFile(L"Save", Resources(L"/Map/Tool/save"), 60, 16, 1, 1, true);
 	IMAGEMANAGER->LoadFromFile(L"Load", Resources(L"/Map/Tool/load"), 60, 16, 1, 1, true);
 	IMAGEMANAGER->LoadFromFile(L"Undo", Resources(L"/Map/Tool/undo"), 60, 16, 1, 1, true);
@@ -39,6 +42,15 @@ void MainGame::Init()
 	IMAGEMANAGER->LoadFromFile(L"GreenTrail", Resources(L"/Trail/DirTile_G"), 96, 96, 4, 4, true);
 	IMAGEMANAGER->LoadFromFile(L"BlueTrail", Resources(L"/Trail/DirTile_B"), 96, 96, 4, 4, true);
 	IMAGEMANAGER->LoadFromFile(L"RedTrail", Resources(L"/Trail/DirTile_R"), 96, 96, 4, 4, true);
+
+	// 캐릭터 관련 // 유찬
+	IMAGEMANAGER->LoadFromFile(L"charmander", Resources(L"charmander"), 192, 1968, 4, 41, true);
+	IMAGEMANAGER->LoadFromFile(L"chikorita", Resources(L"chikorita"), 192, 1968, 4, 41, true);
+	IMAGEMANAGER->LoadFromFile(L"ditto", Resources(L"ditto"), 144, 1200, 3, 25, true);
+	IMAGEMANAGER->LoadFromFile(L"jigglypuff", Resources(L"jigglypuff"), 192, 816, 4, 17, true);
+	IMAGEMANAGER->LoadFromFile(L"lapras", Resources(L"lapras"), 192, 624, 4, 13, true);
+	IMAGEMANAGER->LoadFromFile(L"totodile", Resources(L"totodile"), 240, 1968, 5, 41, true);
+	// 로딩씬 만들기 전까지 임시로 여기에 끝 }}
 
 	Camera* mainCamera = new Camera;
 	mainCamera->Init();

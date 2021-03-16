@@ -32,6 +32,8 @@ enum Form
 
 class Image;
 class Animation;
+class Tile;
+class MapObject;
 
 class Player : public GameObject
 {
@@ -72,6 +74,17 @@ class Player : public GameObject
 
 	float mIsDirectionKeyDown;
 
+	int mTileX;
+	int mTileY;
+
+	int mNextTileX; // 반드시 다음 것은 아님(순서 때문에 값이 변함)
+	int mNextTileY; // 반드시 다음 것은 아님(순서 때문에 값이 변함)
+
+	vector<vector<Tile*>>* mTileListPtr;
+	vector<vector<MapObject*>>* mMapObjectListPtr;
+
+	bool mIsAttackingTemp;
+
 public:
 	Player(const string& name, float x, float y);
 
@@ -83,8 +96,13 @@ public:
 	void InitAnimation();
 
 	void InputDirectionKey();
+	void InputDiggingKey();
 
 	void ChangeForm(); // 임시
 
 	void SafeDeleteAnimation();
+
+public:
+	void SetTileListPtr(vector<vector<Tile*>>* tileListPtr) { mTileListPtr = tileListPtr; }
+	void SetMapObjectListPtr(vector<vector<MapObject*>>* mapObjectListPtr) { mMapObjectListPtr = mapObjectListPtr; }
 };
