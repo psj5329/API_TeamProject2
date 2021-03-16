@@ -1,11 +1,7 @@
 #pragma once
 
 // GameObject 직접적으로 상속
-// Unit, Item, UI, Trail(설치 타일), MapObject(부실 수 있는 것, 없는 것)
-
-//enum Direction { Left, Right, DirEnd };
-// 아이템 등에서는 필요없을거라 게임오브젝트 아래 유닛 클래스 만들어놔서
-// 해당 클래스 상속받는 것만 넣어둔다면?
+enum ObjectType { UNITTYPE, ITEMTYPE, UITYPE, TRAILTYPE, MAPOBJECTTYPE, OBJECTTYPEEND };
 
 class GameObject
 {
@@ -16,6 +12,7 @@ protected:
 	float mSizeX;
 	float mSizeY;
 	RECT mRect;
+	ObjectType mObjectType;
 
 	bool mIsActive;
 	bool mIsDestroy;

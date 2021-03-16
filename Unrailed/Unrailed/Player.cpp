@@ -177,6 +177,9 @@ void Player::Update()
 
 void Player::Render(HDC hdc)
 {
+#ifdef DEBUG
+	RenderRect(hdc, mRect);
+#endif
 	// 카메라 기준 렌더링(유찬)
 	/*CameraManager::GetInstance()->GetMainCamera()
 		->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,

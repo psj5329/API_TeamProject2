@@ -13,7 +13,7 @@ private:
 
 	Scene* mTargetScene;
 	Scene* mLoadingScene;
-	thread* mLoadingThread;
+	thread* mLoadingThread;		// 이 세개가 로딩때 쓴다 고쳐보자
 	bool mIsLoadingEnd;
 
 private:

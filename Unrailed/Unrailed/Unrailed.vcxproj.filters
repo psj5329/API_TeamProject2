@@ -115,6 +115,9 @@
     <Filter Include="MainGame\Object\Unit\Train">
       <UniqueIdentifier>{b072fc35-668d-47f1-b132-98723f7e6e6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\CollisionManager">
+      <UniqueIdentifier>{d921f520-b4fb-42ef-879a-bf826c3ad826}</UniqueIdentifier>
+    </Filter>
     <Filter Include="MainGame\Object\Trail">
       <UniqueIdentifier>{6469547d-4343-40ea-a1d7-c9f57deed5a3}</UniqueIdentifier>
     </Filter>
@@ -258,6 +261,9 @@
     <ClInclude Include="Voltorb.h">
       <Filter>MainGame\Object\Unit\Train</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Framework\CollisionManager</Filter>
+    </ClInclude>
     <ClInclude Include="Ore.h">
       <Filter>MainGame\Object\Item</Filter>
     </ClInclude>
@@ -394,6 +400,9 @@
     </ClCompile>
     <ClCompile Include="Voltorb.cpp">
       <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Framework\CollisionManager</Filter>
     </ClCompile>
     <ClCompile Include="Ore.cpp">
       <Filter>MainGame\Object\Item</Filter>

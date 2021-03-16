@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-enum Direction { Left, Right, Up, Down, DirEnd };
+enum Direction { LEFT, RIGHT, UP, DOWN, DIREND };
 
 class Image;
 class Unit : public GameObject

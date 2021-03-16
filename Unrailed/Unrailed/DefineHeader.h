@@ -15,7 +15,7 @@
 #define ObjectPalletCountX 6
 #define ObjectPalletCountY 3
 
-//#define DEBUG
+#define DEBUG
 
 #define SafeDelete(p)\
 {\
