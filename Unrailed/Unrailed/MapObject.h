@@ -20,6 +20,7 @@ class MapObject
 	int mFrameIndexY;
 	MapObjectType mType;
 	bool mActive;
+	int mHp;
 
 public:
 
@@ -41,6 +42,7 @@ public:
 	int GetIntType()const { return (int)mType; }
 	MapObjectType GetMapObjectType()const { return mType; }
 	bool GetActive()const { return mActive; }
+	int GetHp()const { return mHp; }
 
 	//¼Â
 	void SetImage(Image* image) { mImage = image; }
@@ -53,5 +55,6 @@ public:
 	void SetFrameIndexY(int indexY) { mFrameIndexY = indexY; }
 	void SetObjectType(int type) { mType = (MapObjectType)type; }
 	void SetActive(bool isActive) { mActive = isActive; }
+	void DeductHp() { mHp -= 1; }
 };
 

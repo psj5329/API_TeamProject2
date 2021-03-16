@@ -115,6 +115,15 @@
     <Filter Include="MainGame\Object\Unit\Train">
       <UniqueIdentifier>{b072fc35-668d-47f1-b132-98723f7e6e6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Object\Trail">
+      <UniqueIdentifier>{6469547d-4343-40ea-a1d7-c9f57deed5a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\StringHelper">
+      <UniqueIdentifier>{f9da4a57-0601-4804-8a3b-bcb52c90b1fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Path">
+      <UniqueIdentifier>{a9fcc723-4467-479e-91d1-6b81e40cd708}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -249,6 +258,21 @@
     <ClInclude Include="Voltorb.h">
       <Filter>MainGame\Object\Unit\Train</Filter>
     </ClInclude>
+    <ClInclude Include="Ore.h">
+      <Filter>MainGame\Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Trail.h">
+      <Filter>MainGame\Object\Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="TrailManager.h">
+      <Filter>MainGame\Object\Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="StringHelper.h">
+      <Filter>Framework\StringHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Framework\Path</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -370,6 +394,21 @@
     </ClCompile>
     <ClCompile Include="Voltorb.cpp">
       <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClCompile>
+    <ClCompile Include="Ore.cpp">
+      <Filter>MainGame\Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Trail.cpp">
+      <Filter>MainGame\Object\Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="TrailManager.cpp">
+      <Filter>MainGame\Object\Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="StringHelper.cpp">
+      <Filter>Framework\StringHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Framework\Path</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,8 @@
 #include <functional>
 #include <fstream>
 #include <stack>
+#include <list>
+#include <iostream>
 
 using namespace std;
 
@@ -43,6 +45,8 @@ using namespace std;
 #include "SceneManager.h"
 #include "GameEventManager.h"
 #include "Gizmo.h"
+
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 extern POINT _mousePosition;	//마우스 좌표
 extern HWND	_hWnd;

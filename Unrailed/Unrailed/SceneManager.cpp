@@ -107,3 +107,8 @@ void SceneManager::LoadingThread()
 	mLoadingScene = nullptr;
 	mIsLoadingEnd = true;
 }
+
+Scene* SceneManager::GetCurrentScene()
+{
+	return mCurrentScene;
+}
