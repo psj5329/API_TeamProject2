@@ -84,10 +84,6 @@ void Voltorb::Update()
 		}
 	}
 
-<<<<<<< Updated upstream
-	
-
-=======
 	//Æø¹ß
 	if (mX >= WINSIZEX - 400 && mIsExplode == false)
 	{
@@ -95,7 +91,6 @@ void Voltorb::Update()
 		mState = State::Explode;
 		SetAnimation();
 	}
->>>>>>> Stashed changes
 
 	mCurrentAnimation->Update();
 }
