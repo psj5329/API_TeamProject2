@@ -1,8 +1,13 @@
 #include "pch.h"
 #include "Scene2.h"
+#include "TileMap.h"
 
 void Scene2::Init()
 {
+	mTileMap = new TileMap();
+	mTileMap->Init(TileCountX, TileCountY, TileSize);
+	mTileMap->LoadMap();
+
 	for (int i = 0; i < 3; i++)
 	{
 		Voltorb* temp = new Voltorb;
@@ -26,6 +31,12 @@ void Scene2::Init()
 
 void Scene2::Release()
 {
+	for (int i = 0; i < mVoltorbVec.size(); i++)
+	{
+		mVoltorbVec[i]->Release();
+	}
+	mMachop->Release();
+	mAbra->Release();
 }
 
 void Scene2::Update()
@@ -34,9 +45,7 @@ void Scene2::Update()
 	{
 		mVoltorbVec[i]->Update();
 	}
-
 	mMachop->Update();
-
 	mAbra->Update();
 }
 
@@ -62,8 +71,6 @@ void Scene2::Render(HDC hdc)
 	{
 		mVoltorbVec[i]->Render(hdc);
 	}
-
 	mMachop->Render(hdc);
-
 	mAbra->Render(hdc);
 }

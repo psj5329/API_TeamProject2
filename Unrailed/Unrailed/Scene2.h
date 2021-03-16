@@ -6,6 +6,8 @@
 
 class Scene2 : public Scene
 {
+	class TileMap* mTileMap;
+
 	vector <Voltorb*> mVoltorbVec;
 	Abra* mAbra;
 	Machop* mMachop;

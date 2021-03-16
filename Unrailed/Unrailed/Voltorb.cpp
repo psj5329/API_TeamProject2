@@ -8,6 +8,8 @@ void Voltorb::Init()
 {
 	IMAGEMANAGER->LoadFromFile(L"Voltorb", Resources(L"/Train/voltorb"), 96, 210, 3, 7, true);
 	IMAGEMANAGER->LoadFromFile(L"Electrode", Resources(L"/Train/electrode"), 105, 224, 3, 7, true);
+	IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
+	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Voltorb");
 
 	ReadyAnimation();
@@ -26,6 +28,7 @@ void Voltorb::Init()
 	mTimer = 0;
 	mStop = false;
 
+	mCurrentImage = mImage;
 	mCurrentAnimation = mSleep;
 }
 
@@ -36,6 +39,7 @@ void Voltorb::Release()
 	SafeDelete(mLeftMove);
 	SafeDelete(mRightMove);
 	SafeDelete(mSleep);
+	SafeDelete(mExplode);
 }
 
 void Voltorb::Update()
@@ -80,15 +84,25 @@ void Voltorb::Update()
 		}
 	}
 
+<<<<<<< Updated upstream
 	
 
+=======
+	//Æø¹ß
+	if (mX >= WINSIZEX - 400 && mIsExplode == false)
+	{
+		mIsExplode = true;
+		mState = State::Explode;
+		SetAnimation();
+	}
+>>>>>>> Stashed changes
 
 	mCurrentAnimation->Update();
 }
 
 void Voltorb::Render(HDC hdc)
 {
-	mImage->ScaleFrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	mCurrentImage->ScaleFrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
 void Voltorb::ReadyAnimation()
@@ -118,6 +132,10 @@ void Voltorb::ReadyAnimation()
 	mSleep->SetIsLoop(true);
 	mSleep->SetFrameUpdateTime(0.2f);
 
+	mExplode = new Animation();
+	mExplode->InitFrameByStartEnd(0, 0, 6, 0, false);
+	mExplode->SetIsLoop(false);
+	mExplode->SetFrameUpdateTime(0.1f);
 }
 
 void Voltorb::SetAnimation()
@@ -146,6 +164,11 @@ void Voltorb::SetAnimation()
 	{
 		mCurrentAnimation = mSleep;
 	}
+	if (mState == State::Explode)
+	{
+		mCurrentAnimation = mExplode;
+		mCurrentImage = mExplodeImage;
+	}
 
 	mCurrentAnimation->Play();
 }
@@ -154,10 +177,10 @@ void Voltorb::SetImage(int i)
 {
 	if (i == 0) // 0Àº false
 	{
-		mImage = IMAGEMANAGER->FindImage(L"Electrode");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Electrode");
 	}
 	else
 	{
-		mImage = IMAGEMANAGER->FindImage(L"Voltorb");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Voltorb");
 	}
 }

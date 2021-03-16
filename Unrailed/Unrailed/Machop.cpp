@@ -8,6 +8,8 @@ void Machop::Init()
 	IMAGEMANAGER->LoadFromFile(L"Machop", Resources(L"/Train/machop"), 92, 260, 4, 10, true);
 	IMAGEMANAGER->LoadFromFile(L"Machoke", Resources(L"/Train/machoke"), 128, 256, 4, 8, true);
 	IMAGEMANAGER->LoadFromFile(L"Machamp", Resources(L"/Train/machamp"), 124, 320, 4, 10, true);
+	IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
+	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Machop");
 
 	ReadyAnimation();
@@ -27,6 +29,7 @@ void Machop::Init()
 	mStop = false;
 	mLevel = 1;
 
+	mCurrentImage = mImage;
 	mCurrentAnimation = mRightSleep;
 }
 
@@ -42,6 +45,7 @@ void Machop::Release()
 	SafeDelete(mUpIntercept);
 	SafeDelete(mLeftIntercept);
 	SafeDelete(mRightIntercept);
+	SafeDelete(mExplode);
 }
 
 void Machop::Update()
@@ -112,13 +116,20 @@ void Machop::Update()
 		mLevel = 3;
 	}
 
+	//Æø¹ß
+	if (mX >= WINSIZEX - 400 && mIsExplode == false)
+	{
+		mIsExplode = true;
+		mState = State::Explode;
+		SetAnimation();
+	}
 
 	mCurrentAnimation->Update();
 }
 
 void Machop::Render(HDC hdc)
 {
-	mImage->ScaleFrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	mCurrentImage->ScaleFrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
 void Machop::ReadyAnimation()
@@ -152,6 +163,11 @@ void Machop::ReadyAnimation()
 	mRightSleep->InitFrameByStartEnd(2, 5, 3, 5, false);
 	mRightSleep->SetIsLoop(true);
 	mRightSleep->SetFrameUpdateTime(0.2f);
+
+	mExplode = new Animation();
+	mExplode->InitFrameByStartEnd(0, 0, 6, 0, false);
+	mExplode->SetIsLoop(false);
+	mExplode->SetFrameUpdateTime(0.1f);
 }
 
 void Machop::SetAnimation()
@@ -186,6 +202,11 @@ void Machop::SetAnimation()
 		{
 			mCurrentAnimation = mRightSleep;
 		}
+	}
+	if (mState == State::Explode)
+	{
+		mCurrentAnimation = mExplode;
+		mCurrentImage = mExplodeImage;
 	}
 
 	mCurrentAnimation->Play();
