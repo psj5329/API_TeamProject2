@@ -6,24 +6,18 @@
 #include "MapObject.h"
 
 
-#define TileCountX 10
-#define TileCountY 10
-#define TileSize 48
-#define PalleteCountX 12
-#define PalleteCountY 6
-#define PalleteSize 27
-#define TypePalleteCount 3
-#define ObjectPalletCountX 6
-#define ObjectPalletCountY 3
 
 enum class CurrentPallete
 {
 	Tile,
 	Object,
-	Type
+	Type,
+	Erase
 };
 
 class ICommand;
+
+
 
 class MapToolScene : public Scene
 {
@@ -51,6 +45,8 @@ class MapToolScene : public Scene
 	class Button* mLoadButton;
 	class Button* mUndoButton;
 	class Button* mRightArrowButton;
+	class Button* mRightArrowButton2;
+	class Button* mEraseButton;
 
 	stack<ICommand*> mCommandList;
 public:
@@ -64,11 +60,17 @@ public:
 	vector<vector <MapObject*>>* GetObjectListPtr() { return &mMapObjectList; }
 
 private:
+	
 	void Save();
 	void Load();
 
 	void PushCommand(ICommand* command);
 	void Undo();
 	void Redo();
+
+
+	void EraseButton();
+	void SwitchObjectPallete();
+	void SwitchTilePallete();
 };
 

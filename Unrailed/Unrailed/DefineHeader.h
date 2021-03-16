@@ -4,6 +4,17 @@
 #define WINSIZEX 1280
 #define WINSIZEY 720
 
+//¸Ê°ü·Ã
+#define TileCountX 10
+#define TileCountY 10
+#define TileSize 48
+#define PalleteCountX 12
+#define PalleteCountY 6
+#define PalleteSize 27
+#define TypePalleteCount 3
+#define ObjectPalletCountX 6
+#define ObjectPalletCountY 3
+
 //#define DEBUG
 
 #define SafeDelete(p)\
