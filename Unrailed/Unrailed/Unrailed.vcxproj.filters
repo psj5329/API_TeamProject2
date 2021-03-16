@@ -130,6 +130,9 @@
     <Filter Include="Framework\Path">
       <UniqueIdentifier>{a9fcc723-4467-479e-91d1-6b81e40cd708}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Scene6">
+      <UniqueIdentifier>{16c0818b-f8ed-4820-98ba-43aa3b7ecd4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -288,6 +291,9 @@
     <ClInclude Include="Path.h">
       <Filter>Framework\Path</Filter>
     </ClInclude>
+    <ClInclude Include="Scene6.h">
+      <Filter>MainGame\Scene\Scene6</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -433,6 +439,9 @@
     </ClCompile>
     <ClCompile Include="Path.cpp">
       <Filter>Framework\Path</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene6.cpp">
+      <Filter>MainGame\Scene\Scene6</Filter>
     </ClCompile>
     <ClCompile Include="Abra.cpp">
       <Filter>MainGame\Object\Unit\Train</Filter>

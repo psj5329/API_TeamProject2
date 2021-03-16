@@ -11,6 +11,7 @@ enum class TrailDirection : int
 
 enum class TrailType
 {
+	None,
 	Green,
 	Blue,
 	Red
@@ -34,6 +35,7 @@ class Trail :
 
 public:
 	void Init(int x, int y, int type, int direction);
+	void Init()override {};
 	void Release()override;
 	void Update()override;
 	void Render(HDC hdc)override;
@@ -47,7 +49,7 @@ public:
 
 	void SetTrailType(int type) { mTrailType = (TrailType)type; }
 	void SetDirection(int dir) { mDirection = (TrailDirection)dir; }
-	void SetIsConnected();
+	void SetIsConnected(bool connected) { mIsConnected = connected; }
 
 
 	void Turn();//플레이어의 돌리기

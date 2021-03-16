@@ -44,8 +44,8 @@ void Scene1::Update()
 
 	OBJECTMANAGER->Update();
 	mTileMap->Update();
-	COLLISIONMANAGER->TileCollision(mPlayer, mTileMap);
-	COLLISIONMANAGER->MapObjectCollision(mPlayer, mTileMap);
+	//COLLISIONMANAGER->TileCollision(mPlayer, mTileMap);
+	//COLLISIONMANAGER->MapObjectCollision(mPlayer, mTileMap);
 }
 
 void Scene1::Render(HDC hdc)

@@ -11,10 +11,10 @@ public:
 
 public:
 	bool IsCollision(RECT* rc1, RECT* rc2);
-	void TileCollision(Player* player, TileMap* tileMap);	// ÇÃ·¹ÀÌ¾î Á¤º¸¿Í °¢ ¾ÀÀÇ Å¸ÀÏ¸Ê Á¤º¸¸¦ ¹Ş¾Æ¿Í °¥ ¼ö ¾ø´Â ¶¥Àº ¸ø°¡°Ô
+	void TileCollision(Player* player, TileMap* tileMap);	// í”Œë ˆì´ì–´ ì •ë³´ì™€ ê° ì”¬ì˜ íƒ€ì¼ë§µ ì •ë³´ë¥¼ ë°›ì•„ì™€ ê°ˆ ìˆ˜ ì—†ëŠ” ë•…ì€ ëª»ê°€ê²Œ
 	void MapObjectCollision(Player* player, TileMap* tileMap);
 
-	// Å×½ºÆ®¿ë
+	// í…ŒìŠ¤íŠ¸ìš©
 	GameObject* ItemCollision(GameObject* object);
 };
 

@@ -5,7 +5,7 @@
 
 void Trail::Init(int x, int y, int type, int direction)
 {
-    mTrailType = (TrailType)(type - 1);
+    mTrailType = (TrailType)type;
     mDirection = (TrailDirection)direction;
 
     //이미지정하기
@@ -17,18 +17,21 @@ void Trail::Init(int x, int y, int type, int direction)
     {
         mImage = IMAGEMANAGER->FindImage(L"BlueTrail");
     }
-    else
+    else 
     {
         mImage = IMAGEMANAGER->FindImage(L"RedTrail");
     }
+
         
     mX = x;
     mY = y;
     mSizeX = mImage->GetFrameWidth() * 2;
     mSizeY = mImage->GetFrameHeight() * 2;
     mRect = RectMake(mX, mY, mSizeX, mSizeY);
+    mIsConnected = false;
 
     AnimationInit();
+
     if (mDirection == TrailDirection::Down)
     {
         mCurrentAnimation = mDown;
@@ -45,22 +48,32 @@ void Trail::Init(int x, int y, int type, int direction)
     {
         mCurrentAnimation = mRight;
     }
-
+    mCurrentAnimation->Play();
 }
 
 void Trail::Release()
 {
-
+    SafeDelete(mUp);
+    SafeDelete(mDown);
+    SafeDelete(mLeft);
+    SafeDelete(mRight);
+    SafeDelete(mCurrentAnimation);
 }
 
 void Trail::Update()
 {
 
+    //연결된 친구들만 애니메이션 움직이게
+    if (mIsConnected)
+    {
+        mCurrentAnimation->Update();
+    }
 }
 
 void Trail::Render(HDC hdc)
 {
-    mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+    if(mTrailType != TrailType::None)
+        mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
 //플레이어의 돌리기
@@ -70,15 +83,27 @@ void Trail::Turn()
 	{
     case TrailDirection::Down:
         mDirection = TrailDirection::Left;
+        mCurrentAnimation->Stop();
+        mCurrentAnimation = mLeft;
+        mCurrentAnimation->Play();
         break;
     case TrailDirection::Up:
         mDirection = TrailDirection::Right;
+        mCurrentAnimation->Stop();
+        mCurrentAnimation = mRight;
+        mCurrentAnimation->Play();
         break;
     case TrailDirection::Left:
         mDirection = TrailDirection::Up;
+        mCurrentAnimation->Stop();
+        mCurrentAnimation = mUp;
+        mCurrentAnimation->Play();
         break;
     case TrailDirection::Right:
         mDirection = TrailDirection::Down;
+        mCurrentAnimation->Stop();
+        mCurrentAnimation = mDown;
+        mCurrentAnimation->Play();
         break;
     default:
         break;
@@ -117,7 +142,3 @@ int Trail::PickUp()
     return (int)mTrailType;
 }
 
-void Trail::SetIsConnected()
-{
-
-}
