@@ -44,6 +44,9 @@ void Scene3::Render(HDC hdc)
 
 	mTileMap->Render(hdc);
 
+	OBJECTMANAGER->Render(hdc);
+
+
 	wstring str3 = L"SPACE ¸Ê·Îµå";
 	TextOut(hdc, _mousePosition.x + 10, _mousePosition.y + 40, str3.c_str(), str3.length());
 

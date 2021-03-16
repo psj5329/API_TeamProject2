@@ -6,5 +6,8 @@ public:
 	virtual void Release() = 0;
 	virtual void Update() = 0;
 	virtual void Render(HDC hdc) = 0;
+
+	virtual LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) { return 0; }
+
 };
 

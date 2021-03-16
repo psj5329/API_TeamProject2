@@ -2,7 +2,7 @@
 #include "TileMap.h"
 #include "Tile.h"
 #include "MapToolScene.h"
-
+#include "Trail.h"
 
 void TileMap::Init(int tileX, int tileY, int tileSize)
 {
@@ -52,7 +52,6 @@ void TileMap::Init(int tileX, int tileY, int tileSize)
 				0
 			);
 			mMapObjectList[y].push_back(tempObject);
-
 		}
 	}
 }
@@ -64,7 +63,36 @@ void TileMap::Release()
 
 void TileMap::Update()
 {
-	
+
+	//±¤¹° ¾÷µ«
+	for (int y = 0; y < mMapObjectList.size();y++)
+	{
+		for (int x = 0;x < mMapObjectList[y].size();x++)
+		{
+			if (mMapObjectList[y][x]->GetMapObjectType() != MapObjectType::None)
+			{
+				mMapObjectList[y][x]->Update();
+			}
+		}
+	}
+
+
+	//±¤¹°Ã¼·Â±ð±â
+	if (INPUT->GetKeyDown('P'))
+	{
+		for (int y = 0; y < mMapObjectList.size();y++)
+		{
+			for (int x = 0;x < mMapObjectList[y].size();x++)
+			{
+				if (mMapObjectList[y][x]->GetMapObjectType() != MapObjectType::None)
+				{
+					mMapObjectList[y][x]->DeductHp();
+				}
+			}
+		}
+	}
+
+
 }
 
 void TileMap::Render(HDC hdc)

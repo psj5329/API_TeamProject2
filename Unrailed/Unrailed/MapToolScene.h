@@ -72,5 +72,8 @@ private:
 	void EraseButton();
 	void SwitchObjectPallete();
 	void SwitchTilePallete();
+
+	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)override;
+
 };
 
