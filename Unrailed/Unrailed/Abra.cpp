@@ -8,25 +8,29 @@ void Abra::Init()
 	IMAGEMANAGER->LoadFromFile(L"Abra", Resources(L"/Train/abra"), 96, 200, 4, 8, true);
 	IMAGEMANAGER->LoadFromFile(L"Alakazam", Resources(L"/Train/alakazam"), 124, 232, 4, 8, true);
 	IMAGEMANAGER->LoadFromFile(L"Kadabra", Resources(L"/Train/kadabra"), 120, 256, 4, 8, true);
+	IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
+	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Abra");
 
 	ReadyAnimation();
 
-	//ºÎ¸ð Å¬·¡½º (GameObject) º¯¼ö
+	//ë¶€ëª¨ í´ëž˜ìŠ¤ (GameObject) ë³€ìˆ˜
 	mX = WINSIZEX / 2 - 180;
 	mY = WINSIZEY / 2;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Machop º¯¼ö
+	//Machop ë³€ìˆ˜
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 	mSpeed = 100.f;
 	mTimer = 0;
 	mStop = false;
 	mLevel = 1;
+	mIsExplode = false;
 
+	mCurrentImage = mImage;
 	mCurrentAnimation = mRightSleep;
 }
 
@@ -42,11 +46,12 @@ void Abra::Release()
 	SafeDelete(mUpSynthesis);
 	SafeDelete(mLeftSynthesis);
 	SafeDelete(mRightSynthesis);
+	SafeDelete(mExplode);
 }
 
 void Abra::Update()
 {
-	//»óÅÂÁ¤ÇÏ±â
+	//ìƒíƒœì •í•˜ê¸°
 	if (mTimer == 0)
 	{
 		if (mState == State::Sleep)
@@ -61,7 +66,7 @@ void Abra::Update()
 		SetAnimation();
 	}
 
-	//¿òÁ÷ÀÓ
+	//ì›€ì§ìž„
 	if (mState == State::Sleep)
 	{
 		mTimer += Time::GetInstance()->DeltaTime();
@@ -86,7 +91,7 @@ void Abra::Update()
 		}
 	}
 
-	//ÁøÈ­
+	//ì§„í™”
 	switch (mLevel)
 	{
 	case 1:
@@ -112,13 +117,20 @@ void Abra::Update()
 		mLevel = 3;
 	}
 
+	//í­ë°œ
+	if (mX >= WINSIZEX - 400 && mIsExplode == false)
+	{
+		mIsExplode = true;
+		mState = State::Explode;
+		SetAnimation();
+	}
 
 	mCurrentAnimation->Update();
 }
 
 void Abra::Render(HDC hdc)
 {
-	mImage->ScaleFrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	mCurrentImage->ScaleFrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
 void Abra::ReadyAnimation()
@@ -152,6 +164,10 @@ void Abra::ReadyAnimation()
 	mRightSleep->InitFrameByStartEnd(2, 5, 3, 5, false);
 	mRightSleep->SetIsLoop(true);
 	mRightSleep->SetFrameUpdateTime(0.2f);
+	mExplode = new Animation();
+	mExplode->InitFrameByStartEnd(0, 0, 6, 0, false);
+	mExplode->SetIsLoop(false);
+	mExplode->SetFrameUpdateTime(0.1f);
 }
 
 void Abra::SetAnimation()
@@ -175,6 +191,7 @@ void Abra::SetAnimation()
 		{
 			mCurrentAnimation = mRightMove;
 		}
+		mCurrentImage = mImage;
 	}
 	if (mState == State::Sleep)
 	{
@@ -186,6 +203,12 @@ void Abra::SetAnimation()
 		{
 			mCurrentAnimation = mRightSleep;
 		}
+		mCurrentImage = mImage;
+	}
+	if (mState == State::Explode)
+	{
+		mCurrentAnimation = mExplode;
+		mCurrentImage = mExplodeImage;
 	}
 
 	mCurrentAnimation->Play();

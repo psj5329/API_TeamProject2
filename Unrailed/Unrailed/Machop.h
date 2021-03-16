@@ -1,14 +1,10 @@
 #pragma once
 #include "Train.h"
 
-class Image;
 class Animation;
 
 class Machop : public Train
 {
-	Image* mImage;
-
-	Animation* mCurrentAnimation;
 	Animation* mDownMove;
 	Animation* mUpMove;
 	Animation* mLeftMove;

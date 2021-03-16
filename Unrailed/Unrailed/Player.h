@@ -23,10 +23,10 @@ enum State
 
 enum Form
 {
-	Ditto, // ¸ŞÅ¸¸ù
-	Charmander, // ÆÄÀÌ¸®
-	Chikorita, // Ä¡ÄÚ¸®Å¸
-	Totodile, // ¸®¾ÆÄÚ
+	Ditto, // ë©”íƒ€ëª½
+	Charmander, // íŒŒì´ë¦¬
+	Chikorita, // ì¹˜ì½”ë¦¬íƒ€
+	Totodile, // ë¦¬ì•„ì½”
 	FormEnd
 };
 
@@ -59,7 +59,7 @@ class Player : public GameObject
 	Animation* mLUMoveAnimation;
 	Animation* mRUMoveAnimation;
 
-	Animation* mCurrentAnimation;	//ÇöÀç ¾Ö´Ï¸ŞÀÌ¼Ç
+	Animation* mCurrentAnimation;	//í˜„ì¬ ì• ë‹ˆë©”ì´ì…˜
 
 	DirectionEight mDir;
 	State mState;
@@ -77,8 +77,8 @@ class Player : public GameObject
 	int mTileX;
 	int mTileY;
 
-	int mNextTileX; // ¹İµå½Ã ´ÙÀ½ °ÍÀº ¾Æ´Ô(¼ø¼­ ¶§¹®¿¡ °ªÀÌ º¯ÇÔ)
-	int mNextTileY; // ¹İµå½Ã ´ÙÀ½ °ÍÀº ¾Æ´Ô(¼ø¼­ ¶§¹®¿¡ °ªÀÌ º¯ÇÔ)
+	int mNextTileX; // ë°˜ë“œì‹œ ë‹¤ìŒ ê²ƒì€ ì•„ë‹˜(ìˆœì„œ ë•Œë¬¸ì— ê°’ì´ ë³€í•¨)
+	int mNextTileY; // ë°˜ë“œì‹œ ë‹¤ìŒ ê²ƒì€ ì•„ë‹˜(ìˆœì„œ ë•Œë¬¸ì— ê°’ì´ ë³€í•¨)
 
 	vector<vector<Tile*>>* mTileListPtr;
 	vector<vector<MapObject*>>* mMapObjectListPtr;
@@ -98,10 +98,10 @@ public:
 	void InputDirectionKey();
 	void InputDiggingKey();
 
-	void ChangeForm(); // ÀÓ½Ã
+	void ChangeForm(); // ì„ì‹œ
 
 	void SafeDeleteAnimation();
-
+  
 public:
 	void SetTileListPtr(vector<vector<Tile*>>* tileListPtr) { mTileListPtr = tileListPtr; }
 	void SetMapObjectListPtr(vector<vector<MapObject*>>* mapObjectListPtr) { mMapObjectListPtr = mapObjectListPtr; }

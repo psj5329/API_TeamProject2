@@ -28,7 +28,7 @@ void Player::Init()
 	mDir = DirectionEight::Down;
 	mState = State::Idle;
 
-	mSpeed = 100.f;	
+	mSpeed = 100.f;
 
 	mInputType = 0;
 
@@ -37,14 +37,14 @@ void Player::Init()
 	mChangeT = 0.f;
 
 	mIsDirectionKeyDown = false;
-
+  
 	mTileX = 0;
 	mTileY = 0;
 
 	mNextTileX = 0;
 	mNextTileY = 0;
 
-	mIsAttackingTemp = false; // »óÈ£ÀÛ¿ë Àü Å×½ºÆ® º¯¼ö
+	mIsAttackingTemp = false; // ìƒí˜¸ì‘ìš© ì „ í…ŒìŠ¤íŠ¸ ë³€ìˆ˜
 }
 
 void Player::Release()
@@ -56,9 +56,9 @@ void Player::Update()
 {
 	mTileX = (int)(mX / TileSize);
 	mTileY = (int)(mY / TileSize);
-	// ÇöÀç ÇÃ·¹ÀÌ¾î »çÀÌÁî ´Ã·ÁÁÖ¸é¼­ mx, my°¡ Á¦´ë·Î ÀâÈ÷Áö ¾Ê°í ÀÖÀ½, Å¸ÀÏÀº ½ºÄÉÀÏ¸µ ¾î¶»°Ô ÇÏ°í ÀÖ´ÂÁö ÆÄ¾ÇÇÏ±â
-	// ÇÃ·¹ÀÌ¾î´Â ±×³É ÇöÀç ÀÌ¹ÌÁö¿¡ ·»´õ¸¸ ¹è¼ö ´Ã·ÁÁà¼­ ÀÌ»óÇÔ
-	// ¿ø·¡ Å©±â·Î´Â µü Áß½É, 2¹è Å©±â·Î´Â ¿ŞÂÊ À­ºÎºĞ ÀâÈû
+	// í˜„ì¬ í”Œë ˆì´ì–´ ì‚¬ì´ì¦ˆ ëŠ˜ë ¤ì£¼ë©´ì„œ mx, myê°€ ì œëŒ€ë¡œ ì¡íˆì§€ ì•Šê³  ìˆìŒ, íƒ€ì¼ì€ ìŠ¤ì¼€ì¼ë§ ì–´ë–»ê²Œ í•˜ê³  ìˆëŠ”ì§€ íŒŒì•…í•˜ê¸°
+	// í”Œë ˆì´ì–´ëŠ” ê·¸ëƒ¥ í˜„ì¬ ì´ë¯¸ì§€ì— ë Œë”ë§Œ ë°°ìˆ˜ ëŠ˜ë ¤ì¤˜ì„œ ì´ìƒí•¨
+	// ì›ë˜ í¬ê¸°ë¡œëŠ” ë”± ì¤‘ì‹¬, 2ë°° í¬ê¸°ë¡œëŠ” ì™¼ìª½ ìœ—ë¶€ë¶„ ì¡í˜
 
 	InputDirectionKey();
 
@@ -180,7 +180,7 @@ void Player::Render(HDC hdc)
 #ifdef DEBUG
 	RenderRect(hdc, mRect);
 #endif
-	// Ä«¸Ş¶ó ±âÁØ ·»´õ¸µ(À¯Âù)
+	// ì¹´ë©”ë¼ ê¸°ì¤€ ë Œë”ë§(ìœ ì°¬)
 	/*CameraManager::GetInstance()->GetMainCamera()
 		->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
 			mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(),
@@ -188,7 +188,7 @@ void Player::Render(HDC hdc)
 
 	//RenderRect(hdc, mRect);
 
-	// ÀÓ½Ã·Î Ä«¸Ş¶ó °íÁ¤Çü ·»´õ¸µ
+	// ì„ì‹œë¡œ ì¹´ë©”ë¼ ê³ ì •í˜• ë Œë”ë§
 	mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,
 		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
@@ -198,21 +198,23 @@ void Player::Render(HDC hdc)
 	wstring strInput = L"InputType : " + to_wstring(mInputType);
 	TextOut(hdc, 10, 100, strInput.c_str(), (int)strInput.length());
 
-	wstring strChange = L"Æ÷ÄÏ¸ó º¯!½Å! ";
+	wstring strChange = L"í¬ì¼“ëª¬ ë³€!ì‹ ! ";
+
 	if (mChangeT)
 		TextOut(hdc, mX - 20, mY - 25, strChange.c_str(), (int)strChange.length());
 
 	wstring strSpeed = L"Speed: " + to_wstring(mSpeed);
 	wstring strKeyDown = L"IsKeyDownCheck: " + to_wstring(mIsDirectionKeyDown);
+
 	TextOut(hdc, mX, mY + 50, strSpeed.c_str(), (int)strSpeed.length());
 	TextOut(hdc, mX, mY + 75, strKeyDown.c_str(), (int)strKeyDown.length());
-	wstring strTile = L"Å¸ÀÏ x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
+	wstring strTile = L"íƒ€ì¼ x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
 	TextOut(hdc, mX, mY + 100, strTile.c_str(), (int)strTile.length());
 
 
 
 
-	wstring strAtk = L"°ø°İ ÁßÀÌ´Ù";
+	wstring strAtk = L"ê³µê²© ì¤‘ì´ë‹¤";
 	if (mIsAttackingTemp)
 		TextOut(hdc, mX + 55, mY, strAtk.c_str(), (int)strAtk.length());
 }
@@ -326,7 +328,7 @@ void Player::InputDirectionKey()
 
 	if (Input::GetInstance()->GetKeyAKeyDownB(VK_DOWN, VK_UP))
 	{
-		mInputType = 2; // ¿¹¿Ü 2: w ÀÔ·Â Ã³¸®
+		mInputType = 2; // ì˜ˆì™¸ 2: w ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyDownB(VK_DOWN, VK_LEFT))
@@ -341,7 +343,7 @@ void Player::InputDirectionKey()
 	}
 	else if (Input::GetInstance()->GetKeyAKeyDownB(VK_UP, VK_DOWN))
 	{
-		mInputType = 1; // ¿¹¿Ü 1: s ÀÔ·Â Ã³¸®
+		mInputType = 1; // ì˜ˆì™¸ 1: s ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyDownB(VK_UP, VK_LEFT))
@@ -366,7 +368,7 @@ void Player::InputDirectionKey()
 	}
 	else if (Input::GetInstance()->GetKeyAKeyDownB(VK_LEFT, VK_RIGHT))
 	{
-		mInputType = 4; // ¿¹¿Ü 4: d ÀÔ·Â Ã³¸®
+		mInputType = 4; // ì˜ˆì™¸ 4: d ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyDownB(VK_RIGHT, VK_DOWN))
@@ -382,68 +384,68 @@ void Player::InputDirectionKey()
 	}
 	else if (Input::GetInstance()->GetKeyAKeyDownB(VK_RIGHT, VK_LEFT))
 	{
-		mInputType = 3; // ¿¹¿Ü 3: a ÀÔ·Â Ã³¸®
+		mInputType = 3; // ì˜ˆì™¸ 3: a ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 
 	if (Input::GetInstance()->GetKeyAKeyUpB(VK_DOWN, VK_UP))
 	{
-		mInputType = 1; // ¿¹¿Ü 1: s ÀÔ·Â Ã³¸®
+		mInputType = 1; // ì˜ˆì™¸ 1: s ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyUpB(VK_DOWN, VK_LEFT))
 	{
-		mInputType = 1; // ¿¹¿Ü 1: s ÀÔ·Â Ã³¸®
+		mInputType = 1; // ì˜ˆì™¸ 1: s ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyUpB(VK_DOWN, VK_RIGHT))
 	{
-		mInputType = 1; // ¿¹¿Ü 1: s ÀÔ·Â Ã³¸®
+		mInputType = 1; // ì˜ˆì™¸ 1: s ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyUpB(VK_UP, VK_DOWN))
 	{
-		mInputType = 2; // ¿¹¿Ü 2: w ÀÔ·Â Ã³¸®
+		mInputType = 2; // ì˜ˆì™¸ 2: w ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyUpB(VK_UP, VK_LEFT))
 	{
-		mInputType = 2; // ¿¹¿Ü 2: w ÀÔ·Â Ã³¸®
+		mInputType = 2; // ì˜ˆì™¸ 2: w ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyUpB(VK_UP, VK_RIGHT))
 	{
-		mInputType = 2; // ¿¹¿Ü 2: w ÀÔ·Â Ã³¸®
+		mInputType = 2; // ì˜ˆì™¸ 2: w ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyUpB(VK_LEFT, VK_DOWN))
 	{
-		mInputType = 3; // ¿¹¿Ü 3: a ÀÔ·Â Ã³¸®
+		mInputType = 3; // ì˜ˆì™¸ 3: a ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyUpB(VK_LEFT, VK_UP))
 	{
-		mInputType = 3; // ¿¹¿Ü 3: a ÀÔ·Â Ã³¸®
+		mInputType = 3; // ì˜ˆì™¸ 3: a ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyUpB(VK_LEFT, VK_RIGHT))
 	{
-		mInputType = 3; // ¿¹¿Ü 3: a ÀÔ·Â Ã³¸®
+		mInputType = 3; // ì˜ˆì™¸ 3: a ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyUpB(VK_RIGHT, VK_DOWN))
 	{
-		mInputType = 4; // ¿¹¿Ü 4: d ÀÔ·Â Ã³¸®
+		mInputType = 4; // ì˜ˆì™¸ 4: d ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyUpB(VK_RIGHT, VK_UP))
 	{
-		mInputType = 4; // ¿¹¿Ü 4: d ÀÔ·Â Ã³¸®
+		mInputType = 4; // ì˜ˆì™¸ 4: d ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyAKeyUpB(VK_RIGHT, VK_LEFT))
 	{
-		mInputType = 4; // ¿¹¿Ü 4: d ÀÔ·Â Ã³¸®
+		mInputType = 4; // ì˜ˆì™¸ 4: d ì…ë ¥ ì²˜ë¦¬
 		mIsDirectionKeyDown = true;
 	}
 	else if (Input::GetInstance()->GetKeyUp(VK_DOWN))
@@ -517,14 +519,10 @@ void Player::InputDirectionKey()
 	}
 
 
-	/*
-	mTileX = (int)(mX / TileSize);
-	mTileY = (int)(mY / TileSize);*/
-
 	if (Input::GetInstance()->GetKey(VK_DOWN))
 	{
 		mState = State::Move;
-
+    
 		mNextTileX = mTileX;
 		if (mTileY == TileCountY - 1)
 			mNextTileY = mTileY;
@@ -547,7 +545,7 @@ void Player::InputDirectionKey()
 	if (Input::GetInstance()->GetKey(VK_UP))
 	{
 		mState = State::Move;
-
+    
 		mNextTileX = mTileX;
 		if (mTileY == 0)
 			mNextTileY = mTileY;
@@ -593,7 +591,7 @@ void Player::InputDirectionKey()
 	if (Input::GetInstance()->GetKey(VK_RIGHT))
 	{
 		mState = State::Move;
-
+    
 		if (mTileX == TileCountX - 1)
 			mNextTileX = mTileX;
 		else
@@ -611,6 +609,7 @@ void Player::InputDirectionKey()
 		else if ((mX >= TileSize * mTileX + TileSize / 2) && (mY > TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY + 1][mNextTileX]->GetTileType() == TileType::Wall))
 		mX = TileSize * mTileX + TileSize / 2;
 		else
+
 		mX += mSpeed * Time::GetInstance()->DeltaTime();
 	}
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -708,17 +707,17 @@ void Player::InputDiggingKey()
 		if ((mForm == Form::Charmander) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Red))
 		{
 			mIsAttackingTemp = true;
-			// ¾îÅÃ ½ÃÀÛ > ±¤¹° Ã¼·Â °¨¼Ò > ±¤¹° Ã¼·Â 0ÀÌ¸é ±¤¹° Å¸ÀÔ ¹Ù²Ù°í ºñÈ°¼ºÈ­? > ¾ÆÀÌÅÛ UI¿¡ Ãß°¡
+			// ì–´íƒ ì‹œì‘ > ê´‘ë¬¼ ì²´ë ¥ ê°ì†Œ > ê´‘ë¬¼ ì²´ë ¥ 0ì´ë©´ ê´‘ë¬¼ íƒ€ì… ë°”ê¾¸ê³  ë¹„í™œì„±í™”? > ì•„ì´í…œ UIì— ì¶”ê°€
 		}
 		else if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Green))
 		{
 			mIsAttackingTemp = true;
-			// ¾îÅÃ ½ÃÀÛ > ±¤¹° Ã¼·Â °¨¼Ò > ±¤¹° Ã¼·Â 0ÀÌ¸é ±¤¹° Å¸ÀÔ ¹Ù²Ù°í ºñÈ°¼ºÈ­? > ¾ÆÀÌÅÛ UI¿¡ Ãß°¡
+			// ì–´íƒ ì‹œì‘ > ê´‘ë¬¼ ì²´ë ¥ ê°ì†Œ > ê´‘ë¬¼ ì²´ë ¥ 0ì´ë©´ ê´‘ë¬¼ íƒ€ì… ë°”ê¾¸ê³  ë¹„í™œì„±í™”? > ì•„ì´í…œ UIì— ì¶”ê°€
 		}
 		else if ((mForm == Form::Totodile) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Blue))
 		{
 			mIsAttackingTemp = true;
-			// ¾îÅÃ ½ÃÀÛ > ±¤¹° Ã¼·Â °¨¼Ò > ±¤¹° Ã¼·Â 0ÀÌ¸é ±¤¹° Å¸ÀÔ ¹Ù²Ù°í ºñÈ°¼ºÈ­? > ¾ÆÀÌÅÛ UI¿¡ Ãß°¡
+			// ì–´íƒ ì‹œì‘ > ê´‘ë¬¼ ì²´ë ¥ ê°ì†Œ > ê´‘ë¬¼ ì²´ë ¥ 0ì´ë©´ ê´‘ë¬¼ íƒ€ì… ë°”ê¾¸ê³  ë¹„í™œì„±í™”? > ì•„ì´í…œ UIì— ì¶”ê°€
 		}
 		else
 			mIsAttackingTemp = false;

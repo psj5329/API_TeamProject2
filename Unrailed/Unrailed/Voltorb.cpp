@@ -8,24 +8,27 @@ void Voltorb::Init()
 {
 	IMAGEMANAGER->LoadFromFile(L"Voltorb", Resources(L"/Train/voltorb"), 96, 210, 3, 7, true);
 	IMAGEMANAGER->LoadFromFile(L"Electrode", Resources(L"/Train/electrode"), 105, 224, 3, 7, true);
+	IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
+	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Voltorb");
 
 	ReadyAnimation();
 
-	//ºÎ¸ð Å¬·¡½º (GameObject) º¯¼ö
+	//ë¶€ëª¨ í´ëž˜ìŠ¤ (GameObject) ë³€ìˆ˜
 	mX = WINSIZEX / 2;
 	mY = WINSIZEY / 2;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Electrode º¯¼ö
+	//Electrode ë³€ìˆ˜
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 	mSpeed = 100.f;
 	mTimer = 0;
 	mStop = false;
 
+	mCurrentImage = mImage;
 	mCurrentAnimation = mSleep;
 }
 
@@ -36,11 +39,12 @@ void Voltorb::Release()
 	SafeDelete(mLeftMove);
 	SafeDelete(mRightMove);
 	SafeDelete(mSleep);
+	SafeDelete(mExplode);
 }
 
 void Voltorb::Update()
 {
-	//»óÅÂÁ¤ÇÏ±â
+	//ìƒíƒœì •í•˜ê¸°
 	if (mTimer == 0)
 	{
 		if (mState == State::Sleep)
@@ -55,7 +59,7 @@ void Voltorb::Update()
 		SetAnimation();
 	}
 
-	//¿òÁ÷ÀÓ
+	//ì›€ì§ìž„
 	if (mState == State::Sleep)
 	{
 		mTimer += Time::GetInstance()->DeltaTime();
@@ -80,15 +84,20 @@ void Voltorb::Update()
 		}
 	}
 
-
-
+	//í­ë°œ
+	if (mX >= WINSIZEX - 400 && mIsExplode == false)
+	{
+		mIsExplode = true;
+		mState = State::Explode;
+		SetAnimation();
+	}
 
 	mCurrentAnimation->Update();
 }
 
 void Voltorb::Render(HDC hdc)
 {
-	mImage->ScaleFrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	mCurrentImage->ScaleFrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
 void Voltorb::ReadyAnimation()
@@ -118,6 +127,10 @@ void Voltorb::ReadyAnimation()
 	mSleep->SetIsLoop(true);
 	mSleep->SetFrameUpdateTime(0.2f);
 
+	mExplode = new Animation();
+	mExplode->InitFrameByStartEnd(0, 0, 6, 0, false);
+	mExplode->SetIsLoop(false);
+	mExplode->SetFrameUpdateTime(0.1f);
 }
 
 void Voltorb::SetAnimation()
@@ -146,18 +159,23 @@ void Voltorb::SetAnimation()
 	{
 		mCurrentAnimation = mSleep;
 	}
+	if (mState == State::Explode)
+	{
+		mCurrentAnimation = mExplode;
+		mCurrentImage = mExplodeImage;
+	}
 
 	mCurrentAnimation->Play();
 }
 
 void Voltorb::SetImage(int i)
 {
-	if (i == 0) // 0Àº false
+	if (i == 0) // 0ì€ false
 	{
-		mImage = IMAGEMANAGER->FindImage(L"Electrode");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Electrode");
 	}
 	else
 	{
-		mImage = IMAGEMANAGER->FindImage(L"Voltorb");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Voltorb");
 	}
 }

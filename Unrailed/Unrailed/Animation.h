@@ -11,7 +11,7 @@ class Animation
 	float mFrameUpdateTime;		//프레임 갱신(증가) 해야하는 시간
 	
 	vector<pair<int, int>> mFrameList;		//프레임 정보
-	function<void(void)> mCallbackFunc;		//애니메이션이 전부 플레이되고 끝날 때 실행할 함수
+	function <void(void)> mCallbackFunc;		//애니메이션이 전부 플레이되고 끝날 때 실행할 함수
 public:
 	Animation();
 
