@@ -14,14 +14,14 @@ void Abra::Init()
 
 	ReadyAnimation();
 
-	//ë¶€ëª¨ í´ëž˜ìŠ¤ (GameObject) ë³€ìˆ˜
+	//ºÎ¸ð Å¬·¡½º (GameObject) º¯¼ö
 	mX = WINSIZEX / 2 - 180;
 	mY = WINSIZEY / 2;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Machop ë³€ìˆ˜
+	//Machop º¯¼ö
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 	mSpeed = 100.f;
@@ -51,7 +51,7 @@ void Abra::Release()
 
 void Abra::Update()
 {
-	//ìƒíƒœì •í•˜ê¸°
+	//»óÅÂÁ¤ÇÏ±â
 	if (mTimer == 0)
 	{
 		if (mState == State::Sleep)
@@ -66,7 +66,7 @@ void Abra::Update()
 		SetAnimation();
 	}
 
-	//ì›€ì§ìž„
+	//¿òÁ÷ÀÓ
 	if (mState == State::Sleep)
 	{
 		mTimer += Time::GetInstance()->DeltaTime();
@@ -91,7 +91,7 @@ void Abra::Update()
 		}
 	}
 
-	//ì§„í™”
+	//ÁøÈ­
 	switch (mLevel)
 	{
 	case 1:
@@ -117,7 +117,7 @@ void Abra::Update()
 		mLevel = 3;
 	}
 
-	//í­ë°œ
+	//Æø¹ß
 	if (mX >= WINSIZEX - 400 && mIsExplode == false)
 	{
 		mIsExplode = true;

@@ -15,7 +15,7 @@ void Ore::Release()
 
 void Ore::Update()
 {
-
+	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 }
 
 void Ore::Render(HDC hdc)

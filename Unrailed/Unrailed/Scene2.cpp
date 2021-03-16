@@ -64,7 +64,7 @@ void Scene2::Render(HDC hdc)
 	TextOut(hdc, 10, 40, strFPS.c_str(), strFPS.length());
 
 
-	wstring strScene = L"Ã€ÃŒÂ°Ã‡ 2Â¹Ã¸ Â¾Ã€";
+	wstring strScene = L"ÀÌ°Ç 2¹ø ¾À";
 	TextOut(hdc, WINSIZEX / 2 - 15, WINSIZEY / 2, strScene.c_str(), strScene.length());
 
 

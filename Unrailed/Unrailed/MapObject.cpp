@@ -28,12 +28,12 @@ void MapObject::Release()
 
 void MapObject::Update()
 {
-	//ÃƒÂ¼Â·Ã‚ 0Ã€ÃŒÂ¸Ã© oreÂ»Ã½Â¼Âº
+	//±¤¹° ºÎ¼ÅÁö¸é ¾ÆÀÌÅÛ ¸¸µé¾îµÎ±â?
 	if (mHp <= 0 && mActive == true)
 	{
 		Ore* ore = new Ore();
 		ore->Drop(mX, mY, (int)mType);
-		ObjectManager::GetInstance()->AddObject(ObjectLayer::Item, ore);
+		ObjectManager::GetInstance()->AddObject(ObjectLayer::ITEM, ore);
 		mImage = nullptr;
 		mType = MapObjectType::None;
 		mActive = false;
