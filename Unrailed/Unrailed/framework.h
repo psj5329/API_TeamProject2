@@ -39,6 +39,7 @@ using namespace std;
 #include "Time.h"
 #include "SoundManager.h"
 #include "ObjectManager.h"
+#include "CollisionManager.h"
 #include "SceneManager.h"
 #include "GameEventManager.h"
 #include "Gizmo.h"

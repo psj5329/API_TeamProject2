@@ -1,14 +1,15 @@
 #pragma once
 
-enum ObjectLayer { Background, PLAYER, ENEMY, UI, End };
+enum ObjectLayer { BACKGROUND, PLAYER, ENEMY, UI, End };
 
+class GameObject;
 class ObjectManager
 {
 	Singleton(ObjectManager)
 
 private:
-	typedef map<ObjectLayer, vector<class GameObject*>>::iterator ObjectIter;
-	map<ObjectLayer, vector<class GameObject*>> mObjectList;
+	typedef map<ObjectLayer, vector<GameObject*>>::iterator ObjectIter;
+	map<ObjectLayer, vector<GameObject*>> mObjectList;
 public:
 	ObjectManager();
 
@@ -18,11 +19,11 @@ public:
 	void Render(HDC hdc);
 
 	void AddObject(ObjectLayer layer, class GameObject* object);
-	class GameObject* FindObject(const string& name);
-	class GameObject* FindObject(ObjectLayer layer, const string& name);
-	vector<class GameObject*> FindObjects(const string& name);
-	vector<class GameObject*> FindObjects(ObjectLayer layer, const string& name);
-	vector<class GameObject*> GetObjectList(ObjectLayer layer);
+	GameObject* FindObject(const string& name);
+	GameObject* FindObject(ObjectLayer layer, const string& name);
+	vector<GameObject*> FindObjects(const string& name);
+	vector<GameObject*> FindObjects(ObjectLayer layer, const string& name);
+	vector<GameObject*> GetObjectList(ObjectLayer layer);
 };
 
 #define OBJECTMANAGER ObjectManager::GetInstance()

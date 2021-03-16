@@ -14,6 +14,9 @@ MapObject::MapObject(class Image* image, float x, float y, float sizeX, float si
 	mFrameIndexX = frameIndexX;
 	mFrameIndexY = frameIndexY;
 	mType = (MapObjectType)type;
+
+
+	mHp = 3;
 }
 
 void MapObject::Release()

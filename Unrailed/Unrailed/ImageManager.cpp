@@ -52,3 +52,18 @@ Image * ImageManager::FindImage(wstring key)
 
 	return nullptr;
 }
+
+wstring ImageManager::GetKeyName(Image* image)
+{
+	ImageIter iter = mImageList.begin();
+
+	for (; iter != mImageList.end();)
+	{
+		if (iter->second == image)
+			return iter->first;
+		else
+			iter++;
+	}
+
+	return NULL;
+}

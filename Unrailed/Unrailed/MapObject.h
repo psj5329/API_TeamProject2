@@ -21,6 +21,8 @@ class MapObject
 	MapObjectType mType;
 	bool mActive;
 
+	int mHp;
+
 public:
 
 	MapObject(class Image* image, float x, float y, float sizeX, float sizeY,
@@ -53,5 +55,10 @@ public:
 	void SetFrameIndexY(int indexY) { mFrameIndexY = indexY; }
 	void SetObjectType(int type) { mType = (MapObjectType)type; }
 	void SetActive(bool isActive) { mActive = isActive; }
+
+
+	int GetHp() { return mHp; }
+	void SetHp(int hp) { mHp = hp; }
+	void DamagedHp() { mHp -= 1; }
 };
 
