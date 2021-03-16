@@ -24,6 +24,17 @@ void MainGame::Init()
 	SceneManager::GetInstance()->AddScene(L"Scene3", new Scene3);
 	SceneManager::GetInstance()->AddScene(L"Scene4", new Scene4);
 	SceneManager::GetInstance()->AddScene(L"MapToolScene", new MapToolScene);
+	IMAGEMANAGER->LoadFromFile(L"Save", Resources(L"/Map/Tool/save"), 60, 16, 1, 1, true);
+	IMAGEMANAGER->LoadFromFile(L"Load", Resources(L"/Map/Tool/load"), 60, 16, 1, 1, true);
+	IMAGEMANAGER->LoadFromFile(L"Undo", Resources(L"/Map/Tool/undo"), 60, 16, 1, 1, true);
+	IMAGEMANAGER->LoadFromFile(L"TinyWoods", Resources(L"/Map/TinyWoods"), 288, 144, 12, 6, true);
+	IMAGEMANAGER->LoadFromFile(L"MagmaCavern", Resources(L"/Map/MagmaCavern"), 288, 144, 12, 6, true);
+	IMAGEMANAGER->LoadFromFile(L"MtFarAway", Resources(L"/Map/MtFarAway"), 288, 144, 12, 6, true);
+	IMAGEMANAGER->LoadFromFile(L"GreenMineral", Resources(L"/Map/Green"), 144, 72, 6, 3, true);
+	IMAGEMANAGER->LoadFromFile(L"BlueMineral", Resources(L"/Map/Blue"), 144, 72, 6, 3, true);
+	IMAGEMANAGER->LoadFromFile(L"RedMineral", Resources(L"/Map/Red"), 144, 72, 6, 3, true);
+	IMAGEMANAGER->LoadFromFile(L"RightArrow", Resources(L"/Map/Tool/RightArrow"), 16, 14, 1, 1, true);
+	IMAGEMANAGER->LoadFromFile(L"XTile", Resources(L"/Map/Tool/XTile"), 24, 24, 1, 1, true);
 
 	Camera* mainCamera = new Camera;
 	mainCamera->Init();
