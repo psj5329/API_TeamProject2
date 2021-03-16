@@ -20,5 +20,7 @@ public:
 	RECT GetTileRect(int indexX, int indexY) { return mTileList[indexY][indexX]->GetRect(); }
 	TileType GetTileType(int indexX, int indexY) { return mTileList[indexY][indexX]->GetTileType(); }
 
+	vector<vector<Tile*>>* GetTileListPtr() { return &mTileList; }
+	vector<vector<MapObject*>>* GetObjectListPtr() { return &mMapObjectList; }
 };
 
