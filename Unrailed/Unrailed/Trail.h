@@ -32,6 +32,7 @@ class Trail :
 	Animation* mCurrentAnimation;
 
 	bool mIsConnected;
+	bool mIsTail;
 
 public:
 	void Init(int x, int y, int type, int direction);
@@ -46,11 +47,12 @@ public:
 	TrailType GetTrailType() const{ return mTrailType; }
 	int GetTrailTypeInt() const{ return (int)mTrailType; }
 	bool GetIsConnected() const { return mIsConnected; }
+	bool GetIsTail() const { return mIsTail; }
 
 	void SetTrailType(int type);
 	void SetDirection(int dir);
 	void SetIsConnected(bool connected) { mIsConnected = connected; }
-
+	void SetIsTail(bool tail) { mIsTail = tail; }
 
 	void Turn();//플레이어의 돌리기
 	int PickUp();

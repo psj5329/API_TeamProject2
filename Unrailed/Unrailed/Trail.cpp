@@ -29,6 +29,7 @@ void Trail::Init(int x, int y, int type, int direction)
     mSizeY = mImage->GetFrameHeight() * 2;
     mRect = RectMake(mX, mY, mSizeX, mSizeY);
     mIsConnected = false;
+    mIsTail = false;
 
     AnimationInit();
 

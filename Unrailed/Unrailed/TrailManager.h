@@ -1,6 +1,6 @@
 #pragma once
 
-//�̾��� �������� �ٷ��
+//±âÂ÷±æÀ» ´Ù·ê°÷
 class Trail;
 class TrailManager
 {
@@ -12,10 +12,11 @@ public:
 	void Update();
 	void Render(HDC hdc);
 
-	void InsertTrail(int x, int y, int type, int dir);
-	void TurnTrail();
-	void PickUpTrail();
-	
+	void InsertTrail(int x, int y, int type, int dir);	//ÀÎÀÕ¿¡¼­³Ö±â
+	void TurnTrail(int indexY, int indexX);		//µ¹¸®±â
+	void PickUpTrail(int indexY, int indexX);			//ÁÝ±â
+	void PlaceTrail(int x, int y, int type, int dir);		//¼³Ä¡ÇÏ±â
+
 	vector <vector <Trail*>>* GetTrailListPtr() { return &mTrailList; }
 };
 
