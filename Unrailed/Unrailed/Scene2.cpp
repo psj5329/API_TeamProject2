@@ -14,6 +14,8 @@ void Scene2::Init()
 		temp->Init();
 		temp->SetX(WINSIZEX / 2 - 50 * i);
 		mVoltorbVec.push_back(temp);
+
+		OBJECTMANAGER->AddObject(ObjectLayer::ITEM, mVoltorbVec[i]);
 	}
 
 	mVoltorbVec[0]->SetImage(0);
@@ -27,27 +29,19 @@ void Scene2::Init()
 
 	mAbra = new Abra;
 	mAbra->Init();
+
+	//기차 레이어 추가 요망
+	OBJECTMANAGER->AddObject(ObjectLayer::ITEM, mAbra);
+	OBJECTMANAGER->AddObject(ObjectLayer::ITEM, mMachop);
 }
 
 void Scene2::Release()
 {
-	for (int i = 0; i < mVoltorbVec.size(); i++)
-	{
-		mVoltorbVec[i]->Release();
-	}
-	mMachop->Release();
-	mAbra->Release();
 }
 
 void Scene2::Update()
 {
-	for (int i = 0; i < mVoltorbVec.size(); i++)
-	{
-		mVoltorbVec[i]->Update();
-	}
-
-	mMachop->Update();
-	mAbra->Update();
+	OBJECTMANAGER->Update();
 }
 
 void Scene2::Render(HDC hdc)
@@ -68,10 +62,6 @@ void Scene2::Render(HDC hdc)
 	TextOut(hdc, WINSIZEX / 2 - 15, WINSIZEY / 2, strScene.c_str(), strScene.length());
 
 
-	for (int i = 0; i < mVoltorbVec.size(); i++)
-	{
-		mVoltorbVec[i]->Render(hdc);
-	}
-	mMachop->Render(hdc);
-	mAbra->Render(hdc);
+
+	OBJECTMANAGER->Render(hdc);
 }
