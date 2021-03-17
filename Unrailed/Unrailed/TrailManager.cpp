@@ -68,6 +68,8 @@ void TrailManager::InsertTrail(int x,int y, int type, int dir)
 	mTrailList[y][x]->SetDirection(dir);
 
 	//넣고 주위를 한번더 확인, 닿는 타일이있으면 커넥티드바까주기
+
+	mTrailList[y][x]->SetIsConnected(true);
 }
 
 //끝에 있는 기차길 돌리기

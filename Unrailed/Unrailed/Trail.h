@@ -47,8 +47,8 @@ public:
 	int GetTrailTypeInt() const{ return (int)mTrailType; }
 	bool GetIsConnected() const { return mIsConnected; }
 
-	void SetTrailType(int type) { mTrailType = (TrailType)type; }
-	void SetDirection(int dir) { mDirection = (TrailDirection)dir; }
+	void SetTrailType(int type);
+	void SetDirection(int dir);
 	void SetIsConnected(bool connected) { mIsConnected = connected; }
 
 

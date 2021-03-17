@@ -142,3 +142,48 @@ int Trail::PickUp()
     return (int)mTrailType;
 }
 
+//속성바꾸기
+void Trail::SetTrailType(int type) 
+{ 
+    mTrailType = (TrailType)type; 
+    //이미지정하기
+    if (mTrailType == TrailType::Green)
+    {
+        mImage = IMAGEMANAGER->FindImage(L"GreenTrail");
+    }
+    else if (mTrailType == TrailType::Blue)
+    {
+        mImage = IMAGEMANAGER->FindImage(L"BlueTrail");
+    }
+    else
+    {
+        mImage = IMAGEMANAGER->FindImage(L"RedTrail");
+    }
+}
+
+//방향바꾸기
+void Trail::SetDirection(int dir) 
+{ 
+    mDirection = (TrailDirection)dir; 
+
+    mCurrentAnimation->Stop();
+    switch (mDirection)
+    {
+    case TrailDirection::Down:
+        mCurrentAnimation = mDown;
+        break;
+    case TrailDirection::Up:
+        mCurrentAnimation = mUp;
+        break;
+    case TrailDirection::Left:
+        mCurrentAnimation = mLeft;
+        break;
+    case TrailDirection::Right:
+        mCurrentAnimation = mRight;
+        break;
+    default:
+        break;
+    }
+    mCurrentAnimation->Play();
+
+}

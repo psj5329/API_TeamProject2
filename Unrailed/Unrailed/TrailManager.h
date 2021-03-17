@@ -15,7 +15,7 @@ public:
 	void InsertTrail(int x, int y, int type, int dir);
 	void TurnTrail();
 	void PickUpTrail();
-
-
+	
+	vector <vector <Trail*>>* GetTrailListPtr() { return &mTrailList; }
 };
 

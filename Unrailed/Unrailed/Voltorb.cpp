@@ -3,6 +3,8 @@
 #include "Image.h"
 #include "Animation.h"
 #include "Camera.h"
+#include "Tile.h"
+#include "Trail.h"
 
 void Voltorb::Init()
 {
@@ -59,6 +61,12 @@ void Voltorb::Update()
 		SetAnimation();
 	}
 
+	//인덱스 가져오기
+	//int indexX = mX / TileSize;
+	//int indexY = mY / TileSize;
+	//
+	//mTrailList[indexY][indexX]->GetDirection();
+
 	//움직임
 	if (mState == State::Sleep)
 	{
@@ -93,11 +101,13 @@ void Voltorb::Update()
 	}
 
 	mCurrentAnimation->Update();
+	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 }
 
 void Voltorb::Render(HDC hdc)
 {
-	mCurrentImage->ScaleFrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	RenderRect(hdc, mRect);
+	mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
 void Voltorb::ReadyAnimation()
@@ -131,6 +141,7 @@ void Voltorb::ReadyAnimation()
 	mExplode->InitFrameByStartEnd(0, 0, 6, 0, false);
 	mExplode->SetIsLoop(false);
 	mExplode->SetFrameUpdateTime(0.1f);
+	mExplode->SetCallbackFunc(bind(&Train::EndExplode, this));
 }
 
 void Voltorb::SetAnimation()
@@ -177,5 +188,13 @@ void Voltorb::SetImage(int i)
 	else
 	{
 		mCurrentImage = IMAGEMANAGER->FindImage(L"Voltorb");
+	}
+}
+
+void Voltorb::EndExplode()
+{
+	if (mState == State::Explode)
+	{
+		SetIsDestroy(true);
 	}
 }
