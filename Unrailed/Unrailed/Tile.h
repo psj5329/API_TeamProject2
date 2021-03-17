@@ -1,6 +1,15 @@
 #pragma once
 
 //구조체 변수는 대문자로 시작하게 짬, 나같은경우에는
+enum class TileType : int
+{
+	Normal,
+	Wall,
+	Water,
+	Lava,
+	ice
+};
+
 struct TilePallete
 {
 	class Image* image;
@@ -35,16 +44,11 @@ struct TypePallete
 	int width;
 	int height;
 	int type;
+	TileType tiletype;
+	int a;
 };
 
-enum class TileType: int
-{
-	Normal,
-	Wall,
-	Water,
-	Lava,
-	ice
-};
+
 
 class Tile
 {

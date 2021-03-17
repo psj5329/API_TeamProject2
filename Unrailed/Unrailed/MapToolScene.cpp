@@ -87,7 +87,7 @@ void MapToolScene::Init()
 		}
 	}
 
-	//∆»∑π∆Æ º”º∫ ≥÷æÓ¡÷±‚
+	//º”º∫∆»∑π∆Æ ≥÷æÓ¡÷±‚
 	//Ω√¿€¡°
 	palleteStartX = WINSIZEX / 2 + 350;
 	palleteStartY = 400;
@@ -100,6 +100,7 @@ void MapToolScene::Init()
 		tempTypePallete.height = TileSize;
 		tempTypePallete.rect = RectMake(tempTypePallete.positionX, tempTypePallete.positionY, tempTypePallete.width, tempTypePallete.height);
 		tempTypePallete.type = i;
+		tempTypePallete.tiletype = (TileType)i;
 		mTypePallete.push_back(tempTypePallete);
 
 	}
@@ -357,11 +358,37 @@ void MapToolScene::Render(HDC hdc)
 			Gizmo::GetInstance()->DrawRect(hdc, mPallete[y][x].rect, Gizmo::Color::Red);
 		}
 	}
+
 	//≈∏¿‘∆»∑ø
 	for (int i = 0;i < TypePalleteCount;i++)
 	{
-		Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, (Gizmo::Color)mTypePallete[i].type);
+		switch (mTypePallete[i].tiletype)
+		{
+		case TileType::Normal:
+			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Green);
+			break;
+
+		case TileType::Wall:
+			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Black);
+			break;
+
+		case TileType::Water:
+			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Blue);
+			break;
+
+		case TileType::Lava:
+			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Red);
+			break;
+
+		case TileType::ice:
+			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Gray);
+			break;
+
+		default:
+			break;
+		}
 	}
+
 	//ø…¡ß∆»∑ø
 	for (int y = 0; y < mObjectPallete.size(); ++y)
 	{

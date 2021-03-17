@@ -11,7 +11,7 @@
 #define PalleteCountX 12
 #define PalleteCountY 6
 #define PalleteSize 27
-#define TypePalleteCount 3
+#define TypePalleteCount 5
 #define ObjectPalletCountX 6
 #define ObjectPalletCountY 3
 

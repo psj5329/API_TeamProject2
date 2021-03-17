@@ -84,68 +84,94 @@ void TrailManager::TurnTrail(int indexY, int indexX)
 		//방향바꾸고
 		mTrailList[indexY][indexX]->Turn();
 
-	}
 
-	//타일찾기
-	//아래를보고있고
-	//if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Down)
-	//{
-	//	//맨아랫출이 아니고
-	//	if (indexY > 0)
-	//	{
-	//		//아래에 있고
-	//		if (mTrailList[indexY + 1][indexX]->GetTrailType() != TrailType::None)
-	//		{
-	//			//이미 연결된게 아니면
-	//			if (!mTrailList[indexY + 1][indexX]->GetIsConnected())
-	//			{
-	//				//그놈이 꼬리
-	//				mTrailList[indexY + 1][indexX]->SetIsTail(true);
-	//				mTrailList[indexY + 1][indexX]->SetIsConnected(true);
-	//			}
-	//		}
-	//
-	//	}
-	//	if (indexY < TileCountY)
-	//	{
-	//		//아랫놈이 연결된놈이고
-	//		if (mTrailList[indexY + 1][indexX]->GetIsConnected())
-	//		{
-	//			//위를 보고있으면
-	//			if (mTrailList[indexY + 1][indexX]->GetDirection() == TrailDirection::Up)
-	//			{
-	//				//그놈이 꼬리
-	//				mTrailList[indexY][indexX]->SetIsTail(true);
-	//			}
-	//		}
-	//	}
-	//	if (indexX > 0)
-	//	{
-	//		//왼쪽놈이 연결된놈이고
-	//		if (mTrailList[indexY][indexX - 1]->GetIsConnected())
-	//		{
-	//			//오른쪽을 보고있으면
-	//			if (mTrailList[indexY][indexX - 1]->GetDirection() == TrailDirection::Right)
-	//			{
-	//				//그놈이 꼬리
-	//				mTrailList[indexY][indexX]->SetIsTail(true);
-	//			}
-	//		}
-	//	}
-	//	if (indexX < TileCountX)
-	//	{
-	//		//오른쪽놈이 연결된놈이고
-	//		if (mTrailList[indexY][indexX + 1]->GetIsConnected())
-	//		{
-	//			//왼쪽을 보고있으면
-	//			if (mTrailList[indexY][indexX + 1]->GetDirection() == TrailDirection::Left)
-	//			{
-	//				//그놈이 꼬리
-	//				mTrailList[indexY][indexX]->SetIsTail(true);
-	//			}
-	//		}
-	//	}
-	//}
+
+		//타일찾기
+		//아래를보고있고
+		if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Down)
+		{
+			//맨아랫출이 아니고
+			if (indexY < TileCountY)
+			{
+				//아랫줄녀석이
+				if (mTrailList[indexY + 1][indexX]->GetTrailType() != TrailType::None)
+				{
+					//이미 연결된게 아니면
+					if (!mTrailList[indexY + 1][indexX]->GetIsConnected())
+					{
+						//연결시키고 꼬리체인지
+						mTrailList[indexY][indexX]->SetIsTail(false);
+						mTrailList[indexY + 1][indexX]->SetIsTail(true);
+						mTrailList[indexY + 1][indexX]->SetIsConnected(true);
+					}
+				}
+
+			}
+		}
+		//위를보고있는데
+		if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Up)
+		{
+			//맨윗줄이아니고
+			if (indexY > 0)
+			{
+				//윗줄녀석이
+				if (mTrailList[indexY - 1][indexX]->GetTrailType() != TrailType::None)
+				{
+					//이미 연결된게 아니면
+					if (!mTrailList[indexY - 1][indexX]->GetIsConnected())
+					{
+						//연결시키고 꼬리체인지
+						mTrailList[indexY][indexX]->SetIsTail(false);
+						mTrailList[indexY - 1][indexX]->SetIsTail(true);
+						mTrailList[indexY - 1][indexX]->SetIsConnected(true);
+					}
+				}
+			}
+
+		}
+		//왼쪽을보고있는데
+		if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Left)
+		{
+			//맨왼쪽줄이아니고
+			if (indexX > 0)
+			{
+				//왼쪽녀석이
+				if (mTrailList[indexY][indexX - 1]->GetTrailType() != TrailType::None)
+				{
+					//이미 연결된게 아니면
+					if (!mTrailList[indexY][indexX - 1]->GetIsConnected())
+					{
+						//연결시키고 꼬리체인지
+						mTrailList[indexY][indexX]->SetIsTail(false);
+						mTrailList[indexY][indexX - 1]->SetIsTail(true);
+						mTrailList[indexY][indexX - 1]->SetIsConnected(true);
+					}
+				}
+			}
+
+		}
+		//오른쪽을보고있는데
+		if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Right)
+		{
+			//맨오른쪽줄이아니고
+			if (indexX > TileCountX)
+			{
+				//오른쪽녀석이
+				if (mTrailList[indexY][indexX + 1]->GetTrailType() != TrailType::None)
+				{
+					//이미 연결된게 아니면
+					if (!mTrailList[indexY][indexX + 1]->GetIsConnected())
+					{
+						//연결시키고 꼬리체인지
+						mTrailList[indexY][indexX]->SetIsTail(false);
+						mTrailList[indexY][indexX + 1]->SetIsTail(true);
+						mTrailList[indexY][indexX + 1]->SetIsConnected(true);
+					}
+				}
+			}
+
+		}
+	}
 }
 
 //끄트머리의 기차길을 줍기
@@ -234,6 +260,10 @@ void TrailManager::PlaceTrail(int x, int y, int type, int dir)
 			{
 				//설치한놈은 연결된놈
 				mTrailList[y][x]->SetIsConnected(true);
+
+				//꼬리교체
+				mTrailList[y - 1][x]->SetIsTail(false);
+				mTrailList[y][x]->SetIsTail(true);
 			}
 		}
 
@@ -248,6 +278,10 @@ void TrailManager::PlaceTrail(int x, int y, int type, int dir)
 			{
 				//설치한놈은 연결된놈
 				mTrailList[y][x]->SetIsConnected(true);
+
+				//꼬리교체
+				mTrailList[y + 1][x]->SetIsTail(false);
+				mTrailList[y][x]->SetIsTail(true);
 			}
 		}
 	}
@@ -261,6 +295,10 @@ void TrailManager::PlaceTrail(int x, int y, int type, int dir)
 			{
 				//설치한놈은 연결된놈
 				mTrailList[y][x]->SetIsConnected(true);
+
+				//꼬리교체
+				mTrailList[y][x - 1]->SetIsTail(false);
+				mTrailList[y][x]->SetIsTail(true);
 			}
 		}
 	}
@@ -274,8 +312,39 @@ void TrailManager::PlaceTrail(int x, int y, int type, int dir)
 			{
 				//설치한놈은 연결된놈
 				mTrailList[y][x]->SetIsConnected(true);
+
+
+				//꼬리교체
+				mTrailList[y][x + 1]->SetIsTail(false);
+				mTrailList[y][x]->SetIsTail(true);
 			}
 		}
 	}
 
 }
+
+//시작 트레일의 인덱스를 넣어 꼬리를찾자
+//void TrailManager::SetTrailTail(int indexY, int indexX)
+//{
+//	//연결된 트레일이고
+//	if (mTrailList[indexY][indexX]->GetIsConnected() && mTrailList[indexY][indexX]->GetTrailType() != TrailType::None)
+//	{
+//		switch (mTrailList[indexY][indexX]->GetDirection())
+//		{
+//		case TrailDirection::Down :
+//			if(mTrailList[indexY+1][indexX].)
+//			break;
+//		case TrailDirection::Up:
+//			break;
+//
+//		case TrailDirection::Left:
+//			break;
+//
+//		case TrailDirection::Right:
+//			break;
+//
+//		default:
+//			break;
+//		}
+//	}
+//}
