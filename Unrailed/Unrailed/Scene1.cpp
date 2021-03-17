@@ -37,7 +37,7 @@ void Scene1::Update()
 	if (INPUT->GetKeyDown(VK_SPACE))
 	{
 		//SCENEMANAGER->LoadScene(L"Scene2");
-		GameObject* item = COLLISIONMANAGER->ItemCollision(mPlayer);
+		GameObject* item = COLLISIONMANAGER->ItemCollision(&mPlayer->GetRect());
 		if(item != nullptr)
 			item->SetIsActive(false);
 	}
