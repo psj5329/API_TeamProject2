@@ -134,19 +134,6 @@ void MainGame::AddScene()
 
 void MainGame::LoadResources(LoadingScene * scene)
 {
-	/*char* str_buff = new char[100];
-
-	vector<wstring> vecFileName;
-
-	filesystem::recursive_directory_iterator iter(filesystem::current_path() / "../Resources");
-	while (iter != filesystem::end(iter))
-	{
-		const filesystem::directory_entry& entry = *iter;
-		wstring strName = (wstring)entry.path();
-		strcpy_s(str_buff, 100, strName.c_str());
-		vecFileName.push_back(strName);
-	}*/
-
 	// ¸Ê °ü·Ã // ³²ÈÆ
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save", Resources(L"/Map/Tool/save"), 60, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Load", Resources(L"/Map/Tool/load"), 60, 16, 1, 1, true); });
