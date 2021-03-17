@@ -8,11 +8,11 @@ void Scene6::Init()
 	mTileMap = new TileMap();
 	mTileMap->Init(TileCountX, TileCountY, TileSize);
 	mTileMap->LoadMap();
-	//ì§€ê¸ˆ ë°Ÿê³  ìˆëŠ” íƒ€ì¼ ë°©í–¥ í™•ì¸
-	//ê·¸ ë‹¤ìŒíƒ€ì¼ì˜ ì¤‘ê°„ê¹Œì§€ íƒ€ì¼ ë°©í–¥ëŒ€ë¡œ ì´ë™
-	//ë°˜ë³µ
+	//Áö±İ ¹â°í ÀÖ´Â Å¸ÀÏ ¹æÇâ È®ÀÎ
+	//±× ´ÙÀ½Å¸ÀÏÀÇ Áß°£±îÁö Å¸ÀÏ ¹æÇâ´ë·Î ÀÌµ¿
+	//¹İº¹
 
-	//ì¸ë±ìŠ¤ ê°€ì ¸ì˜¤ê¸° : í˜„ì¬ xê°’ ë‚˜ëˆ„ê¸° íƒ€ì¼ì‚¬ì´ì¦ˆ
+	//ÀÎµ¦½º °¡Á®¿À±â : ÇöÀç x°ª ³ª´©±â Å¸ÀÏ»çÀÌÁî
 	mTrailManager = new TrailManager();
 	mTrailManager->Init();
 	mTrailManager->InsertTrail(0, 6, 1, 3);
@@ -26,17 +26,17 @@ void Scene6::Init()
 	mTrailManager->InsertTrail(7, 7, 1, 1);
 	mTrailManager->InsertTrail(7, 6, 1, 1);
 	mTrailManager->InsertTrail(7, 5, 1, 3);
-  
+
 	mTrailManager->InsertTrail(7, 4, 1, 3);
 	mTrailManager->InsertTrail(6, 4, 1, 3);
 	mTrailManager->InsertTrail(5, 4, 1, 3);
 	mTrailManager->InsertTrail(4, 4, 1, 3);
 	mTrailManager->InsertTrail(3, 4, 1, 3);
-	
-	
 
 
-	//Trainì¸ì‡
+
+
+	//TrainÀÎÀÕ
 	for (int i = 0; i < 3; i++)
 	{
 		Voltorb* temp = new Voltorb;
@@ -68,7 +68,7 @@ void Scene6::Update()
 	mTileMap->Update();
 	mTrailManager->Update();
 
-	//Train ì—…ë°ì´íŠ¸
+	//Train ¾÷µ¥ÀÌÆ®
 	for (int i = 0; i < mVoltorbVec.size(); i++)
 	{
 		mVoltorbVec[i]->Update();
@@ -83,7 +83,7 @@ void Scene6::Render(HDC hdc)
 
 	mTrailManager->Render(hdc);
 
-	//Train ëœë”
+	//Train ·£´õ
 	for (int i = 0; i < mVoltorbVec.size(); i++)
 	{
 		mVoltorbVec[i]->Render(hdc);

@@ -4,13 +4,13 @@
 
 void TrailManager::Init()
 {
-	//ë¹ˆíŠ¸ë ˆì¼ ì¸ì‡
+	//ºóÆ®·¹ÀÏ ÀÎÀÕ
 	for (int y = 0; y < TileCountY; ++y)
 	{
 		mTrailList.push_back(vector <Trail*>());
 		for (int x = 0; x < TileCountX; ++x)
 		{
-			//ë²¡í„°
+			//º¤ÅÍ
 			Trail* trail = new Trail();
 			trail->Init(TileSize * x, TileSize * y, 0, 0);
 			mTrailList[y].push_back(trail);
@@ -21,7 +21,7 @@ void TrailManager::Init()
 
 void TrailManager::Release()
 {
-	//íƒ€ì¼ ë¦´ë¦¬ì¦ˆ
+	//Å¸ÀÏ ¸±¸®Áî
 	for (int y = 0; y < mTrailList.size(); ++y)
 	{
 		for (int x = 0; x < mTrailList[y].size(); ++x)
@@ -60,46 +60,46 @@ void TrailManager::Render(HDC hdc)
 	}
 }
 
-//ì”¬ì—ì„œ ì¸ì‡í• ë•Œ
-void TrailManager::InsertTrail(int x,int y, int type, int dir)
+//¾À¿¡¼­ ÀÎÀÕÇÒ¶§
+void TrailManager::InsertTrail(int x, int y, int type, int dir)
 {
-	//í•´ë‹¹ì¸ë±ìŠ¤ì˜ ì†ì„±
+	//ÇØ´çÀÎµ¦½ºÀÇ ¼Ó¼º
 	mTrailList[y][x]->SetTrailType(type);
 	mTrailList[y][x]->SetDirection(dir);
 
-	//ë°”ê¿”ì•¼í•¨
+	//¹Ù²ã¾ßÇÔ
 	mTrailList[y][x]->SetIsConnected(true);
 }
 
 
 
 
-//ëì— ìˆëŠ” ê¸°ì°¨ê¸¸ ëŒë¦¬ê¸°	//íŠ¸ë ˆì¼ì´ ë³´ëŠ” ë°©í–¥ì— íƒ€ì¼ì´ìˆë‚˜, ì´ë¯¸ ì»¤ë„¥í‹°ë“œëœ íƒ€ì¼ì´ ì•„ë‹ˆë©´ ê·¸íƒ€ì¼ì„ ì»¤ë„¥í‹°ë“œë¡œ
+//³¡¿¡ ÀÖ´Â ±âÂ÷±æ µ¹¸®±â	//Æ®·¹ÀÏÀÌ º¸´Â ¹æÇâ¿¡ Å¸ÀÏÀÌÀÖ³ª, ÀÌ¹Ì Ä¿³ØÆ¼µåµÈ Å¸ÀÏÀÌ ¾Æ´Ï¸é ±×Å¸ÀÏÀ» Ä¿³ØÆ¼µå·Î
 void TrailManager::TurnTrail(int indexY, int indexX)
 {
 	//mTrailList.back()->Turn();
-	//ëŒë¦´ë ¤ëŠ”ê²Œ ê¼¬ë¦¬ë©´
+	//µ¹¸±·Á´Â°Ô ²¿¸®¸é
 	if (mTrailList[indexY][indexX]->GetIsTail())
 	{
-		//ë°©í–¥ë°”ê¾¸ê³ 
+		//¹æÇâ¹Ù²Ù°í
 		mTrailList[indexY][indexX]->Turn();
 
 	}
 
-	//íƒ€ì¼ì°¾ê¸°
-	//ì•„ë˜ë¥¼ë³´ê³ ìˆê³ 
+	//Å¸ÀÏÃ£±â
+	//¾Æ·¡¸¦º¸°íÀÖ°í
 	//if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Down)
 	//{
-	//	//ë§¨ì•„ë«ì¶œì´ ì•„ë‹ˆê³ 
+	//	//¸Ç¾Æ·§ÃâÀÌ ¾Æ´Ï°í
 	//	if (indexY > 0)
 	//	{
-	//		//ì•„ë˜ì— ìˆê³ 
+	//		//¾Æ·¡¿¡ ÀÖ°í
 	//		if (mTrailList[indexY + 1][indexX]->GetTrailType() != TrailType::None)
 	//		{
-	//			//ì´ë¯¸ ì—°ê²°ëœê²Œ ì•„ë‹ˆë©´
+	//			//ÀÌ¹Ì ¿¬°áµÈ°Ô ¾Æ´Ï¸é
 	//			if (!mTrailList[indexY + 1][indexX]->GetIsConnected())
 	//			{
-	//				//ê·¸ë†ˆì´ ê¼¬ë¦¬
+	//				//±×³ğÀÌ ²¿¸®
 	//				mTrailList[indexY + 1][indexX]->SetIsTail(true);
 	//				mTrailList[indexY + 1][indexX]->SetIsConnected(true);
 	//			}
@@ -108,39 +108,39 @@ void TrailManager::TurnTrail(int indexY, int indexX)
 	//	}
 	//	if (indexY < TileCountY)
 	//	{
-	//		//ì•„ë«ë†ˆì´ ì—°ê²°ëœë†ˆì´ê³ 
+	//		//¾Æ·§³ğÀÌ ¿¬°áµÈ³ğÀÌ°í
 	//		if (mTrailList[indexY + 1][indexX]->GetIsConnected())
 	//		{
-	//			//ìœ„ë¥¼ ë³´ê³ ìˆìœ¼ë©´
+	//			//À§¸¦ º¸°íÀÖÀ¸¸é
 	//			if (mTrailList[indexY + 1][indexX]->GetDirection() == TrailDirection::Up)
 	//			{
-	//				//ê·¸ë†ˆì´ ê¼¬ë¦¬
+	//				//±×³ğÀÌ ²¿¸®
 	//				mTrailList[indexY][indexX]->SetIsTail(true);
 	//			}
 	//		}
 	//	}
 	//	if (indexX > 0)
 	//	{
-	//		//ì™¼ìª½ë†ˆì´ ì—°ê²°ëœë†ˆì´ê³ 
+	//		//¿ŞÂÊ³ğÀÌ ¿¬°áµÈ³ğÀÌ°í
 	//		if (mTrailList[indexY][indexX - 1]->GetIsConnected())
 	//		{
-	//			//ì˜¤ë¥¸ìª½ì„ ë³´ê³ ìˆìœ¼ë©´
+	//			//¿À¸¥ÂÊÀ» º¸°íÀÖÀ¸¸é
 	//			if (mTrailList[indexY][indexX - 1]->GetDirection() == TrailDirection::Right)
 	//			{
-	//				//ê·¸ë†ˆì´ ê¼¬ë¦¬
+	//				//±×³ğÀÌ ²¿¸®
 	//				mTrailList[indexY][indexX]->SetIsTail(true);
 	//			}
 	//		}
 	//	}
 	//	if (indexX < TileCountX)
 	//	{
-	//		//ì˜¤ë¥¸ìª½ë†ˆì´ ì—°ê²°ëœë†ˆì´ê³ 
+	//		//¿À¸¥ÂÊ³ğÀÌ ¿¬°áµÈ³ğÀÌ°í
 	//		if (mTrailList[indexY][indexX + 1]->GetIsConnected())
 	//		{
-	//			//ì™¼ìª½ì„ ë³´ê³ ìˆìœ¼ë©´
+	//			//¿ŞÂÊÀ» º¸°íÀÖÀ¸¸é
 	//			if (mTrailList[indexY][indexX + 1]->GetDirection() == TrailDirection::Left)
 	//			{
-	//				//ê·¸ë†ˆì´ ê¼¬ë¦¬
+	//				//±×³ğÀÌ ²¿¸®
 	//				mTrailList[indexY][indexX]->SetIsTail(true);
 	//			}
 	//		}
@@ -148,27 +148,27 @@ void TrailManager::TurnTrail(int indexY, int indexX)
 	//}
 }
 
-//ë„íŠ¸ë¨¸ë¦¬ì˜ ê¸°ì°¨ê¸¸ì„ ì¤ê¸°
+//²ôÆ®¸Ó¸®ÀÇ ±âÂ÷±æÀ» Áİ±â
 void TrailManager::PickUpTrail(int indexY, int indexX)
 {
 	//mTrailList.pop_back();
-	//ê±´ë“œë¦°ê²Œ ê¼¬ë¦¬ë©´
+	//°Çµå¸°°Ô ²¿¸®¸é
 	if (mTrailList[indexY][indexX]->GetIsTail())
 	{
 		mTrailList[indexY][indexX]->SetTrailType(0);
 		mTrailList[indexY][indexX]->SetIsActive(false);
 		mTrailList[indexY][indexX]->SetIsTail(false);
 
-		//ëº€ë…€ì…•ì˜ì£¼ë³€ ì²´í¬, ê¼¬ë¦¬ì„¤ì •í•˜ê¸°
+		//»«³à¼ÆÀÇÁÖº¯ Ã¼Å©, ²¿¸®¼³Á¤ÇÏ±â
 		if (indexY > 0)
 		{
-			//ìœ—ë†ˆì´ ì—°ê²°ëœë†ˆì´ê³ 
+			//À­³ğÀÌ ¿¬°áµÈ³ğÀÌ°í
 			if (mTrailList[indexY - 1][indexX]->GetIsConnected())
 			{
-				//ì•„ë˜ë¥¼ ë³´ê³ ìˆìœ¼ë©´
+				//¾Æ·¡¸¦ º¸°íÀÖÀ¸¸é
 				if (mTrailList[indexY - 1][indexX]->GetDirection() == TrailDirection::Down)
 				{
-					//ê·¸ë†ˆì´ ê¼¬ë¦¬
+					//±×³ğÀÌ ²¿¸®
 					mTrailList[indexY - 1][indexX]->SetIsTail(true);
 				}
 			}
@@ -176,39 +176,39 @@ void TrailManager::PickUpTrail(int indexY, int indexX)
 		}
 		if (indexY < TileCountY)
 		{
-			//ì•„ë«ë†ˆì´ ì—°ê²°ëœë†ˆì´ê³ 
+			//¾Æ·§³ğÀÌ ¿¬°áµÈ³ğÀÌ°í
 			if (mTrailList[indexY + 1][indexX]->GetIsConnected())
 			{
-				//ìœ„ë¥¼ ë³´ê³ ìˆìœ¼ë©´
+				//À§¸¦ º¸°íÀÖÀ¸¸é
 				if (mTrailList[indexY + 1][indexX]->GetDirection() == TrailDirection::Up)
 				{
-					//ê·¸ë†ˆì´ ê¼¬ë¦¬
+					//±×³ğÀÌ ²¿¸®
 					mTrailList[indexY][indexX]->SetIsTail(true);
 				}
 			}
 		}
 		if (indexX > 0)
 		{
-			//ì™¼ìª½ë†ˆì´ ì—°ê²°ëœë†ˆì´ê³ 
+			//¿ŞÂÊ³ğÀÌ ¿¬°áµÈ³ğÀÌ°í
 			if (mTrailList[indexY][indexX - 1]->GetIsConnected())
 			{
-				//ì˜¤ë¥¸ìª½ì„ ë³´ê³ ìˆìœ¼ë©´
+				//¿À¸¥ÂÊÀ» º¸°íÀÖÀ¸¸é
 				if (mTrailList[indexY][indexX - 1]->GetDirection() == TrailDirection::Right)
 				{
-					//ê·¸ë†ˆì´ ê¼¬ë¦¬
+					//±×³ğÀÌ ²¿¸®
 					mTrailList[indexY][indexX]->SetIsTail(true);
 				}
 			}
 		}
 		if (indexX < TileCountX)
 		{
-			//ì˜¤ë¥¸ìª½ë†ˆì´ ì—°ê²°ëœë†ˆì´ê³ 
+			//¿À¸¥ÂÊ³ğÀÌ ¿¬°áµÈ³ğÀÌ°í
 			if (mTrailList[indexY][indexX + 1]->GetIsConnected())
 			{
-				//ì™¼ìª½ì„ ë³´ê³ ìˆìœ¼ë©´
+				//¿ŞÂÊÀ» º¸°íÀÖÀ¸¸é
 				if (mTrailList[indexY][indexX + 1]->GetDirection() == TrailDirection::Left)
 				{
-					//ê·¸ë†ˆì´ ê¼¬ë¦¬
+					//±×³ğÀÌ ²¿¸®
 					mTrailList[indexY][indexX]->SetIsTail(true);
 				}
 			}
@@ -216,23 +216,23 @@ void TrailManager::PickUpTrail(int indexY, int indexX)
 	}
 }
 
-//í”Œë ˆì´ì–´ê°€ íŠ¸ë ˆì¼ ì„¤ì¹˜
+//ÇÃ·¹ÀÌ¾î°¡ Æ®·¹ÀÏ ¼³Ä¡
 void TrailManager::PlaceTrail(int x, int y, int type, int dir)
 {
 	mTrailList[y][x]->SetTrailType(type);
 	mTrailList[y][x]->SetDirection(dir);
 	mTrailList[y][x]->SetIsActive(true);
 
-	//ì„¤ì¹˜í•œë…€ì„ì˜ ì—°ê²°ì²´í¬
+	//¼³Ä¡ÇÑ³à¼®ÀÇ ¿¬°áÃ¼Å©
 	if (y > 0)
 	{
-		//ìœ—ë†ˆì´ ì—°ê²°ëœë†ˆì´ê³ 
+		//À­³ğÀÌ ¿¬°áµÈ³ğÀÌ°í
 		if (mTrailList[y - 1][x]->GetIsConnected())
 		{
-			//ì•„ë˜ë¥¼ ë³´ê³ ìˆìœ¼ë©´
+			//¾Æ·¡¸¦ º¸°íÀÖÀ¸¸é
 			if (mTrailList[y - 1][x]->GetDirection() == TrailDirection::Down)
 			{
-				//ì„¤ì¹˜í•œë†ˆì€ ì—°ê²°ëœë†ˆ
+				//¼³Ä¡ÇÑ³ğÀº ¿¬°áµÈ³ğ
 				mTrailList[y][x]->SetIsConnected(true);
 			}
 		}
@@ -240,39 +240,39 @@ void TrailManager::PlaceTrail(int x, int y, int type, int dir)
 	}
 	if (y < TileCountY)
 	{
-		//ì•„ë«ë†ˆì´ ì—°ê²°ëœë†ˆì´ê³ 
+		//¾Æ·§³ğÀÌ ¿¬°áµÈ³ğÀÌ°í
 		if (mTrailList[y + 1][x]->GetIsConnected())
 		{
-			//ìœ„ë¥¼ ë³´ê³ ìˆìœ¼ë©´
+			//À§¸¦ º¸°íÀÖÀ¸¸é
 			if (mTrailList[y + 1][x]->GetDirection() == TrailDirection::Up)
 			{
-				//ì„¤ì¹˜í•œë†ˆì€ ì—°ê²°ëœë†ˆ
+				//¼³Ä¡ÇÑ³ğÀº ¿¬°áµÈ³ğ
 				mTrailList[y][x]->SetIsConnected(true);
 			}
 		}
 	}
 	if (x > 0)
 	{
-		//ì™¼ìª½ë†ˆì´ ì—°ê²°ëœë†ˆì´ê³ 
-		if (mTrailList[y][x-1]->GetIsConnected())
+		//¿ŞÂÊ³ğÀÌ ¿¬°áµÈ³ğÀÌ°í
+		if (mTrailList[y][x - 1]->GetIsConnected())
 		{
-			//ì˜¤ë¥¸ìª½ì„ ë³´ê³ ìˆìœ¼ë©´
-			if (mTrailList[y][x-1]->GetDirection() == TrailDirection::Right)
+			//¿À¸¥ÂÊÀ» º¸°íÀÖÀ¸¸é
+			if (mTrailList[y][x - 1]->GetDirection() == TrailDirection::Right)
 			{
-				//ì„¤ì¹˜í•œë†ˆì€ ì—°ê²°ëœë†ˆ
+				//¼³Ä¡ÇÑ³ğÀº ¿¬°áµÈ³ğ
 				mTrailList[y][x]->SetIsConnected(true);
 			}
 		}
 	}
 	if (x < TileCountX)
 	{
-		//ì˜¤ë¥¸ìª½ë†ˆì´ ì—°ê²°ëœë†ˆì´ê³ 
+		//¿À¸¥ÂÊ³ğÀÌ ¿¬°áµÈ³ğÀÌ°í
 		if (mTrailList[y][x + 1]->GetIsConnected())
 		{
-			//ì™¼ìª½ì„ ë³´ê³ ìˆìœ¼ë©´
+			//¿ŞÂÊÀ» º¸°íÀÖÀ¸¸é
 			if (mTrailList[y][x + 1]->GetDirection() == TrailDirection::Left)
 			{
-				//ì„¤ì¹˜í•œë†ˆì€ ì—°ê²°ëœë†ˆ
+				//¼³Ä¡ÇÑ³ğÀº ¿¬°áµÈ³ğ
 				mTrailList[y][x]->SetIsConnected(true);
 			}
 		}
