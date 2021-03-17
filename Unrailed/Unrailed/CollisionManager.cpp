@@ -161,7 +161,7 @@ void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 
 }
 
-GameObject * CollisionManager::ItemCollision(GameObject* object)
+GameObject * CollisionManager::ItemCollision(RECT* rc)
 {
 	vector<GameObject*> vecItem = OBJECTMANAGER->GetObjectList(ObjectLayer::ITEM);
 	vector<GameObject*>::iterator iter = vecItem.begin();
@@ -169,7 +169,7 @@ GameObject * CollisionManager::ItemCollision(GameObject* object)
 	for (; iter != vecItem.end();)
 	{
 		RECT temp;
-		if (IntersectRect(&temp, &object->GetRect(), &(*iter)->GetRect()))
+		if (IntersectRect(&temp, rc, &(*iter)->GetRect()))
 		{
 			return (*iter);
 		}

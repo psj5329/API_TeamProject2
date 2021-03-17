@@ -42,6 +42,16 @@ void ImageManager::LoadFromFile(wstring key, wstring filePath, int width, int he
 	mImageList.insert(make_pair(key, newImage));
 }
 
+void ImageManager::LoadAllBmpFile()
+{
+	wstring path = L"../Resources/";
+	vector<wstring> vecFileName;
+
+	/*struct _finddata_t fd;
+	intptr_t handle;
+	if(handle = FindFirstFile(path.c_str(), &fd))*/
+}
+
 Image * ImageManager::FindImage(wstring key)
 {
 	ImageIter iter = mImageList.find(key);
