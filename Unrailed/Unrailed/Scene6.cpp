@@ -11,11 +11,21 @@ void Scene6::Init()
 
 	mTrailManager = new TrailManager();
 	mTrailManager->Init();
-	mTrailManager->InsertTrail(0, 7, 1, 3);
-	mTrailManager->InsertTrail(1, 7, 1, 3);
+	mTrailManager->InsertTrail(0, 6, 1, 3);
+	mTrailManager->InsertTrail(1, 6, 1, 3);
+	mTrailManager->InsertTrail(2, 6, 1, 3);
+	mTrailManager->InsertTrail(3, 6, 1, 0);
+	mTrailManager->InsertTrail(3, 7, 1, 3);
+	mTrailManager->InsertTrail(4, 7, 1, 3);
+	mTrailManager->InsertTrail(5, 7, 1, 3);
+	mTrailManager->InsertTrail(6, 7, 1, 3);
+	mTrailManager->InsertTrail(7, 7, 1, 1);
+	mTrailManager->InsertTrail(7, 6, 1, 1);
+	mTrailManager->InsertTrail(7, 5, 1, 3);
+	mTrailManager->InsertTrail(8, 5, 1, 3);
 
 
-	//적인잇
+	//기차인잇
 
 }
 

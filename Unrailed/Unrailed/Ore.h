@@ -3,6 +3,7 @@
 
 enum class OreType
 {
+	None,
 	Green,
 	Blue,
 	Red
@@ -25,7 +26,7 @@ public:
 	int GetOreTypeInt() { return (int)mType; }
 	OreType GetOreType() { return mType; }
 
-	void SetOreType(int type) { mType = (OreType)(type + 1); }
+	void SetOreType(int type) { mType = (OreType)type; }
 	void Drop(int x, int y, int type);
 	int PickUp();
 	void Place(int x, int y);

@@ -54,7 +54,7 @@ void Ore::Drop(int x, int y, int type)
 int Ore::PickUp()
 {
 	mIsActive = false;
-	return (int)(mType) +1;
+	return (int)mType;
 }
 
 void Ore::Place(int x, int y)

@@ -27,6 +27,8 @@ void Scene3::Update()
 		mTileMap->LoadMap();
 	}
 
+	OBJECTMANAGER->Update();
+
 }
 
 void Scene3::Render(HDC hdc)
