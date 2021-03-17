@@ -126,11 +126,13 @@ void Abra::Update()
 	}
 
 	mCurrentAnimation->Update();
+	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 }
 
 void Abra::Render(HDC hdc)
 {
-	mCurrentImage->ScaleFrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	RenderRect(hdc, mRect);
+	mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
 void Abra::ReadyAnimation()
@@ -164,10 +166,12 @@ void Abra::ReadyAnimation()
 	mRightSleep->InitFrameByStartEnd(2, 5, 3, 5, false);
 	mRightSleep->SetIsLoop(true);
 	mRightSleep->SetFrameUpdateTime(0.2f);
+
 	mExplode = new Animation();
 	mExplode->InitFrameByStartEnd(0, 0, 6, 0, false);
 	mExplode->SetIsLoop(false);
 	mExplode->SetFrameUpdateTime(0.1f);
+	mExplode->SetCallbackFunc(bind(&Train::EndExplode, this));
 }
 
 void Abra::SetAnimation()
@@ -212,4 +216,12 @@ void Abra::SetAnimation()
 	}
 
 	mCurrentAnimation->Play();
+}
+
+void Abra::EndExplode()
+{
+	if (mState == State::Explode)
+	{
+		SetIsDestroy(true);
+	}
 }

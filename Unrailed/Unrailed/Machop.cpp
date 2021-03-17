@@ -124,11 +124,13 @@ void Machop::Update()
 	}
 
 	mCurrentAnimation->Update();
+	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 }
 
 void Machop::Render(HDC hdc)
 {
-	mCurrentImage->ScaleFrameRender(hdc, mX, mY, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	RenderRect(hdc, mRect);
+	mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
 void Machop::ReadyAnimation()
@@ -167,6 +169,7 @@ void Machop::ReadyAnimation()
 	mExplode->InitFrameByStartEnd(0, 0, 6, 0, false);
 	mExplode->SetIsLoop(false);
 	mExplode->SetFrameUpdateTime(0.1f);
+	mExplode->SetCallbackFunc(bind(&Train::EndExplode, this));
 }
 
 void Machop::SetAnimation()
@@ -190,6 +193,7 @@ void Machop::SetAnimation()
 		{
 			mCurrentAnimation = mRightMove;
 		}
+		mCurrentImage = mImage;
 	}
 	if (mState == State::Sleep)
 	{
@@ -201,6 +205,7 @@ void Machop::SetAnimation()
 		{
 			mCurrentAnimation = mRightSleep;
 		}
+		mCurrentImage = mImage;
 	}
 	if (mState == State::Explode)
 	{
@@ -209,4 +214,12 @@ void Machop::SetAnimation()
 	}
 
 	mCurrentAnimation->Play();
+}
+
+void Machop::EndExplode()
+{
+	if (mState == State::Explode)
+	{
+		SetIsDestroy(true);
+	}
 }

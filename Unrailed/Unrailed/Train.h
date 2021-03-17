@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Trail.h"
 
 enum class Direction : int
 {
@@ -22,6 +23,8 @@ enum class State : int
 class Train : public GameObject
 {
 protected:
+	vector <vector <Trail*>> mTrailList;
+
 	State mState;
 	Direction mDirection;
 	float mSpeed;
@@ -44,7 +47,9 @@ public:
 	virtual void Render(HDC hdc)override = 0;
 
 	virtual void ReadyAnimation() = 0;
-
 	virtual void SetAnimation() = 0;
+	virtual void EndExplode() = 0;
+
+	void SetTrail(vector <vector <Trail*>>* trail) { mTrailList = *trail; }
 };
 

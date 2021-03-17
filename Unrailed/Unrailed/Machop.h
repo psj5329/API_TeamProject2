@@ -22,7 +22,8 @@ public:
 	void Update()override;
 	void Render(HDC hdc)override;
 
-	void ReadyAnimation();
+	void ReadyAnimation()override;
 
-	void SetAnimation();
+	void SetAnimation()override;
+	void EndExplode()override;
 };

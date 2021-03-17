@@ -41,7 +41,9 @@ void CollisionManager::TileCollision(Player* player, TileMap* tileMap)
 			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
 			{
 				RECT temp;
-				if (IntersectRect(&temp, &player->GetRect(), &(*tileList)[j][i]->GetRect()))
+				RECT playerRc = player->GetRect();
+				RECT tileRc = (*tileList)[j][i]->GetRect();
+				if (IntersectRect(&temp, &playerRc, &tileRc))
 				{
 					float width = temp.right - temp.left;
 					float height = temp.bottom - temp.top;
@@ -107,7 +109,9 @@ void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
 			{
 				RECT temp;
-				if (IntersectRect(&temp, &player->GetRect(), &(*mapObjectList)[j][i]->GetRect()))
+				RECT playerRc = player->GetRect();
+				RECT mapObjectRc = (*tileList)[j][i]->GetRect();
+				if (IntersectRect(&temp, &playerRc, &mapObjectRc))
 				{
 					float width = temp.right - temp.left;
 					float height = temp.bottom - temp.top;
@@ -169,7 +173,9 @@ GameObject * CollisionManager::ItemCollision(GameObject* object)
 	for (; iter != vecItem.end();)
 	{
 		RECT temp;
-		if (IntersectRect(&temp, &object->GetRect(), &(*iter)->GetRect()))
+		RECT objectRc = object->GetRect();
+		RECT iterRc = (*iter)->GetRect();
+		if (IntersectRect(&temp, &objectRc, &iterRc))
 		{
 			return (*iter);
 		}
