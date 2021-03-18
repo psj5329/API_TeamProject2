@@ -49,7 +49,7 @@ void LoadingScene::Update()
 	if (mIsEndLoading)
 	{
 		if (INPUT->GetKeyDown(VK_RETURN))
-			SCENEMANAGER->LoadScene(L"Scene2");
+			SCENEMANAGER->LoadScene(L"Scene6");
 	}
 
 	if (mLoadIndex >= mLoadList.size())

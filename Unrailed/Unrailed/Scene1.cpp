@@ -8,6 +8,7 @@
 
 #include "TileMap.h"
 #include "Player.h"
+#include "Camera.h"
 
 void Scene1::Init()
 {
@@ -20,12 +21,23 @@ void Scene1::Init()
 	mPlayer->SetY(48*5);
 	OBJECTMANAGER->AddObject(ObjectLayer::PLAYER, mPlayer);
 
+	Camera* main = CAMERAMANAGER->GetMainCamera();
+	main->ChangeMode(Camera::Mode::Follow);
+	main->SetTarget(mPlayer);
+	main->SetX(WINSIZEX / 2);
+	main->SetY(WINSIZEY / 2);
+	CAMERAMANAGER->SetMainCamera(main);
+
 	OBJECTMANAGER->Init();
 }
 
 void Scene1::Release()
 {
 	OBJECTMANAGER->Release();
+
+	Camera* camera = CAMERAMANAGER->GetMainCamera();
+	SafeDelete(camera);
+	CameraManager::ReleaseInstance();
 }
 
 void Scene1::Update()
@@ -42,6 +54,7 @@ void Scene1::Update()
 	mTileMap->Update();
 	COLLISIONMANAGER->TileCollision(mPlayer, mTileMap);
 	COLLISIONMANAGER->MapObjectCollision(mPlayer, mTileMap);
+	CAMERAMANAGER->Update();
 }
 
 void Scene1::Render(HDC hdc)

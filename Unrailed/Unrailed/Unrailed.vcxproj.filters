@@ -300,8 +300,12 @@
     <ClInclude Include="MainScene.h">
       <Filter>MainGame\Scene\Menu</Filter>
     </ClInclude>
+    <ClInclude Include="FileSystemHelper.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
     <ClInclude Include="MapToolReady.h">
       <Filter>MainGame\Scene\MapToolScene</Filter>
+    </ClInclude>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -458,8 +462,12 @@
     <ClCompile Include="MainScene.cpp">
       <Filter>MainGame\Scene\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="FileSystemHelper.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
     <ClCompile Include="MapToolReady.cpp">
       <Filter>MainGame\Scene\MapToolScene</Filter>
+      </ClCompile>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

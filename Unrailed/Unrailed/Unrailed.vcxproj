@@ -30,7 +30,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -91,6 +91,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -161,6 +162,7 @@
     <ClInclude Include="DefineHeader.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Figure.h" />
+    <ClInclude Include="FileSystemHelper.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameEvent.h" />
     <ClInclude Include="GameEventManager.h" />
@@ -219,6 +221,7 @@
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FileSystemHelper.cpp" />
     <ClCompile Include="GameEvent.cpp" />
     <ClCompile Include="GameEventManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
