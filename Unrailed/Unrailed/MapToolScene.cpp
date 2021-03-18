@@ -141,6 +141,7 @@ void MapToolScene::Init()
 	mCurrentTile = mPallete[0][0];
 	mCurrentType = TileType::Normal;
 	mCurrentPallete = CurrentPallete::Tile;
+
 }
 
 void MapToolScene::Release()
@@ -271,13 +272,11 @@ void MapToolScene::Update()
 				{
 					ISetTileType* command = new ISetTileType(mTileList[indexY][indexX], mCurrentType);
 					PushCommand(command);
-
 				}
 			}
 			//옵젝바꾸기
 			if (mCurrentPallete == CurrentPallete::Object)
 			{
-
 				if (mMapObjectList[indexY][indexX]->GetImage() != mCurrentObject.image ||
 					mMapObjectList[indexY][indexX]->GetFrameIndexX() != mCurrentObject.frameX ||
 					mMapObjectList[indexY][indexX]->GetFrameIndexY() != mCurrentObject.frameY)

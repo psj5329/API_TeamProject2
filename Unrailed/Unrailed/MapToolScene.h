@@ -15,6 +15,20 @@ enum class CurrentPallete
 	Erase
 };
 
+struct MouseRect
+{
+	Image image;
+	float positionX;
+	float positionY;
+	float sizeX;
+	float sizeY;
+	int indexX;
+	int indexY;
+	RECT rect;
+	int frameX;
+	int frameY;
+};
+
 class ICommand;
 
 
@@ -37,9 +51,10 @@ class MapToolScene : public Scene
 	TilePallete mCurrentTile;
 	TileType mCurrentType;
 	MapObjectPallete mCurrentObject;
-
 	CurrentPallete mCurrentPallete;
 
+	//마우스끝에 표시할친구
+	MouseRect mMouse;
 
 	class Button* mSaveButton;
 	class Button* mLoadButton;
