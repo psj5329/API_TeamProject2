@@ -32,6 +32,7 @@ protected:
 	int mLevel;
 	bool mStop;
 	bool mIsExplode;
+	bool mReachTile;
 
 	class Image* mCurrentImage;
 	class Image* mImage;
