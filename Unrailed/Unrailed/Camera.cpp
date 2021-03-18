@@ -24,7 +24,7 @@ void Camera::Update()
 		if (mTarget)
 		{
 			mX = Math::Lerp(mX, mTarget->GetX(), 2.f * Time::GetInstance()->DeltaTime());
-			mY = Math::Lerp(mY, mTarget->GetY(), 2.f * Time::GetInstance()->DeltaTime());
+			//mY = Math::Lerp(mY, mTarget->GetY(), 2.f * Time::GetInstance()->DeltaTime());
 
 			mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 		}

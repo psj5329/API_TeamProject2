@@ -12,12 +12,10 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <list>
 #include <queue>
 #include <functional>
 #include <fstream>
 #include <stack>
-#include <list>
 #include <iostream>
 #include <filesystem>
 
@@ -32,6 +30,17 @@ using namespace std;
 #endif
 
 #include "../Libraries/inc/fmod.hpp"
+
+#pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "dwrite.lib")
+#pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "WindowsCodecs.lib")
+
+#include <D2D1.h>
+#include <d2d1helper.h>
+#include <d2d1.h>
+#include <dwrite.h>
+#include <wincodec.h>
 
 #include "DefineHeader.h"
 #include "Figure.h"
