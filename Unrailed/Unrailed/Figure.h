@@ -43,8 +43,8 @@ inline void RenderLine(HDC hdc,int startX, int startY, int endX, int endY)
 
 inline float GetDistance(int aX, int aY, int bX, int bY)
 {
-	float width = aX - bX;
-	float height = aY - bY;
+	float width = (float)(aX - bX);
+	float height = (float)(aY - bY);
 
 	return sqrtf(width * width + height * height);
 }

@@ -8,18 +8,12 @@
 
 void Scene4::Init()
 {
-	/*
-	IMAGEMANAGER->LoadFromFile(L"charmander", Resources(L"charmander"), 192, 1968, 4, 41, true);
-	IMAGEMANAGER->LoadFromFile(L"chikorita", Resources(L"chikorita"), 192, 1968, 4, 41, true);
-	IMAGEMANAGER->LoadFromFile(L"ditto", Resources(L"ditto"), 144, 1200, 3, 25, true);
-	IMAGEMANAGER->LoadFromFile(L"jigglypuff", Resources(L"jigglypuff"), 192, 816, 4, 17, true);
-	IMAGEMANAGER->LoadFromFile(L"lapras", Resources(L"lapras"), 192, 624, 4, 13, true);
-	IMAGEMANAGER->LoadFromFile(L"totodile", Resources(L"totodile"), 240, 1968, 5, 41, true);
-	*/
-
 	// 플레이어도 사실 메인게임으로 가야 함
-	Player* player = new Player("Player", TileSize * 4.5, TileSize * 4.5);
-	OBJECTMANAGER->AddObject(ObjectLayer::PLAYER, player);
+	mTempPlayer = new Player("Player", TileSize * 4.5, TileSize * 4.5);
+	OBJECTMANAGER->AddObject(ObjectLayer::PLAYER, mTempPlayer);
+
+	// 각 씬에서는 얘를 사용해야 함
+	//Player* player = (Player*)(OBJECTMANAGER->FindObject("Player"));
 
 	/* 얘는 메인으로 가야 함
 	Camera* camera = new Camera();
@@ -37,9 +31,9 @@ void Scene4::Init()
 	mTileMap->LoadMap();
 
 	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
-	player->SetTileListPtr(tileListPtr);
+	mTempPlayer->SetTileListPtr(tileListPtr);
 	vector<vector<MapObject*>>* mapObjectListPtr = mTileMap->GetObjectListPtr();
-	player->SetMapObjectListPtr(mapObjectListPtr);
+	mTempPlayer->SetMapObjectListPtr(mapObjectListPtr);
 }
 
 void Scene4::Release()
@@ -49,13 +43,16 @@ void Scene4::Release()
 
 void Scene4::Update()
 {
+	RECT* playerColBoxPtr = mTempPlayer->GetColBoxPtr();
 	OBJECTMANAGER->Update();
+	mTileMap->Update();
+	COLLISIONMANAGER->TileCollision(mTempPlayer, playerColBoxPtr, mTileMap);
+	COLLISIONMANAGER->MapObjectCollision(mTempPlayer, playerColBoxPtr, mTileMap);
 }
 
 void Scene4::Render(HDC hdc)
 {
 	mTileMap->Render(hdc);
-
 	OBJECTMANAGER->Render(hdc);
 
 	// {{ 완성본에서 지워야 할 내용 시작

@@ -38,8 +38,6 @@ class MapObject;
 class Player : public GameObject
 {
 	Image* mImage;
-	//Animation* mIdleAnimation;
-	//Animation* mRunAnimation;
 
 	Animation* mDownIdleAnimation;
 	Animation* mUpIdleAnimation;
@@ -59,7 +57,9 @@ class Player : public GameObject
 	Animation* mLUMoveAnimation;
 	Animation* mRUMoveAnimation;
 
-	Animation* mCurrentAnimation;	//현재 애니메이션
+	Animation* mCurrentAnimation;
+
+	RECT mColBox;
 
 	DirectionEight mDir;
 	State mState;
@@ -95,14 +95,23 @@ public:
 
 	void InitAnimation();
 
+	void SafeDeleteAnimation();
+
 	void InputDirectionKey();
 	void InputDiggingKey();
 
-	void ChangeForm(); // 임시
+	void CheckNextTile();
 
-	void SafeDeleteAnimation();
+
+
+	void ChangeForm(); // 임시
+	void ChangeCurrentAnimation();
+
+	void RenderTestText(HDC hdc);
 
 public:
+	RECT* GetColBoxPtr(void) { return &mColBox; }
+
 	void SetTileListPtr(vector<vector<Tile*>>* tileListPtr) { mTileListPtr = tileListPtr; }
 	void SetMapObjectListPtr(vector<vector<MapObject*>>* mapObjectListPtr) { mMapObjectListPtr = mapObjectListPtr; }
 };
