@@ -7,7 +7,6 @@ enum class MapObjectType
 	Red
 };
 
-
 class MapObject
 {
 	class Image* mImage;

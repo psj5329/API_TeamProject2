@@ -64,7 +64,7 @@ void Player::Update()
 
 	InputDirectionKey();
 
-	InputDiggingKey();
+	InputSpaceKey();
 
 	ChangeForm();
 
@@ -506,7 +506,7 @@ void Player::InputDirectionKey()
 	mColBox = RectMakeCenter((int)mX, (int)mY, TileSize, TileSize);
 }
 
-void Player::InputDiggingKey()
+void Player::InputSpaceKey()
 {
 	if (Input::GetInstance()->GetKey(VK_SPACE))
 	{
@@ -529,6 +529,28 @@ void Player::InputDiggingKey()
 		}
 		else
 			mIsAttackingTemp = false;
+
+
+
+
+		/////////////////////////// object매니저에 있는 아이템의 mType이 무슨 색인지에 따라서 바꿔줘야 함
+		/////////////////////// ore -> 소지 item으로 바꾸기 플레이어만의 inventory(vector<gameobject*>) 를 만들자)
+		/*
+		if ((mForm == Form::Charmander) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Red))
+		{
+			mIsAttackingTemp = true;
+			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
+		}
+		else if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Green))
+		{
+			mIsAttackingTemp = true;
+			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
+		}
+		else if ((mForm == Form::Totodile) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Blue))
+		{
+			mIsAttackingTemp = true;
+			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
+		}*/
 	}
 	else
 		mIsAttackingTemp = false;

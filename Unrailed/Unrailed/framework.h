@@ -57,7 +57,7 @@ using namespace std;
 #include "GameEventManager.h"
 #include "Gizmo.h"
 
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 extern POINT _mousePosition;	//마우스 좌표
 extern HWND	_hWnd;
