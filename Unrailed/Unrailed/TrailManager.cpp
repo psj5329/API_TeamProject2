@@ -1,6 +1,7 @@
 #include "pch.h"
-#include "Trail.h"
+//#include "Trail.h"
 #include "TrailManager.h"
+
 
 void TrailManager::Init()
 {

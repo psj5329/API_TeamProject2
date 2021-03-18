@@ -48,4 +48,3 @@ void MapObject::Render(HDC hdc)
 			mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
 	}
 }
-
