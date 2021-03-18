@@ -10,8 +10,14 @@ class LoadingScene : public Scene
 	int mLoadIndex;
 	bool mIsEndLoading;
 
+	Image* mLoadingBarImage;
+	float mRatio;
 	Image* mImage;
 	Animation* mAnimation;
+	int mFontColor;
+	bool mIsColorChange;
+
+	thread* mLoadingImageThread;
 
 public:
 	void AddLoadFunc(const function<void(void)>& func);
@@ -21,6 +27,10 @@ public:
 	void Update()override;
 	void Render(HDC hdc)override;
 
+public:
+	void LoadingImageThread();
+
+public:
 	bool GetIsEndLoading()const { return mIsEndLoading; }
 };
 
