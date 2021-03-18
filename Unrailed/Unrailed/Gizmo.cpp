@@ -10,10 +10,14 @@ Gizmo::Gizmo()
 	HPEN redPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
 	HPEN greenPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
 	HPEN bluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
+	HPEN blackPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
+	HPEN grayPen = CreatePen(PS_SOLID, 1, RGB(128, 128, 128));
 
 	mPenList.insert(make_pair(Color::Red, redPen));
 	mPenList.insert(make_pair(Color::Green, greenPen));
 	mPenList.insert(make_pair(Color::Blue, bluePen));
+	mPenList.insert(make_pair(Color::Black, blackPen));
+	mPenList.insert(make_pair(Color::Gray, grayPen));
 }
 
 Gizmo::~Gizmo()

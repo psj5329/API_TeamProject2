@@ -87,7 +87,7 @@ void MapToolScene::Init()
 		}
 	}
 
-	//팔레트 속성 넣어주기
+	//속성팔레트 넣어주기
 	//시작점
 	palleteStartX = WINSIZEX / 2 + 350;
 	palleteStartY = 400;
@@ -100,6 +100,7 @@ void MapToolScene::Init()
 		tempTypePallete.height = TileSize;
 		tempTypePallete.rect = RectMake(tempTypePallete.positionX, tempTypePallete.positionY, tempTypePallete.width, tempTypePallete.height);
 		tempTypePallete.type = i;
+		tempTypePallete.tiletype = (TileType)i;
 		mTypePallete.push_back(tempTypePallete);
 
 	}
@@ -140,6 +141,7 @@ void MapToolScene::Init()
 	mCurrentTile = mPallete[0][0];
 	mCurrentType = TileType::Normal;
 	mCurrentPallete = CurrentPallete::Tile;
+
 }
 
 void MapToolScene::Release()
@@ -270,13 +272,11 @@ void MapToolScene::Update()
 				{
 					ISetTileType* command = new ISetTileType(mTileList[indexY][indexX], mCurrentType);
 					PushCommand(command);
-
 				}
 			}
 			//옵젝바꾸기
 			if (mCurrentPallete == CurrentPallete::Object)
 			{
-
 				if (mMapObjectList[indexY][indexX]->GetImage() != mCurrentObject.image ||
 					mMapObjectList[indexY][indexX]->GetFrameIndexX() != mCurrentObject.frameX ||
 					mMapObjectList[indexY][indexX]->GetFrameIndexY() != mCurrentObject.frameY)
@@ -357,11 +357,37 @@ void MapToolScene::Render(HDC hdc)
 			Gizmo::GetInstance()->DrawRect(hdc, mPallete[y][x].rect, Gizmo::Color::Red);
 		}
 	}
+
 	//타입팔렛
 	for (int i = 0;i < TypePalleteCount;i++)
 	{
-		Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, (Gizmo::Color)mTypePallete[i].type);
+		switch (mTypePallete[i].tiletype)
+		{
+		case TileType::Normal:
+			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Green);
+			break;
+
+		case TileType::Wall:
+			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Black);
+			break;
+
+		case TileType::Water:
+			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Blue);
+			break;
+
+		case TileType::Lava:
+			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Red);
+			break;
+
+		case TileType::ice:
+			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Gray);
+			break;
+
+		default:
+			break;
+		}
 	}
+
 	//옵젝팔렛
 	for (int y = 0; y < mObjectPallete.size(); ++y)
 	{

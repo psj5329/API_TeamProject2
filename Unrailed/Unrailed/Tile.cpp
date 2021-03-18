@@ -20,17 +20,29 @@ void Tile::Render(HDC hdc)
 
 	if (mImage != nullptr)
 		mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
-	if (mTileType == TileType::Normal)
+
+	switch (mTileType)
 	{
-		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Blue);
-	}
-	else if(mTileType==TileType::Wall)
-	{
-		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Red);
-	}
-	else
-	{
+	case TileType::Normal:
 		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Green);
+		break;
+
+	case TileType::Wall:
+		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Black);
+		break;
+
+	case TileType::Water:
+		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Blue);
+		break;
+
+	case TileType::Lava:
+		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Red);
+		break;
+
+	case TileType::ice:
+		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Gray);
+		break;
+	default:
+		break;
 	}
-	//RenderRect(hdc, mRect);
 }

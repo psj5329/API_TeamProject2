@@ -6,7 +6,7 @@ class Gizmo final
 public:
 	enum class Color : int
 	{
-		Blue,Red, Green,End
+		Blue,Red, Green,End,Black,Gray
 	};
 private:
 	map<Color, HPEN> mPenList;
