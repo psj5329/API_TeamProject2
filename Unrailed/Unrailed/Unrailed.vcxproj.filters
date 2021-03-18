@@ -300,6 +300,9 @@
     <ClInclude Include="MainScene.h">
       <Filter>MainGame\Scene\Menu</Filter>
     </ClInclude>
+    <ClInclude Include="MapToolReady.h">
+      <Filter>MainGame\Scene\MapToolScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -454,6 +457,9 @@
     </ClCompile>
     <ClCompile Include="MainScene.cpp">
       <Filter>MainGame\Scene\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="MapToolReady.cpp">
+      <Filter>MainGame\Scene\MapToolScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
