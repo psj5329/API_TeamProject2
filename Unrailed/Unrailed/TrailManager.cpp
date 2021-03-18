@@ -61,14 +61,14 @@ void TrailManager::Render(HDC hdc)
 }
 
 //씬에서 인잇할때
-void TrailManager::InsertTrail(int x, int y, int type, int dir)
+void TrailManager::InsertTrail(int indexY, int indexX, int type, int dir)
 {
 	//해당인덱스의 속성
-	mTrailList[y][x]->SetTrailType(type);
-	mTrailList[y][x]->SetDirection(dir);
+	mTrailList[indexY][indexX]->SetTrailType(type);
+	mTrailList[indexY][indexX]->SetDirection(dir);
 
 	//바꿔야함
-	mTrailList[y][x]->SetIsConnected(true);
+	mTrailList[indexY][indexX]->SetIsConnected(true);
 }
 
 
@@ -200,19 +200,29 @@ TrailType TrailManager::PickUpTrail(int indexY, int indexX)
 
 		SetTrailTail(mStartY,mStartX);
 
+		return mTrailList[indexY][indexX]->GetTrailType();
 	}
-	return mTrailList[indexY][indexX]->GetTrailType();
-
+	else
+	{
+		return TrailType::None;
+	}
 }
 
 //플레이어가 트레일 설치
-void TrailManager::PlaceTrail(int indexY, int indexX, int type, int dir)
+bool TrailManager::PlaceTrail(int indexY, int indexX, int type, int dir)
 {
+	//벽처리해야해
+	if (mTrailList[indexY - 1][indexX]->GetIsConnected() && mTrailList[indexY+1][indexX]->GetIsConnected() &&
+		mTrailList[indexY][indexX -1]->GetIsConnected() && mTrailList[indexY][indexX + 1]->GetIsConnected())
+	{
+		return false;
+	}
+
 	mTrailList[indexY][indexX]->SetTrailType(type);
 	mTrailList[indexY][indexX]->SetDirection(dir);
 	mTrailList[indexY][indexX]->SetIsActive(true);
 	SetTrailTail(mStartY,mStartX);
-	
+	return true;
 
 }
 

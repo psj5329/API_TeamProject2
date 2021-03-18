@@ -102,7 +102,6 @@ void MapToolScene::Init()
 		tempTypePallete.type = i;
 		tempTypePallete.tiletype = (TileType)i;
 		mTypePallete.push_back(tempTypePallete);
-
 	}
 
 	//¸Ê¿ÉÁ§ÆÈ·¹Æ®
@@ -133,10 +132,18 @@ void MapToolScene::Init()
 	//¹öÆ°
 	mRightArrowButton = new Button(rightArrow, WINSIZEX - 40, 210, rightArrow->GetFrameWidth() * 2, rightArrow->GetFrameHeight() * 2, bind(&MapToolScene::SwitchTilePallete, this));
 	mRightArrowButton2 = new Button(rightArrow, WINSIZEX / 2+325, 480, rightArrow->GetFrameWidth()*2, rightArrow->GetFrameHeight()*2, bind(&MapToolScene::SwitchObjectPallete, this));
-	mSaveButton = new Button(save, WINSIZEX / 2, WINSIZEY / 2, save->GetFrameWidth(), save->GetFrameHeight(), bind(&MapToolScene::Save, this));
+	mSaveButton = new Button(save, WINSIZEX / 2, WINSIZEY / 2, save->GetFrameWidth(), save->GetFrameHeight(), bind(&MapToolScene::Save, this,1));
 	mLoadButton = new Button(load, WINSIZEX / 2 + 100, WINSIZEY / 2, load->GetFrameWidth(), load->GetFrameHeight(), bind(&MapToolScene::Load, this));
 	mUndoButton = new Button(undo, WINSIZEX / 2 + 200, WINSIZEY / 2, undo->GetFrameWidth(), undo->GetFrameHeight(), bind(&MapToolScene::Undo, this));
 	mEraseButton = new Button(eraser, WINSIZEX / 2 + 325, 425, eraser->GetFrameWidth()*2, eraser->GetFrameHeight()*2, bind(&MapToolScene::EraseButton, this));
+	
+	for (int i = 0;i < 5;i++)
+	{
+		wstring str = L"Save" + to_wstring(i+1);
+		Image* save = ImageManager::GetInstance()->FindImage(str);
+		Button* tempButton = new Button(save, WINSIZEX / 2 + 80*i, WINSIZEY - 130, save->GetFrameWidth(), save->GetFrameHeight(), bind(&MapToolScene::Save, this,i));
+		mSaveButtons.push_back(tempButton);
+	}
 
 	mCurrentTile = mPallete[0][0];
 	mCurrentType = TileType::Normal;
@@ -316,6 +323,10 @@ void MapToolScene::Update()
 	mEraseButton->Update();
 	mRightArrowButton->Update();
 	mRightArrowButton2->Update();
+	for (int i = 0; i < mSaveButtons.size();i++)
+	{
+		mSaveButtons[i]->Update();
+	}
 }
 
 void MapToolScene::Render(HDC hdc)
@@ -416,10 +427,18 @@ void MapToolScene::Render(HDC hdc)
 	mEraseButton->Render(hdc);
 	mRightArrowButton->Render(hdc);
 	mRightArrowButton2->Render(hdc);
+
+	for (int i = 0; i < mSaveButtons.size();i++)
+	{
+		mSaveButtons[i]->Render(hdc);
+	}
 }
 
-void MapToolScene::Save()
+void MapToolScene::Save(int i)
 {
+	wstring str = L"../Data/Save" + to_wstring(i+1) + L".txt";
+	//ofstream saveStream(str);
+
 	ofstream saveStream(L"../Data/Test.txt");
 	if (saveStream.is_open())
 	{

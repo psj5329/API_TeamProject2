@@ -30,7 +30,7 @@ struct MouseRect
 };
 
 class ICommand;
-
+class Button;
 
 
 class MapToolScene : public Scene
@@ -56,12 +56,14 @@ class MapToolScene : public Scene
 	//마우스끝에 표시할친구
 	MouseRect mMouse;
 
-	class Button* mSaveButton;
-	class Button* mLoadButton;
-	class Button* mUndoButton;
-	class Button* mRightArrowButton;
-	class Button* mRightArrowButton2;
-	class Button* mEraseButton;
+	Button* mSaveButton;
+	Button* mLoadButton;
+	Button* mUndoButton;
+	Button* mRightArrowButton;
+	Button* mRightArrowButton2;
+	Button* mEraseButton;
+	vector <Button*> mSaveButtons;
+
 
 	stack<ICommand*> mCommandList;
 public:
@@ -76,7 +78,7 @@ public:
 
 private:
 	
-	void Save();
+	void Save(int i);
 	void Load();
 
 	void PushCommand(ICommand* command);

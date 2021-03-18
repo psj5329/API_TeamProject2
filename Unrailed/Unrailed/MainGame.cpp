@@ -150,6 +150,13 @@ void MainGame::LoadResources(LoadingScene * scene)
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"GreenTrail", Resources(L"/Trail/DirTile_G"), 96, 96, 4, 4, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"BlueTrail", Resources(L"/Trail/DirTile_B"), 96, 96, 4, 4, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"RedTrail", Resources(L"/Trail/DirTile_R"), 96, 96, 4, 4, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save1", Resources(L"/Map/Tool/save1"), 75, 16, 1, 1, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save2", Resources(L"/Map/Tool/save2"), 75, 16, 1, 1, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save3", Resources(L"/Map/Tool/save3"), 75, 16, 1, 1, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save4", Resources(L"/Map/Tool/save4"), 75, 16, 1, 1, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save5", Resources(L"/Map/Tool/save5"), 75, 16, 1, 1, true); });
+
+
 
 	// 캐릭터 관련 // 유찬
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"charmander", Resources(L"charmander"), 192, 1968, 4, 41, true); });
