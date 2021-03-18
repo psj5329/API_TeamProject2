@@ -16,6 +16,7 @@ enum class TrailType
 	Blue,
 	Red
 };
+
 class Image;
 class Animation;
 class Trail :

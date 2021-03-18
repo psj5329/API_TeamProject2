@@ -98,12 +98,8 @@ public:
 	void SafeDeleteAnimation();
 
 	void InputDirectionKey();
-	void InputDiggingKey();
-
+	void InputSpaceKey();
 	void CheckNextTile();
-
-
-
 	void ChangeForm(); // юс╫ц
 	void ChangeCurrentAnimation();
 
