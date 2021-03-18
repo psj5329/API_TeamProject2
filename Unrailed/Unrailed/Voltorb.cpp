@@ -28,7 +28,6 @@ void Voltorb::Init()
 	mState = State::Sleep;
 	mSpeed = 100.f;
 	mTimer = 0;
-	mStop = false;
 
 	mCurrentImage = mImage;
 	mCurrentAnimation = mSleep;
@@ -46,6 +45,10 @@ void Voltorb::Release()
 
 void Voltorb::Update()
 {
+	//인덱스 가져오기
+	int indexX = mX / TileSize;
+	int indexY = mY / TileSize;
+
 	//상태정하기
 	if (mTimer == 0)
 	{
@@ -54,41 +57,59 @@ void Voltorb::Update()
 			SetAnimation();
 		}
 	}
-	if (mTimer >= 5 && mState == State::Sleep)
+	if (mTimer >= 2 && mState == State::Sleep)
 	{
 		mDirection = Direction::Right;
 		mState = State::Move;
 		SetAnimation();
-	}
 
-	//인덱스 가져오기
-	//int indexX = mX / TileSize;
-	//int indexY = mY / TileSize;
-	//
-	//mTrailList[indexY][indexX]->GetDirection();
+		mTimer = 0;
+	}
+	//계속 들어오지 않게 수정 요망
+	if (mState == State::Move)
+	{
+		if (mDirection == Direction::Down)
+		{
+			SetAnimation();
+		}
+		if (mDirection == Direction::Up)
+		{
+			SetAnimation();
+		}
+		if (mDirection == Direction::Left)
+		{
+			SetAnimation();
+		}
+		if (mDirection == Direction::Right)
+		{
+			SetAnimation();
+		}
+	}
 
 	//움직임
 	if (mState == State::Sleep)
 	{
 		mTimer += Time::GetInstance()->DeltaTime();
 	}
-	if (mState == State::Move)
+	//올라가있는 기차길의 현재 기차길/타일의 중간오면 방향확인
+	//방향이 가리키는 타일의 중간까지이동
+	if (mReachTile == false)
 	{
-		if (mDirection == Direction::Down)
+		if (CheckTrailDirection() == Direction::Down)
 		{
-			mY += mSpeed * Time::GetInstance()->DeltaTime();
+			Move(indexY + 1, indexX, Direction::Down);
 		}
-		if (mDirection == Direction::Up)
+		if (CheckTrailDirection() == Direction::Up)
 		{
-			mY -= mSpeed * Time::GetInstance()->DeltaTime();
+			Move(indexY - 1, indexX, Direction::Up);
 		}
-		if (mDirection == Direction::Left)
+		if (CheckTrailDirection() == Direction::Left)
 		{
-			mX -= mSpeed * Time::GetInstance()->DeltaTime();
+			Move(indexY, indexX - 1, Direction::Left);
 		}
-		if (mDirection == Direction::Right)
+		if (CheckTrailDirection() == Direction::Right)
 		{
-			mX += mSpeed * Time::GetInstance()->DeltaTime();
+			Move(indexY, indexX + 1, Direction::Right);
 		}
 	}
 
@@ -198,3 +219,64 @@ void Voltorb::EndExplode()
 		SetIsDestroy(true);
 	}
 }
+
+Direction Voltorb::CheckTrailDirection()
+{
+	int indexX = mX / TileSize;
+	int indexY = mY / TileSize;
+
+	Direction dir = (Direction)mTrailList[indexY][indexX]->GetDirection();
+	return dir;
+}
+
+void Voltorb::Move(int indexY, int indexX, Direction dir)
+{
+	float centerX = (mTrailList[indexY][indexX]->GetRect().left + mTrailList[indexY][indexX]->GetRect().right) / 2;
+	float centerY = (mTrailList[indexY][indexX]->GetRect().top + mTrailList[indexY][indexX]->GetRect().bottom) / 2;
+	
+	if (dir == Direction::Down)
+	{
+		if (mY <= centerY)
+		{
+			mY += mSpeed * Time::GetInstance()->DeltaTime() / 2;
+		}
+		else
+		{
+			mReachTile = true;
+		}
+	}
+	if (dir == Direction::Up)
+	{
+		if (mY >= centerY)
+		{
+			mY -= mSpeed * Time::GetInstance()->DeltaTime() / 2;
+		}
+		else
+		{
+			mReachTile = true;
+		}
+	}
+	if (dir == Direction::Left)
+	{
+		if (mX >= centerX)
+		{
+			mX -= mSpeed * Time::GetInstance()->DeltaTime() / 2;
+		}
+		else
+		{
+			mReachTile = true;
+		}
+	}
+	if (dir == Direction::Right)
+	{
+		if (mX <= centerX)
+		{
+			mX += mSpeed * Time::GetInstance()->DeltaTime() / 2;
+		}
+		else
+		{
+			mReachTile = true;
+		}
+	}
+}
+

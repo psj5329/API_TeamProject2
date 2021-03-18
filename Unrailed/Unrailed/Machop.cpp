@@ -26,7 +26,6 @@ void Machop::Init()
 	mState = State::Sleep;
 	mSpeed = 100.f;
 	mTimer = 0;
-	mStop = false;
 	mLevel = 1;
 
 	mCurrentImage = mImage;
