@@ -35,6 +35,9 @@ class Button;
 
 class MapToolScene : public Scene
 {
+	int mYTileCount;
+	int mXTileCount;
+
 	//만드는 타일들
 	vector <vector <Tile*>> mTileList;
 	//만드는 옵젝
@@ -72,14 +75,21 @@ public:
 	void Update()override;
 	void Render(HDC hdc)override;
 	void ImageLoad();
+	void SetMapSize(int y, int x) override {
+		mYTileCount = y; mXTileCount = x;
+	};
+	void OpenLoadWindow()override;
 
 	vector<vector <Tile*>>* GetTileListPtr() { return &mTileList; }
 	vector<vector <MapObject*>>* GetObjectListPtr() { return &mMapObjectList; }
 
+
 private:
-	
+	void InitEmptyMap();
+	void ReleaseMap();
+
 	void Save(int i);
-	void Load();
+	void Load(wstring fileName);
 
 	void PushCommand(ICommand* command);
 	void Undo();
@@ -89,7 +99,7 @@ private:
 	void EraseButton();
 	void SwitchObjectPallete();
 	void SwitchTilePallete();
-
+	
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)override;
 
 };

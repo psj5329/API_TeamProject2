@@ -3,6 +3,7 @@
 
 #include "Scene.h"
 #include "LoadingScene.h"
+#include "MapToolScene.h"
 
 Singleton_NULL(SceneManager)
 
@@ -122,4 +123,46 @@ wstring SceneManager::GetCurrentSceneName()
 	}
 	
 	return NULL;
+}
+
+void SceneManager::SetMapToolScene(int y, int x)
+{
+	SceneIter iter = mSceneList.find(L"MapToolScene");
+
+	if (iter == mSceneList.end())
+		return;
+
+	if (mCurrentScene == iter->second)
+		return;
+
+	Scene* targetScene = iter->second;
+
+	if (mCurrentScene)
+		mCurrentScene->Release();
+
+	targetScene->SetMapSize(y, x);
+	targetScene->Init();
+
+	mCurrentScene = targetScene;
+}
+
+void SceneManager::LoadMapToolScene()
+{
+	SceneIter iter = mSceneList.find(L"MapToolScene");
+
+	if (iter == mSceneList.end())
+		return;
+
+	if (mCurrentScene == iter->second)
+		return;
+
+	Scene* targetScene = iter->second;
+
+	if (mCurrentScene)
+		mCurrentScene->Release();
+
+	targetScene->Init();
+	targetScene->OpenLoadWindow();
+
+	mCurrentScene = targetScene;
 }
