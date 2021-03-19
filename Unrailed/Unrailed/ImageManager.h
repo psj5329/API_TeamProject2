@@ -7,6 +7,7 @@ class ImageManager
 private:
 	map<wstring, Image*> mImageList;
 	typedef map<wstring, Image*>::iterator ImageIter;
+	IWICImagingFactory* wicFactory;
 public:
 	~ImageManager();
 

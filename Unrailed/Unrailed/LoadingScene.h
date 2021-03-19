@@ -11,7 +11,6 @@ class LoadingScene : public Scene
 	bool mIsEndLoading;
 
 	Image* mLoadingBarImage;
-	float mRatio;
 	Image* mImage;
 	Animation* mAnimation;
 	int mFontColor;

@@ -10,6 +10,7 @@ private:
 	{
 		wstring SoundName;
 		FMOD::Channel* Channel;
+		bool Loop;
 	};
 	typedef map<wstring, FMOD::Sound*>::iterator SoundIter;
 

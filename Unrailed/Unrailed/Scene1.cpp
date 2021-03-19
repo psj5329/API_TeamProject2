@@ -35,9 +35,9 @@ void Scene1::Release()
 {
 	OBJECTMANAGER->Release();
 
-	Camera* camera = CAMERAMANAGER->GetMainCamera();
+	/*Camera* camera = CAMERAMANAGER->GetMainCamera();
 	SafeDelete(camera);
-	CameraManager::ReleaseInstance();
+	CameraManager::ReleaseInstance();*/
 }
 
 void Scene1::Update()

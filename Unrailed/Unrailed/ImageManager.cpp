@@ -44,10 +44,10 @@ void ImageManager::LoadFromFile(wstring key, wstring filePath, int width, int he
 
 void ImageManager::LoadAllBmpFile()
 {
-	wchar_t* ptr = nullptr;
-	vector<wstring> vecFileName;
-	UINT width, height;
-	int frameX, frameY;
+	//wchar_t* ptr = nullptr;
+	//vector<wstring> vecFileName;
+	//UINT width, height;
+	//int frameX, frameY;
 
 	//filesystem::recursive_directory_iterator iter(filesystem::current_path() / "../Resources");
 	//while (iter != filesystem::end(iter))
@@ -55,7 +55,7 @@ void ImageManager::LoadAllBmpFile()
 	//	const filesystem::directory_entry& entry = *iter;
 	//	wstring strPath = (wstring)entry.path();
 
-	//	 폴더일 경우 거르자
+	//	// 폴더일 경우 거르자
 	//	if (entry.is_directory())//(strPath.find(L".bmp") == wstring::npos)
 	//	{
 	//		++iter;
@@ -65,28 +65,28 @@ void ImageManager::LoadAllBmpFile()
 	//	wstring strName = wcstok_s(&strPath[0], L"/", &ptr);
 	//	strName = wcstok_s(nullptr, L"\\", &ptr);
 
-	//	 폴더로 들어갈 경우 여기서 더 잘라야함
+	//	// 폴더로 들어갈 경우 여기서 더 잘라야함 --> 여기서 이름이 파일.bmp or Trail\\ 이런 식
 	//	if (wcsstr(ptr, L"\\") != NULL)
 	//		strName = wcstok_s(nullptr, L"\\", &ptr);
-	//	 한번 더 폴더이면?
+	//	// 한번 더 폴더이면?
 	//	if (wcsstr(ptr, L"\\") != NULL)
-	//		strName = wcstok_s(nullptr, L"\\", &ptr);
+	//		strName = wcstok_s(nullptr, L"\\", &ptr);	// --> 이때면 이제 ㄹㅇ 파일.bmp
 
 	//	// {{ 쌤 d2d 코드에서 가져옴
 	//	// 테스트용
 	//	IWICImagingFactory* wicFactory;
-	//	//디코더 생성
+	//	// 디코더 생성
 	//	IWICBitmapDecoder* ipDecoder = nullptr;
 	//	wicFactory->CreateDecoderFromFilename(strName.c_str(), NULL, GENERIC_READ,
 	//		WICDecodeMetadataCacheOnDemand, &ipDecoder);
-	//	//디코더에서 프레임얻음
+	//	// 디코더에서 프레임얻음
 	//	IWICBitmapFrameDecode* ipFrame = nullptr;
 	//	ipDecoder->GetFrame(0, &ipFrame);
 	//	ipFrame->GetSize(&width, &height);
 	//	// }}
 
 
-	//	 사이즈를 알아왔으니 프레임까지? 없으면 .bmp 떼기
+	//	// 사이즈를 알아왔으니 프레임까지? 없으면 .bmp 떼기
 	//	strName = wcstok_s(nullptr, L".", &ptr);
 
 	//	if (wcsstr(ptr, L"\\") != NULL)
@@ -110,10 +110,15 @@ void ImageManager::LoadAllBmpFile()
 
 Image * ImageManager::FindImage(wstring key)
 {
-	ImageIter iter = mImageList.find(key);
-	if (iter != mImageList.end())
+	//ImageIter iter = mImageList.find(key);
+	ImageIter iter = mImageList.begin();
+	for (; iter != mImageList.end();)
 	{
-		return iter->second;
+		//if (iter->first == key)
+		if(wcscmp(iter->first.c_str(), key.c_str()) == 0)
+			return iter->second;
+		else
+			iter++;
 	}
 
 	return nullptr;

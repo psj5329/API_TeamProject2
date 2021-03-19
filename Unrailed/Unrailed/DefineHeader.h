@@ -50,6 +50,7 @@ public:\
 ClassName* ClassName::instance = NULL;
 
 #define Resources(Path) (wstring(L"../Resources/").append(Path).append(L".bmp"))
+#define ResourcesSoundmp4(Path) (wstring(L"../Sound/").append(Path).append(L".mp4"))
 
 #define Synthesize(VarType,VarName,FuncName)\
 protected: VarType VarName;\
