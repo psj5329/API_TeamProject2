@@ -85,6 +85,8 @@ class Player : public GameObject
 
 	bool mIsAttackingTemp;
 
+	vector<GameObject*> mItemList;
+
 public:
 	Player(const string& name, float x, float y);
 

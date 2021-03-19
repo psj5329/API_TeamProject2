@@ -104,7 +104,7 @@ void Trail::Turn()
         mDirection = TrailDirection::Down;
         mCurrentAnimation->Stop();
         mCurrentAnimation = mDown;
-        mCurrentAnimation->Play();
+        mCurrentAnimation->Play();	
         break;
     default:
         break;
