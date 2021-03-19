@@ -5,6 +5,7 @@
 #include "Camera.h"
 
 #include "TileMap.h"
+#include "TrailManager.h"
 
 void Scene4::Init()
 {
@@ -30,6 +31,29 @@ void Scene4::Init()
 	mTileMap->Init(TileCountX, TileCountY, TileSize);
 	mTileMap->LoadMap();
 
+	mTrailManager = new TrailManager();
+	mTrailManager->Init();
+	mTrailManager->InsertTrail(0, 5, 1, 0); // 0: down 1: up 2: left 3: right
+	mTrailManager->InsertTrail(1, 5, 1, 0);
+	mTrailManager->InsertTrail(2, 5, 1, 0);
+	mTrailManager->InsertTrail(3, 5, 1, 0);
+
+	mTrailManager->InsertTrail(4, 5, 1, 3);
+	mTrailManager->InsertTrail(4, 6, 1, 3);
+
+	mTrailManager->InsertTrail(4, 7, 1, 0);
+	mTrailManager->InsertTrail(5, 7, 1, 0);
+	mTrailManager->InsertTrail(6, 7, 1, 0);
+
+	mTrailManager->InsertTrail(7, 7, 1, 2);
+	mTrailManager->InsertTrail(7, 6, 1, 2);
+	mTrailManager->InsertTrail(7, 5, 1, 2);
+	mTrailManager->InsertTrail(7, 4, 1, 2);
+
+	mTrailManager->InsertTrail(7, 3, 1, 1);
+	mTrailManager->InsertTrail(6, 3, 1, 1);
+	mTrailManager->InsertTrail(5, 3, 1, 1);
+
 	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
 	mTempPlayer->SetTileListPtr(tileListPtr);
 	vector<vector<MapObject*>>* mapObjectListPtr = mTileMap->GetObjectListPtr();
@@ -38,6 +62,8 @@ void Scene4::Init()
 
 void Scene4::Release()
 {
+	mTileMap->Release();
+	mTrailManager->Release();
 	OBJECTMANAGER->Release();
 }
 
@@ -46,6 +72,7 @@ void Scene4::Update()
 	RECT* playerColBoxPtr = mTempPlayer->GetColBoxPtr();
 	OBJECTMANAGER->Update();
 	mTileMap->Update();
+	mTrailManager->Update();
 	COLLISIONMANAGER->TileCollision(mTempPlayer, playerColBoxPtr, mTileMap);
 	COLLISIONMANAGER->MapObjectCollision(mTempPlayer, playerColBoxPtr, mTileMap);
 }
@@ -53,6 +80,7 @@ void Scene4::Update()
 void Scene4::Render(HDC hdc)
 {
 	mTileMap->Render(hdc);
+	mTrailManager->Render(hdc);
 	OBJECTMANAGER->Render(hdc);
 
 	// {{ 완성본에서 지워야 할 내용 시작

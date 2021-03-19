@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Tile.h"
 #include "MapObject.h"
+#include "Ore.h"
 
 Player::Player(const string& name, float x, float y)
 	:GameObject(name, x, y)
@@ -424,12 +425,6 @@ void Player::InputDirectionKey()
 		{
 			mY = TileSize * TileCountY - TileSize / 2;
 		}
-		/*else if ((mY >= TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX]->GetTileType() == TileType::Wall))
-			mY = TileSize * mTileY + TileSize / 2;
-		else if ((mY >= TileSize * mTileY + TileSize / 2) && (mX < TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX - 1]->GetTileType() == TileType::Wall))
-			mY = TileSize * mTileY + TileSize / 2;
-		else if ((mY >= TileSize * mTileY + TileSize / 2) && (mX > TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX + 1]->GetTileType() == TileType::Wall))
-			mY = TileSize * mTileY + TileSize / 2;*/
 		else
 			mY += mSpeed * Time::GetInstance()->DeltaTime();
 	}
@@ -447,12 +442,6 @@ void Player::InputDirectionKey()
 		{
 			mY = TileSize / 2;
 		}
-		/*else if ((mY <= TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX]->GetTileType() == TileType::Wall))
-			mY = TileSize * mTileY + TileSize / 2;
-		else if ((mY <= TileSize * mTileY + TileSize / 2) && (mX < TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX - 1]->GetTileType() == TileType::Wall))
-			mY = TileSize * mTileY + TileSize / 2;
-		else if ((mY <= TileSize * mTileY + TileSize / 2) && (mX > TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX + 1]->GetTileType() == TileType::Wall))
-			mY = TileSize * mTileY + TileSize / 2;*/
 		else
 			mY -= mSpeed * Time::GetInstance()->DeltaTime();
 	}
@@ -470,12 +459,6 @@ void Player::InputDirectionKey()
 		{
 			mX = TileSize / 2;
 		}
-		/*else if ((mX <= TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX]->GetTileType() == TileType::Wall))
-			mX = TileSize * mTileX + TileSize / 2;
-		else if ((mX <= TileSize * mTileX + TileSize / 2) && (mY < TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY - 1][mNextTileX]->GetTileType() == TileType::Wall))
-			mX = TileSize * mTileX + TileSize / 2;
-		else if ((mX <= TileSize * mTileX + TileSize / 2) && (mY > TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY + 1][mNextTileX]->GetTileType() == TileType::Wall))
-			mX = TileSize * mTileX + TileSize / 2;*/
 		else
 			mX -= mSpeed * Time::GetInstance()->DeltaTime();
 	}
@@ -493,12 +476,6 @@ void Player::InputDirectionKey()
 		{
 			mX = TileSize * TileCountX - TileSize / 2;
 		}
-		/*else if ((mX >= TileSize * mTileX + TileSize / 2) && ((*mTileListPtr)[mNextTileY][mNextTileX]->GetTileType() == TileType::Wall))
-			mX = TileSize * mTileX + TileSize / 2;
-		else if ((mX >= TileSize * mTileX + TileSize / 2) && (mY < TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY - 1][mNextTileX]->GetTileType() == TileType::Wall))
-			mX = TileSize * mTileX + TileSize / 2;
-		else if ((mX >= TileSize * mTileX + TileSize / 2) && (mY > TileSize * mTileY + TileSize / 2) && ((*mTileListPtr)[mNextTileY + 1][mNextTileX]->GetTileType() == TileType::Wall))
-			mX = TileSize * mTileX + TileSize / 2;*/
 		else
 			mX += mSpeed * Time::GetInstance()->DeltaTime();
 	}
@@ -530,27 +507,45 @@ void Player::InputSpaceKey()
 		else
 			mIsAttackingTemp = false;
 
+		GameObject* item = COLLISIONMANAGER->ItemCollision(&mColBox);
+		OreType invenType;
 
-
-
-		/////////////////////////// object매니저에 있는 아이템의 mType이 무슨 색인지에 따라서 바꿔줘야 함
-		/////////////////////// ore -> 소지 item으로 바꾸기 플레이어만의 inventory(vector<gameobject*>) 를 만들자)
-		/*
-		if ((mForm == Form::Charmander) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Red))
+		if (mItemList.size())
 		{
-			mIsAttackingTemp = true;
-			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
+			invenType = ((Ore*)mItemList[0])->GetOreType();
 		}
-		else if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Green))
+		
+		if ((item != nullptr) && (item->GetIsActive()))
 		{
-			mIsAttackingTemp = true;
-			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
+			if ((mForm == Form::Charmander) && (((Ore*)item)->GetOreType() == OreType::Red) && ((mItemList.size() == 0) || (invenType == OreType::Red)))
+			{
+				Ore* redOre = new Ore();
+				redOre = (Ore*)item;
+				mItemList.push_back((GameObject*)redOre);
+				item->SetIsActive(false);
+			}
+			else if ((mForm == Form::Chikorita) && (((Ore*)item)->GetOreType() == OreType::Green) && ((mItemList.size() == 0) || (invenType == OreType::Green)))
+			{
+				Ore* greenOre = new Ore();
+				greenOre = (Ore*)item;
+				mItemList.push_back((GameObject*)greenOre);
+				item->SetIsActive(false);
+			}
+			else if ((mForm == Form::Totodile) && (((Ore*)item)->GetOreType() == OreType::Blue) && ((mItemList.size() == 0) || (invenType == OreType::Blue)))
+			{
+				Ore* blueOre = new Ore();
+				blueOre = (Ore*)item;
+				mItemList.push_back((GameObject*)blueOre);
+				item->SetIsActive(false);
+			}
 		}
-		else if ((mForm == Form::Totodile) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Blue))
-		{
-			mIsAttackingTemp = true;
-			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
-		}*/
+
+
+
+
+
+		
+		
 	}
 	else
 		mIsAttackingTemp = false;
@@ -810,4 +805,7 @@ void Player::RenderTestText(HDC hdc)
 	//wstring strAtk = L"공격 중이다";
 	//if (mIsAttackingTemp)
 	//	TextOut(hdc, (int)mX + 55, (int)mY, strAtk.c_str(), (int)strAtk.length());
+
+	wstring strInven = L"Inven size: " + to_wstring(mItemList.size());
+	TextOut(hdc, (int)mX + 25, (int)mY + 25, strInven.c_str(), (int)strInven.length());
 }
