@@ -55,7 +55,7 @@ void ImageManager::LoadAllBmpFile()
 	//	const filesystem::directory_entry& entry = *iter;
 	//	wstring strPath = (wstring)entry.path();
 
-	//	// 폴더일 경우 거르자
+	//	 폴더일 경우 거르자
 	//	if (entry.is_directory())//(strPath.find(L".bmp") == wstring::npos)
 	//	{
 	//		++iter;
@@ -65,10 +65,10 @@ void ImageManager::LoadAllBmpFile()
 	//	wstring strName = wcstok_s(&strPath[0], L"/", &ptr);
 	//	strName = wcstok_s(nullptr, L"\\", &ptr);
 
-	//	// 폴더로 들어갈 경우 여기서 더 잘라야함
+	//	 폴더로 들어갈 경우 여기서 더 잘라야함
 	//	if (wcsstr(ptr, L"\\") != NULL)
 	//		strName = wcstok_s(nullptr, L"\\", &ptr);
-	//	// 한번 더 폴더이면?
+	//	 한번 더 폴더이면?
 	//	if (wcsstr(ptr, L"\\") != NULL)
 	//		strName = wcstok_s(nullptr, L"\\", &ptr);
 
@@ -86,7 +86,7 @@ void ImageManager::LoadAllBmpFile()
 	//	// }}
 
 
-	//	// 사이즈를 알아왔으니 프레임까지? 없으면 .bmp 떼기
+	//	 사이즈를 알아왔으니 프레임까지? 없으면 .bmp 떼기
 	//	strName = wcstok_s(nullptr, L".", &ptr);
 
 	//	if (wcsstr(ptr, L"\\") != NULL)

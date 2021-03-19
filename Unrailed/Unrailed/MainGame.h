@@ -6,6 +6,7 @@ class MainGame
 {
 	Image* mBackBuffer;
 	LoadingScene* mLoadingScene;
+	IWICImagingFactory* wicFactory;
 
 public:
 	void Init();
