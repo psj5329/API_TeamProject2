@@ -19,6 +19,9 @@ public:
 	void AddScene();
 	void LoadResources(LoadingScene* scene);
 
+	void LoadImageResources(LoadingScene* scene);
+	void LoadSoundResources(LoadingScene* scene);
+
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 };
 

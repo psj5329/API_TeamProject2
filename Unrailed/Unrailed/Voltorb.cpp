@@ -8,22 +8,22 @@
 
 void Voltorb::Init()
 {
-	IMAGEMANAGER->LoadFromFile(L"Voltorb", Resources(L"/Train/voltorb"), 96, 210, 3, 7, true);
-	IMAGEMANAGER->LoadFromFile(L"Electrode", Resources(L"/Train/electrode"), 105, 224, 3, 7, true);
-	IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
+	//IMAGEMANAGER->LoadFromFile(L"Voltorb", Resources(L"/Train/voltorb"), 96, 210, 3, 7, true);
+	//IMAGEMANAGER->LoadFromFile(L"Electrode", Resources(L"/Train/electrode"), 105, 224, 3, 7, true);
+	//IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Voltorb");
 
 	ReadyAnimation();
 
-	//ë¶€ëª¨ í´ëž˜ìŠ¤ (GameObject) ë³€ìˆ˜
+	//ºÎ¸ð Å¬·¡½º (GameObject) º¯¼ö
 	mX = WINSIZEX / 2;
 	mY = WINSIZEY / 2;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Electrode ë³€ìˆ˜
+	//Electrode º¯¼ö
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 	mSpeed = 100.f;
@@ -45,11 +45,11 @@ void Voltorb::Release()
 
 void Voltorb::Update()
 {
-	//ì¸ë±ìŠ¤ ê°€ì ¸ì˜¤ê¸°
+	//ÀÎµ¦½º °¡Á®¿À±â
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
-	//ìƒíƒœì •í•˜ê¸°
+	//»óÅÂÁ¤ÇÏ±â
 	if (mTimer == 0)
 	{
 		if (mState == State::Sleep)
@@ -65,7 +65,7 @@ void Voltorb::Update()
 
 		mTimer = 0;
 	}
-	//ê³„ì† ë“¤ì–´ì˜¤ì§€ ì•Šê²Œ ìˆ˜ì • ìš”ë§
+	//°è¼Ó µé¾î¿ÀÁö ¾Ê°Ô ¼öÁ¤ ¿ä¸Á
 	if (mState == State::Move)
 	{
 		if (mDirection == Direction::Down)
@@ -86,13 +86,13 @@ void Voltorb::Update()
 		}
 	}
 
-	//ì›€ì§ìž„
+	//¿òÁ÷ÀÓ
 	if (mState == State::Sleep)
 	{
 		mTimer += Time::GetInstance()->DeltaTime();
 	}
-	//ì˜¬ë¼ê°€ìžˆëŠ” ê¸°ì°¨ê¸¸ì˜ í˜„ìž¬ ê¸°ì°¨ê¸¸/íƒ€ì¼ì˜ ì¤‘ê°„ì˜¤ë©´ ë°©í–¥í™•ì¸
-	//ë°©í–¥ì´ ê°€ë¦¬í‚¤ëŠ” íƒ€ì¼ì˜ ì¤‘ê°„ê¹Œì§€ì´ë™
+	//¿Ã¶ó°¡ÀÖ´Â ±âÂ÷±æÀÇ ÇöÀç ±âÂ÷±æ/Å¸ÀÏÀÇ Áß°£¿À¸é ¹æÇâÈ®ÀÎ
+	//¹æÇâÀÌ °¡¸®Å°´Â Å¸ÀÏÀÇ Áß°£±îÁöÀÌµ¿
 	if (mReachTile == false)
 	{
 		if (CheckTrailDirection() == Direction::Down)
@@ -113,7 +113,7 @@ void Voltorb::Update()
 		}
 	}
 
-	//í­ë°œ
+	//Æø¹ß
 	if (mX >= WINSIZEX - 400 && mIsExplode == false)
 	{
 		mIsExplode = true;
@@ -202,7 +202,7 @@ void Voltorb::SetAnimation()
 
 void Voltorb::SetImage(int i)
 {
-	if (i == 0) // 0ì€ false
+	if (i == 0) // 0Àº false
 	{
 		mCurrentImage = IMAGEMANAGER->FindImage(L"Electrode");
 	}
@@ -233,7 +233,7 @@ void Voltorb::Move(int indexY, int indexX, Direction dir)
 {
 	float centerX = (mTrailList[indexY][indexX]->GetRect().left + mTrailList[indexY][indexX]->GetRect().right) / 2;
 	float centerY = (mTrailList[indexY][indexX]->GetRect().top + mTrailList[indexY][indexX]->GetRect().bottom) / 2;
-	
+
 	if (dir == Direction::Down)
 	{
 		if (mY <= centerY)

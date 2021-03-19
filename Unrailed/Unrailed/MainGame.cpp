@@ -141,50 +141,10 @@ void MainGame::AddScene()
 
 void MainGame::LoadResources(LoadingScene * scene)
 {
-	wchar_t path[100];
-	if (GetCurrentDirectory(100, path) > 0)
-	{
-		wchar_t* ptr = nullptr;
-		wstring strPath = path;
-		wstring str = wcstok_s(&strPath[0], L"2", &ptr);
-		str.append(L"2\\Unrailed\\Resources\\*.*");		// ㅏ 진짜 넘 맘에 안든다
-		FileSystemHelper::GetAllFile(str);
-	}
+	LoadImageResources(scene);
+	LoadSoundResources(scene);
 
-	FileSystemHelper::mVecFileInfo;
-	UINT width, height;
-	int frameX, frameY;
-	wchar_t* ptr = nullptr;
-
-	//for (int i = 0; i < FileSystemHelper::mVecFileInfo.size(); ++i)
-	//{
-	//	wstring strKey = FileSystemHelper::mVecFileInfo[i].FileName.c_str();
-	//	strKey = wcstok_s(&strKey[0], L".", &ptr);	// 우선 .bmp 떼고
-	//	
-	//	if (wcsstr(strKey.c_str(), L"_") != NULL)
-	//	{
-	//		wstring strFrameX = wcstok_s(&strKey[0], L"_", &ptr);
-	//		frameX = _wtoi(strFrameX.c_str());
-	//		wstring strFrameY = wcstok_s(nullptr, L".", &ptr);			// x프레임 떼고
-	//		frameY = _wtoi(strFrameY.c_str());
-	//	}
-
-	//	wstring strFull = FileSystemHelper::mVecFileInfo[i].FilePath + FileSystemHelper::mVecFileInfo[i].FileName;
-	//	
-	//	//디코더 생성
-	//	IWICBitmapDecoder* ipDecoder = nullptr;
-	//	wicFactory->CreateDecoderFromFilename(strFull.c_str(), NULL, GENERIC_READ,
-	//	WICDecodeMetadataCacheOnDemand, &ipDecoder);
-	//	//디코더에서 프레임얻음
-	//	IWICBitmapFrameDecode* ipFrame = nullptr;
-	//	ipDecoder->GetFrame(0, &ipFrame);
-	//	ipFrame->GetSize(&width, &height);
-	//	scene->AddLoadFunc([strKey, i, width, height , frameX, frameY]() { IMAGEMANAGER->LoadFromFile(strKey
-	//		, FileSystemHelper::mVecFileInfo[i].FilePath + FileSystemHelper::mVecFileInfo[i].FileName
-	//		, width, height, frameX, frameY, true); });
-	//}
-
-	// 맵 관련 // 남훈
+	/*// 맵 관련 // 남훈
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save", Resources(L"/Map/Tool/save"), 60, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Load", Resources(L"/Map/Tool/load"), 60, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Undo", Resources(L"/Map/Tool/undo"), 60, 16, 1, 1, true); });
@@ -217,6 +177,92 @@ void MainGame::LoadResources(LoadingScene * scene)
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"ditto", Resources(L"ditto"), 144, 1200, 3, 25, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"jigglypuff", Resources(L"jigglypuff"), 192, 816, 4, 17, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"lapras", Resources(L"lapras"), 192, 624, 4, 13, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"totodile", Resources(L"totodile"), 240, 1968, 5, 41, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"totodile", Resources(L"totodile"), 240, 1968, 5, 41, true); });*/
+}
+
+void MainGame::LoadImageResources(LoadingScene* scene)
+{
+	wchar_t path[100];
+	if (GetCurrentDirectory(100, path) > 0)
+	{
+		wchar_t* ptr = nullptr;
+		wstring strPath = path;
+		wstring str = wcstok_s(&strPath[0], L"2", &ptr);
+		str.append(L"2\\Unrailed\\Resources\\*.*");		// ㅏ 진짜 넘 맘에 안든다
+		FileSystemHelper::GetAllFile(str, FileType::IMAGE);
+	}
+
+	UINT width = 0, height = 0;
+	int frameX = 0, frameY = 0;
+	wchar_t* ptr = nullptr;
+	CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory));
+
+	for (int i = 0; i < FileSystemHelper::mVecFileInfo.size(); ++i)
+	{
+		if (FileSystemHelper::mVecFileInfo[i].FileType == FileType::IMAGE)
+		{
+			width = 0;
+			height = 0;
+			frameX = 0;
+			frameY = 0;
+
+			wstring strKey = FileSystemHelper::mVecFileInfo[i].FileName.c_str();
+			strKey = wcstok_s(&strKey[0], L".", &ptr);	// 우선 .bmp 떼고
+
+			if (wcsstr(strKey.c_str(), L"-") != NULL)
+			{
+				wstring strFrameX = wcstok_s(&strKey[0], L"-", &ptr);
+				strFrameX = wcstok_s(nullptr, L"-", &ptr);
+				frameX = _wtoi(strFrameX.c_str());
+				wstring strFrameY = wcstok_s(nullptr, L"-", &ptr);			// x프레임 떼고
+				frameY = _wtoi(strFrameY.c_str());
+			}
+
+			wstring strFull = FileSystemHelper::mVecFileInfo[i].FilePath + FileSystemHelper::mVecFileInfo[i].FileName;
+
+			// 디코더 생성
+			IWICBitmapDecoder* ipDecoder = nullptr;
+			wicFactory->CreateDecoderFromFilename(strFull.c_str(), NULL, GENERIC_READ,
+				WICDecodeMetadataCacheOnDemand, &ipDecoder);
+			// 디코더에서 프레임얻음
+			IWICBitmapFrameDecode* ipFrame = nullptr;
+			ipDecoder->GetFrame(0, &ipFrame);
+			ipFrame->GetSize(&width, &height);
+
+			if (frameX == 0 && frameY == 0)
+				scene->AddLoadFunc([strKey, strFull, width, height, frameX, frameY]() {
+				IMAGEMANAGER->LoadFromFile(strKey, strFull, width, height, true); });
+			else
+				scene->AddLoadFunc([strKey, strFull, width, height, frameX, frameY]() {
+				IMAGEMANAGER->LoadFromFile(strKey, strFull, width, height, frameX, frameY, true); });
+		}
+	}
+}
+
+void MainGame::LoadSoundResources(LoadingScene* scene)
+{
+	wchar_t path[100];
+	if (GetCurrentDirectory(100, path) > 0)
+	{
+		wchar_t* ptr = nullptr;
+		wstring strPath = path;
+		wstring str = wcstok_s(&strPath[0], L"2", &ptr);
+		str.append(L"2\\Unrailed\\Sound\\*.*");		// ㅏ 진짜 넘 맘에 안든다
+		FileSystemHelper::GetAllFile(str, FileType::SOUND);
+	}
+
+	wchar_t* ptr = nullptr;
+
+	for (int i = 0; i < FileSystemHelper::mVecFileInfo.size(); ++i)
+	{
+		if (FileSystemHelper::mVecFileInfo[i].FileType == FileType::SOUND)
+		{
+			wstring strFull = FileSystemHelper::mVecFileInfo[i].FilePath + FileSystemHelper::mVecFileInfo[i].FileName;
+			wstring strKey = FileSystemHelper::mVecFileInfo[i].FileName.c_str();
+			strKey = wcstok_s(&strKey[0], L".", &ptr);
+
+			scene->AddLoadFunc([strKey, strFull]() { SOUNDMANAGER->LoadFromFile(strKey, strFull, false); });
+		}
+	}
 }
 

@@ -5,23 +5,23 @@
 
 void Machop::Init()
 {
-	IMAGEMANAGER->LoadFromFile(L"Machop", Resources(L"/Train/machop"), 92, 260, 4, 10, true);
-	IMAGEMANAGER->LoadFromFile(L"Machoke", Resources(L"/Train/machoke"), 128, 256, 4, 8, true);
-	IMAGEMANAGER->LoadFromFile(L"Machamp", Resources(L"/Train/machamp"), 124, 320, 4, 10, true);
-	IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
+	//IMAGEMANAGER->LoadFromFile(L"Machop", Resources(L"/Train/machop"), 92, 260, 4, 10, true);
+	//IMAGEMANAGER->LoadFromFile(L"Machoke", Resources(L"/Train/machoke"), 128, 256, 4, 8, true);
+	//IMAGEMANAGER->LoadFromFile(L"Machamp", Resources(L"/Train/machamp"), 124, 320, 4, 10, true);
+	//IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Machop");
 
 	ReadyAnimation();
 
-	//ë¶€ëª¨ í´ëž˜ìŠ¤ (GameObject) ë³€ìˆ˜
+	//ºÎ¸ð Å¬·¡½º (GameObject) º¯¼ö
 	mX = WINSIZEX / 2 - 135;
 	mY = WINSIZEY / 2;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Machop ë³€ìˆ˜
+	//Machop º¯¼ö
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 	mSpeed = 100.f;
@@ -49,7 +49,7 @@ void Machop::Release()
 
 void Machop::Update()
 {
-	//ìƒíƒœì •í•˜ê¸°
+	//»óÅÂÁ¤ÇÏ±â
 	if (mTimer == 0)
 	{
 		if (mState == State::Sleep)
@@ -64,7 +64,7 @@ void Machop::Update()
 		SetAnimation();
 	}
 
-	//ì›€ì§ìž„
+	//¿òÁ÷ÀÓ
 	if (mState == State::Sleep)
 	{
 		mTimer += Time::GetInstance()->DeltaTime();
@@ -89,7 +89,7 @@ void Machop::Update()
 		}
 	}
 
-	//ì§„í™”
+	//ÁøÈ­
 	switch (mLevel)
 	{
 	case 1:
@@ -163,7 +163,7 @@ void Machop::ReadyAnimation()
 	mRightSleep->InitFrameByStartEnd(2, 5, 3, 5, false);
 	mRightSleep->SetIsLoop(true);
 	mRightSleep->SetFrameUpdateTime(0.2f);
-  
+
 	mExplode = new Animation();
 	mExplode->InitFrameByStartEnd(0, 0, 6, 0, false);
 	mExplode->SetIsLoop(false);

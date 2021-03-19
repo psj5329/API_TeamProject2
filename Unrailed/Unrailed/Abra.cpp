@@ -5,10 +5,10 @@
 
 void Abra::Init()
 {
-	IMAGEMANAGER->LoadFromFile(L"Abra", Resources(L"/Train/abra"), 96, 200, 4, 8, true);
-	IMAGEMANAGER->LoadFromFile(L"Alakazam", Resources(L"/Train/alakazam"), 124, 232, 4, 8, true);
-	IMAGEMANAGER->LoadFromFile(L"Kadabra", Resources(L"/Train/kadabra"), 120, 256, 4, 8, true);
-	IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
+	//IMAGEMANAGER->LoadFromFile(L"Abra", Resources(L"/Train/abra"), 96, 200, 4, 8, true);
+	//IMAGEMANAGER->LoadFromFile(L"Alakazam", Resources(L"/Train/alakazam"), 124, 232, 4, 8, true);
+	//IMAGEMANAGER->LoadFromFile(L"Kadabra", Resources(L"/Train/kadabra"), 120, 256, 4, 8, true);
+	//IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Abra");
 

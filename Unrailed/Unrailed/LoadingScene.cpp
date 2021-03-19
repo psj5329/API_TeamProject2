@@ -11,8 +11,8 @@ void LoadingScene::AddLoadFunc(const function<void(void)>& func)
 
 void LoadingScene::Init()
 {
-	IMAGEMANAGER->LoadFromFile(L"LoadingTrain", Resources(L"LoadingTrain"), 850, 70, 5, 1, true);
-	IMAGEMANAGER->LoadFromFile(L"LoadingEndTrain", Resources(L"LoadingEndTrain"), 850, 70, 5, 1, true);
+	IMAGEMANAGER->LoadFromFile(L"LoadingTrain", Resources(L"LoadingTrain-5-1"), 850, 70, 5, 1, true);
+	IMAGEMANAGER->LoadFromFile(L"LoadingEndTrain", Resources(L"LoadingEndTrain-5-1"), 850, 70, 5, 1, true);
 	mImage = IMAGEMANAGER->FindImage(L"LoadingTrain");
 
 	IMAGEMANAGER->LoadFromFile(L"LoadingBar", Resources(L"LoadingBar"), 1280, 30, true);
@@ -54,22 +54,21 @@ void LoadingScene::Update()
 
 	if (mLoadIndex >= mLoadList.size())
 	{
+		if(!mIsEndLoading)
+			mImage = IMAGEMANAGER->FindImage(L"LoadingEndTrain");
 		mIsEndLoading = true;
-		mImage = IMAGEMANAGER->FindImage(L"LoadingEndTrain");
 		return;
 	}
 
 	function<void(void)> func = mLoadList[mLoadIndex];
 	func();
 	mLoadIndex++;
-
-	mRatio = mLoadIndex / mLoadList.size();
 }
 
 void LoadingScene::Render(HDC hdc)
 {
 	mImage->ScaleFrameRender(hdc, WINSIZEX / 2 - mImage->GetWidth() / 10, WINSIZEY / 2, mAnimation->GetNowFrameX(), 0, mImage->GetWidth() / 5, mImage->GetHeight());
-	mLoadingBarImage->ScaleRender(hdc, 0, WINSIZEY - mLoadingBarImage->GetHeight(), mLoadingBarImage->GetWidth() * mRatio, mLoadingBarImage->GetHeight());
+	mLoadingBarImage->ScaleRender(hdc, 0, WINSIZEY - mLoadingBarImage->GetHeight(), mLoadingBarImage->GetWidth() * mLoadIndex / mLoadList.size(), mLoadingBarImage->GetHeight());
 
 	SetBkColor(hdc, RGB(0, 0, 0));
 	SetTextColor(hdc, RGB(255, 255, 255));

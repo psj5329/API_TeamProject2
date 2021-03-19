@@ -5,7 +5,7 @@
 vector<FileSystemHelper::FileInfo> FileSystemHelper::mVecFileInfo = {};
 _finddata_t fd;
 
-void FileSystemHelper::FileSearch(wstring filePath)
+void FileSystemHelper::FileSearch(wstring filePath, FileType type)
 {
 	intptr_t handle = NULL;
 	string str;
@@ -31,7 +31,7 @@ void FileSystemHelper::FileSearch(wstring filePath)
 			string path = fd.name;
 			wstring temp;
 			temp.assign(path.begin(), path.end());
-			FileSearch(strFile.append(temp).append(L"\\*.*"));
+			FileSearch(strFile.append(temp).append(L"\\*.*"), type);
 		}
 		else if (check == 1 && fd.size != 0 && fd.name[0] != '.')
 		{
@@ -40,6 +40,7 @@ void FileSystemHelper::FileSearch(wstring filePath)
 			string name = fd.name;
 			file.FilePath = strFile;
 			file.FileName.assign(name.begin(), name.end());
+			file.FileType = type;
 			mVecFileInfo.push_back(file);
 		}
 	}
@@ -47,9 +48,9 @@ void FileSystemHelper::FileSearch(wstring filePath)
 	_findclose(handle);
 }
 
-vector<FileSystemHelper::FileInfo> FileSystemHelper::GetAllFile(wstring folderPath)
+vector<FileSystemHelper::FileInfo> FileSystemHelper::GetAllFile(wstring folderPath, FileType type)
 {
-	FileSearch(folderPath);
+	FileSearch(folderPath, type);
 
 
 
