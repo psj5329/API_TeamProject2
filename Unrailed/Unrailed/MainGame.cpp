@@ -14,6 +14,7 @@
 #include "Scene4.h"
 #include "MapToolScene.h"
 #include "Scene6.h"
+#include "MapToolReady.h"
 
 void MainGame::Init()
 {
@@ -68,13 +69,16 @@ void MainGame::Update()
 	}
 	else if (Input::GetInstance()->GetKeyDown('5'))
 	{
-		SCENEMANAGER->LoadScene(L"MapToolScene");
+		SCENEMANAGER->LoadScene(L"MapToolReady");
 	}
 	else if (Input::GetInstance()->GetKeyDown('6'))
 	{
 		SCENEMANAGER->LoadScene(L"Scene6");
 	}
-	
+	else if (Input::GetInstance()->GetKeyDown('7'))
+	{
+		SCENEMANAGER->LoadScene(L"MapToolReady");
+	}
 	SceneManager::GetInstance()->Update();
 }
 
@@ -128,6 +132,7 @@ void MainGame::AddScene()
 	SceneManager::GetInstance()->AddScene(L"Scene4", new Scene4);
 	SceneManager::GetInstance()->AddScene(L"MapToolScene", new MapToolScene);
 	SceneManager::GetInstance()->AddScene(L"Scene6", new Scene6);
+	SceneManager::GetInstance()->AddScene(L"MapToolReady", new MapToolReady);
 
 	SCENEMANAGER->LoadScene(L"LoadingScene");
 }
@@ -155,6 +160,9 @@ void MainGame::LoadResources(LoadingScene * scene)
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save3", Resources(L"/Map/Tool/save3"), 75, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save4", Resources(L"/Map/Tool/save4"), 75, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save5", Resources(L"/Map/Tool/save5"), 75, 16, 1, 1, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"MapReady", Resources(L"/Map/Tool/MapToolReady"), 224, 232, 1, 1, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Numbers", Resources(L"/Map/Tool/Numbers"), 110, 11, 10, 1, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"New", Resources(L"/Map/Tool/new"), 60, 16, 1, 1, true); });
 
 
 

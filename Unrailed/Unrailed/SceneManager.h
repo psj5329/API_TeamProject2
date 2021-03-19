@@ -29,6 +29,8 @@ public:
 	void AddScene(const wstring& sceneName, Scene* scene);
 	void LoadScene(const wstring& sceneName);
 	//void LoadScene(const wstring& targetSceneName, const wstring& loadingSceneName);
+	void SetMapToolScene(int y, int x);
+	void LoadMapToolScene();
 
 	Scene* GetCurrentScene();
 	wstring GetCurrentSceneName();

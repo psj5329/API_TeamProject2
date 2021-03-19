@@ -18,53 +18,7 @@ void MapToolScene::Init()
 	Image* rightArrow = ImageManager::GetInstance()->FindImage(L"RightArrow");
 	Image* empty = nullptr;
 
-	//∫Û∏  ¿Œ¿’
-	for (int y = 0; y < TileCountY; ++y)
-	{
-		mTileList.push_back(vector <Tile*>());
-		for (int x = 0; x < TileCountX; ++x)
-		{
-			//∫§≈Õ
-			Tile* tempTile = new Tile
-			(
-				tileImage,
-				TileSize * x,
-				TileSize * y,
-				TileSize,
-				TileSize,
-				Random::GetInstance()->RandomInt(2),
-				0,
-				0
-			);
-
-			mTileList[y].push_back(tempTile);
-
-		}
-	}
-	//∫Û∏ ø…¡ß ¿Œ¿’
-	for (int y = 0; y < TileCountY; ++y)
-	{
-		mMapObjectList.push_back(vector <MapObject*>());
-		for (int x = 0; x < TileCountX; ++x)
-		{
-
-			//∫§≈Õ
-			MapObject* tempObject = new MapObject
-			(
-				empty,
-				TileSize * x,
-				TileSize * y,
-				TileSize,
-				TileSize,
-				0,
-				0,
-				0
-			);
-			mMapObjectList[y].push_back(tempObject);
-
-		}
-	}
-
+	InitEmptyMap();
 
 	//∆»∑π∆Æ
 	int palleteStartX = WINSIZEX / 2;
@@ -133,7 +87,7 @@ void MapToolScene::Init()
 	mRightArrowButton = new Button(rightArrow, WINSIZEX - 40, 210, rightArrow->GetFrameWidth() * 2, rightArrow->GetFrameHeight() * 2, bind(&MapToolScene::SwitchTilePallete, this));
 	mRightArrowButton2 = new Button(rightArrow, WINSIZEX / 2+325, 480, rightArrow->GetFrameWidth()*2, rightArrow->GetFrameHeight()*2, bind(&MapToolScene::SwitchObjectPallete, this));
 	mSaveButton = new Button(save, WINSIZEX / 2, WINSIZEY / 2, save->GetFrameWidth(), save->GetFrameHeight(), bind(&MapToolScene::Save, this,1));
-	mLoadButton = new Button(load, WINSIZEX / 2 + 100, WINSIZEY / 2, load->GetFrameWidth(), load->GetFrameHeight(), bind(&MapToolScene::Load, this));
+	mLoadButton = new Button(load, WINSIZEX / 2 + 100, WINSIZEY / 2, load->GetFrameWidth(), load->GetFrameHeight(), bind(&MapToolScene::OpenLoadWindow, this));
 	mUndoButton = new Button(undo, WINSIZEX / 2 + 200, WINSIZEY / 2, undo->GetFrameWidth(), undo->GetFrameHeight(), bind(&MapToolScene::Undo, this));
 	mEraseButton = new Button(eraser, WINSIZEX / 2 + 325, 425, eraser->GetFrameWidth()*2, eraser->GetFrameHeight()*2, bind(&MapToolScene::EraseButton, this));
 	
@@ -154,37 +108,7 @@ void MapToolScene::Init()
 void MapToolScene::Release()
 {
 	
-	//≈∏¿œ ∏±∏Æ¡Ó
-	for (int y = 0; y < mTileList.size(); ++y)
-	{
-		for (int x = 0; x < mTileList[y].size(); ++x)
-		{
-			SafeDelete(mTileList[y][x]);
-			mTileList[y].erase(mTileList[y].begin() + x);
-			x--;
-		}
-		if (mTileList[y].size() <= 0)
-		{
-			mTileList.erase(mTileList.begin() + y);
-			y--;
-		}
-	}
-	//ø…¡ß ∏±∏Æ¡Ó
-	for (int y = 0; y < mMapObjectList.size(); ++y)
-	{
-		for (int x = 0; x < mMapObjectList[y].size(); ++x)
-		{
-			SafeDelete(mMapObjectList[y][x]);
-			mMapObjectList[y].erase(mMapObjectList[y].begin() + x);
-			x--;
-		}
-		if (mMapObjectList[y].size() <= 0)
-		{
-			mMapObjectList.erase(mMapObjectList.begin() + y);
-			y--;
-		}
-	}
-
+	ReleaseMap();
 
 	SafeDelete(mSaveButton);
 	SafeDelete(mLoadButton);
@@ -254,8 +178,8 @@ void MapToolScene::Update()
 		int indexX = _mousePosition.x / TileSize;
 		int indexY = _mousePosition.y / TileSize;
 
-		if (indexX >= 0 && indexX < TileCountX &&
-			indexY >= 0 && indexY < TileCountY)
+		if (indexX >= 0 && indexX < mXTileCount &&
+			indexY >= 0 && indexY < mYTileCount)
 		{
 
 			//≈∏¿œπŸ≤Ÿ±‚
@@ -307,15 +231,9 @@ void MapToolScene::Update()
 		}
 
 
-
 	}
 	// }}
 
-	//≈∏¿œ±◊∏∞∞Õ√≥∑≥ø…¡ß ±◊∏Æ±‚
-
-
-	//if (Input::GetInstance()->GetKeyDown(VK_SPACE))
-	//	Reset();
 
 	mSaveButton->Update();
 	mLoadButton->Update();
@@ -332,9 +250,9 @@ void MapToolScene::Update()
 void MapToolScene::Render(HDC hdc)
 {
 	//∏ 
-	for (int y = 0; y < TileCountY; ++y)
+	for (int y = 0; y < mTileList.size(); ++y)
 	{
-		for (int x = 0; x < TileCountX; ++x)
+		for (int x = 0; x < mTileList[y].size(); ++x)
 		{
 			mTileList[y][x]->Render(hdc);
 		}
@@ -432,23 +350,34 @@ void MapToolScene::Render(HDC hdc)
 	{
 		mSaveButtons[i]->Render(hdc);
 	}
+
+
+	wstring y = L"TileY: " + to_wstring(mYTileCount);
+	TextOut(hdc, _mousePosition.x, _mousePosition.y, y.c_str(), (int)y.length());
+	wstring x = L"TileX: " + to_wstring(mXTileCount);
+	TextOut(hdc, _mousePosition.x, _mousePosition.y + 20, x.c_str(), (int)x.length());
 }
 
 void MapToolScene::Save(int i)
 {
 	wstring str = L"../Data/Save" + to_wstring(i+1) + L".txt";
-	//ofstream saveStream(str);
-
-	ofstream saveStream(L"../Data/Test.txt");
+	//ofstream saveStream(L"../Data/Test.txt");
+	ofstream saveStream(str);
 	if (saveStream.is_open())
 	{
 		string tempImageKey;
 		int frameX;
 		int frameY;
 
-		for (int y = 0; y < TileCountY; ++y)
+		//∏ ≈©±‚¿˙¿Â
+		saveStream << mYTileCount;
+		saveStream << ",";
+		saveStream << mXTileCount;
+		saveStream << endl;
+
+		for (int y = 0; y < mYTileCount; ++y)
 		{
-			for (int x = 0; x < TileCountX; ++x)
+			for (int x = 0; x < mXTileCount; ++x)
 			{
 				string str;
 				wstring keyName;
@@ -486,14 +415,23 @@ void MapToolScene::Save(int i)
 	}
 }
 
-void MapToolScene::Load()
+void MapToolScene::Load(wstring fileName)
 {
-	ifstream loadStream(L"../Data/Test.txt");
+	//ifstream loadStream(L"../Data/Test.txt");
+	ReleaseMap();
+	ifstream loadStream(fileName);
 	if (loadStream.is_open())
 	{
-		for (int y = 0; y < TileCountY; ++y)
+		string buffer;
+		getline(loadStream, buffer, ',');
+		mYTileCount = stoi(buffer);
+		getline(loadStream, buffer);
+		mXTileCount = stoi(buffer);
+		InitEmptyMap();
+
+		for (int y = 0; y < mYTileCount; ++y)
 		{
-			for (int x = 0; x < TileCountX; ++x)
+			for (int x = 0; x < mXTileCount; ++x)
 			{
 				string key;
 				int frameX;
@@ -503,7 +441,6 @@ void MapToolScene::Load()
 				int objectFrameX;
 				int objectFrameY;
 				int objectType;
-				string buffer;
 
 
 				getline(loadStream, buffer, ',');
@@ -546,6 +483,12 @@ void MapToolScene::Load()
 		}
 	}
 }
+
+void MapToolScene::OpenLoadWindow()
+{
+	Path::OpenFileDialog(L"", nullptr, L"../Resources/", bind(&MapToolScene::Load,this, placeholders::_1), _hWnd);
+}
+
 
 void MapToolScene::PushCommand(ICommand* command)
 {
@@ -607,7 +550,7 @@ void MapToolScene::SwitchObjectPallete()
 void MapToolScene::SwitchTilePallete()
 {
 	Image* mapImage;
-	//πŸ≤‹¿ÃπÃ¡ˆ ¡§«œ∞Ì
+	//πŸ≤‹¿ÃπÃ¡ˆ ¡§«œ±‚
 	if (mPallete[0][0].image->GetKeyName() == L"TinyWoods")
 	{
 		mapImage = IMAGEMANAGER->FindImage(L"MagmaCavern");
@@ -630,6 +573,93 @@ void MapToolScene::SwitchTilePallete()
 		}
 	}
 
+
+}
+
+void MapToolScene::InitEmptyMap()
+{
+	Image* tileImage = ImageManager::GetInstance()->FindImage(L"TinyWoods");
+
+	//∫Û∏  ¿Œ¿’
+	for (int y = 0; y < mYTileCount; ++y)
+	{
+		mTileList.push_back(vector <Tile*>());
+		for (int x = 0; x < mXTileCount; ++x)
+		{
+			//∫§≈Õ
+			Tile* tempTile = new Tile
+			(
+				tileImage,
+				TileSize * x,
+				TileSize * y,
+				TileSize,
+				TileSize,
+				Random::GetInstance()->RandomInt(2),
+				0,
+				0
+			);
+
+			mTileList[y].push_back(tempTile);
+
+		}
+	}
+	//∫Û∏ ø…¡ß ¿Œ¿’
+	for (int y = 0; y < mYTileCount; ++y)
+	{
+		mMapObjectList.push_back(vector <MapObject*>());
+		for (int x = 0; x < mXTileCount; ++x)
+		{
+
+			//∫§≈Õ
+			MapObject* tempObject = new MapObject
+			(
+				nullptr,
+				TileSize * x,
+				TileSize * y,
+				TileSize,
+				TileSize,
+				0,
+				0,
+				0
+			);
+			mMapObjectList[y].push_back(tempObject);
+
+		}
+	}
+}
+
+void MapToolScene::ReleaseMap()
+{
+	//≈∏¿œ ∏±∏Æ¡Ó
+	for (int y = 0; y < mTileList.size(); ++y)
+	{
+		for (int x = 0; x < mTileList[y].size(); ++x)
+		{
+			SafeDelete(mTileList[y][x]);
+			mTileList[y].erase(mTileList[y].begin() + x);
+			x--;
+		}
+		if (mTileList[y].size() <= 0)
+		{
+			mTileList.erase(mTileList.begin() + y);
+			y--;
+		}
+	}
+	//ø…¡ß ∏±∏Æ¡Ó
+	for (int y = 0; y < mMapObjectList.size(); ++y)
+	{
+		for (int x = 0; x < mMapObjectList[y].size(); ++x)
+		{
+			SafeDelete(mMapObjectList[y][x]);
+			mMapObjectList[y].erase(mMapObjectList[y].begin() + x);
+			x--;
+		}
+		if (mMapObjectList[y].size() <= 0)
+		{
+			mMapObjectList.erase(mMapObjectList.begin() + y);
+			y--;
+		}
+	}
 
 }
 

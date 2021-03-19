@@ -58,7 +58,36 @@ void TileMap::Init(int tileX, int tileY, int tileSize)
 
 void TileMap::Release()
 {
-
+	//鸥老 副府令
+	for (int y = 0; y < mTileList.size(); ++y)
+	{
+		for (int x = 0; x < mTileList[y].size(); ++x)
+		{
+			SafeDelete(mTileList[y][x]);
+			mTileList[y].erase(mTileList[y].begin() + x);
+			x--;
+		}
+		if (mTileList[y].size() <= 0)
+		{
+			mTileList.erase(mTileList.begin() + y);
+			y--;
+		}
+	}
+	//可璃 副府令
+	for (int y = 0; y < mMapObjectList.size(); ++y)
+	{
+		for (int x = 0; x < mMapObjectList[y].size(); ++x)
+		{
+			SafeDelete(mMapObjectList[y][x]);
+			mMapObjectList[y].erase(mMapObjectList[y].begin() + x);
+			x--;
+		}
+		if (mMapObjectList[y].size() <= 0)
+		{
+			mMapObjectList.erase(mMapObjectList.begin() + y);
+			y--;
+		}
+	}
 }
 
 void TileMap::Update()
@@ -176,5 +205,10 @@ void TileMap::LoadMap()
 			}
 		}
 	}
+
+}
+
+void TileMap::LoadMap(wstring mapName)
+{
 
 }

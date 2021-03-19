@@ -17,8 +17,16 @@ public:
 
 	void SetTileListPtr(vector <vector <Tile*>>* tileListPtr) { mTileList = *tileListPtr; }
 	void LoadMap();
+	void LoadMap(wstring mapName);
 	RECT GetTileRect(int indexX, int indexY) { return mTileList[indexY][indexX]->GetRect(); }
 	TileType GetTileType(int indexX, int indexY) { return mTileList[indexY][indexX]->GetTileType(); }
+
+	float GetTileCenterX(int indexX, int indexY) {
+		return (mTileList[indexY][indexX]->GetRect().left + mTileList[indexY][indexX]->GetRect().right) / 2;
+	}
+	float GetTileCenterY(int indexX, int indexY) {
+		return (mTileList[indexY][indexX]->GetRect().top + mTileList[indexY][indexX]->GetRect().bottom) / 2;
+	}
 
 	vector<vector<Tile*>>* GetTileListPtr() { return &mTileList; }
 	vector<vector<MapObject*>>* GetObjectListPtr() { return &mMapObjectList; }
