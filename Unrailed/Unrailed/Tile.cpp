@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Tile.h"
 #include "Image.h"
+#include "Camera.h"
 
 Tile::Tile(Image * image, float x, float y, float sizeX, float sizeY, int frameIndexX, int frameIndexY,int type)
 {
@@ -19,7 +20,8 @@ void Tile::Render(HDC hdc)
 {
 
 	if (mImage != nullptr)
-		mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+		//mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
 
 	switch (mTileType)
 	{
