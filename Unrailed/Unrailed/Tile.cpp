@@ -26,23 +26,23 @@ void Tile::Render(HDC hdc)
 	switch (mTileType)
 	{
 	case TileType::Normal:
-		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Green);
+		Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Green);
 		break;
 
 	case TileType::Wall:
-		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Black);
+		Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Black);
 		break;
 
 	case TileType::Water:
-		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Blue);
+		Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Blue);
 		break;
 
 	case TileType::Lava:
-		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Red);
+		Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Red);
 		break;
 
 	case TileType::ice:
-		Gizmo::GetInstance()->DrawRect(hdc, mRect, Gizmo::Color::Gray);
+		Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Gray);
 		break;
 	default:
 		break;
