@@ -187,9 +187,11 @@ void MainGame::LoadImageResources(LoadingScene* scene)
 	{
 		wchar_t* ptr = nullptr;
 		wstring strPath = path;
-		wstring str = wcstok_s(&strPath[0], L"2", &ptr);
-		str.append(L"2\\Unrailed\\Resources\\*.*");		// ㅏ 진짜 넘 맘에 안든다
-		FileSystemHelper::GetAllFile(str, FileType::IMAGE);
+		//wstring str = wcstok_s(&strPath[0], L"2", &ptr);
+		size_t strSize = strPath.find(L"2\\Unrailed\\Unrailed");
+		strPath.erase(strSize);
+		strPath.append(L"2\\Unrailed\\Resources\\*.*");		// ㅏ 진짜 넘 맘에 안든다
+		FileSystemHelper::GetAllFile(strPath, FileType::IMAGE);
 	}
 
 	UINT width = 0, height = 0;
@@ -246,9 +248,11 @@ void MainGame::LoadSoundResources(LoadingScene* scene)
 	{
 		wchar_t* ptr = nullptr;
 		wstring strPath = path;
-		wstring str = wcstok_s(&strPath[0], L"2", &ptr);
-		str.append(L"2\\Unrailed\\Sound\\*.*");		// ㅏ 진짜 넘 맘에 안든다
-		FileSystemHelper::GetAllFile(str, FileType::SOUND);
+		//wstring str = wcstok_s(&strPath[0], L"2", &ptr);
+		size_t strSize = strPath.find(L"2\\Unrailed\\Unrailed");
+		strPath.erase(strSize);
+		strPath.append(L"2\\Unrailed\\Resources\\*.*");
+		FileSystemHelper::GetAllFile(strPath, FileType::SOUND);
 	}
 
 	wchar_t* ptr = nullptr;

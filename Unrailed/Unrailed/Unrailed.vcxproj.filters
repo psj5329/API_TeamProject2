@@ -136,6 +136,9 @@
     <Filter Include="MainGame\Scene\Menu">
       <UniqueIdentifier>{4eb80d5b-aa25-4219-be92-7b6f48ca6048}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\PathFinder">
+      <UniqueIdentifier>{903fd37e-54cd-43e3-96ff-8a6ec1db7c79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -306,6 +309,9 @@
     <ClInclude Include="MapToolReady.h">
       <Filter>MainGame\Scene\MapToolScene</Filter>
     </ClInclude>
+    <ClInclude Include="PathFinder.h">
+      <Filter>Framework\PathFinder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -466,6 +472,9 @@
     </ClCompile>
     <ClCompile Include="MapToolReady.cpp">
       <Filter>MainGame\Scene\MapToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinder.cpp">
+      <Filter>Framework\PathFinder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
