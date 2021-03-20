@@ -303,6 +303,75 @@ void CollisionManager::MapObjectCollision(Player* player, RECT* rc, TileMap* til
 	}
 }
 
+void CollisionManager::MapObjectCollision(Player* player, RECT* rc, vector<vector<Tile*>>* tileList, vector<vector<MapObject*>>* mapObjectList)
+{
+	int x = player->GetX() / TileSize;
+	int y = player->GetY() / TileSize;
+
+	float rcWidth = rc->right - rc->left;
+	float rcHeight = rc->bottom - rc->top;
+
+	for (int j = y - 1; j <= y + 1; ++j)
+	{
+		for (int i = x - 1; i <= x + 1; ++i)
+		{
+			// 범위 안일 때
+			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
+			{
+				RECT temp;
+				RECT mapObjectRc = (*tileList)[j][i]->GetRect();
+				if (IntersectRect(&temp, rc, &mapObjectRc))
+				{
+					float width = temp.right - temp.left;
+					float height = temp.bottom - temp.top;
+
+					if ((*mapObjectList)[j][i]->GetMapObjectType() != MapObjectType::None)		// None이 아니라면 광물이 있음
+					{
+						if (width > height)
+						{
+							if (temp.top == (*mapObjectList)[j][i]->GetRect().top)	// 플레이어가 위
+							{
+								//player->SetY((*mapObjectList)[j][i]->GetRect().top - rcHeight / 2);
+								(*mapObjectList)[j][i]->DeductHp();
+
+								if ((*mapObjectList)[j][i]->GetHp() <= 0)
+									(*tileList)[j][i]->SetTileType(TileType::Normal);
+							}
+							else if (temp.bottom == (*mapObjectList)[j][i]->GetRect().bottom)	// 플레이어가 아래
+							{
+								//player->SetY((*mapObjectList)[j][i]->GetRect().bottom + rcHeight / 2);
+								(*mapObjectList)[j][i]->DeductHp();
+
+								if ((*mapObjectList)[j][i]->GetHp() <= 0)
+									(*tileList)[j][i]->SetTileType(TileType::Normal);
+							}
+						}
+						else
+						{
+							if (temp.left == (*mapObjectList)[j][i]->GetRect().left)	// 플레이어가 왼쪽
+							{
+								//player->SetX((*mapObjectList)[j][i]->GetRect().left - rcWidth / 2);
+								(*mapObjectList)[j][i]->DeductHp();
+
+								if ((*mapObjectList)[j][i]->GetHp() <= 0)
+									(*tileList)[j][i]->SetTileType(TileType::Normal);
+							}
+							else if (temp.right == (*mapObjectList)[j][i]->GetRect().right)	// 플레이어가 오른쪽
+							{
+								//player->SetX((*mapObjectList)[j][i]->GetRect().right + rcWidth / 2);
+								(*mapObjectList)[j][i]->DeductHp();
+
+								if ((*mapObjectList)[j][i]->GetHp() <= 0)
+									(*tileList)[j][i]->SetTileType(TileType::Normal);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 GameObject * CollisionManager::ItemCollision(RECT* rc)
 {
 	vector<GameObject*> vecItem = OBJECTMANAGER->GetObjectList(ObjectLayer::ITEM);

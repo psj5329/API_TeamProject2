@@ -68,7 +68,7 @@ void LoadingScene::Update()
 void LoadingScene::Render(HDC hdc)
 {
 	mImage->ScaleFrameRender(hdc, WINSIZEX / 2 - mImage->GetWidth() / 10, WINSIZEY / 2, mAnimation->GetNowFrameX(), 0, mImage->GetWidth() / 5, mImage->GetHeight());
-	mLoadingBarImage->ScaleRender(hdc, 0, WINSIZEY - mLoadingBarImage->GetHeight(), mLoadingBarImage->GetWidth() * mLoadIndex / mLoadList.size(), mLoadingBarImage->GetHeight());
+	//mLoadingBarImage->ScaleRender(hdc, 0, WINSIZEY - mLoadingBarImage->GetHeight(), mLoadingBarImage->GetWidth() * mLoadIndex / mLoadList.size(), mLoadingBarImage->GetHeight());
 
 	SetBkColor(hdc, RGB(0, 0, 0));
 	SetTextColor(hdc, RGB(255, 255, 255));
