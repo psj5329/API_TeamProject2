@@ -4,6 +4,8 @@
 #include "Image.h"
 #include "Button.h"
 #include "Path.h"
+#include "Camera.h"
+
 void MapToolScene::Init()
 {
 	ImageLoad();
@@ -168,15 +170,17 @@ void MapToolScene::Update()
 				}
 			}
 		}
-
-
 	}
+
+
+	float x = CAMERAMANAGER->GetMainCamera()->GetX();
+	float y = CAMERAMANAGER->GetMainCamera()->GetY();
 
 	// {{ 타일 그리기~
 	if (Input::GetInstance()->GetKey(VK_LBUTTON))
 	{
-		int indexX = _mousePosition.x / TileSize;
-		int indexY = _mousePosition.y / TileSize;
+		int indexX = (_mousePosition.x + (x - WINSIZEX / 2)) / TileSize;
+		int indexY = (_mousePosition.y + (y - WINSIZEY / 2)) / TileSize;
 
 		if (indexX >= 0 && indexX < mXTileCount &&
 			indexY >= 0 && indexY < mYTileCount)
@@ -680,4 +684,96 @@ void MapToolScene::ImageLoad()
  {
 	//wParam
 	 return 0;
+ }
+
+
+
+ //////마우스표시관련//////
+ void MapToolScene::InitMouseRect()
+ {
+	 mMouse.image = mCurrentTile.image;
+	 mMouse.frameX = mCurrentTile.frameX;
+	 mMouse.frameY = mCurrentTile.frameY;
+	 mMouse.positionX = _mousePosition.x;
+	 mMouse.positionY = _mousePosition.y;
+	 mMouse.sizeX = TileSize;
+	 mMouse.sizeY = TileSize;
+	 mMouse.rect = RectMakeCenter(mMouse.positionX, mMouse.positionY, mMouse.sizeX, mMouse.sizeY);
+ }
+
+ void MapToolScene::UpdateMouseRect()
+ {
+	 mMouse.positionX = _mousePosition.x;
+	 mMouse.positionY = _mousePosition.y;
+	 mMouse.rect = RectMakeCenter(mMouse.positionX, mMouse.positionY, mMouse.sizeX, mMouse.sizeY);
+ }
+
+ void MapToolScene::RenderMouseRect(HDC hdc)
+ {
+	 switch (mCurrentPallete)
+	 {
+	 case CurrentPallete::Tile:
+		 mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.2);
+		 break;
+	 case CurrentPallete::Object:
+		 mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.2);
+		 break;
+	 case CurrentPallete::Type:
+		 switch (mCurrentType)
+		 {
+		 case TileType::Normal:
+			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Green);
+			 break;
+
+		 case TileType::Wall:
+			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Black);
+			 break;
+
+		 case TileType::Water:
+			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Blue);
+			 break;
+
+		 case TileType::Lava:
+			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Red);
+			 break;
+
+		 case TileType::ice:
+			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Gray);
+			 break;
+
+		 default:
+			 break;
+		 }
+		 break;
+	 case CurrentPallete::Erase:
+		 mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.3);
+		 break;
+	 default:
+		 break;
+	 }
+ }
+
+ void MapToolScene::SetMouseRect()
+ {
+	 switch (mCurrentPallete)
+	 {
+	 case CurrentPallete::Tile:
+		 mMouse.image = mCurrentTile.image;
+		 mMouse.frameX = mCurrentTile.frameX;
+		 mMouse.frameY = mCurrentTile.frameY;
+		 break;
+	 case CurrentPallete::Object:
+		 mMouse.image = mCurrentObject.image;
+		 mMouse.frameX = mCurrentObject.frameX;
+		 mMouse.frameY = mCurrentObject.frameY;
+		 break;
+	 case CurrentPallete::Type:
+		 mMouse.image = nullptr;
+		 break;
+	 case CurrentPallete::Erase:
+		 mMouse.image = IMAGEMANAGER->FindImage(L"XTile");
+		 break;
+	 default:
+		 break;
+	 }
  }

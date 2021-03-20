@@ -19,5 +19,6 @@ private:
 public:
 	void DrawRect(HDC hdc, RECT rc,Color color);
 	void DrawEllipse(HDC hdc, float x, float y, float radius, Color color);
+	void DrawRectInCamera(HDC hdc, RECT rc, Color color);
 };
 

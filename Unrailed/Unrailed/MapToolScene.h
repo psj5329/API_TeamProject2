@@ -17,7 +17,7 @@ enum class CurrentPallete
 
 struct MouseRect
 {
-	Image image;
+	Image* image;
 	float positionX;
 	float positionY;
 	float sizeX;
@@ -99,6 +99,12 @@ private:
 	void EraseButton();
 	void SwitchObjectPallete();
 	void SwitchTilePallete();
+
+	//¸¶¿ì½º
+	void InitMouseRect();
+	void SetMouseRect();
+	void UpdateMouseRect();
+	void RenderMouseRect(HDC hdc);
 	
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)override;
 

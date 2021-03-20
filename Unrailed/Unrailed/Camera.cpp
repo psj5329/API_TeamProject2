@@ -88,7 +88,7 @@ void Camera::AlphaScaleFrameRender(HDC hdc, Image * image, int x, int y, int fra
 	image->AlphaScaleFrameRender(hdc, x - mRect.left, y - mRect.top, frameX, frameY, width, height, alpha);
 }
 
-void Camera::RenderRect(HDC hdc, RECT rc)
+void Camera::RenderRectCam(HDC hdc, RECT rc)
 {
 	rc.left -= mRect.left;
 	rc.right -= mRect.left;
