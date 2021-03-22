@@ -9,7 +9,7 @@ void Trail::Init(int x, int y, int type, int direction)
     mTrailType = (TrailType)type;
     mDirection = (TrailDirection)direction;
 
-    //ÀÌ¹ÌÁöÁ¤ÇÏ±â
+    //ì´ë¯¸ì§€ì •í•˜ê¸°
     if (mTrailType == TrailType::Green)
     {
         mImage = IMAGEMANAGER->FindImage(L"GreenTrail");
@@ -65,7 +65,7 @@ void Trail::Release()
 void Trail::Update()
 {
 
-    //¿¬°áµÈ Ä£±¸µé¸¸ ¾Ö´Ï¸ÞÀÌ¼Ç ¿òÁ÷ÀÌ°Ô
+    //ì—°ê²°ëœ ì¹œêµ¬ë“¤ë§Œ ì• ë‹ˆë©”ì´ì…˜ ì›€ì§ì´ê²Œ
     if (mIsConnected)
     {
         mCurrentAnimation->Update();
@@ -75,10 +75,10 @@ void Trail::Update()
 void Trail::Render(HDC hdc)
 {
     if(mTrailType != TrailType::None)
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+    	  CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
-//ÇÃ·¹ÀÌ¾îÀÇ µ¹¸®±â
+//í”Œë ˆì´ì–´ì˜ ëŒë¦¬ê¸°
 void Trail::Turn()
 {
 	switch (mDirection)
@@ -144,11 +144,11 @@ int Trail::PickUp()
     return (int)mTrailType;
 }
 
-//¼Ó¼º¹Ù²Ù±â
+//ì†ì„±ë°”ê¾¸ê¸°
 void Trail::SetTrailType(int type) 
 { 
     mTrailType = (TrailType)type; 
-    //ÀÌ¹ÌÁöÁ¤ÇÏ±â
+    //ì´ë¯¸ì§€ì •í•˜ê¸°
     if (mTrailType == TrailType::Green)
     {
         mImage = IMAGEMANAGER->FindImage(L"GreenTrail");
@@ -163,7 +163,7 @@ void Trail::SetTrailType(int type)
     }
 }
 
-//¹æÇâ¹Ù²Ù±â
+//ë°©í–¥ë°”ê¾¸ê¸°
 void Trail::SetDirection(int dir) 
 { 
     mDirection = (TrailDirection)dir; 
