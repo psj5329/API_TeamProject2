@@ -3,6 +3,7 @@
 //#include "Player.h"
 #include "TileMap.h"
 #include "MapToolScene.h"
+#include "Camera.h"
 
 void Scene3::Init()
 {
@@ -10,8 +11,8 @@ void Scene3::Init()
 	//mPlayer->Init();
 
 	mTileMap = new TileMap();
-	mTileMap->Init(TileCountX, TileCountY, TileSize);
-	mTileMap->LoadMap();
+	//mTileMap->Init(TileCountX, TileCountY, TileSize);
+	mTileMap->LoadMap(3);
 }
 
 void Scene3::Release()
@@ -28,6 +29,7 @@ void Scene3::Update()
 	}
 
 	OBJECTMANAGER->Update();
+	CAMERAMANAGER->GetMainCamera()->Update();
 
 }
 

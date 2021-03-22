@@ -15,7 +15,7 @@ class Ore :
 {
 	OreType mType;
 	Image* mImage;
-
+	int mCount;
 	int mFrameX;
 
 public:
@@ -26,6 +26,7 @@ public:
 
 	int GetOreTypeInt() { return (int)mType; }
 	OreType GetOreType() { return mType; }
+	int GetCount() { return mCount; }
 
 	void SetOreType(int type) { mType = (OreType)type; }
 	void Drop(int x, int y, int type);

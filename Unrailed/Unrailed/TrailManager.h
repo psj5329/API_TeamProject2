@@ -8,11 +8,15 @@ class TrailManager
 	//vector<Trail*> mTrailList;
 	vector<vector<Trail*>> mTrailList;
 
+	int XTileCount;
+	int YTileCount;
+
 	int mStartX;
 	int mStartY;
 
 public:
 	void Init();
+	void Init(int YTileCount, int XTileCount);
 	void Release();
 	void Update();
 	void Render(HDC hdc);
@@ -26,5 +30,6 @@ public:
 
 	vector<vector<Trail*>>* GetTrailListPtr() { return &mTrailList; }
 
+private:
 	void SetTrailTail(int indexY, int indexX);
 };

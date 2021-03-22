@@ -27,6 +27,7 @@ struct MouseRect
 	RECT rect;
 	int frameX;
 	int frameY;
+	bool isOn;
 };
 
 class ICommand;

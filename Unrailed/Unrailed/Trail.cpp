@@ -22,7 +22,7 @@ void Trail::Init(int x, int y, int type, int direction)
     {
         mImage = IMAGEMANAGER->FindImage(L"RedTrail");
     }
-
+    
         
     mX = x;
     mY = y;
@@ -75,7 +75,8 @@ void Trail::Update()
 void Trail::Render(HDC hdc)
 {
     if(mTrailType != TrailType::None)
-    	  CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+        CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc,mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+       // mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
 //플레이어의 돌리기

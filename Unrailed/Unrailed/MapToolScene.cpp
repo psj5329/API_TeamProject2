@@ -345,9 +345,6 @@ void MapToolScene::Render(HDC hdc)
 		}
 	}
 
-
-	wstring str3 = L"P ¾ÀÀüÈ¯";
-	TextOut(hdc, 500, 50, str3.c_str(), str3.length());
 	mSaveButton->Render(hdc);
 	mLoadButton->Render(hdc);
 	mUndoButton->Render(hdc);
@@ -605,6 +602,7 @@ void MapToolScene::InitEmptyMap()
 			Tile* tempTile = new Tile
 			(
 				tileImage,
+				nullptr,
 				TileSize * x,
 				TileSize * y,
 				TileSize,
@@ -675,7 +673,6 @@ void MapToolScene::ReleaseMap()
 			y--;
 		}
 	}
-
 }
 
 void MapToolScene::ImageLoad()
@@ -714,9 +711,34 @@ void MapToolScene::ImageLoad()
 
  void MapToolScene::UpdateMouseRect()
  {
-	 mMouse.positionX = _mousePosition.x;
-	 mMouse.positionY = _mousePosition.y;
-	 mMouse.rect = RectMakeCenter(mMouse.positionX, mMouse.positionY, mMouse.sizeX, mMouse.sizeY);
+
+	 float x = CAMERAMANAGER->GetMainCamera()->GetX();
+	 float y = CAMERAMANAGER->GetMainCamera()->GetY();
+
+	 int indexX = (_mousePosition.x + (x - WINSIZEX / 2)) / TileSize;
+	 int indexY = (_mousePosition.y + (y - WINSIZEY / 2)) / TileSize;
+
+	 if (indexX >= 0 && indexX < mXTileCount &&
+		 indexY >= 0 && indexY < mYTileCount)
+	 {
+		 mMouse.isOn = true;
+	 }
+	 else
+	 {
+		 mMouse.isOn = false;
+	 }
+
+	 if (mMouse.isOn)
+	 {
+		 mMouse.rect = mTileList[indexY][indexX]->GetRect();
+	 }
+	 else
+	 {
+		 mMouse.positionX = _mousePosition.x;
+		 mMouse.positionY = _mousePosition.y;
+		 mMouse.rect = RectMakeCenter(mMouse.positionX, mMouse.positionY, mMouse.sizeX, mMouse.sizeY);
+	 }
+
  }
 
  void MapToolScene::RenderMouseRect(HDC hdc)
@@ -724,32 +746,36 @@ void MapToolScene::ImageLoad()
 	 switch (mCurrentPallete)
 	 {
 	 case CurrentPallete::Tile:
-		 mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
+		 CAMERAMANAGER->GetMainCamera()->AlphaScaleFrameRender(
+			 hdc, mMouse.image, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
+		 //mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
 		 break;
 	 case CurrentPallete::Object:
-		 mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
+		 CAMERAMANAGER->GetMainCamera()->AlphaScaleFrameRender(
+			 hdc, mMouse.image, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
+		 //mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
 		 break;
 	 case CurrentPallete::Type:
 		 switch (mCurrentType)
 		 {
 		 case TileType::Normal:
-			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Green);
+			 Gizmo::GetInstance()->DrawRectInCamera(hdc, mMouse.rect, Gizmo::Color::Green);
 			 break;
 
 		 case TileType::Wall:
-			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Black);
+			 Gizmo::GetInstance()->DrawRectInCamera(hdc, mMouse.rect, Gizmo::Color::Black);
 			 break;
 
 		 case TileType::Water:
-			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Blue);
+			 Gizmo::GetInstance()->DrawRectInCamera(hdc, mMouse.rect, Gizmo::Color::Blue);
 			 break;
 
 		 case TileType::Lava:
-			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Red);
+			 Gizmo::GetInstance()->DrawRectInCamera(hdc, mMouse.rect, Gizmo::Color::Red);
 			 break;
 
 		 case TileType::ice:
-			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Gray);
+			 Gizmo::GetInstance()->DrawRectInCamera(hdc, mMouse.rect, Gizmo::Color::Gray);
 			 break;
 
 		 default:
@@ -757,7 +783,9 @@ void MapToolScene::ImageLoad()
 		 }
 		 break;
 	 case CurrentPallete::Erase:
-		 mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
+		 CAMERAMANAGER->GetMainCamera()->AlphaScaleFrameRender(
+			 hdc, mMouse.image, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
+		 //mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
 		 break;
 	 default:
 		 break;
