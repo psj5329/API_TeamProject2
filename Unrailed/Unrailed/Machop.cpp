@@ -2,6 +2,9 @@
 #include "Machop.h"
 #include "Image.h"
 #include "Animation.h"
+#include "Tile.h"
+#include "Trail.h"
+#include "Camera.h"
 
 void Machop::Init()
 {
@@ -27,6 +30,7 @@ void Machop::Init()
 	mSpeed = 100.f;
 	mTimer = 0;
 	mLevel = 1;
+	mReachTile = false;
 
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightSleep;
@@ -49,19 +53,64 @@ void Machop::Release()
 
 void Machop::Update()
 {
+	int indexX = mX / TileSize;
+	int indexY = mY / TileSize;
+
 	//상태정하기
-	if (mTimer == 0)
+	//if (mTimer == 0)
+	//{
+	//	if (mState == State::Sleep)
+	//	{
+	//		SetAnimation();
+	//	}
+	//}
+	//if (mTimer >= 5 && mState == State::Sleep)
+	//{
+	//	mDirection = Direction::Right;
+	//	mState = State::Move;
+	//	SetAnimation();
+	//}
+
+
+	if (mTDirection == TrailDirection::Down)
 	{
-		if (mState == State::Sleep)
+		if (mState == State::Move)
 		{
-			SetAnimation();
+			if (mDirection == Direction::Down)
+			{
+				SetAnimation();
+			}
 		}
 	}
-	if (mTimer >= 5 && mState == State::Sleep)
+	if (mTDirection == TrailDirection::Up)
 	{
-		mDirection = Direction::Right;
-		mState = State::Move;
-		SetAnimation();
+		if (mState == State::Move)
+		{
+			if (mDirection == Direction::Up)
+			{
+				SetAnimation();
+			}
+		}
+	}
+	if (mTDirection == TrailDirection::Left)
+	{
+		if (mState == State::Move)
+		{
+			if (mDirection == Direction::Left)
+			{
+				SetAnimation();
+			}
+		}
+	}
+	if (mTDirection == TrailDirection::Right)
+	{
+		if (mState == State::Move)
+		{
+			if (mDirection == Direction::Right)
+			{
+				SetAnimation();
+			}
+		}
 	}
 
 	//움직임
@@ -69,23 +118,23 @@ void Machop::Update()
 	{
 		mTimer += Time::GetInstance()->DeltaTime();
 	}
-	if (mState == State::Move)
+	if (mReachTile == false)
 	{
-		if (mDirection == Direction::Down)
+		if (CheckTrailDirection() == Direction::Down)
 		{
-			mY += mSpeed * Time::GetInstance()->DeltaTime();
+			Move(indexY + 1, indexX, Direction::Down);
 		}
-		if (mDirection == Direction::Up)
+		if (CheckTrailDirection() == Direction::Up)
 		{
-			mY -= mSpeed * Time::GetInstance()->DeltaTime();
+			Move(indexY - 1, indexX, Direction::Up);
 		}
-		if (mDirection == Direction::Left)
+		if (CheckTrailDirection() == Direction::Left)
 		{
-			mX -= mSpeed * Time::GetInstance()->DeltaTime();
+			Move(indexY, indexX - 1, Direction::Left);
 		}
-		if (mDirection == Direction::Right)
+		if (CheckTrailDirection() == Direction::Right)
 		{
-			mX += mSpeed * Time::GetInstance()->DeltaTime();
+			Move(indexY, indexX + 1, Direction::Right);
 		}
 	}
 
@@ -128,8 +177,10 @@ void Machop::Update()
 
 void Machop::Render(HDC hdc)
 {
-	RenderRect(hdc, mRect);
-	mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	//RenderRect(hdc, mRect);
+	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
 void Machop::ReadyAnimation()
@@ -220,5 +271,65 @@ void Machop::EndExplode()
 	if (mState == State::Explode)
 	{
 		SetIsDestroy(true);
+	}
+}
+
+Direction Machop::CheckTrailDirection()
+{
+	int indexX = mX / TileSize;
+	int indexY = mY / TileSize;
+
+	Direction dir = (Direction)mTrailList[indexY][indexX]->GetDirection();
+	return dir;
+}
+
+void Machop::Move(int indexY, int indexX, Direction dir)
+{
+	float centerX = (mTrailList[indexY][indexX]->GetRect().left + mTrailList[indexY][indexX]->GetRect().right) / 2;
+	float centerY = (mTrailList[indexY][indexX]->GetRect().top + mTrailList[indexY][indexX]->GetRect().bottom) / 2;
+
+	if (dir == Direction::Down)
+	{
+		if (mY <= centerY)
+		{
+			mY += mSpeed * Time::GetInstance()->DeltaTime() / 2;
+		}
+		else
+		{
+			mReachTile = true;
+		}
+	}
+	if (dir == Direction::Up)
+	{
+		if (mY >= centerY)
+		{
+			mY -= mSpeed * Time::GetInstance()->DeltaTime() / 2;
+		}
+		else
+		{
+			mReachTile = true;
+		}
+	}
+	if (dir == Direction::Left)
+	{
+		if (mX >= centerX)
+		{
+			mX -= mSpeed * Time::GetInstance()->DeltaTime() / 2;
+		}
+		else
+		{
+			mReachTile = true;
+		}
+	}
+	if (dir == Direction::Right)
+	{
+		if (mX <= centerX)
+		{
+			mX += mSpeed * Time::GetInstance()->DeltaTime() / 2;
+		}
+		else
+		{
+			mReachTile = true;
+		}
 	}
 }
