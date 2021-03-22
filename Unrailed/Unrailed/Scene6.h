@@ -1,6 +1,8 @@
 #pragma once
 #include "Scene.h"
 #include "Voltorb.h"
+#include "Machop.h"
+#include "Abra.h"
 
 class TrailManager;
 class TileMap;
@@ -11,6 +13,8 @@ class Scene6 : public Scene
 	TrailManager* mTrailManager;
 	
 	vector <Voltorb*> mVoltorbVec;
+	Abra* mAbra;
+	Machop* mMachop;
 
 public:
 	void Init()override;

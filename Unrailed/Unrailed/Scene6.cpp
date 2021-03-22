@@ -15,24 +15,22 @@ void Scene6::Init()
 	//인덱스 가져오기 : 현재 x값 나누기 타일사이즈
 	mTrailManager = new TrailManager();
 	mTrailManager->Init();
-	mTrailManager->InsertTrail(0, 6, 1, 3);
-	mTrailManager->InsertTrail(1, 6, 1, 3);
-	mTrailManager->InsertTrail(2, 6, 1, 3);
-	mTrailManager->InsertTrail(3, 6, 1, 0);
-	mTrailManager->InsertTrail(3, 7, 1, 3);
-	mTrailManager->InsertTrail(4, 7, 1, 3);
-	mTrailManager->InsertTrail(5, 7, 1, 3);
-	mTrailManager->InsertTrail(6, 7, 1, 3);
-	mTrailManager->InsertTrail(7, 7, 1, 1);
-	mTrailManager->InsertTrail(7, 6, 1, 1);
-	mTrailManager->InsertTrail(7, 5, 1, 1);
-	mTrailManager->InsertTrail(7, 4, 1, 2);
-	mTrailManager->InsertTrail(6, 4, 1, 2);
-	mTrailManager->InsertTrail(5, 4, 1, 2);
-	mTrailManager->InsertTrail(4, 4, 1, 2);
-	mTrailManager->InsertTrail(3, 4, 1, 2);
-
-
+	mTrailManager->InsertTrail(6, 0, 1, 3);
+	mTrailManager->InsertTrail(6, 1, 1, 3);
+	mTrailManager->InsertTrail(6, 2, 1, 3);
+	mTrailManager->InsertTrail(6, 3, 1, 3);
+	mTrailManager->InsertTrail(6, 4, 1, 1);
+	mTrailManager->InsertTrail(5, 4, 1, 1);
+	mTrailManager->InsertTrail(4, 4, 1, 3);
+	mTrailManager->InsertTrail(4, 5, 1, 3);
+	mTrailManager->InsertTrail(4, 6, 1, 3);
+	mTrailManager->InsertTrail(4, 7, 1, 0);
+	mTrailManager->InsertTrail(5, 7, 1, 0);
+	mTrailManager->InsertTrail(6, 7, 1, 0);
+	mTrailManager->InsertTrail(7, 7, 1, 2);
+	mTrailManager->InsertTrail(7, 6, 1, 2);
+	mTrailManager->InsertTrail(7, 5, 1, 2);
+	mTrailManager->InsertTrail(7, 4, 1, 1);
 
 
 	//Train인잇
@@ -56,6 +54,22 @@ void Scene6::Init()
 	mVoltorbVec[0]->SetY(WINSIZEY / 2 - 50);
 	mVoltorbVec[1]->SetY(WINSIZEY / 2 - 40);
 	mVoltorbVec[2]->SetY(WINSIZEY / 2 - 40);
+
+	//mMachop = new Machop;
+	//mMachop->Init();
+	//mMachop->SetX(60);
+	//mMachop->SetY(WINSIZEY / 2 - 40);
+	//OBJECTMANAGER->AddObject(ObjectLayer::ITEM, mMachop);
+	//vector <vector <Trail*>>* temp = mTrailManager->GetTrailListPtr();
+	//mMachop->SetTrail(temp);
+	//
+	//mAbra = new Abra;
+	//mAbra->Init();
+	//mAbra->SetX(50);
+	//mAbra->SetY(WINSIZEY / 2 - 40);
+	//OBJECTMANAGER->AddObject(ObjectLayer::ITEM, mAbra);
+	//vector <vector <Trail*>>* temp2 = mTrailManager->GetTrailListPtr();
+	//mAbra->SetTrail(temp2);
 }
 
 void Scene6::Release()

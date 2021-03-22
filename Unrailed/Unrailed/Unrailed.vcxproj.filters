@@ -309,9 +309,6 @@
     <ClInclude Include="MapToolReady.h">
       <Filter>MainGame\Scene\MapToolScene</Filter>
     </ClInclude>
-    <ClInclude Include="PathFinder.h">
-      <Filter>Framework\PathFinder</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -472,9 +469,6 @@
     </ClCompile>
     <ClCompile Include="MapToolReady.cpp">
       <Filter>MainGame\Scene\MapToolScene</Filter>
-    </ClCompile>
-    <ClCompile Include="PathFinder.cpp">
-      <Filter>Framework\PathFinder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
