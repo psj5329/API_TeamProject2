@@ -5,6 +5,8 @@
 
 void TrailManager::Init()
 {
+	YTileCount = TileCountY;
+	XTileCount = TileCountX;
 	//빈트레일 인잇
 	for (int y = 0; y < TileCountY; ++y)
 	{
@@ -20,9 +22,27 @@ void TrailManager::Init()
 	}
 }
 
+void TrailManager::Init(int y, int x)
+{
+	YTileCount = y;
+	XTileCount = x;
+	//빈트레일 인잇
+	for (int y = 0; y < YTileCount; ++y)
+	{
+		mTrailList.push_back(vector <Trail*>());
+		for (int x = 0; x < XTileCount; ++x)
+		{
+			//벡터
+			Trail* trail = new Trail();
+			trail->Init(TileSize * x, TileSize * y, 0, 0);
+			mTrailList[y].push_back(trail);
+		}
+	}
+}
+
 void TrailManager::Release()
 {
-	//타일 릴리즈
+	//트레일 릴리즈
 	for (int y = 0; y < mTrailList.size(); ++y)
 	{
 		for (int x = 0; x < mTrailList[y].size(); ++x)
@@ -87,7 +107,7 @@ void TrailManager::TurnTrail(int indexY, int indexX)
 		//아래보는데
 		if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Down)
 		{
-			if (indexY < TileCountY)
+			if (indexY < YTileCount)
 			{
 				//아래에 연결된트레일이있다면
 				if (mTrailList[indexY + 1][indexX]->GetIsConnected())
@@ -137,7 +157,7 @@ void TrailManager::TurnTrail(int indexY, int indexX)
 		//오른쪽보는데
 		if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Right)
 		{
-			if (indexX < TileCountX)
+			if (indexX < XTileCount)
 			{
 				//오른쪽에 연결된트레일이있다면
 				if (mTrailList[indexY][indexX + 1]->GetIsConnected())
@@ -190,10 +210,10 @@ void TrailManager::TurnTrail(int indexY, int indexX)
 //끄트머리의 기차길을 줍기
 TrailType TrailManager::PickUpTrail(int indexY, int indexX)
 {
-	//mTrailList.pop_back();
 	//건드린게 꼬리면
 	if (mTrailList[indexY][indexX]->GetIsTail())
 	{
+		TrailType type = mTrailList[indexY][indexX]->GetTrailType();
 		mTrailList[indexY][indexX]->SetTrailType(0);
 		mTrailList[indexY][indexX]->SetIsActive(false);
 		mTrailList[indexY][indexX]->SetIsTail(false);
@@ -201,7 +221,7 @@ TrailType TrailManager::PickUpTrail(int indexY, int indexX)
 
 		SetTrailTail(mStartY,mStartX);
 
-		return mTrailList[indexY][indexX]->GetTrailType();
+		return type;
 	}
 	else
 	{
@@ -212,11 +232,143 @@ TrailType TrailManager::PickUpTrail(int indexY, int indexX)
 //플레이어가 트레일 설치
 bool TrailManager::PlaceTrail(int indexY, int indexX, int type, int dir)
 {
-	//벽처리해야해
-	if (mTrailList[indexY - 1][indexX]->GetIsConnected() && mTrailList[indexY+1][indexX]->GetIsConnected() &&
-		mTrailList[indexY][indexX -1]->GetIsConnected() && mTrailList[indexY][indexX + 1]->GetIsConnected())
+	int counter = 4;
+	bool up = true;
+	bool down = true;
+	bool left = true;
+	bool right = true;
+
+
+	//어디가 막혀있나 체크
+	//아래 확인하자
+	if (indexY < YTileCount)
+	{
+		if (mTrailList[indexY + 1][indexX]->GetIsConnected())
+		{
+			counter--;
+			down = false;
+		}
+	}
+	//위확인
+	if (indexY > 0) 
+	{
+		if (mTrailList[indexY - 1][indexX]->GetIsConnected())
+		{
+			counter--;
+			up = false;
+		}
+	}
+	//오른쪽확인
+	if (indexX  < XTileCount)
+	{
+		if (mTrailList[indexY][indexX + 1]->GetIsConnected())
+		{
+			counter--;
+			right = false;
+		}
+	}
+	//왼쪽확인
+	if (indexX > 0)
+	{
+		if (mTrailList[indexY][indexX - 1]->GetIsConnected())
+		{
+			counter--;
+			left = false;
+		}
+	}
+	if (!counter)
 	{
 		return false;
+	}
+
+	//방향정하기
+	//아래로넣고싶어
+	if (dir == 0)
+	{
+		//아래막혔으면
+		if (!down)
+		{
+			//위
+			dir++;
+			//위막혔으면
+			if (!up)
+			{
+				//왼쪽
+				dir++;
+				//왼막혔으면
+				if (!left)
+				{
+					//오
+					dir++;
+				}
+			}
+		}
+	}
+	//위로넣고싶어
+	else if (dir == 1)
+	{
+		//위막혔으면
+		if (!up)
+		{
+			//왼
+			dir++;
+			//왼막혔으면
+			if (!left)
+			{
+				//오
+				dir++;
+				//오막혔으면
+				if (!right)
+				{
+					//아래
+					dir = 0;
+				}
+			}
+		}
+	}
+	//왼쪽으로넣고싶어
+	else if (dir == 2)
+	{
+		//왼막혔으면
+		if (!left)
+		{
+			//오
+			dir++;
+			//오막혔으면
+			if (!right)
+			{
+				//아래
+				dir = 0;
+				//아래막혔으면
+				if (!down)
+				{
+					//위
+					dir++;
+				}
+			}
+		}
+	}
+	//오른쪽으로 넣고싶어
+	else if (dir == 3)
+	{
+		//오막혔으면
+		if (!right)
+		{
+			//아래
+			dir = 0;
+			//아래막혔으면
+			if (!down)
+			{
+				//위
+				dir++;
+				//위막혔으면
+				if (!up)
+				{
+					//왼쪽
+					dir++;
+				}
+			}
+		}
 	}
 
 	mTrailList[indexY][indexX]->SetTrailType(type);
@@ -237,7 +389,7 @@ void TrailManager::SetTrailTail(int indexY, int indexX)
 		{
 			////////////아래보고있고
 		case TrailDirection::Down:
-			if (indexY < TileCountY)
+			if (indexY < YTileCount)
 			{
 				//아래칸에 트레일이 없거나 이미 연결된 트레일이면 
 				if (mTrailList[indexY + 1][indexX]->GetTrailType() == TrailType::None || !mTrailList[indexY + 1][indexX]->GetIsConnected())
@@ -328,7 +480,7 @@ void TrailManager::SetTrailTail(int indexY, int indexX)
 			break;
 			///////////오른쪽보고있고
 		case TrailDirection::Right:
-			if (indexX < TileCountX)
+			if (indexX < XTileCount)
 			{
 				//오른칸에 트레일이 없거나 이미 연결된 트레일이면 
 				if (mTrailList[indexY][indexX + 1]->GetTrailType() == TrailType::None || !mTrailList[indexY][indexX + 1]->GetIsConnected())

@@ -19,6 +19,7 @@ void TileMap::Init(int tileX, int tileY, int tileSize)
 			Tile* tempTile = new Tile
 			(
 				nullptr,
+				nullptr,
 				tileSize * x,
 				tileSize * y,
 				tileSize,
@@ -262,6 +263,7 @@ void TileMap::LoadMap(int i)
 				mTileList[y][x]->SetFrameIndexX(frameX);
 				mTileList[y][x]->SetFrameIndexY(frameY);
 				mTileList[y][x]->SetTileType((TileType)type);
+				mTileList[y][x]->SetCoverImage();
 
 				if (objectKey == "none")
 					mMapObjectList[y][x]->SetImage(nullptr);
@@ -290,6 +292,7 @@ void TileMap::InitEmptyMap()
 			//บคลอ
 			Tile* tempTile = new Tile
 			(
+				nullptr,
 				nullptr,
 				TileSize * x,
 				TileSize * y,

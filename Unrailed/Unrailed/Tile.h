@@ -53,6 +53,7 @@ struct TypePallete
 class Tile
 {
 	class Image* mImage;
+	class Image* mCoveImage;
 	float mX;
 	float mY;
 	float mSizeX;
@@ -60,12 +61,14 @@ class Tile
 	RECT mRect;
 	int mFrameIndexX;
 	int mFrameIndexY;
+	float mAlpha;
+	float mAlphaRate;
 
 	TileType mTileType;
 
 public:
 
-	Tile(class Image* image, float x, float y, float sizeX, float sizeY,
+	Tile(class Image* image, class Image* coverImage, float x, float y, float sizeX, float sizeY,
 		int frameIndexX, int frameIndexY, int type);
 	void Render(HDC hdc);
 
@@ -89,5 +92,8 @@ public:
 	void SetFrameIndexX(int indexX) { mFrameIndexX = indexX; }
 	void SetFrameIndexY(int indexY) { mFrameIndexY = indexY; }
 	void SetTileType(TileType tiletype) { mTileType = tiletype; }
+	void SetCoverImage();
+
+private:
 };
 

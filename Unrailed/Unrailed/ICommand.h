@@ -30,7 +30,6 @@ public:
 		mTargetTile = tile;
 		mExecutePalleteData = executeData;
 
-
 		if (tile->GetImage() != nullptr)
 			mSaveImageKey = tile->GetImage()->GetKeyName();
 		mSaveFrameX = tile->GetFrameIndexX();

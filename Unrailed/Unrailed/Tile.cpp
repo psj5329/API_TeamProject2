@@ -3,9 +3,10 @@
 #include "Image.h"
 #include "Camera.h"
 
-Tile::Tile(Image * image, float x, float y, float sizeX, float sizeY, int frameIndexX, int frameIndexY,int type)
+Tile::Tile(Image* image, Image* coverImage, float x, float y, float sizeX, float sizeY, int frameIndexX, int frameIndexY, int type)
 {
 	mImage = image;
+	mCoveImage = coverImage;
 	mX = x;
 	mY = y;
 	mSizeX = sizeX;
@@ -14,6 +15,8 @@ Tile::Tile(Image * image, float x, float y, float sizeX, float sizeY, int frameI
 	mFrameIndexX = frameIndexX;
 	mFrameIndexY = frameIndexY;
 	mTileType = (TileType)type;
+	mAlpha = 0.1;
+	mAlphaRate = 0.5;
 }
 
 void Tile::Render(HDC hdc)
@@ -22,6 +25,19 @@ void Tile::Render(HDC hdc)
 	if (mImage != nullptr)
 		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
 		//mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+
+	if (mCoveImage != nullptr)
+	{
+
+		
+		CAMERAMANAGER->GetMainCamera()->AlphaScaleFrameRender(hdc, mCoveImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY,mAlpha);
+
+		mAlpha += mAlphaRate * TIME->DeltaTime();
+		if (mAlpha > 1)
+			mAlpha = 0;
+		
+	}
+
 
 	switch (mTileType)
 	{
@@ -46,5 +62,22 @@ void Tile::Render(HDC hdc)
 		break;
 	default:
 		break;
+	}
+}
+
+
+void Tile::SetCoverImage()
+{
+	if (wcscmp(mImage->GetKeyName().c_str(), L"MagmaCavern") == 0)
+	{
+		mCoveImage = IMAGEMANAGER->FindImage(L"MagmaCavernCover");
+	}
+	else if (wcscmp(mImage->GetKeyName().c_str(), L"LushPrairie") == 0)
+	{
+		mCoveImage = IMAGEMANAGER->FindImage(L"LushPrairieCover");
+	}
+	else
+	{
+		mCoveImage = nullptr;
 	}
 }
