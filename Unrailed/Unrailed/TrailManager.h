@@ -23,10 +23,10 @@ public:
 
 	void SetStartIndex(int y, int x) { mStartX = x; mStartY = y; }
 
-	void InsertTrail(int indexY, int indexX, int type, int dir);	//ë§µì—ì„œ íŠ¸ë ˆì¼ì¸ì‡
-	void TurnTrail(int indexY, int indexX);		//í”Œë ˆì´ì–´ê°€ íŠ¸ë ˆì¼ ëŒë¦¬ê¸°
-	TrailType PickUpTrail(int indexY, int indexX);			//í‹€ë ˆì´ì–´ê°€ íŠ¸ë ˆì¼ì¤ê¸°
-	bool PlaceTrail(int indexY, int indexX, int type, int dir);		//í”Œë ˆì´ì–´ê°€ íŠ¸ë ˆì¼ì„¤ì¹˜
+	void InsertTrail(int indexY, int indexX, int type, int dir);	//¸Ê¿¡¼­ Æ®·¹ÀÏÀÎÀÕ
+	void TurnTrail(int indexY, int indexX);		//ÇÃ·¹ÀÌ¾î°¡ Æ®·¹ÀÏ µ¹¸®±â
+	TrailType PickUpTrail(int indexY, int indexX);			//Æ²·¹ÀÌ¾î°¡ Æ®·¹ÀÏÁİ±â
+	bool PlaceTrail(int indexY, int indexX, int type, int dir);		//ÇÃ·¹ÀÌ¾î°¡ Æ®·¹ÀÏ¼³Ä¡
 
 	vector<vector<Trail*>>* GetTrailListPtr() { return &mTrailList; }
 

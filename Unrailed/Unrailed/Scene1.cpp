@@ -44,7 +44,7 @@ void Scene1::Init()
 
 void Scene1::Release()
 {
-	OBJECTMANAGER->Release();
+	//OBJECTMANAGER->Release();
 }
 
 void Scene1::Update()
