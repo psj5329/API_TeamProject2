@@ -27,7 +27,6 @@ protected:
 
 	State mState;
 	Direction mDirection;
-	TrailDirection mTDirection;
 	float mSpeed;
 	float mSpeedX;
 	float mSpeedY;
@@ -37,7 +36,6 @@ protected:
 	int mLevel;
 	bool mStop;
 	bool mIsExplode;
-	bool mReachTile;
 
 	class Image* mCurrentImage;
 	class Image* mImage;
@@ -58,7 +56,7 @@ public:
 
 	void SetTrail(vector <vector <Trail*>>* trail) { mTrailList = *trail; }
 	void SetTarget();
-	bool Check();
+	bool CheckTile();
 	void SetSpeed();
 };
 

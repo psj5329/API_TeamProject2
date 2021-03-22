@@ -18,10 +18,10 @@ public:
 	void Render(HDC hdc)override;
 
 	void ReadyAnimation()override;
-
 	void SetAnimation()override;
-	void EndExplode()override;
 	void SetImage(int type);
+
+	void EndExplode()override;
 };
 
 

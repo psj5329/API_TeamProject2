@@ -442,8 +442,8 @@ GameObject * CollisionManager::ItemCollision(RECT* rc)
 	for (; iter != vecItem.end();)
 	{
 		RECT temp;
-
-		if (IntersectRect(&temp, rc, &(*iter)->GetRect()))
+		RECT ItemRc = (*iter)->GetRect();
+		if (IntersectRect(&temp, rc, &ItemRc))
 		{
 			return (*iter);
 		}

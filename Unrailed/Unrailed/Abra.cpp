@@ -5,35 +5,32 @@
 #include "Tile.h"
 #include "Trail.h"
 #include "Camera.h"
+#include "Ore.h"
 
 void Abra::Init()
 {
-	//IMAGEMANAGER->LoadFromFile(L"Abra", Resources(L"/Train/abra"), 96, 200, 4, 8, true);
-	//IMAGEMANAGER->LoadFromFile(L"Alakazam", Resources(L"/Train/alakazam"), 124, 232, 4, 8, true);
-	//IMAGEMANAGER->LoadFromFile(L"Kadabra", Resources(L"/Train/kadabra"), 120, 256, 4, 8, true);
-	//IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Abra");
 
 	ReadyAnimation();
 
 	//부모 클래스 (GameObject) 변수
-	mX = WINSIZEX / 2 - 180;
+	mX = WINSIZEX / 2 - 135;
 	mY = WINSIZEY / 2;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Machop 변수
+	//Abra 변수
 	mDirection = Direction::Right;
-	mState = State::Sleep;
+	mState = State::Move;
 	mSpeed = 100.f;
 	mTimer = 0;
 	mLevel = 1;
-	mReachTile = false;
 
 	mCurrentImage = mImage;
-	mCurrentAnimation = mRightSleep;
+	mCurrentAnimation = mRightMove;
+	mCurrentAnimation->Play();
 }
 
 void Abra::Release()
@@ -71,45 +68,23 @@ void Abra::Update()
 	//	SetAnimation();
 	//}
 
-
-	if (mTDirection == TrailDirection::Down)
+	if (mState == State::Move)
 	{
-		if (mState == State::Move)
+		if (mDirection == Direction::Down)
 		{
-			if (mDirection == Direction::Down)
-			{
-				SetAnimation();
-			}
+			SetAnimation();
 		}
-	}
-	if (mTDirection == TrailDirection::Up)
-	{
-		if (mState == State::Move)
+		else if (mDirection == Direction::Up)
 		{
-			if (mDirection == Direction::Up)
-			{
-				SetAnimation();
-			}
+			SetAnimation();
 		}
-	}
-	if (mTDirection == TrailDirection::Left)
-	{
-		if (mState == State::Move)
+		else if (mDirection == Direction::Left)
 		{
-			if (mDirection == Direction::Left)
-			{
-				SetAnimation();
-			}
+			SetAnimation();
 		}
-	}
-	if (mTDirection == TrailDirection::Right)
-	{
-		if (mState == State::Move)
+		else if (mDirection == Direction::Right)
 		{
-			if (mDirection == Direction::Right)
-			{
-				SetAnimation();
-			}
+			SetAnimation();
 		}
 	}
 
@@ -118,24 +93,16 @@ void Abra::Update()
 	{
 		mTimer += Time::GetInstance()->DeltaTime();
 	}
-	if (mReachTile == false)
+
+	SetSpeed();
+	if (mState == State::Move)
 	{
-		if (CheckTrailDirection() == Direction::Down)
-		{
-			Move(indexY + 1, indexX, Direction::Down);
-		}
-		if (CheckTrailDirection() == Direction::Up)
-		{
-			Move(indexY - 1, indexX, Direction::Up);
-		}
-		if (CheckTrailDirection() == Direction::Left)
-		{
-			Move(indexY, indexX - 1, Direction::Left);
-		}
-		if (CheckTrailDirection() == Direction::Right)
-		{
-			Move(indexY, indexX + 1, Direction::Right);
-		}
+		mX += mSpeedX * Time::GetInstance()->DeltaTime() / 2;
+		mY += mSpeedY * Time::GetInstance()->DeltaTime() / 2;
+	}
+	if (CheckTile() == true)
+	{
+		SetTarget();
 	}
 
 	//진화
@@ -145,10 +112,10 @@ void Abra::Update()
 		mImage = IMAGEMANAGER->FindImage(L"Abra");
 		break;
 	case 2:
-		mImage = IMAGEMANAGER->FindImage(L"Alakazam");
+		mImage = IMAGEMANAGER->FindImage(L"Kadabra");
 		break;
 	case 3:
-		mImage = IMAGEMANAGER->FindImage(L"Kadabra");
+		mImage = IMAGEMANAGER->FindImage(L"Alakazam");
 		break;
 	}
 	if (INPUT->GetKeyDown('A'))
@@ -164,13 +131,12 @@ void Abra::Update()
 		mLevel = 3;
 	}
 
-	//폭발
-	if (mX >= WINSIZEX - 400 && mIsExplode == false)
-	{
-		mIsExplode = true;
-		mState = State::Explode;
-		SetAnimation();
-	}
+	//if (mX >= WINSIZEX - 400 && mIsExplode == false)
+	//{
+	//	mIsExplode = true;
+	//	mState = State::Explode;
+	//	SetAnimation();
+	//}
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -225,46 +191,70 @@ void Abra::ReadyAnimation()
 
 void Abra::SetAnimation()
 {
-	mCurrentAnimation->Stop();
 	if (mState == State::Move)
 	{
 		if (mDirection == Direction::Down)
 		{
-			mCurrentAnimation = mDownMove;
+			if (mCurrentAnimation != mDownMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mDownMove;
+				mCurrentAnimation->Play();
+			}
 		}
 		if (mDirection == Direction::Up)
 		{
-			mCurrentAnimation = mUpMove;
+			if (mCurrentAnimation != mUpMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mUpMove;
+				mCurrentAnimation->Play();
+			}
 		}
 		if (mDirection == Direction::Left)
 		{
-			mCurrentAnimation = mLeftMove;
+
+			if (mCurrentAnimation != mLeftMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLeftMove;
+				mCurrentAnimation->Play();
+			}
 		}
 		if (mDirection == Direction::Right)
 		{
-			mCurrentAnimation = mRightMove;
+			if (mCurrentAnimation != mRightMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRightMove;
+				mCurrentAnimation->Play();
+
+			}
 		}
-		mCurrentImage = mImage;
 	}
+
 	if (mState == State::Sleep)
 	{
-		if (mDirection == Direction::Left)
-		{
-			mCurrentAnimation = mLeftSleep;
-		}
 		if (mDirection == Direction::Right)
 		{
+			mCurrentAnimation->Stop();
 			mCurrentAnimation = mRightSleep;
+			mCurrentAnimation->Play();
 		}
-		mCurrentImage = mImage;
+		if (mDirection == Direction::Left)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mLeftSleep;
+			mCurrentAnimation->Play();
+		}
 	}
 	if (mState == State::Explode)
 	{
+		mCurrentAnimation->Stop();
 		mCurrentAnimation = mExplode;
+		mCurrentAnimation->Play();
 		mCurrentImage = mExplodeImage;
 	}
-
-	mCurrentAnimation->Play();
 }
 
 void Abra::EndExplode()
@@ -272,65 +262,5 @@ void Abra::EndExplode()
 	if (mState == State::Explode)
 	{
 		SetIsDestroy(true);
-	}
-}
-
-Direction Abra::CheckTrailDirection()
-{
-	int indexX = mX / TileSize;
-	int indexY = mY / TileSize;
-
-	Direction dir = (Direction)mTrailList[indexY][indexX]->GetDirection();
-	return dir;
-}
-
-void Abra::Move(int indexY, int indexX, Direction dir)
-{
-	float centerX = (mTrailList[indexY][indexX]->GetRect().left + mTrailList[indexY][indexX]->GetRect().right) / 2;
-	float centerY = (mTrailList[indexY][indexX]->GetRect().top + mTrailList[indexY][indexX]->GetRect().bottom) / 2;
-
-	if (dir == Direction::Down)
-	{
-		if (mY <= centerY)
-		{
-			mY += mSpeed * Time::GetInstance()->DeltaTime() / 2;
-		}
-		else
-		{
-			mReachTile = true;
-		}
-	}
-	if (dir == Direction::Up)
-	{
-		if (mY >= centerY)
-		{
-			mY -= mSpeed * Time::GetInstance()->DeltaTime() / 2;
-		}
-		else
-		{
-			mReachTile = true;
-		}
-	}
-	if (dir == Direction::Left)
-	{
-		if (mX >= centerX)
-		{
-			mX -= mSpeed * Time::GetInstance()->DeltaTime() / 2;
-		}
-		else
-		{
-			mReachTile = true;
-		}
-	}
-	if (dir == Direction::Right)
-	{
-		if (mX <= centerX)
-		{
-			mX += mSpeed * Time::GetInstance()->DeltaTime() / 2;
-		}
-		else
-		{
-			mReachTile = true;
-		}
 	}
 }

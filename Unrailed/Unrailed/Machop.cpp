@@ -5,13 +5,10 @@
 #include "Tile.h"
 #include "Trail.h"
 #include "Camera.h"
+#include "Ore.h"
 
 void Machop::Init()
 {
-	//IMAGEMANAGER->LoadFromFile(L"Machop", Resources(L"/Train/machop"), 92, 260, 4, 10, true);
-	//IMAGEMANAGER->LoadFromFile(L"Machoke", Resources(L"/Train/machoke"), 128, 256, 4, 8, true);
-	//IMAGEMANAGER->LoadFromFile(L"Machamp", Resources(L"/Train/machamp"), 124, 320, 4, 10, true);
-	//IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Machop");
 
@@ -26,14 +23,17 @@ void Machop::Init()
 
 	//Machop 변수
 	mDirection = Direction::Right;
-	mState = State::Sleep;
+	mState = State::Move;
 	mSpeed = 100.f;
 	mTimer = 0;
 	mLevel = 1;
-	mReachTile = false;
+	mGreenOreCount = 0;
+	mBlueOreCount = 0;
+	mRedOreCount = 0;
 
 	mCurrentImage = mImage;
-	mCurrentAnimation = mRightSleep;
+	mCurrentAnimation = mRightMove;
+	mCurrentAnimation->Play();
 }
 
 void Machop::Release()
@@ -56,6 +56,8 @@ void Machop::Update()
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
+	TakeOre();
+
 	//상태정하기
 	//if (mTimer == 0)
 	//{
@@ -71,45 +73,23 @@ void Machop::Update()
 	//	SetAnimation();
 	//}
 
-
-	if (mTDirection == TrailDirection::Down)
+	if (mState == State::Move)
 	{
-		if (mState == State::Move)
+		if (mDirection == Direction::Down)
 		{
-			if (mDirection == Direction::Down)
-			{
-				SetAnimation();
-			}
+			SetAnimation();
 		}
-	}
-	if (mTDirection == TrailDirection::Up)
-	{
-		if (mState == State::Move)
+		else if (mDirection == Direction::Up)
 		{
-			if (mDirection == Direction::Up)
-			{
-				SetAnimation();
-			}
+			SetAnimation();
 		}
-	}
-	if (mTDirection == TrailDirection::Left)
-	{
-		if (mState == State::Move)
+		else if (mDirection == Direction::Left)
 		{
-			if (mDirection == Direction::Left)
-			{
-				SetAnimation();
-			}
+			SetAnimation();
 		}
-	}
-	if (mTDirection == TrailDirection::Right)
-	{
-		if (mState == State::Move)
+		else if (mDirection == Direction::Right)
 		{
-			if (mDirection == Direction::Right)
-			{
-				SetAnimation();
-			}
+			SetAnimation();
 		}
 	}
 
@@ -118,24 +98,16 @@ void Machop::Update()
 	{
 		mTimer += Time::GetInstance()->DeltaTime();
 	}
-	if (mReachTile == false)
+
+	SetSpeed();
+	if (mState == State::Move || mState == State::Intercept)
 	{
-		if (CheckTrailDirection() == Direction::Down)
-		{
-			Move(indexY + 1, indexX, Direction::Down);
-		}
-		if (CheckTrailDirection() == Direction::Up)
-		{
-			Move(indexY - 1, indexX, Direction::Up);
-		}
-		if (CheckTrailDirection() == Direction::Left)
-		{
-			Move(indexY, indexX - 1, Direction::Left);
-		}
-		if (CheckTrailDirection() == Direction::Right)
-		{
-			Move(indexY, indexX + 1, Direction::Right);
-		}
+		mX += mSpeedX * Time::GetInstance()->DeltaTime() / 2;
+		mY += mSpeedY * Time::GetInstance()->DeltaTime() / 2;
+	}
+	if (CheckTile() == true)
+	{
+		SetTarget();
 	}
 
 	//진화
@@ -164,12 +136,12 @@ void Machop::Update()
 		mLevel = 3;
 	}
 
-	if (mX >= WINSIZEX - 400 && mIsExplode == false)
-	{
-		mIsExplode = true;
-		mState = State::Explode;
-		SetAnimation();
-	}
+	//if (mX >= WINSIZEX - 400 && mIsExplode == false)
+	//{
+	//	mIsExplode = true;
+	//	mState = State::Explode;
+	//	SetAnimation();
+	//}
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -181,6 +153,15 @@ void Machop::Render(HDC hdc)
 	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+
+	wstring strGreen = L"그린:" + to_wstring(mGreenOreCount);
+	TextOut(hdc, mX - 20, mY - 40, strGreen.c_str(), strGreen.length());
+
+	wstring strBlue = L"블루:" + to_wstring(mBlueOreCount);
+	TextOut(hdc, mX - 20, mY - 55, strBlue.c_str(), strBlue.length());
+
+	wstring strRed = L"레드:" + to_wstring(mRedOreCount);
+	TextOut(hdc, mX - 20, mY - 70, strRed.c_str(), strRed.length());
 }
 
 void Machop::ReadyAnimation()
@@ -220,50 +201,192 @@ void Machop::ReadyAnimation()
 	mExplode->SetIsLoop(false);
 	mExplode->SetFrameUpdateTime(0.1f);
 	mExplode->SetCallbackFunc(bind(&Train::EndExplode, this));
+
+	mDownIntercept = new Animation();
+	mDownIntercept->InitFrameByStartEnd(0, 6, 2, 6, false);
+	mDownIntercept->SetIsLoop(false);
+	mDownIntercept->SetFrameUpdateTime(0.15f);
+	mDownIntercept->SetCallbackFunc(bind(&Machop::EndIntercept, this));
+
+	mUpIntercept = new Animation();
+	mUpIntercept->InitFrameByStartEnd(0, 7, 2, 7, false);
+	mUpIntercept->SetIsLoop(false);
+	mUpIntercept->SetFrameUpdateTime(0.15f);
+	mUpIntercept->SetCallbackFunc(bind(&Machop::EndIntercept, this));
+
+	mLeftIntercept = new Animation();
+	mLeftIntercept->InitFrameByStartEnd(0, 8, 2, 8, false);
+	mLeftIntercept->SetIsLoop(false);
+	mLeftIntercept->SetFrameUpdateTime(0.15f);
+	mLeftIntercept->SetCallbackFunc(bind(&Machop::EndIntercept, this));
+
+	mRightIntercept = new Animation();
+	mRightIntercept->InitFrameByStartEnd(0, 9, 2, 9, false);
+	mRightIntercept->SetIsLoop(false);
+	mRightIntercept->SetFrameUpdateTime(0.15f);
+	mRightIntercept->SetCallbackFunc(bind(&Machop::EndIntercept, this));
 }
 
 void Machop::SetAnimation()
 {
-	mCurrentAnimation->Stop();
 	if (mState == State::Move)
 	{
 		if (mDirection == Direction::Down)
 		{
-			mCurrentAnimation = mDownMove;
+			if (mCurrentAnimation != mDownMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mDownMove;
+				mCurrentAnimation->Play();
+			}
 		}
 		if (mDirection == Direction::Up)
 		{
-			mCurrentAnimation = mUpMove;
+			if (mCurrentAnimation != mUpMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mUpMove;
+				mCurrentAnimation->Play();
+			}
 		}
 		if (mDirection == Direction::Left)
 		{
-			mCurrentAnimation = mLeftMove;
+			if (mCurrentAnimation != mLeftMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLeftMove;
+				mCurrentAnimation->Play();
+			}
 		}
 		if (mDirection == Direction::Right)
 		{
-			mCurrentAnimation = mRightMove;
+			if (mCurrentAnimation != mRightMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRightMove;
+				mCurrentAnimation->Play();
+			}
 		}
-		mCurrentImage = mImage;
 	}
+
+	if (mState == State::Intercept)
+	{
+		if (mDirection == Direction::Down)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mDownIntercept;
+			mCurrentAnimation->Play();
+		}
+		if (mDirection == Direction::Up)
+		{
+
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mUpIntercept;
+			mCurrentAnimation->Play();
+		}
+		if (mDirection == Direction::Left)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mLeftIntercept;
+			mCurrentAnimation->Play();
+
+		}
+		if (mDirection == Direction::Right)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mRightIntercept;
+			mCurrentAnimation->Play();
+		}
+	}
+
 	if (mState == State::Sleep)
 	{
-		if (mDirection == Direction::Left)
-		{
-			mCurrentAnimation = mLeftSleep;
-		}
 		if (mDirection == Direction::Right)
 		{
+			mCurrentAnimation->Stop();
 			mCurrentAnimation = mRightSleep;
+			mCurrentAnimation->Play();
 		}
-		mCurrentImage = mImage;
+		if (mDirection == Direction::Left)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mLeftSleep;
+			mCurrentAnimation->Play();
+		}
 	}
 	if (mState == State::Explode)
 	{
+		mCurrentAnimation->Stop();
 		mCurrentAnimation = mExplode;
+		mCurrentAnimation->Play();
 		mCurrentImage = mExplodeImage;
 	}
+}
 
-	mCurrentAnimation->Play();
+void Machop::TakeOre()
+{
+	Ore* ore = new Ore;
+	
+	if (INPUT->GetKeyDown('Z'))
+	{
+		mGreenOreCount++;
+		mOreList.push_back(ore);
+
+		ore->SetOreType(1);//그린
+		ore->GetOreType();
+
+		mState = State::Intercept;
+		SetAnimation();
+	}
+	if (INPUT->GetKeyDown('X'))
+	{
+		mBlueOreCount++;
+		mOreList.push_back(ore);
+
+		ore->SetOreType(2);//블루
+		ore->GetOreType();
+
+		mState = State::Intercept;
+		SetAnimation();
+	}
+	if (INPUT->GetKeyDown('C'))
+	{
+		mRedOreCount++;
+		mOreList.push_back(ore);
+
+		ore->SetOreType(3);//레드
+		ore->GetOreType();
+
+		mState = State::Intercept;
+		SetAnimation();
+	}
+}
+
+void Machop::EndIntercept()
+{
+	if (mState == State::Intercept)
+	{
+		if (mDirection == Direction::Down)
+		{
+			mState = State::Move;
+			SetAnimation();
+		}
+		if (mDirection == Direction::Up)
+		{
+			mState = State::Move;
+			SetAnimation();
+		}
+		if (mDirection == Direction::Left)
+		{
+			mState = State::Move;
+			SetAnimation();
+		}
+		if (mDirection == Direction::Right)
+		{
+			mState = State::Move;
+			SetAnimation();
+		}
+	}
 }
 
 void Machop::EndExplode()
@@ -271,65 +394,5 @@ void Machop::EndExplode()
 	if (mState == State::Explode)
 	{
 		SetIsDestroy(true);
-	}
-}
-
-Direction Machop::CheckTrailDirection()
-{
-	int indexX = mX / TileSize;
-	int indexY = mY / TileSize;
-
-	Direction dir = (Direction)mTrailList[indexY][indexX]->GetDirection();
-	return dir;
-}
-
-void Machop::Move(int indexY, int indexX, Direction dir)
-{
-	float centerX = (mTrailList[indexY][indexX]->GetRect().left + mTrailList[indexY][indexX]->GetRect().right) / 2;
-	float centerY = (mTrailList[indexY][indexX]->GetRect().top + mTrailList[indexY][indexX]->GetRect().bottom) / 2;
-
-	if (dir == Direction::Down)
-	{
-		if (mY <= centerY)
-		{
-			mY += mSpeed * Time::GetInstance()->DeltaTime() / 2;
-		}
-		else
-		{
-			mReachTile = true;
-		}
-	}
-	if (dir == Direction::Up)
-	{
-		if (mY >= centerY)
-		{
-			mY -= mSpeed * Time::GetInstance()->DeltaTime() / 2;
-		}
-		else
-		{
-			mReachTile = true;
-		}
-	}
-	if (dir == Direction::Left)
-	{
-		if (mX >= centerX)
-		{
-			mX -= mSpeed * Time::GetInstance()->DeltaTime() / 2;
-		}
-		else
-		{
-			mReachTile = true;
-		}
-	}
-	if (dir == Direction::Right)
-	{
-		if (mX <= centerX)
-		{
-			mX += mSpeed * Time::GetInstance()->DeltaTime() / 2;
-		}
-		else
-		{
-			mReachTile = true;
-		}
 	}
 }

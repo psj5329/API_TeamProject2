@@ -31,7 +31,7 @@ void Train::SetTarget()
 	}
 }
 
-bool Train::Check()
+bool Train::CheckTile()
 {
 	float centerX = (mTrailList[mTargetY][mTargetX]->GetRect().left + mTrailList[mTargetY][mTargetX]->GetRect().right) / 2;
 	float centerY = (mTrailList[mTargetY][mTargetX]->GetRect().top + mTrailList[mTargetY][mTargetX]->GetRect().bottom) / 2;

@@ -38,13 +38,13 @@ void Scene6::Init()
 	{
 		Voltorb* temp = new Voltorb;
 		temp->Init();
-		temp->SetX(70 - 50 * i);
+		temp->SetX(120 - 50 * i);
 		mVoltorbVec.push_back(temp);
 		
 		vector <vector <Trail*>>* temp2 = mTrailManager->GetTrailListPtr();
 		mVoltorbVec[i]->SetTrail(temp2);
 
-		OBJECTMANAGER->AddObject(ObjectLayer::ITEM, mVoltorbVec[i]);
+		OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, mVoltorbVec[i]);
 	}
 
 	mVoltorbVec[0]->SetImage(0);
@@ -55,21 +55,21 @@ void Scene6::Init()
 	mVoltorbVec[1]->SetY(WINSIZEY / 2 - 40);
 	mVoltorbVec[2]->SetY(WINSIZEY / 2 - 40);
 
-	//mMachop = new Machop;
-	//mMachop->Init();
-	//mMachop->SetX(60);
-	//mMachop->SetY(WINSIZEY / 2 - 40);
-	//OBJECTMANAGER->AddObject(ObjectLayer::ITEM, mMachop);
-	//vector <vector <Trail*>>* temp = mTrailManager->GetTrailListPtr();
-	//mMachop->SetTrail(temp);
-	//
-	//mAbra = new Abra;
-	//mAbra->Init();
-	//mAbra->SetX(50);
-	//mAbra->SetY(WINSIZEY / 2 - 40);
-	//OBJECTMANAGER->AddObject(ObjectLayer::ITEM, mAbra);
-	//vector <vector <Trail*>>* temp2 = mTrailManager->GetTrailListPtr();
-	//mAbra->SetTrail(temp2);
+	mMachop = new Machop;
+	mMachop->Init();
+	mMachop->SetX(-35);
+	mMachop->SetY(WINSIZEY / 2 - 40);
+	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, mMachop);
+	vector <vector <Trail*>>* temp = mTrailManager->GetTrailListPtr();
+	mMachop->SetTrail(temp);
+	
+	mAbra = new Abra;
+	mAbra->Init();
+	mAbra->SetX(-85);
+	mAbra->SetY(WINSIZEY / 2 - 40);
+	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, mAbra);
+	vector <vector <Trail*>>* temp2 = mTrailManager->GetTrailListPtr();
+	mAbra->SetTrail(temp2);
 }
 
 void Scene6::Release()

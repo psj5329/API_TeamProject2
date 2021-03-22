@@ -8,9 +8,6 @@
 
 void Voltorb::Init()
 {
-	//IMAGEMANAGER->LoadFromFile(L"Voltorb", Resources(L"/Train/voltorb"), 96, 210, 3, 7, true);
-	//IMAGEMANAGER->LoadFromFile(L"Electrode", Resources(L"/Train/electrode"), 105, 224, 3, 7, true);
-	//IMAGEMANAGER->LoadFromFile(L"Explode", Resources(L"/Train/explode"), 630, 90, 7, 1, true);
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Voltorb");
 
@@ -28,7 +25,6 @@ void Voltorb::Init()
 	mState = State::Move;
 	mSpeed = 100.f;
 	mTimer = 0;
-	mReachTile = false;
 
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
@@ -101,7 +97,7 @@ void Voltorb::Update()
 		mX += mSpeedX * Time::GetInstance()->DeltaTime() / 2;
 		mY += mSpeedY * Time::GetInstance()->DeltaTime() / 2;
 	}
-	if (Check() == true)
+	if (CheckTile() == true)
 	{
 		SetTarget();
 	}
@@ -162,43 +158,45 @@ void Voltorb::ReadyAnimation()
 
 void Voltorb::SetAnimation()
 {
+	if (mState == State::Move)
+	{
+		if (mDirection == Direction::Down)
+		{
+			if (mCurrentAnimation != mDownMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mDownMove;
+				mCurrentAnimation->Play();
+			}
+		}
+		if (mDirection == Direction::Up)
+		{
+			if (mCurrentAnimation != mUpMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mUpMove;
+				mCurrentAnimation->Play();
+			}
+		}
+		if (mDirection == Direction::Left)
+		{
 
-	if (mDirection == Direction::Down)
-	{
-		if (mCurrentAnimation != mDownMove)
-		{
-			mCurrentAnimation->Stop();
-			mCurrentAnimation = mDownMove;
-			mCurrentAnimation->Play();
+			if (mCurrentAnimation != mLeftMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLeftMove;
+				mCurrentAnimation->Play();
+			}
 		}
-	}
-	if (mDirection == Direction::Up)
-	{
-		if (mCurrentAnimation != mUpMove)
+		if (mDirection == Direction::Right)
 		{
-			mCurrentAnimation->Stop();
-			mCurrentAnimation = mUpMove;
-			mCurrentAnimation->Play();
-		}
-	}
-	if (mDirection == Direction::Left)
-	{
-		
-		if (mCurrentAnimation != mLeftMove)
-		{
-			mCurrentAnimation->Stop();
-			mCurrentAnimation = mLeftMove;
-			mCurrentAnimation->Play();
-		}
-	}
-	if (mDirection == Direction::Right)
-	{
-		if (mCurrentAnimation != mRightMove)
-		{
-			mCurrentAnimation->Stop();
-			mCurrentAnimation = mRightMove;
-			mCurrentAnimation->Play();
+			if (mCurrentAnimation != mRightMove)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRightMove;
+				mCurrentAnimation->Play();
 
+			}
 		}
 	}
 
