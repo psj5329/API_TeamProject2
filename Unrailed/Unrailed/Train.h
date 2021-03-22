@@ -27,7 +27,12 @@ protected:
 
 	State mState;
 	Direction mDirection;
+	TrailDirection mTDirection;
 	float mSpeed;
+	float mSpeedX;
+	float mSpeedY;
+	int mTargetX;
+	int mTargetY;
 	float mTimer;
 	int mLevel;
 	bool mStop;
@@ -52,5 +57,8 @@ public:
 	virtual void EndExplode() = 0;
 
 	void SetTrail(vector <vector <Trail*>>* trail) { mTrailList = *trail; }
+	void SetTarget();
+	bool Check();
+	void SetSpeed();
 };
 

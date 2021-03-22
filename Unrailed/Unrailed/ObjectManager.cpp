@@ -2,6 +2,7 @@
 #include "ObjectManager.h"
 
 #include "GameObject.h"
+#include "Player.h"
 
 Singleton_NULL(ObjectManager)
 
@@ -152,4 +153,9 @@ vector<class GameObject*> ObjectManager::FindObjects(ObjectLayer layer, const st
 vector<class GameObject*> ObjectManager::GetObjectList(ObjectLayer layer)
 {
 	return mObjectList[layer];
+}
+
+Player * ObjectManager::GetPlayer()
+{
+	return dynamic_cast<Player*>(mObjectList[ObjectLayer::PLAYER].front());
 }

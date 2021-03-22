@@ -24,9 +24,9 @@ enum State
 enum Form
 {
 	Ditto, // 메타몽
-	Charmander, // 파이리
 	Chikorita, // 치코리타
 	Totodile, // 리아코
+	Charmander, // 파이리
 	FormEnd
 };
 
@@ -34,6 +34,7 @@ class Image;
 class Animation;
 class Tile;
 class MapObject;
+class TrailManager;
 
 class Player : public GameObject
 {
@@ -87,6 +88,10 @@ class Player : public GameObject
 
 	vector<GameObject*> mItemList;
 
+	bool mIsGettingItemThisFrame;
+
+	TrailManager* mTrailManager;
+
 public:
 	Player(const string& name, float x, float y);
 
@@ -102,7 +107,8 @@ public:
 	void InputDirectionKey();
 	void InputSpaceKey();
 	void CheckNextTile();
-	void ChangeForm(); // 임시
+	void InputCKey(); // 'C' means ChangeForm // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
+	void ChangeForm(); // 지울 예정인 함수 // 현재 호출하지 않고 있음
 	void ChangeCurrentAnimation();
 
 	void RenderTestText(HDC hdc);
@@ -112,4 +118,6 @@ public:
 
 	void SetTileListPtr(vector<vector<Tile*>>* tileListPtr) { mTileListPtr = tileListPtr; }
 	void SetMapObjectListPtr(vector<vector<MapObject*>>* mapObjectListPtr) { mMapObjectListPtr = mapObjectListPtr; }
+
+	void SetTrailManagerPtr(TrailManager* trailManager) { mTrailManager = trailManager; }
 };

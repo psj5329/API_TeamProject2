@@ -1,6 +1,6 @@
 #pragma once
-#define WINSTARTX 50
-#define WINSTARTY 50
+#define WINSTARTX 3
+#define WINSTARTY 3
 #define WINSIZEX 1280
 #define WINSIZEY 720
 

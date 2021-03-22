@@ -58,6 +58,8 @@ void Scene4::Init()
 	mTempPlayer->SetTileListPtr(tileListPtr);
 	vector<vector<MapObject*>>* mapObjectListPtr = mTileMap->GetObjectListPtr();
 	mTempPlayer->SetMapObjectListPtr(mapObjectListPtr);
+
+	mTempPlayer->SetTrailManagerPtr(mTrailManager);
 }
 
 void Scene4::Release()
@@ -69,12 +71,13 @@ void Scene4::Release()
 
 void Scene4::Update()
 {
-	RECT* playerColBoxPtr = mTempPlayer->GetColBoxPtr();
-	OBJECTMANAGER->Update();
 	mTileMap->Update();
 	mTrailManager->Update();
+	OBJECTMANAGER->Update();
+
+	RECT* playerColBoxPtr = mTempPlayer->GetColBoxPtr();
 	COLLISIONMANAGER->TileCollision(mTempPlayer, playerColBoxPtr, mTileMap);
-	COLLISIONMANAGER->MapObjectCollision(mTempPlayer, playerColBoxPtr, mTileMap);
+	// COLLISIONMANAGER->MapObjectCollision(mTempPlayer, playerColBoxPtr, mTileMap); // 플레이어 내부로 이동
 }
 
 void Scene4::Render(HDC hdc)
@@ -84,7 +87,7 @@ void Scene4::Render(HDC hdc)
 	OBJECTMANAGER->Render(hdc);
 
 	// {{ 완성본에서 지워야 할 내용 시작
-	wstring strScene = L"이건 4번 씬 / 방향키: 이동 / 이동 중 shift: 대시 / 8, 9, 0, 7: 변신";
+	wstring strScene = L"이건 4번 씬 / 방향키: 이동 / 이동 중 shift: 대시 / C: 변신";
 	TextOut(hdc, WINSIZEX / 2 - 15, 100, strScene.c_str(), strScene.length());
 	// 완성본에서 지워야 할 내용 끝 }}
 }

@@ -9,6 +9,7 @@ enum class OreType
 	Red
 };
 class Image;
+
 class Ore :
 	public GameObject
 {

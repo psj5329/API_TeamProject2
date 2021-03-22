@@ -15,6 +15,7 @@
 #include "MapToolScene.h"
 #include "Scene6.h"
 #include "MapToolReady.h"
+#include "MainScene.h"
 
 #include "FileSystemHelper.h"
 
@@ -26,9 +27,11 @@ void MainGame::Init()
 	AddScene();
 
 	Camera* mainCamera = new Camera;
-	mainCamera->Init();
 	mainCamera->SetX(WINSIZEX / 2);
 	mainCamera->SetY(WINSIZEY / 2);
+	mainCamera->Init();
+	//mainCamera->SetX(0);
+	//mainCamera->SetY(0);
 	
 	CAMERAMANAGER->SetMainCamera(mainCamera);
 }
@@ -128,6 +131,7 @@ void MainGame::AddScene()
 	LoadResources(mLoadingScene);
 
 	SCENEMANAGER->AddScene(L"LoadingScene", mLoadingScene);
+	SceneManager::GetInstance()->AddScene(L"MainScene", new MainScene);
 	SceneManager::GetInstance()->AddScene(L"Scene1", new Scene1);
 	SceneManager::GetInstance()->AddScene(L"Scene2", new Scene2);
 	SceneManager::GetInstance()->AddScene(L"Scene3", new Scene3);
