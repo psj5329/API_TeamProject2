@@ -1,12 +1,13 @@
 #pragma once
 #include "Scene.h"
 
-class Image;
 class Player;
+class Sableye;
 class Scene1 : public Scene
 {
 	TileMap* mTileMap;
 	Player* mPlayer;
+	Sableye* mEnemy;
 
 public:
 	void Init()override;
@@ -16,8 +17,5 @@ public:
 
 public:
 	TileMap* GetTileMap() { return mTileMap; }
-
-public:
-	void LoadResources();
 };
 

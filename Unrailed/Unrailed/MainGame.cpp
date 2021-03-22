@@ -15,6 +15,7 @@
 #include "MapToolScene.h"
 #include "Scene6.h"
 #include "MapToolReady.h"
+#include "MainScene.h"
 
 #include "FileSystemHelper.h"
 
@@ -128,6 +129,7 @@ void MainGame::AddScene()
 	LoadResources(mLoadingScene);
 
 	SCENEMANAGER->AddScene(L"LoadingScene", mLoadingScene);
+	SceneManager::GetInstance()->AddScene(L"MainScene", new MainScene);
 	SceneManager::GetInstance()->AddScene(L"Scene1", new Scene1);
 	SceneManager::GetInstance()->AddScene(L"Scene2", new Scene2);
 	SceneManager::GetInstance()->AddScene(L"Scene3", new Scene3);

@@ -10,6 +10,8 @@ protected:
 	Image* mImage;
 	Direction mDirection;
 
+	int mHp;
+
 public:
 	virtual void Init() override;
 	virtual void Release()override;
@@ -19,8 +21,12 @@ public:
 public:
 	// Get
 	inline Direction GetDirection() { return mDirection; }
+	inline int GetHp() { return mHp; }
 	
 	//Set
 	inline void SetDirection(Direction dir) { mDirection = dir; }
+	inline void SetHp(int hp) { mHp = hp; }
+
+	inline void DamagedHp() { mHp -= 1; }
 };
 

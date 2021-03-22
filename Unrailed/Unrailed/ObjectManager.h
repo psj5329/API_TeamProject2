@@ -3,6 +3,7 @@
 enum ObjectLayer { BACKGROUND, ITEM, TRAIL, PLAYER, ENEMY, UI, End };
 
 class GameObject;
+class Player;
 class ObjectManager
 {
 	Singleton(ObjectManager)
@@ -24,6 +25,7 @@ public:
 	vector<GameObject*> FindObjects(const string& name);
 	vector<GameObject*> FindObjects(ObjectLayer layer, const string& name);
 	vector<GameObject*> GetObjectList(ObjectLayer layer);
+	Player* GetPlayer();
 };
 
 #define OBJECTMANAGER ObjectManager::GetInstance()
