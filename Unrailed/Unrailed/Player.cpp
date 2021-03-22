@@ -87,17 +87,16 @@ void Player::Render(HDC hdc)
 	RenderRect(hdc, mColBox);
 #endif
 	// 카메라 기준 렌더링(유찬)
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
+		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
 	/*CameraManager::GetInstance()->GetMainCamera()
 		->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
 			mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(),
 			mImage->GetFrameWidth() * 2, mImage->GetFrameHeight() * 2);*/
 
 	// 임시로 카메라 고정형 렌더링
-	mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,
-		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
-
-	//mImage->FrameRender(hdc,mRect.left,mRect.top, mCurrentAnimation->GetNowFrameX(),
-	//	mCurrentAnimation->GetNowFrameY());
+	//mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,
+	//	mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
 
 	RenderTestText(hdc);
 }
@@ -902,25 +901,26 @@ void Player::ChangeCurrentAnimation()
 
 void Player::RenderTestText(HDC hdc)
 {
+	RECT cam = CAMERAMANAGER->GetMainCamera()->GetRect();
 	//wstring strInput = L"InputType : " + to_wstring(mInputType);
 	//TextOut(hdc, 10, 100, strInput.c_str(), (int)strInput.length());
 
 	wstring strChange = L"포켓몬 변!신! ";
 	if (mChangeT)
-		TextOut(hdc, (int)mX - 20, (int)mY - 25, strChange.c_str(), (int)strChange.length());
+		TextOut(hdc, (int)mX - 20 - cam.left, (int)mY - 25 - cam.top, strChange.c_str(), (int)strChange.length());
 
-	//wstring strSpeed = L"Speed: " + to_wstring(mSpeed);
+	//wstring strSpeed = L"SApeed: " + to_wstring(mSpeed);
 	//wstring strKeyDown = L"IsKeyDownCheck: " + to_wstring(mIsDirectionKeyDown);
 	//TextOut(hdc, (int)mX, (int)mY + 50, strSpeed.c_str(), (int)strSpeed.length());
 	//TextOut(hdc, (int)mX, (int)mY + 75, strKeyDown.c_str(), (int)strKeyDown.length());
 
 	wstring strTile = L"tile x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
-	TextOut(hdc, (int)mX + 25, (int)mY, strTile.c_str(), (int)strTile.length());
+	TextOut(hdc, (int)mX + 25 - cam.left, (int)mY - cam.top, strTile.c_str(), (int)strTile.length());
 
 	//wstring strAtk = L"공격 중이다";
 	//if (mIsAttackingTemp)
 	//	TextOut(hdc, (int)mX + 55, (int)mY, strAtk.c_str(), (int)strAtk.length());
 
 	wstring strInven = L"Inven size: " + to_wstring(mItemList.size());
-	TextOut(hdc, (int)mX + 25, (int)mY + 25, strInven.c_str(), (int)strInven.length());
+	TextOut(hdc, (int)mX + 25 - cam.left, (int)mY + 25 - cam.top, strInven.c_str(), (int)strInven.length());
 }

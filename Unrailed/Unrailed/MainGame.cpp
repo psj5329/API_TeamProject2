@@ -26,9 +26,11 @@ void MainGame::Init()
 	AddScene();
 
 	Camera* mainCamera = new Camera;
-	mainCamera->Init();
 	mainCamera->SetX(WINSIZEX / 2);
 	mainCamera->SetY(WINSIZEY / 2);
+	mainCamera->Init();
+	//mainCamera->SetX(0);
+	//mainCamera->SetY(0);
 	
 	CAMERAMANAGER->SetMainCamera(mainCamera);
 }

@@ -192,16 +192,16 @@ void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 								player->SetY((*mapObjectList)[j][i]->GetRect().top - player->GetSizeY() / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 							else if (temp.bottom == (*mapObjectList)[j][i]->GetRect().bottom)	// 플레이어가 아래
 							{
 								player->SetY((*mapObjectList)[j][i]->GetRect().bottom + player->GetSizeY() / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 						}
 						else
@@ -211,16 +211,16 @@ void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 								player->SetX((*mapObjectList)[j][i]->GetRect().left - player->GetSizeX() / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 							else if (temp.right == (*mapObjectList)[j][i]->GetRect().right)	// 플레이어가 오른쪽
 							{
 								player->SetX((*mapObjectList)[j][i]->GetRect().right + player->GetSizeX() / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 
 						}
@@ -230,7 +230,7 @@ void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 		}
 	}
 }
-
+/*
 void CollisionManager::MapObjectCollision(Player* player, RECT* rc, TileMap* tileMap)
 {
 	vector<vector<Tile*>>* tileList = tileMap->GetTileListPtr();
@@ -265,16 +265,16 @@ void CollisionManager::MapObjectCollision(Player* player, RECT* rc, TileMap* til
 								player->SetY((*mapObjectList)[j][i]->GetRect().top - rcHeight / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 							else if (temp.bottom == (*mapObjectList)[j][i]->GetRect().bottom)	// 플레이어가 아래
 							{
 								player->SetY((*mapObjectList)[j][i]->GetRect().bottom + rcHeight / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 						}
 						else
@@ -284,16 +284,16 @@ void CollisionManager::MapObjectCollision(Player* player, RECT* rc, TileMap* til
 								player->SetX((*mapObjectList)[j][i]->GetRect().left - rcWidth / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 							else if (temp.right == (*mapObjectList)[j][i]->GetRect().right)	// 플레이어가 오른쪽
 							{
 								player->SetX((*mapObjectList)[j][i]->GetRect().right + rcWidth / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 						}
 					}
@@ -302,7 +302,7 @@ void CollisionManager::MapObjectCollision(Player* player, RECT* rc, TileMap* til
 		}
 	}
 }
-
+*/
 void CollisionManager::MapObjectCollision(Player* player, RECT* rc, vector<vector<Tile*>>* tileList, vector<vector<MapObject*>>* mapObjectList)
 {
 	int x = player->GetX() / TileSize;
@@ -334,16 +334,16 @@ void CollisionManager::MapObjectCollision(Player* player, RECT* rc, vector<vecto
 								//player->SetY((*mapObjectList)[j][i]->GetRect().top - rcHeight / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 							else if (temp.bottom == (*mapObjectList)[j][i]->GetRect().bottom)	// 플레이어가 아래
 							{
 								//player->SetY((*mapObjectList)[j][i]->GetRect().bottom + rcHeight / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 						}
 						else
@@ -353,16 +353,16 @@ void CollisionManager::MapObjectCollision(Player* player, RECT* rc, vector<vecto
 								//player->SetX((*mapObjectList)[j][i]->GetRect().left - rcWidth / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 							else if (temp.right == (*mapObjectList)[j][i]->GetRect().right)	// 플레이어가 오른쪽
 							{
 								//player->SetX((*mapObjectList)[j][i]->GetRect().right + rcWidth / 2);
 								(*mapObjectList)[j][i]->DeductHp();
 
-								if ((*mapObjectList)[j][i]->GetHp() <= 0)
-									(*tileList)[j][i]->SetTileType(TileType::Normal);
+								//if ((*mapObjectList)[j][i]->GetHp() <= 0)
+								//	(*tileList)[j][i]->SetTileType(TileType::Normal);
 							}
 						}
 					}
@@ -370,6 +370,68 @@ void CollisionManager::MapObjectCollision(Player* player, RECT* rc, vector<vecto
 			}
 		}
 	}
+}
+
+void CollisionManager::MapObjectCollision(Player* player, RECT* rc, vector<vector<MapObject*>>* mapObjectList, int nextTileX, int nextTileY)
+{
+	int x = player->GetX() / TileSize;
+	int y = player->GetY() / TileSize;
+
+	float rcWidth = rc->right - rc->left;
+	float rcHeight = rc->bottom - rc->top;
+
+	RECT temp;
+	MapObject* nextObject = (*mapObjectList)[nextTileY][nextTileX];
+	RECT nextMapObjectRc = nextObject->GetRect();
+	if (IntersectRect(&temp, rc, &nextMapObjectRc))
+	{
+		float width = temp.right - temp.left;
+		float height = temp.bottom - temp.top;
+
+		if (nextObject->GetMapObjectType() != MapObjectType::None)
+		{
+			nextObject->DeductHp();
+		}
+	}
+
+	/*
+	RECT temp;
+	RECT mapObjectRc = (*tileList)[j][i]->GetRect();
+	if (IntersectRect(&temp, rc, &mapObjectRc))
+	{
+		float width = temp.right - temp.left;
+		float height = temp.bottom - temp.top;
+
+		if ((*mapObjectList)[j][i]->GetMapObjectType() != MapObjectType::None)		// None이 아니라면 광물이 있음
+		{
+			if (width > height)
+			{
+				if (temp.top == (*mapObjectList)[j][i]->GetRect().top)	// 플레이어가 위
+				{
+					//player->SetY((*mapObjectList)[j][i]->GetRect().top - rcHeight / 2);
+					(*mapObjectList)[j][i]->DeductHp();
+				}
+				else if (temp.bottom == (*mapObjectList)[j][i]->GetRect().bottom)	// 플레이어가 아래
+				{
+					//player->SetY((*mapObjectList)[j][i]->GetRect().bottom + rcHeight / 2);
+					(*mapObjectList)[j][i]->DeductHp();
+				}
+			}
+			else
+			{
+				if (temp.left == (*mapObjectList)[j][i]->GetRect().left)	// 플레이어가 왼쪽
+				{
+					//player->SetX((*mapObjectList)[j][i]->GetRect().left - rcWidth / 2);
+					(*mapObjectList)[j][i]->DeductHp();
+				}
+				else if (temp.right == (*mapObjectList)[j][i]->GetRect().right)	// 플레이어가 오른쪽
+				{
+					//player->SetX((*mapObjectList)[j][i]->GetRect().right + rcWidth / 2);
+					(*mapObjectList)[j][i]->DeductHp();
+				}
+			}
+		}
+	}*/
 }
 
 GameObject * CollisionManager::ItemCollision(RECT* rc)
