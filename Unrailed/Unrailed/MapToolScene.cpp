@@ -4,6 +4,8 @@
 #include "Image.h"
 #include "Button.h"
 #include "Path.h"
+#include "Camera.h"
+
 void MapToolScene::Init()
 {
 	ImageLoad();
@@ -102,6 +104,7 @@ void MapToolScene::Init()
 	mCurrentTile = mPallete[0][0];
 	mCurrentType = TileType::Normal;
 	mCurrentPallete = CurrentPallete::Tile;
+	InitMouseRect();
 
 }
 
@@ -120,6 +123,9 @@ void MapToolScene::Release()
 
 void MapToolScene::Update()
 {
+	
+	CAMERAMANAGER->GetMainCamera()->Update();
+
 	if (Input::GetInstance()->GetKeyDown(VK_RETURN))
 	{
 		Path::OpenFileDialog(L"", nullptr, L"../Resources/", nullptr, _hWnd);
@@ -139,6 +145,7 @@ void MapToolScene::Update()
 					mCurrentTile = mPallete[y][x];
 					//들고있는종류바꾸고
 					mCurrentPallete = CurrentPallete::Tile;
+					SetMouseRect();
 				}
 			}
 		}
@@ -151,6 +158,7 @@ void MapToolScene::Update()
 				mCurrentType = (TileType)mTypePallete[i].type;
 
 				mCurrentPallete = CurrentPallete::Type;
+				SetMouseRect();
 			}
 		}
 
@@ -165,18 +173,21 @@ void MapToolScene::Update()
 					mCurrentObject = mObjectPallete[y][x];
 					//들고있는종류바꾸고
 					mCurrentPallete = CurrentPallete::Object;
+					SetMouseRect();
 				}
 			}
 		}
-
-
 	}
+
+
+	float x = CAMERAMANAGER->GetMainCamera()->GetX();
+	float y = CAMERAMANAGER->GetMainCamera()->GetY();
 
 	// {{ 타일 그리기~
 	if (Input::GetInstance()->GetKey(VK_LBUTTON))
 	{
-		int indexX = _mousePosition.x / TileSize;
-		int indexY = _mousePosition.y / TileSize;
+		int indexX = (_mousePosition.x + (x - WINSIZEX / 2)) / TileSize;
+		int indexY = (_mousePosition.y + (y - WINSIZEY / 2)) / TileSize;
 
 		if (indexX >= 0 && indexX < mXTileCount &&
 			indexY >= 0 && indexY < mYTileCount)
@@ -226,11 +237,7 @@ void MapToolScene::Update()
 					mMapObjectList[indexY][indexX]->SetImage(nullptr);
 				}
 			}
-
-
 		}
-
-
 	}
 	// }}
 
@@ -245,6 +252,8 @@ void MapToolScene::Update()
 	{
 		mSaveButtons[i]->Update();
 	}
+
+	UpdateMouseRect();
 }
 
 void MapToolScene::Render(HDC hdc)
@@ -351,11 +360,12 @@ void MapToolScene::Render(HDC hdc)
 		mSaveButtons[i]->Render(hdc);
 	}
 
-
-	wstring y = L"TileY: " + to_wstring(mYTileCount);
-	TextOut(hdc, _mousePosition.x, _mousePosition.y, y.c_str(), (int)y.length());
-	wstring x = L"TileX: " + to_wstring(mXTileCount);
-	TextOut(hdc, _mousePosition.x, _mousePosition.y + 20, x.c_str(), (int)x.length());
+	
+	RenderMouseRect(hdc);
+	//wstring y = L"TileY: " + to_wstring(mYTileCount);
+	//TextOut(hdc, _mousePosition.x, _mousePosition.y, y.c_str(), (int)y.length());
+	//wstring x = L"TileX: " + to_wstring(mXTileCount);
+	//TextOut(hdc, _mousePosition.x, _mousePosition.y + 20, x.c_str(), (int)x.length());
 }
 
 void MapToolScene::Save(int i)
@@ -513,6 +523,7 @@ void MapToolScene::Redo()
 void MapToolScene::EraseButton()
 {
 	mCurrentPallete = CurrentPallete::Erase;
+	SetMouseRect();
 }
 
 void MapToolScene::SwitchObjectPallete()
@@ -551,11 +562,15 @@ void MapToolScene::SwitchTilePallete()
 {
 	Image* mapImage;
 	//바꿀이미지 정하기
-	if (mPallete[0][0].image->GetKeyName() == L"TinyWoods")
+	if (wcscmp(mPallete[0][0].image->GetKeyName().c_str(), L"TinyWoods") == 0)
+	{
+		mapImage = IMAGEMANAGER->FindImage(L"LushPrairie");
+	}
+	else if (wcscmp(mPallete[0][0].image->GetKeyName().c_str(), L"LushPrairie") == 0)
 	{
 		mapImage = IMAGEMANAGER->FindImage(L"MagmaCavern");
 	}
-	else if (mPallete[0][0].image->GetKeyName() == L"MagmaCavern")
+	else if (wcscmp(mPallete[0][0].image->GetKeyName().c_str(), L"MagmaCavern") == 0)
 	{
 		mapImage = IMAGEMANAGER->FindImage(L"MtFarAway");
 	}
@@ -680,4 +695,96 @@ void MapToolScene::ImageLoad()
  {
 	//wParam
 	 return 0;
+ }
+
+
+
+ //////마우스표시관련//////
+ void MapToolScene::InitMouseRect()
+ {
+	 mMouse.image = mCurrentTile.image;
+	 mMouse.frameX = mCurrentTile.frameX;
+	 mMouse.frameY = mCurrentTile.frameY;
+	 mMouse.positionX = _mousePosition.x;
+	 mMouse.positionY = _mousePosition.y;
+	 mMouse.sizeX = TileSize;
+	 mMouse.sizeY = TileSize;
+	 mMouse.rect = RectMakeCenter(mMouse.positionX, mMouse.positionY, mMouse.sizeX, mMouse.sizeY);
+ }
+
+ void MapToolScene::UpdateMouseRect()
+ {
+	 mMouse.positionX = _mousePosition.x;
+	 mMouse.positionY = _mousePosition.y;
+	 mMouse.rect = RectMakeCenter(mMouse.positionX, mMouse.positionY, mMouse.sizeX, mMouse.sizeY);
+ }
+
+ void MapToolScene::RenderMouseRect(HDC hdc)
+ {
+	 switch (mCurrentPallete)
+	 {
+	 case CurrentPallete::Tile:
+		 mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
+		 break;
+	 case CurrentPallete::Object:
+		 mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
+		 break;
+	 case CurrentPallete::Type:
+		 switch (mCurrentType)
+		 {
+		 case TileType::Normal:
+			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Green);
+			 break;
+
+		 case TileType::Wall:
+			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Black);
+			 break;
+
+		 case TileType::Water:
+			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Blue);
+			 break;
+
+		 case TileType::Lava:
+			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Red);
+			 break;
+
+		 case TileType::ice:
+			 Gizmo::GetInstance()->DrawRect(hdc, mMouse.rect, Gizmo::Color::Gray);
+			 break;
+
+		 default:
+			 break;
+		 }
+		 break;
+	 case CurrentPallete::Erase:
+		 mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
+		 break;
+	 default:
+		 break;
+	 }
+ }
+
+ void MapToolScene::SetMouseRect()
+ {
+	 switch (mCurrentPallete)
+	 {
+	 case CurrentPallete::Tile:
+		 mMouse.image = mCurrentTile.image;
+		 mMouse.frameX = mCurrentTile.frameX;
+		 mMouse.frameY = mCurrentTile.frameY;
+		 break;
+	 case CurrentPallete::Object:
+		 mMouse.image = mCurrentObject.image;
+		 mMouse.frameX = mCurrentObject.frameX;
+		 mMouse.frameY = mCurrentObject.frameY;
+		 break;
+	 case CurrentPallete::Type:
+		 mMouse.image = nullptr;
+		 break;
+	 case CurrentPallete::Erase:
+		 mMouse.image = IMAGEMANAGER->FindImage(L"XTile");
+		 break;
+	 default:
+		 break;
+	 }
  }

@@ -116,6 +116,7 @@ void MainGame::RenderTime(HDC hdc)
 	TextOut(hdc, 10, 25, strDeltaTime.c_str(), strDeltaTime.length());
 	TextOut(hdc, 10, 40, strFPS.c_str(), strFPS.length());
 
+
 	/*wstring strScene = L"여긴 메인, 1~4 눌러서 씬 넘어가자";
 	TextOut(hdc, WINSIZEX / 2 - 50, WINSIZEY / 2, strScene.c_str(), strScene.length());*/
 }
@@ -143,42 +144,40 @@ void MainGame::LoadResources(LoadingScene * scene)
 	LoadImageResources(scene);
 	LoadSoundResources(scene);
 
-	/*
-	// 수정이 로드 방식대로 할 때 로딩 이미지 외에 로딩이 안 되고 있어서 임시로 주석 해제하고 파일경로 전부 수정했음
-	// 나중에 수정이 로드 방식 해결되면 주석 걸어놓기
-	// 맵 관련 // 남훈
+	/*// 맵 관련 // 남훈
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save", Resources(L"/Map/Tool/save"), 60, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Load", Resources(L"/Map/Tool/load"), 60, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Undo", Resources(L"/Map/Tool/undo"), 60, 16, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"TinyWoods", Resources(L"/Map/TinyWoods-12-6"), 288, 144, 12, 6, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"MagmaCavern", Resources(L"/Map/MagmaCavern-12-6"), 288, 144, 12, 6, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"MtFarAway", Resources(L"/Map/MtFarAway-12-6"), 288, 144, 12, 6, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"GreenMineral", Resources(L"/Map/GreenMineral-6-3"), 144, 72, 6, 3, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"BlueMineral", Resources(L"/Map/BlueMineral-6-3"), 144, 72, 6, 3, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"RedMineral", Resources(L"/Map/RedMineral-6-3"), 144, 72, 6, 3, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"TinyWoods", Resources(L"/Map/TinyWoods"), 288, 144, 12, 6, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"MagmaCavern", Resources(L"/Map/MagmaCavern"), 288, 144, 12, 6, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"MtFarAway", Resources(L"/Map/MtFarAway"), 288, 144, 12, 6, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"GreenMineral", Resources(L"/Map/Green"), 144, 72, 6, 3, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"BlueMineral", Resources(L"/Map/Blue"), 144, 72, 6, 3, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"RedMineral", Resources(L"/Map/Red"), 144, 72, 6, 3, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"RightArrow", Resources(L"/Map/Tool/RightArrow"), 16, 14, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"XTile", Resources(L"/Map/Tool/XTile"), 24, 24, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Ore", Resources(L"/Item/Ore-3-1"), 39, 12, 3, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"GreenTrail", Resources(L"/Trail/GreenTrail-4-4"), 96, 96, 4, 4, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"BlueTrail", Resources(L"/Trail/BlueTrail-4-4"), 96, 96, 4, 4, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"RedTrail", Resources(L"/Trail/RedTrail-4-4"), 96, 96, 4, 4, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Ore", Resources(L"/Item/Stone"), 39, 12, 3, 1, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"GreenTrail", Resources(L"/Trail/DirTile_G"), 96, 96, 4, 4, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"BlueTrail", Resources(L"/Trail/DirTile_B"), 96, 96, 4, 4, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"RedTrail", Resources(L"/Trail/DirTile_R"), 96, 96, 4, 4, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save1", Resources(L"/Map/Tool/save1"), 75, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save2", Resources(L"/Map/Tool/save2"), 75, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save3", Resources(L"/Map/Tool/save3"), 75, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save4", Resources(L"/Map/Tool/save4"), 75, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save5", Resources(L"/Map/Tool/save5"), 75, 16, 1, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"MapReady", Resources(L"/Map/Tool/MapToolReady"), 224, 232, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Numbers", Resources(L"/Map/Tool/Numbers-10-1"), 110, 11, 10, 1, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Numbers", Resources(L"/Map/Tool/Numbers"), 110, 11, 10, 1, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"New", Resources(L"/Map/Tool/new"), 60, 16, 1, 1, true); });
 
+
+
 	// 캐릭터 관련 // 유찬
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"charmander", Resources(L"charmander-4-41"), 192, 1968, 4, 41, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"chikorita", Resources(L"chikorita-4-41"), 192, 1968, 4, 41, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"ditto", Resources(L"ditto-3-25"), 144, 1200, 3, 25, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"jigglypuff", Resources(L"jigglypuff-4-17"), 192, 816, 4, 17, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"charmander", Resources(L"charmander"), 192, 1968, 4, 41, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"chikorita", Resources(L"chikorita"), 192, 1968, 4, 41, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"ditto", Resources(L"ditto"), 144, 1200, 3, 25, true); });
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"jigglypuff", Resources(L"jigglypuff"), 192, 816, 4, 17, true); });
 	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"lapras", Resources(L"lapras"), 192, 624, 4, 13, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"totodile", Resources(L"totodile-5-41"), 240, 1968, 5, 41, true); });
-	*/
+	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"totodile", Resources(L"totodile"), 240, 1968, 5, 41, true); });*/
 }
 
 void MainGame::LoadImageResources(LoadingScene* scene)
@@ -188,7 +187,7 @@ void MainGame::LoadImageResources(LoadingScene* scene)
 	{
 		wchar_t* ptr = nullptr;
 		wstring strPath = path;
-		//wstring str = wcstok_s(&strPath[0], L"Unrailed", &ptr);
+		//wstring str = wcstok_s(&strPath[0], L"2", &ptr);
 		size_t strSize = strPath.find(L"2\\Unrailed\\Unrailed");
 		strPath.erase(strSize);
 		strPath.append(L"2\\Unrailed\\Resources\\*.*");		// ㅏ 진짜 넘 맘에 안든다
@@ -249,9 +248,11 @@ void MainGame::LoadSoundResources(LoadingScene* scene)
 	{
 		wchar_t* ptr = nullptr;
 		wstring strPath = path;
-		wstring str = wcstok_s(&strPath[0], L"2", &ptr);
-		str.append(L"2\\Unrailed\\Sound\\*.*");		// ㅏ 진짜 넘 맘에 안든다
-		FileSystemHelper::GetAllFile(str, FileType::SOUND);
+		//wstring str = wcstok_s(&strPath[0], L"2", &ptr);
+		size_t strSize = strPath.find(L"2\\Unrailed\\Unrailed");
+		strPath.erase(strSize);
+		strPath.append(L"2\\Unrailed\\Resources\\*.*");
+		FileSystemHelper::GetAllFile(strPath, FileType::SOUND);
 	}
 
 	wchar_t* ptr = nullptr;

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Gizmo.h"
+#include "Camera.h"
 
 Singleton_NULL(Gizmo)
 
@@ -48,6 +49,18 @@ void Gizmo::DrawEllipse(HDC hdc, float x, float y, float radius, Color color)
 	HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, mNullBrush);
 	HPEN oldPen = (HPEN)SelectObject(hdc, pen);
 	RenderEllipse(hdc, x,y,radius);
+	SelectObject(hdc, oldPen);
+	SelectObject(hdc, oldBrush);
+}
+
+void Gizmo::DrawRectInCamera(HDC hdc, RECT rc, Color color)
+{
+	HPEN pen = mPenList[color];
+
+	HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, mNullBrush);
+	HPEN oldPen = (HPEN)SelectObject(hdc, pen);
+	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, rc);
+	//RenderRect(hdc, rc);
 	SelectObject(hdc, oldPen);
 	SelectObject(hdc, oldBrush);
 }

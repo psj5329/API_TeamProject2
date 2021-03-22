@@ -2,6 +2,7 @@
 #include "Image.h"
 #include "MapObject.h"
 #include "Ore.h"
+#include "Camera.h"
 
 MapObject::MapObject(class Image* image, float x, float y, float sizeX, float sizeY,
 	int frameIndexX, int frameIndexY, int type)
@@ -45,6 +46,7 @@ void MapObject::Render(HDC hdc)
 	if (mType != MapObjectType::None)
 	{
 		if (mImage != nullptr)
-			mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+			CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+			//mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
 	}
 }
