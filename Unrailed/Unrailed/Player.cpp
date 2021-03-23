@@ -4,7 +4,6 @@
 #include "Image.h"
 #include "Camera.h"
 #include "Animation.h"
-#include "Tile.h"
 #include "MapObject.h"
 #include "TrailManager.h"
 #include "Ore.h"
@@ -51,6 +50,8 @@ void Player::Init()
 	mIsAttackingTemp = false; // 상호작용 전 테스트 변수
 
 	mIsGettingItemThisFrame = false;
+
+	mIsChangable = true;
 }
 
 void Player::Release()
@@ -64,8 +65,7 @@ void Player::Update()
 	mTileY = (int)(mY / TileSize);
 
 	InputDirectionKey();
-
-	//Move(); // 씬4 업데이트 내에 주석 걸고 이거 살리고 계속 하면 됨
+	Move();
 
 	InputSpaceKey();
 
@@ -490,11 +490,8 @@ void Player::Move()
 {
 	COLLISIONMANAGER->TileMapObjectCollision(this, &mColBox, mTileListPtr, mMapObjectListPtr, mTileX, mTileY);
 
-	//TileMapObjectCollision(Player* player, RECT* rc, vector<vector<Tile*>>* tileList, vector<vector<MapObject*>>* mapObjectList, int indexX, int indexY)
-	// 타일리스트 포인터 넘겨주게 수정해야 함
-
-	//COLLISIONMANAGER->TileCollision(this, &mColBox, mTileMap); 
-	//COLLISIONMANAGER->MapObjectCollision(this, &mColBox, mTileMap); // 플레이어 내부로 이동
+	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
+	mColBox = RectMakeCenter((int)mX, (int)mY, TileSize, TileSize);
 }
 
 void Player::InputSpaceKey()
@@ -756,37 +753,91 @@ void Player::InputCKey()
 	{
 		if (mForm == Form::Ditto)
 		{
+			mIsChangable = true;
 			mForm = Form::Chikorita;
 			mImage = IMAGEMANAGER->FindImage(L"chikorita");
 		}
 		else if (mForm == Form::Chikorita)
 		{
+			mIsChangable = true;
 			mForm = Form::Totodile;
 			mImage = IMAGEMANAGER->FindImage(L"totodile");
 		}
 		else if (mForm == Form::Totodile)
 		{
-			mForm = Form::Charmander;
-			mImage = IMAGEMANAGER->FindImage(L"charmander");
+			if (CheckTileType(TileType::Water))
+			{
+				mIsChangable = false;
+			}
+			else
+			{
+				mIsChangable = true;
+				mForm = Form::Charmander;
+				mImage = IMAGEMANAGER->FindImage(L"charmander");
+			}
 		}
 		else if (mForm == Form::Charmander)
 		{
-			mForm = Form::Ditto;
-			mImage = IMAGEMANAGER->FindImage(L"ditto");
+			if (CheckTileType(TileType::Lava))
+			{
+				mIsChangable = false;
+			}
+			else
+			{
+				mIsChangable = true;
+				mForm = Form::Ditto;
+				mImage = IMAGEMANAGER->FindImage(L"ditto");
+			}
 		}
 
 		// {{ 이 변수 굳이 필요없으면 지우기 // 이펙트 등 사용할 거면 살려두기
 		mChangeT = 2.f; 
 
-		if (mChangeT)
-		{
-			mChangeT -= TIME->DeltaTime();
-
-			if (mChangeT <= 0)
-				mChangeT = 0.f;
-		}
+		//if (mChangeT)
+		//{
+		//	mChangeT -= TIME->DeltaTime();
+		//
+		//	if (mChangeT <= 0)
+		//		mChangeT = 0.f;
+		//}
 		// }} 이 변수 굳이 필요없으면 지우기 // 이펙트 등 사용할 거면 살려두기
 	}
+
+	if (mChangeT)
+	{
+		mChangeT -= TIME->DeltaTime();
+
+		if (mChangeT <= 0)
+		{
+			mChangeT = 0.f;
+			mIsChangable = true;
+		}
+	}
+}
+
+bool Player::CheckTileType(TileType tileType)
+{
+	for (int j = mTileY - 1; j <= mTileY + 1; ++j)
+	{
+		for (int i = mTileX - 1; i <= mTileX + 1; ++i)
+		{
+			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
+			{
+				TileType currentTileType = (*mTileListPtr)[j][i]->GetTileType();
+
+				if (currentTileType == tileType)
+				{
+					RECT temp;
+					RECT tileRc = (*mTileListPtr)[j][i]->GetRect();
+
+					if (IntersectRect(&temp, &mColBox, &tileRc))
+						return true;
+				}
+			}
+		}
+	}
+
+	return false;
 }
 
 void Player::ChangeForm()
@@ -942,6 +993,8 @@ void Player::RenderTestText(HDC hdc)
 	//TextOut(hdc, 10, 100, strInput.c_str(), (int)strInput.length());
 
 	wstring strChange = L"포켓몬 변!신! ";
+	if (!mIsChangable)
+		strChange = L"변신 불가 지역입니다";
 	if (mChangeT)
 		TextOut(hdc, (int)mX - 20 - cam.left, (int)mY - 25 - cam.top, strChange.c_str(), (int)strChange.length());
 
