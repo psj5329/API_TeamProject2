@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Tile.h"
 
 enum DirectionEight
 {
@@ -32,7 +33,6 @@ enum Form
 
 class Image;
 class Animation;
-class Tile;
 class MapObject;
 class TrailManager;
 
@@ -92,6 +92,8 @@ class Player : public GameObject
 
 	TrailManager* mTrailManager;
 
+	bool mIsChangable;
+
 public:
 	Player(const string& name, float x, float y);
 
@@ -109,6 +111,7 @@ public:
 	void InputSpaceKey();
 	void CheckNextTile();
 	void InputCKey(); // 'C' means ChangeForm // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
+	bool CheckTileType(TileType tileType);
 	void ChangeForm(); // 지울 예정인 함수 // 현재 호출하지 않고 있음
 	void ChangeCurrentAnimation();
 
