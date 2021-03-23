@@ -32,7 +32,7 @@ void Scene4::Init()
 	mTileMap->LoadMap();
 
 	mTrailManager = new TrailManager();
-	mTrailManager->Init();
+	mTrailManager->Init(mTileMap->GetYTileCount(),mTileMap->GetXTileCount());
 	mTrailManager->InsertTrail(0, 5, 1, 0); // 0: down 1: up 2: left 3: right
 	mTrailManager->InsertTrail(1, 5, 1, 0);
 	mTrailManager->InsertTrail(2, 5, 1, 0);
