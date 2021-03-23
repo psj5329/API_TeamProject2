@@ -1,10 +1,13 @@
 #pragma once
 #include "Train.h"
+#include "Machop.h"
 
 class Animation;
 
 class Abra : public Train
 {
+	Machop* mMachop;
+
 	Animation* mDownMove;
 	Animation* mUpMove;
 	Animation* mLeftMove;
@@ -26,4 +29,8 @@ public:
 	void SetAnimation()override;
 
 	void EndExplode()override;
+	void EndSynthesis();
+
+	void SynthesisOre();
+
 };

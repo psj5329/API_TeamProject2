@@ -24,7 +24,6 @@ void Voltorb::Init()
 	mDirection = Direction::Right;
 	mState = State::Move;
 	mSpeed = 100.f;
-	mTimer = 0;
 
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
@@ -84,10 +83,10 @@ void Voltorb::Update()
 		}
 	}
 	//움직임
-	if (mState == State::Sleep)
-	{
-		mTimer += Time::GetInstance()->DeltaTime();
-	}
+	//if (mState == State::Sleep)
+	//{
+	//	mTimer += Time::GetInstance()->DeltaTime();
+	//}
 
 	//올라가있는 기차길의 현재 기차길/타일의 중간오면 방향확인
 	//방향이 가리키는 타일의 중간까지이동

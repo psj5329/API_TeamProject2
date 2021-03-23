@@ -9,6 +9,7 @@
 
 void Machop::Init()
 {
+	mName = "Machop";
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Machop");
 
@@ -25,11 +26,8 @@ void Machop::Init()
 	mDirection = Direction::Right;
 	mState = State::Move;
 	mSpeed = 100.f;
-	mTimer = 0;
 	mLevel = 1;
-	mGreenOreCount = 0;
-	mBlueOreCount = 0;
-	mRedOreCount = 0;
+	mOreCount = 0;
 
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
@@ -56,7 +54,7 @@ void Machop::Update()
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
-	TakeOre();
+	InterceptOre();
 
 	//상태정하기
 	//if (mTimer == 0)
@@ -94,10 +92,10 @@ void Machop::Update()
 	}
 
 	//움직임
-	if (mState == State::Sleep)
-	{
-		mTimer += Time::GetInstance()->DeltaTime();
-	}
+	//if (mState == State::Sleep)
+	//{
+	//	mTimer += Time::GetInstance()->DeltaTime();
+	//}
 
 	SetSpeed();
 	if (mState == State::Move || mState == State::Intercept)
@@ -154,14 +152,24 @@ void Machop::Render(HDC hdc)
 	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
-	wstring strGreen = L"그린:" + to_wstring(mGreenOreCount);
-	TextOut(hdc, mX - 20, mY - 40, strGreen.c_str(), strGreen.length());
+	wstring strOre;
+	for (int i = 0; i < mOreList.size(); ++i)
+	{
+		if (mOreList[i]->GetOreType() == OreType::Green)
+			strOre = L"그린" + to_wstring(mOreCount);
+		else if (mOreList[i]->GetOreType() == OreType::Blue)
+			strOre = L"블루" + to_wstring(mOreCount);
+		else if (mOreList[i]->GetOreType() == OreType::Red)
+			strOre = L"레드" + to_wstring(mOreCount);
 
-	wstring strBlue = L"블루:" + to_wstring(mBlueOreCount);
+		TextOut(hdc, mX - 20, mY - 40 - i * 15, strOre.c_str(), strOre.length());
+	}
+
+/*	wstring strBlue = L"블루:" + to_wstring(mOreCount);
 	TextOut(hdc, mX - 20, mY - 55, strBlue.c_str(), strBlue.length());
 
-	wstring strRed = L"레드:" + to_wstring(mRedOreCount);
-	TextOut(hdc, mX - 20, mY - 70, strRed.c_str(), strRed.length());
+	wstring strRed = L"레드:" + to_wstring(mOreCount);
+	TextOut(hdc, mX - 20, mY - 70, strRed.c_str(), strRed.length());*/
 }
 
 void Machop::ReadyAnimation()
@@ -323,43 +331,52 @@ void Machop::SetAnimation()
 	}
 }
 
-void Machop::TakeOre()
+void Machop::InterceptOre()
 {
 	Ore* ore = new Ore;
-	
-	if (INPUT->GetKeyDown('Z'))
+
+	if (mOreCount <= 5)
 	{
-		mGreenOreCount++;
-		mOreList.push_back(ore);
+		if (INPUT->GetKeyDown('Z'))
+		{
+			mOreCount++;
 
-		ore->SetOreType(1);//그린
-		ore->GetOreType();
+			ore->SetOreType(1);//그린
+			ore->GetOreType();
 
-		mState = State::Intercept;
-		SetAnimation();
+			mOreList.push_back(ore);
+
+			mState = State::Intercept;
+			SetAnimation();
+		}
+		if (INPUT->GetKeyDown('X'))
+		{
+			mOreCount++;
+
+			ore->SetOreType(2);//블루
+			ore->GetOreType();
+
+			mOreList.push_back(ore);
+
+			mState = State::Intercept;
+			SetAnimation();
+		}
+		if (INPUT->GetKeyDown('C'))
+		{
+			mOreCount++;
+
+			ore->SetOreType(3);//레드
+			ore->GetOreType();
+
+			mOreList.push_back(ore);
+
+			mState = State::Intercept;
+			SetAnimation();
+		}
 	}
-	if (INPUT->GetKeyDown('X'))
-	{
-		mBlueOreCount++;
-		mOreList.push_back(ore);
 
-		ore->SetOreType(2);//블루
-		ore->GetOreType();
+	//추가로 받으면 합성끝나고 빈자리 생길때까지 상호작용X 추가요망
 
-		mState = State::Intercept;
-		SetAnimation();
-	}
-	if (INPUT->GetKeyDown('C'))
-	{
-		mRedOreCount++;
-		mOreList.push_back(ore);
-
-		ore->SetOreType(3);//레드
-		ore->GetOreType();
-
-		mState = State::Intercept;
-		SetAnimation();
-	}
 }
 
 void Machop::EndIntercept()

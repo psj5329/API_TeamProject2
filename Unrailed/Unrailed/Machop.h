@@ -7,9 +7,7 @@ class Animation;
 class Machop : public Train
 {
 	vector <Ore*> mOreList;
-	int mGreenOreCount;
-	int mBlueOreCount;
-	int mRedOreCount;
+	int mOreCount;
 
 	Animation* mDownMove;
 	Animation* mUpMove;
@@ -34,5 +32,9 @@ public:
 	void EndExplode()override;
 	void EndIntercept();
 
-	void TakeOre();
+	void InterceptOre();
+	int GetOreCount() { return mOreCount; }
+	void SetOreCount(int i) { mOreCount = i; }
+	vector <Ore*> GetOreList() { return mOreList; }
+	void OreErase() { mOreList.erase(mOreList.begin(), mOreList.begin() + 2); }
 };

@@ -9,6 +9,7 @@
 
 void Abra::Init()
 {
+	mMachop = (Machop*)OBJECTMANAGER->FindObject("Machop");
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Abra");
 
@@ -25,8 +26,9 @@ void Abra::Init()
 	mDirection = Direction::Right;
 	mState = State::Move;
 	mSpeed = 100.f;
-	mTimer = 0;
 	mLevel = 1;
+	mSynthesisCoolTime = 0;
+	mIsSynthesis = false;
 
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
@@ -52,6 +54,8 @@ void Abra::Update()
 {
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
+
+	SynthesisOre();
 
 	//상태정하기
 	//if (mTimer == 0)
@@ -89,13 +93,13 @@ void Abra::Update()
 	}
 
 	//움직임
-	if (mState == State::Sleep)
-	{
-		mTimer += Time::GetInstance()->DeltaTime();
-	}
+	//if (mState == State::Sleep)
+	//{
+	//	mTimer += Time::GetInstance()->DeltaTime();
+	//}
 
 	SetSpeed();
-	if (mState == State::Move)
+	if (mState == State::Move || mState == State::Synthesis)
 	{
 		mX += mSpeedX * Time::GetInstance()->DeltaTime() / 2;
 		mY += mSpeedY * Time::GetInstance()->DeltaTime() / 2;
@@ -187,6 +191,30 @@ void Abra::ReadyAnimation()
 	mExplode->SetIsLoop(false);
 	mExplode->SetFrameUpdateTime(0.1f);
 	mExplode->SetCallbackFunc(bind(&Train::EndExplode, this));
+
+	mDownSynthesis = new Animation();
+	mDownSynthesis->InitFrameByStartEnd(0, 6, 1, 6, false);
+	mDownSynthesis->SetIsLoop(false);
+	mDownSynthesis->SetFrameUpdateTime(0.3f);
+	mDownSynthesis->SetCallbackFunc(bind(&Abra::EndSynthesis, this));
+
+	mUpSynthesis = new Animation();
+	mUpSynthesis->InitFrameByStartEnd(2, 6, 3, 6, false);
+	mUpSynthesis->SetIsLoop(false);
+	mUpSynthesis->SetFrameUpdateTime(0.3f);
+	mUpSynthesis->SetCallbackFunc(bind(&Abra::EndSynthesis, this));
+
+	mLeftSynthesis = new Animation();
+	mLeftSynthesis->InitFrameByStartEnd(0, 7, 1, 7, false);
+	mLeftSynthesis->SetIsLoop(false);
+	mLeftSynthesis->SetFrameUpdateTime(0.4f);
+	mLeftSynthesis->SetCallbackFunc(bind(&Abra::EndSynthesis, this));
+
+	mRightSynthesis = new Animation();
+	mRightSynthesis->InitFrameByStartEnd(2, 7, 3, 7, false);
+	mRightSynthesis->SetIsLoop(false);
+	mRightSynthesis->SetFrameUpdateTime(0.4f);
+	mRightSynthesis->SetCallbackFunc(bind(&Abra::EndSynthesis, this));
 }
 
 void Abra::SetAnimation()
@@ -233,6 +261,36 @@ void Abra::SetAnimation()
 		}
 	}
 
+	if (mState == State::Synthesis)
+	{
+		if (mDirection == Direction::Down)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mDownSynthesis;
+			mCurrentAnimation->Play();
+		}
+		if (mDirection == Direction::Up)
+		{
+
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mUpSynthesis;
+			mCurrentAnimation->Play();
+		}
+		if (mDirection == Direction::Left)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mLeftSynthesis;
+			mCurrentAnimation->Play();
+
+		}
+		if (mDirection == Direction::Right)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mRightSynthesis;
+			mCurrentAnimation->Play();
+		}
+	}
+
 	if (mState == State::Sleep)
 	{
 		if (mDirection == Direction::Right)
@@ -254,6 +312,58 @@ void Abra::SetAnimation()
 		mCurrentAnimation = mExplode;
 		mCurrentAnimation->Play();
 		mCurrentImage = mExplodeImage;
+	}
+}
+
+void Abra::SynthesisOre()
+{
+	if (mMachop->GetOreList().size() >= 2 && mIsSynthesis == false)
+	{
+		mState = State::Synthesis;
+		SetAnimation();
+
+		mMachop->OreErase();
+		mMachop->SetOreCount(mMachop->GetOreCount() - 2);
+
+		mIsSynthesis = true;
+	}
+	if (mIsSynthesis == true)
+	{
+		mSynthesisCoolTime += TIME->DeltaTime();
+	}
+	if (mSynthesisCoolTime >= 1.5f && mIsSynthesis == true)
+	{
+		mIsSynthesis = false;
+		mSynthesisCoolTime = 0;
+		
+	}
+	
+}
+
+void Abra::EndSynthesis()
+{
+	if (mState == State::Synthesis)
+	{
+		if (mDirection == Direction::Down)
+		{
+			mState = State::Move;
+			SetAnimation();
+		}
+		if (mDirection == Direction::Up)
+		{
+			mState = State::Move;
+			SetAnimation();
+		}
+		if (mDirection == Direction::Left)
+		{
+			mState = State::Move;
+			SetAnimation();
+		}
+		if (mDirection == Direction::Right)
+		{
+			mState = State::Move;
+			SetAnimation();
+		}
 	}
 }
 

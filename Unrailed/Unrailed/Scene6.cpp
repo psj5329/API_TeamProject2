@@ -51,9 +51,10 @@ void Scene6::Init()
 	mVoltorbVec[1]->SetImage(1);
 	mVoltorbVec[2]->SetImage(1);
 
-	mVoltorbVec[0]->SetY(WINSIZEY / 2 - 50);
-	mVoltorbVec[1]->SetY(WINSIZEY / 2 - 40);
-	mVoltorbVec[2]->SetY(WINSIZEY / 2 - 40);
+	for (int i = 0; i < 3; i++)
+	{
+		mVoltorbVec[i]->SetY(WINSIZEY / 2 - 40);
+	}
 
 	mMachop = new Machop;
 	mMachop->Init();

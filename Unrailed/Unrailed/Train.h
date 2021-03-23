@@ -32,10 +32,11 @@ protected:
 	float mSpeedY;
 	int mTargetX;
 	int mTargetY;
-	float mTimer;
+	float mSynthesisCoolTime;
 	int mLevel;
 	bool mStop;
 	bool mIsExplode;
+	bool mIsSynthesis;
 
 	class Image* mCurrentImage;
 	class Image* mImage;
