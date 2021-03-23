@@ -105,6 +105,7 @@ public:
 	void SafeDeleteAnimation();
 
 	void InputDirectionKey();
+	void Move();
 	void InputSpaceKey();
 	void CheckNextTile();
 	void InputCKey(); // 'C' means ChangeForm // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
@@ -115,6 +116,8 @@ public:
 
 public:
 	RECT* GetColBoxPtr(void) { return &mColBox; }
+	DirectionEight GetDir(void) const { return mDir; }
+	Form GetForm(void) const { return mForm; }
 
 	void SetTileListPtr(vector<vector<Tile*>>* tileListPtr) { mTileListPtr = tileListPtr; }
 	void SetMapObjectListPtr(vector<vector<MapObject*>>* mapObjectListPtr) { mMapObjectListPtr = mapObjectListPtr; }

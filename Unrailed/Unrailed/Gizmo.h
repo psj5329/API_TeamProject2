@@ -6,7 +6,32 @@ class Gizmo final
 public:
 	enum class Color : int
 	{
-		Blue,Red, Green,End,Black,Gray
+		Green,
+		Blue,
+		Red,
+		Black,
+		Gray,
+		Lime,
+		DarkGreen,
+		Navy,
+		Maroon,
+		DarkRed,
+		Crimson,
+		Brown,
+		Pink,
+		DeepPink,
+		Yellow,
+		Olive,
+		Orange,
+		DarkOrange,
+		OrangeRed,
+		Cyan,
+		DeepSkyBlue,
+		SkyBlue,
+		DarkCyan,
+		Purple,
+		Violet,
+		End
 	};
 private:
 	map<Color, HPEN> mPenList;
@@ -22,3 +47,4 @@ public:
 	void DrawRectInCamera(HDC hdc, RECT rc, Color color);
 };
 
+#define GIZMO Gizmo::GetInstance()

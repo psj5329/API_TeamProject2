@@ -25,6 +25,110 @@ bool CollisionManager::IsCollision(RECT * rc1, RECT * rc2)
 	return true;*/
 }
 
+void CollisionManager::TileMapObjectCollision(Player* player, RECT* rc, vector<vector<Tile*>>* tileList, vector<vector<MapObject*>>* mapObjectList, int indexX, int indexY)
+{
+	bool isCorrected = false;
+
+	float rcWidth = rc->right - rc->left;
+	float rcHeight = rc->bottom - rc->top;
+
+	for (int j = indexY - 1; j <= indexY + 1; ++j) // 타일 검사
+	{
+		for (int i = indexX - 1; i <= indexX + 1; ++i)
+		{
+			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
+			{
+				Form form = player->GetForm();
+				DirectionEight dir = player->GetDir();
+				RECT temp;
+				Tile* tile = (*tileList)[j][i];
+				RECT tileRc = tile->GetRect();
+				TileType tileType = tile->GetTileType();
+
+			//	if (tileType == TileType::Normal)
+			//		continue;
+			//	else if (tileType == TileType::Water && form == Form::Totodile)
+			//		continue;
+			//	else if (tileType == TileType::Lava && form == Form::Charmander)
+			//		continue;
+
+				//if ((dir == DirectionEight::Down && j == indexY + 1) || (dir == DirectionEight::Up && j == indexY - 1) ||
+				//	(dir == DirectionEight::Left && i == indexX - 1) || (dir == DirectionEight::Right && i == indexX + 1))
+				//{
+					if (IntersectRect(&temp, rc, &tileRc))
+					{
+						float width = temp.right - temp.left;
+						float height = temp.bottom - temp.top;
+
+						if (width > height)
+						{
+							if (temp.top == tileRc.top) // rc상 / tile하
+								player->SetY(tileRc.top - rcHeight / 2);
+							else // tile상 / rc하
+								player->SetY(tileRc.bottom + rcHeight / 2);
+						}
+						else
+						{
+							if (temp.left == tileRc.left) // rc좌 / tile우
+								player->SetY(tileRc.left - rcWidth / 2);
+							else // tile좌 / rc우
+								player->SetY(tileRc.right + rcWidth / 2);
+						}
+
+						isCorrected = true;
+					}
+				//}
+			}
+		}
+	}
+
+	if (isCorrected) // 타일 검사 후 보정 끝났으면 나가주세요.
+		return;
+	/*
+	for (int j = indexY - 1; j <= indexY + 1; ++j) // 맵 오브젝트 검사
+	{
+		for (int i = indexX - 1; i <= indexX + 1; ++i)
+		{
+			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
+			{
+				Form form = player->GetForm();
+				DirectionEight dir = player->GetDir();
+				RECT temp;
+				//MapObject* mapObject = (*mapObjectList)[j][i];
+				RECT mapObjectRc = (*mapObjectList)[j][i]->GetRect();
+				//MapObjectType mapObjectType = mapObject->GetMapObjectType();
+
+				if ((dir == DirectionEight::Down && j == indexY + 1) || (dir == DirectionEight::Up && j == indexY - 1) ||
+					(dir == DirectionEight::Left && i == indexX - 1) || (dir == DirectionEight::Right && i == indexX + 1))
+				{
+					if (IntersectRect(&temp, rc, &mapObjectRc))
+					{
+						float width = temp.right - temp.left;
+						float height = temp.bottom - temp.top;
+
+						if (width > height)
+						{
+							if (temp.top == mapObjectRc.top) // rc상 / mapObject하
+								player->SetY(mapObjectRc.top - rcHeight / 2);
+							else // mapObject상 / rc하
+								player->SetY(mapObjectRc.bottom + rcHeight / 2);
+						}
+						else
+						{
+							if (temp.left == mapObjectRc.left) // rc좌 / mapObject우
+								player->SetY(mapObjectRc.left - rcWidth / 2);
+							else // mapObject좌 / rc우
+								player->SetY(mapObjectRc.right + rcWidth / 2);
+						}
+
+						isCorrected = true;
+					}
+				}
+			}
+		}
+	}*/
+}
+
 void CollisionManager::TileCollision(Player* player, TileMap* tileMap)
 {
 	vector <vector <Tile*>>* tileList = tileMap->GetTileListPtr();
@@ -230,7 +334,7 @@ void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 		}
 	}
 }
-/*
+
 void CollisionManager::MapObjectCollision(Player* player, RECT* rc, TileMap* tileMap)
 {
 	vector<vector<Tile*>>* tileList = tileMap->GetTileListPtr();
@@ -302,7 +406,7 @@ void CollisionManager::MapObjectCollision(Player* player, RECT* rc, TileMap* til
 		}
 	}
 }
-*/
+
 void CollisionManager::MapObjectCollision(Player* player, RECT* rc, vector<vector<Tile*>>* tileList, vector<vector<MapObject*>>* mapObjectList)
 {
 	int x = player->GetX() / TileSize;
@@ -372,66 +476,14 @@ void CollisionManager::MapObjectCollision(Player* player, RECT* rc, vector<vecto
 	}
 }
 
-void CollisionManager::MapObjectCollision(Player* player, RECT* rc, vector<vector<MapObject*>>* mapObjectList, int nextTileX, int nextTileY)
+void CollisionManager::MapObjectCollision(RECT* rc, vector<vector<MapObject*>>* mapObjectList, int tileIndexX, int tileIndexY)
 {
-	int x = player->GetX() / TileSize;
-	int y = player->GetY() / TileSize;
-
-	float rcWidth = rc->right - rc->left;
-	float rcHeight = rc->bottom - rc->top;
-
 	RECT temp;
-	MapObject* nextObject = (*mapObjectList)[nextTileY][nextTileX];
-	RECT nextMapObjectRc = nextObject->GetRect();
-	if (IntersectRect(&temp, rc, &nextMapObjectRc))
-	{
-		float width = temp.right - temp.left;
-		float height = temp.bottom - temp.top;
+	MapObject* mapObject = (*mapObjectList)[tileIndexY][tileIndexX];
+	RECT mapObjectRc = mapObject->GetRect();
 
-		if (nextObject->GetMapObjectType() != MapObjectType::None)
-		{
-			nextObject->DeductHp();
-		}
-	}
-
-	/*
-	RECT temp;
-	RECT mapObjectRc = (*tileList)[j][i]->GetRect();
 	if (IntersectRect(&temp, rc, &mapObjectRc))
-	{
-		float width = temp.right - temp.left;
-		float height = temp.bottom - temp.top;
-
-		if ((*mapObjectList)[j][i]->GetMapObjectType() != MapObjectType::None)		// None이 아니라면 광물이 있음
-		{
-			if (width > height)
-			{
-				if (temp.top == (*mapObjectList)[j][i]->GetRect().top)	// 플레이어가 위
-				{
-					//player->SetY((*mapObjectList)[j][i]->GetRect().top - rcHeight / 2);
-					(*mapObjectList)[j][i]->DeductHp();
-				}
-				else if (temp.bottom == (*mapObjectList)[j][i]->GetRect().bottom)	// 플레이어가 아래
-				{
-					//player->SetY((*mapObjectList)[j][i]->GetRect().bottom + rcHeight / 2);
-					(*mapObjectList)[j][i]->DeductHp();
-				}
-			}
-			else
-			{
-				if (temp.left == (*mapObjectList)[j][i]->GetRect().left)	// 플레이어가 왼쪽
-				{
-					//player->SetX((*mapObjectList)[j][i]->GetRect().left - rcWidth / 2);
-					(*mapObjectList)[j][i]->DeductHp();
-				}
-				else if (temp.right == (*mapObjectList)[j][i]->GetRect().right)	// 플레이어가 오른쪽
-				{
-					//player->SetX((*mapObjectList)[j][i]->GetRect().right + rcWidth / 2);
-					(*mapObjectList)[j][i]->DeductHp();
-				}
-			}
-		}
-	}*/
+		mapObject->DeductHp();
 }
 
 GameObject * CollisionManager::ItemCollision(RECT* rc)
