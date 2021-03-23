@@ -76,8 +76,8 @@ void Scene4::Update()
 	OBJECTMANAGER->Update();
 
 	RECT* playerColBoxPtr = mTempPlayer->GetColBoxPtr();
-	COLLISIONMANAGER->TileCollision(mTempPlayer, playerColBoxPtr, mTileMap);
-	// COLLISIONMANAGER->MapObjectCollision(mTempPlayer, playerColBoxPtr, mTileMap); // 플레이어 내부로 이동
+	COLLISIONMANAGER->TileCollision(mTempPlayer, playerColBoxPtr, mTileMap); // 플레이어 내부로 이동.. 일단 실패.. 집에서 재도전
+//	COLLISIONMANAGER->MapObjectCollision(mTempPlayer, playerColBoxPtr, mTileMap);
 }
 
 void Scene4::Render(HDC hdc)

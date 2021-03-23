@@ -2,12 +2,12 @@
 #include "Player.h"
 
 #include "Image.h"
-#include "Animation.h"
 #include "Camera.h"
+#include "Animation.h"
 #include "Tile.h"
 #include "MapObject.h"
-#include "Ore.h"
 #include "TrailManager.h"
+#include "Ore.h"
 
 Player::Player(const string& name, float x, float y)
 	:GameObject(name, x, y)
@@ -62,11 +62,10 @@ void Player::Update()
 {
 	mTileX = (int)(mX / TileSize);
 	mTileY = (int)(mY / TileSize);
-	// 현재 플레이어 사이즈 늘려주면서 mx, my가 제대로 잡히지 않고 있음, 타일은 스케일링 어떻게 하고 있는지 파악하기
-	// 플레이어는 그냥 현재 이미지에 렌더만 배수 늘려줘서 이상함
-	// 원래 크기로는 딱 중심, 2배 크기로는 왼쪽 윗부분 잡힘
 
 	InputDirectionKey();
+
+	//Move(); // 씬4 업데이트 내에 주석 걸고 이거 살리고 계속 하면 됨
 
 	InputSpaceKey();
 
@@ -86,19 +85,19 @@ void Player::Render(HDC hdc)
 #ifdef DEBUG
 	RenderRect(hdc, mColBox);
 #endif
-	// 카메라 기준 렌더링(유찬)
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
 		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
-	/*CameraManager::GetInstance()->GetMainCamera()
-		->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
-			mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(),
-			mImage->GetFrameWidth() * 2, mImage->GetFrameHeight() * 2);*/
 
-	// 임시로 카메라 고정형 렌더링
-	//mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,
-	//	mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
-
+	// 테스트 텍스트 // 릴리즈 전 지워주세요
 	RenderTestText(hdc);
+
+	// {{ 현재 타일, 다음 타일 확인용 // 릴리즈 전 지워주세요 // 유찬
+	RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
+	RECT nextRc = (*mTileListPtr)[mNextTileY][mNextTileX]->GetRect();
+	GIZMO->DrawRect(hdc, currentRc, Gizmo::Color::Yellow);
+	GIZMO->DrawRect(hdc, nextRc, Gizmo::Color::Cyan);
+	GIZMO->DrawRect(hdc, mColBox, Gizmo::Color::Violet);
+	// }} 현재 타일, 다음 타일 확인용 // 릴리즈 전 지워주세요
 }
 
 void Player::InitAnimation()
@@ -487,6 +486,17 @@ void Player::InputDirectionKey()
 	mColBox = RectMakeCenter((int)mX, (int)mY, TileSize, TileSize);
 }
 
+void Player::Move()
+{
+	COLLISIONMANAGER->TileMapObjectCollision(this, &mColBox, mTileListPtr, mMapObjectListPtr, mTileX, mTileY);
+
+	//TileMapObjectCollision(Player* player, RECT* rc, vector<vector<Tile*>>* tileList, vector<vector<MapObject*>>* mapObjectList, int indexX, int indexY)
+	// 타일리스트 포인터 넘겨주게 수정해야 함
+
+	//COLLISIONMANAGER->TileCollision(this, &mColBox, mTileMap); 
+	//COLLISIONMANAGER->MapObjectCollision(this, &mColBox, mTileMap); // 플레이어 내부로 이동
+}
+
 void Player::InputSpaceKey()
 {
 	mIsGettingItemThisFrame = false;
@@ -495,6 +505,31 @@ void Player::InputSpaceKey()
 	{
 		CheckNextTile();
 
+		if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Green))
+		{
+			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
+			mIsAttackingTemp = true;
+		}
+		else if ((mForm == Form::Totodile) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Blue))
+		{
+			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
+			mIsAttackingTemp = true;
+		}
+		else if ((mForm == Form::Charmander) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Red))
+		{
+			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
+			mIsAttackingTemp = true;
+		}
+		else
+		{
+			mIsAttackingTemp = false;
+		}
+
+		// 이동할 때 앞에 1. 못가는 타일 2. 맵오브젝트(안캔광물)
+		// 아이템(3) 내려놓을 때 앞에 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물)//내가 가지고 있는 것이랑 다를 때 4. 기찻길 > 일 때 놓을 수 없음
+		// 기찻길(4) 내려놓을 떄 앞에 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물) 4. 기찻길 5. 비어있더라도 타일과 기찻길의 속성이 안 맞을 때 > 일 때 놓을 수 없음
+
+		/*
 		// {{ 맵오브젝트(벽) -> 아이템(광물) // 광물 캐기
 		if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Green))
 		{
@@ -517,9 +552,10 @@ void Player::InputSpaceKey()
 		else
 			mIsAttackingTemp = false;
 		// }} 맵오브젝트(벽) -> 아이템(광물) // 광물 캐기
+		*/
 
 		// {{ 아이템(광물) -> 인벤 소지 아이템(UI) // 아이템 줍기
-		GameObject* item = COLLISIONMANAGER->ItemCollision(&mColBox);
+/*		GameObject* item = COLLISIONMANAGER->ItemCollision(&mColBox);
 		OreType invenType;
 
 		if (mItemList.size())
@@ -607,7 +643,7 @@ void Player::InputSpaceKey()
 
 					mItemList.erase(mItemList.begin());
 				}
-			}*/
+			}
 		}
 		// }} 인벤 소지 아이템(UI) -> 아이템(광물) // 아이템 버리기
 
@@ -620,7 +656,7 @@ void Player::InputSpaceKey()
 //		{}
 		// }} 화살표 돌리기
 
-		// (*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Red))
+		// (*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Red))*/
 	}
 	else
 		mIsAttackingTemp = false;

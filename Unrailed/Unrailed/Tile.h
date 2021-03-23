@@ -3,11 +3,11 @@
 //구조체 변수는 대문자로 시작하게 짬, 나같은경우에는
 enum class TileType : int
 {
-	Normal,
-	Wall,
-	Water,
-	Lava,
-	ice
+	Normal, // 모두 갈 수 있는 곳
+	Wall, // 아무도 갈 수 없는 곳
+	Water, // 리아코만 갈 수 있는 곳
+	Lava, // 파이리만 갈 수 있는 곳
+	ice // 미끄러지는 곳이지만 보류
 };
 
 struct TilePallete
@@ -48,8 +48,6 @@ struct TypePallete
 	int a;
 };
 
-
-
 class Tile
 {
 	class Image* mImage;
@@ -67,9 +65,9 @@ class Tile
 	TileType mTileType;
 
 public:
-
 	Tile(class Image* image, class Image* coverImage, float x, float y, float sizeX, float sizeY,
 		int frameIndexX, int frameIndexY, int type);
+
 	void Render(HDC hdc);
 
 	//겟
@@ -93,7 +91,4 @@ public:
 	void SetFrameIndexY(int indexY) { mFrameIndexY = indexY; }
 	void SetTileType(TileType tiletype) { mTileType = tiletype; }
 	void SetCoverImage();
-
-private:
 };
-
