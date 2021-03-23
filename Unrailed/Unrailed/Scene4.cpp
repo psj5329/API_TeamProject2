@@ -9,14 +9,14 @@
 
 void Scene4::Init()
 {
-	// í”Œë ˆì´ì–´ë„ ì‚¬ì‹¤ ë©”ì¸ê²Œìž„ìœ¼ë¡œ ê°€ì•¼ í•¨
+	// ÇÃ·¹ÀÌ¾îµµ »ç½Ç ¸ÞÀÎ°ÔÀÓÀ¸·Î °¡¾ß ÇÔ
 	mTempPlayer = new Player("Player", TileSize * 4.5, TileSize * 4.5);
 	OBJECTMANAGER->AddObject(ObjectLayer::PLAYER, mTempPlayer);
 
-	// ê° ì”¬ì—ì„œëŠ” ì–˜ë¥¼ ì‚¬ìš©í•´ì•¼ í•¨
+	// °¢ ¾À¿¡¼­´Â ¾ê¸¦ »ç¿ëÇØ¾ß ÇÔ
 	//Player* player = (Player*)(OBJECTMANAGER->FindObject("Player"));
 
-	/* ì–˜ëŠ” ë©”ì¸ìœ¼ë¡œ ê°€ì•¼ í•¨
+	/* ¾ê´Â ¸ÞÀÎÀ¸·Î °¡¾ß ÇÔ
 	Camera* camera = new Camera();
 	camera->SetX(100);
 	camera->SetY(WINSIZEY / 2);
@@ -75,9 +75,9 @@ void Scene4::Update()
 	mTrailManager->Update();
 	OBJECTMANAGER->Update();
 
-//	RECT* playerColBoxPtr = mTempPlayer->GetColBoxPtr(); // ì´ ì„¸ ì¤„ ì§€ìš°??ìž!!
-//	COLLISIONMANAGER->TileCollision(mTempPlayer, playerColBoxPtr, mTileMap); // í”Œë ˆì´ì–´ ë‚´ë¶€ë¡œ ì´ë™í–ˆìŒ ì§€ìš¸ ì˜ˆì •!
-//	COLLISIONMANAGER->MapObjectCollision(mTempPlayer, playerColBoxPtr, mTileMap);
+	//	RECT* playerColBoxPtr = mTempPlayer->GetColBoxPtr(); // ÀÌ ¼¼ ÁÙ Áö¿ì??ÀÚ!!
+	//	COLLISIONMANAGER->TileCollision(mTempPlayer, playerColBoxPtr, mTileMap); // ÇÃ·¹ÀÌ¾î ³»ºÎ·Î ÀÌµ¿ÇßÀ½ Áö¿ï ¿¹Á¤!
+	//	COLLISIONMANAGER->MapObjectCollision(mTempPlayer, playerColBoxPtr, mTileMap);
 }
 
 void Scene4::Render(HDC hdc)
@@ -86,8 +86,8 @@ void Scene4::Render(HDC hdc)
 	mTrailManager->Render(hdc);
 	OBJECTMANAGER->Render(hdc);
 
-	// {{ ì™„ì„±ë³¸ì—ì„œ ì§€ì›Œì•¼ í•  ë‚´ìš© ì‹œìž‘
-	wstring strScene = L"ì´ê±´ 4ë²ˆ ì”¬ / ë°©í–¥í‚¤: ì´ë™ / ì´ë™ ì¤‘ shift: ëŒ€ì‹œ / C: ë³€ì‹ ";
+	// {{ ¿Ï¼ºº»¿¡¼­ Áö¿ö¾ß ÇÒ ³»¿ë ½ÃÀÛ
+	wstring strScene = L"ÀÌ°Ç 4¹ø ¾À / ¹æÇâÅ°: ÀÌµ¿ / ÀÌµ¿ Áß shift: ´ë½Ã / C: º¯½Å";
 	TextOut(hdc, WINSIZEX / 2 - 15, 100, strScene.c_str(), strScene.length());
-	// ì™„ì„±ë³¸ì—ì„œ ì§€ì›Œì•¼ í•  ë‚´ìš© ë }}
+	// ¿Ï¼ºº»¿¡¼­ Áö¿ö¾ß ÇÒ ³»¿ë ³¡ }}
 }
