@@ -3,190 +3,191 @@
 #include "Image.h"
 #include "Animation.h"
 #include "Camera.h"
+#include "TrailManager.h"
 
 void Trail::Init(int x, int y, int type, int direction)
 {
-	mTrailType = (TrailType)type;
-	mDirection = (TrailDirection)direction;
+    mTrailType = (TrailType)type;
+    mDirection = (TrailDirection)direction;
 
-	//이미지정하기
-	if (mTrailType == TrailType::Green)
-	{
-		mImage = IMAGEMANAGER->FindImage(L"GreenTrail");
-	}
-	else if (mTrailType == TrailType::Blue)
-	{
-		mImage = IMAGEMANAGER->FindImage(L"BlueTrail");
-	}
-	else
-	{
-		mImage = IMAGEMANAGER->FindImage(L"RedTrail");
-	}
+    //이미지정하기
+    if (mTrailType == TrailType::Green)
+    {
+        mImage = IMAGEMANAGER->FindImage(L"GreenTrail");
+    }
+    else if (mTrailType == TrailType::Blue)
+    {
+        mImage = IMAGEMANAGER->FindImage(L"BlueTrail");
+    }
+    else 
+    {
+        mImage = IMAGEMANAGER->FindImage(L"RedTrail");
+    }
+    
+        
+    mX = x;
+    mY = y;
+    mSizeX = mImage->GetFrameWidth() * 2;
+    mSizeY = mImage->GetFrameHeight() * 2;
+    mRect = RectMake(mX, mY, mSizeX, mSizeY);
+    mIsConnected = false;
+    mIsTail = false;
+    mOrder = 0;
 
-
-	mX = x;
-	mY = y;
-	mSizeX = mImage->GetFrameWidth() * 2;
-	mSizeY = mImage->GetFrameHeight() * 2;
-	mRect = RectMake(mX, mY, mSizeX, mSizeY);
-	mIsConnected = false;
-	mIsTail = false;
-
-	AnimationInit();
-
-	if (mDirection == TrailDirection::Down)
-	{
-		mCurrentAnimation = mDown;
-	}
-	else if (mDirection == TrailDirection::Up)
-	{
-		mCurrentAnimation = mUp;
-	}
-	else if (mDirection == TrailDirection::Left)
-	{
-		mCurrentAnimation = mLeft;
-	}
-	else
-	{
-		mCurrentAnimation = mRight;
-	}
-	mCurrentAnimation->Play();
 }
 
 void Trail::Release()
 {
-	SafeDelete(mUp);
-	SafeDelete(mDown);
-	SafeDelete(mLeft);
-	SafeDelete(mRight);
-	SafeDelete(mCurrentAnimation);
+    SafeDelete(mUp);
+    SafeDelete(mDown);
+    SafeDelete(mLeft);
+    SafeDelete(mRight);
+    SafeDelete(mCurrentAnimation);
 }
 
 void Trail::Update()
 {
 
-	//연결된 친구들만 애니메이션 움직이게
-	if (mIsConnected)
-	{
-		mCurrentAnimation->Update();
-	}
 }
 
 void Trail::Render(HDC hdc)
 {
-	if (mTrailType != TrailType::None)
-		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-	// mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+    if (mTrailType != TrailType::None)
+    {
+        if (mIsConnected)
+        {
+            CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc,mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+
+        }
+        else
+        {
+            if(mDirection == TrailDirection::Up)
+            { 
+                CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, 0, 0, mSizeX, mSizeY);
+            }
+            else if (mDirection == TrailDirection::Down)
+            {
+                CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, 0, 1, mSizeX, mSizeY);
+            }
+            else if (mDirection == TrailDirection::Left)
+            {
+                CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, 0, 3, mSizeX, mSizeY);
+            }
+            else
+            {
+                CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, 0, 2, mSizeX, mSizeY);
+            }
+
+        }
+    }
+       // mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
+
 
 //플레이어의 돌리기
 void Trail::Turn()
 {
 	switch (mDirection)
 	{
-	case TrailDirection::Down:
-		mDirection = TrailDirection::Left;
-		mCurrentAnimation->Stop();
-		mCurrentAnimation = mLeft;
-		mCurrentAnimation->Play();
-		break;
-	case TrailDirection::Up:
-		mDirection = TrailDirection::Right;
-		mCurrentAnimation->Stop();
-		mCurrentAnimation = mRight;
-		mCurrentAnimation->Play();
-		break;
-	case TrailDirection::Left:
-		mDirection = TrailDirection::Up;
-		mCurrentAnimation->Stop();
-		mCurrentAnimation = mUp;
-		mCurrentAnimation->Play();
-		break;
-	case TrailDirection::Right:
-		mDirection = TrailDirection::Down;
-		mCurrentAnimation->Stop();
-		mCurrentAnimation = mDown;
-		mCurrentAnimation->Play();
-		break;
-	default:
-		break;
+    case TrailDirection::Down:
+        mDirection = TrailDirection::Left;
+        mCurrentAnimation = mLeft;
+        break;
+    case TrailDirection::Up:
+        mDirection = TrailDirection::Right;
+        mCurrentAnimation = mRight;
+        break;
+    case TrailDirection::Left:
+        mDirection = TrailDirection::Up;
+        mCurrentAnimation = mUp;
+        break;
+    case TrailDirection::Right:
+        mDirection = TrailDirection::Down;
+        mCurrentAnimation = mDown;
+        break;
+    default:
+        break;
 	}
 
 }
 
-void Trail::AnimationInit()
+void Trail::AnimationInit(Animation* down, Animation* up, Animation* left, Animation* right)
 {
-	mDown = new Animation();
-	mDown->InitFrameByStartEnd(0, 1, 3, 1, false);
-	mDown->SetIsLoop(true);
-	mDown->SetFrameUpdateTime(0.2f);
+    mDown = down;
 
-	mUp = new Animation();
-	mUp->InitFrameByStartEnd(0, 0, 3, 0, false);
-	mUp->SetIsLoop(true);
-	mUp->SetFrameUpdateTime(0.2f);
+    mUp = up;
 
-	mLeft = new Animation();
-	mLeft->InitFrameByStartEnd(0, 3, 3, 3, false);
-	mLeft->SetIsLoop(true);
-	mLeft->SetFrameUpdateTime(0.2f);
+    mLeft = left;
 
-	mRight = new Animation();
-	mRight->InitFrameByStartEnd(0, 2, 3, 2, false);
-	mRight->SetIsLoop(true);
-	mRight->SetFrameUpdateTime(0.2f);
+    mRight = right;
+
+    if (mDirection == TrailDirection::Down)
+    {
+        mCurrentAnimation = mDown;
+    }
+    else if (mDirection == TrailDirection::Up)
+    {
+        mCurrentAnimation = mUp;
+    }
+    else if (mDirection == TrailDirection::Left)
+    {
+        mCurrentAnimation = mLeft;
+    }
+    else
+    {
+        mCurrentAnimation = mRight;
+    }
+    //mCurrentAnimation->Play();
 
 }
 
 int Trail::PickUp()
 {
-	mIsActive = false;
-	mIsDestroy = true;
-	return (int)mTrailType;
+    mIsActive = false;
+    mIsDestroy = true;
+    return (int)mTrailType;
 }
 
 //속성바꾸기
-void Trail::SetTrailType(int type)
-{
-	mTrailType = (TrailType)type;
-	//이미지정하기
-	if (mTrailType == TrailType::Green)
-	{
-		mImage = IMAGEMANAGER->FindImage(L"GreenTrail");
-	}
-	else if (mTrailType == TrailType::Blue)
-	{
-		mImage = IMAGEMANAGER->FindImage(L"BlueTrail");
-	}
-	else
-	{
-		mImage = IMAGEMANAGER->FindImage(L"RedTrail");
-	}
+void Trail::SetTrailType(int type) 
+{ 
+    mTrailType = (TrailType)type; 
+    //이미지정하기
+    if (mTrailType == TrailType::Green)
+    {
+        mImage = IMAGEMANAGER->FindImage(L"GreenTrail");
+    }
+    else if (mTrailType == TrailType::Blue)
+    {
+        mImage = IMAGEMANAGER->FindImage(L"BlueTrail");
+    }
+    else
+    {
+        mImage = IMAGEMANAGER->FindImage(L"RedTrail");
+    }
 }
 
 //방향바꾸기
-void Trail::SetDirection(int dir)
-{
-	mDirection = (TrailDirection)dir;
+void Trail::SetDirection(int dir) 
+{ 
+    mDirection = (TrailDirection)dir; 
 
-	mCurrentAnimation->Stop();
-	switch (mDirection)
-	{
-	case TrailDirection::Down:
-		mCurrentAnimation = mDown;
-		break;
-	case TrailDirection::Up:
-		mCurrentAnimation = mUp;
-		break;
-	case TrailDirection::Left:
-		mCurrentAnimation = mLeft;
-		break;
-	case TrailDirection::Right:
-		mCurrentAnimation = mRight;
-		break;
-	default:
-		break;
-	}
-	mCurrentAnimation->Play();
+    switch (mDirection)
+    {
+    case TrailDirection::Down:
+        mCurrentAnimation = mDown;
+        break;
+    case TrailDirection::Up:
+        mCurrentAnimation = mUp;
+        break;
+    case TrailDirection::Left:
+        mCurrentAnimation = mLeft;
+        break;
+    case TrailDirection::Right:
+        mCurrentAnimation = mRight;
+        break;
+    default:
+        break;
+    }
 
 }

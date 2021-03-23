@@ -1,13 +1,15 @@
 #include "pch.h"
 //#include "Trail.h"
 #include "TrailManager.h"
+#include "Animation.h"
 
 
 void TrailManager::Init()
 {
 	YTileCount = TileCountY;
 	XTileCount = TileCountX;
-	//빈트레일 인잇
+	//빈트레일 인니셜라이즈
+	AnimationInit();
 	for (int y = 0; y < TileCountY; ++y)
 	{
 		mTrailList.push_back(vector <Trail*>());
@@ -20,13 +22,16 @@ void TrailManager::Init()
 
 		}
 	}
+
 }
 
 void TrailManager::Init(int y, int x)
 {
 	YTileCount = y;
 	XTileCount = x;
-	//빈트레일 인잇
+	//빈트레일 이니셜라이즈
+	AnimationInit();
+
 	for (int y = 0; y < YTileCount; ++y)
 	{
 		mTrailList.push_back(vector <Trail*>());
@@ -35,6 +40,7 @@ void TrailManager::Init(int y, int x)
 			//벡터
 			Trail* trail = new Trail();
 			trail->Init(TileSize * x, TileSize * y, 0, 0);
+			trail->AnimationInit(mDown, mUp, mLeft, mRight);
 			mTrailList[y].push_back(trail);
 		}
 	}
@@ -68,6 +74,10 @@ void TrailManager::Update()
 			mTrailList[y][x]->Update();
 		}
 	}
+	mUp->Update();
+	mDown->Update();
+	mLeft->Update();
+	mRight->Update();
 }
 
 void TrailManager::Render(HDC hdc)
@@ -99,18 +109,27 @@ void TrailManager::InsertTrail(int indexY, int indexX, int type, int dir)
 void TrailManager::TurnTrail(int indexY, int indexX)
 {
 	//mTrailList.back()->Turn();
-	//돌릴려는게 꼬리면
-	if (mTrailList[indexY][indexX]->GetIsTail())
+	if (mTrailList[indexY][indexX]->GetTrailType() == TrailType::None)
+		return;
+
+	//돌릴려는게 꼬리거나 연결안된친구면
+	if (mTrailList[indexY][indexX]->GetIsTail() || !mTrailList[indexY][indexX]->GetIsConnected())
 	{
 		//일단돌려
 		mTrailList[indexY][indexX]->Turn();
 		//아래보는데
 		if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Down)
 		{
-			if (indexY < YTileCount)
+			if (indexY < YTileCount-1)
 			{
-				//아래에 연결된트레일이있다면
+				//아래에 연결된 트레일이있거나
 				if (mTrailList[indexY + 1][indexX]->GetIsConnected())
+				{
+					//다시돌려
+					TurnTrail(indexY, indexX);
+				}
+				//마주보고있으면
+				else if (mTrailList[indexY + 1][indexX]->GetDirection() == TrailDirection::Up && mTrailList[indexY + 1][indexX]->GetTrailType() != TrailType::None)
 				{
 					//다시돌려
 					TurnTrail(indexY, indexX);
@@ -130,12 +149,18 @@ void TrailManager::TurnTrail(int indexY, int indexX)
 			}
 		}
 		//위보는데
-		if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Down)
+		if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Up)
 		{
 			if (indexY > 0)
 			{
 				//위에 연결된트레일이있다면
 				if (mTrailList[indexY - 1][indexX]->GetIsConnected())
+				{
+					//다시돌려
+					TurnTrail(indexY, indexX);
+				}
+				//마주보고있으면
+				else if (mTrailList[indexY - 1][indexX]->GetDirection() == TrailDirection::Down && mTrailList[indexY - 1][indexX]->GetTrailType() != TrailType::None)
 				{
 					//다시돌려
 					TurnTrail(indexY, indexX);
@@ -157,10 +182,16 @@ void TrailManager::TurnTrail(int indexY, int indexX)
 		//오른쪽보는데
 		if (mTrailList[indexY][indexX]->GetDirection() == TrailDirection::Right)
 		{
-			if (indexX < XTileCount)
+			if (indexX < XTileCount-1)
 			{
 				//오른쪽에 연결된트레일이있다면
 				if (mTrailList[indexY][indexX + 1]->GetIsConnected())
+				{
+					//다시돌려
+					TurnTrail(indexY, indexX);
+				}
+				//마주보고있으면
+				else if (mTrailList[indexY][indexX+1]->GetDirection() == TrailDirection::Left && mTrailList[indexY][indexX+1]->GetTrailType() != TrailType::None)
 				{
 					//다시돌려
 					TurnTrail(indexY, indexX);
@@ -190,6 +221,12 @@ void TrailManager::TurnTrail(int indexY, int indexX)
 					//다시돌려
 					TurnTrail(indexY, indexX);
 				}
+				//마주보고있으면
+				else if (mTrailList[indexY][indexX-1]->GetDirection() == TrailDirection::Right && mTrailList[indexY][indexX-1]->GetTrailType() != TrailType::None)
+				{
+					//다시돌려
+					TurnTrail(indexY, indexX);
+				}
 				else
 				{
 					//없으면 꼬리설정
@@ -204,6 +241,74 @@ void TrailManager::TurnTrail(int indexY, int indexX)
 				return;
 			}
 		}
+	}
+}
+
+void TrailManager::TurnTrail2(int indexY, int indexX)
+{
+	//mTrailList.back()->Turn();
+	if (mTrailList[indexY][indexX]->GetTrailType() == TrailType::None)
+		return;
+
+	if (mTrailList[indexY][indexX]->GetIsTail() == false && mTrailList[indexY][indexX]->GetIsConnected() == true)
+		return;
+
+	int targetIndexX;
+	int targetIndexY;
+	TrailDirection reverseDirection;
+	bool isEndLine = false;
+	switch (mTrailList[indexY][indexX]->GetDirection())
+	{
+	case TrailDirection::Down:
+		targetIndexX = indexX;
+		targetIndexY = indexY + 1;
+		reverseDirection = TrailDirection::Up;
+		isEndLine = indexY < YTileCount - 1 ? true : false;
+		break;
+	case TrailDirection::Up:
+		targetIndexX = indexX;
+		targetIndexY = indexY - 1;
+		reverseDirection = TrailDirection::Down;
+		break;
+	case TrailDirection::Right:
+		targetIndexX = indexX + 1;
+		targetIndexY = indexY;
+		reverseDirection = TrailDirection::Left;
+		break;
+	case TrailDirection::Left:
+		targetIndexX = indexX - 1;
+		targetIndexY = indexY;
+		reverseDirection = TrailDirection::Right;
+		break;
+	}
+
+	if (isEndLine)
+	{
+		//아래에 연결된 트레일이있거나
+		if (mTrailList[targetIndexY][targetIndexX]->GetIsConnected())
+		{
+			//다시돌려
+			TurnTrail(indexY, indexX);
+		}
+		//마주보고있으면
+		else if (mTrailList[targetIndexY][targetIndexX]->GetDirection() == reverseDirection && 
+			mTrailList[targetIndexY][targetIndexX]->GetTrailType() != TrailType::None)
+		{
+			//다시돌려
+			TurnTrail(indexY, indexX);
+		}
+		else
+		{
+			//없으면 꼬리설정
+			SetTrailTail(mStartY, mStartX);
+			return;
+		}
+	}
+	else
+	{
+		//맨아래줄이면 꼬리설정
+		SetTrailTail(mStartY, mStartX);
+		return;
 	}
 }
 
@@ -241,9 +346,14 @@ bool TrailManager::PlaceTrail(int indexY, int indexX, int type, int dir)
 
 	//어디가 막혀있나 체크
 	//아래 확인하자
-	if (indexY < YTileCount)
+	if (indexY < YTileCount-1)
 	{
 		if (mTrailList[indexY + 1][indexX]->GetIsConnected())
+		{
+			counter--;
+			down = false;
+		}
+		else if (mTrailList[indexY + 1][indexX]->GetTrailType() != TrailType::None && mTrailList[indexY + 1][indexX]->GetDirection() == TrailDirection::Up)
 		{
 			counter--;
 			down = false;
@@ -257,11 +367,21 @@ bool TrailManager::PlaceTrail(int indexY, int indexX, int type, int dir)
 			counter--;
 			up = false;
 		}
+		else if (mTrailList[indexY - 1][indexX]->GetTrailType() != TrailType::None && mTrailList[indexY - 1][indexX]->GetDirection() == TrailDirection::Down)
+		{
+			counter--;
+			up = false;
+		}
 	}
 	//오른쪽확인
-	if (indexX  < XTileCount)
+	if (indexX  < XTileCount-1)
 	{
 		if (mTrailList[indexY][indexX + 1]->GetIsConnected())
+		{
+			counter--;
+			right = false;
+		}
+		else if (mTrailList[indexY][indexX + 1]->GetTrailType() != TrailType::None && mTrailList[indexY][indexX + 1]->GetDirection() == TrailDirection::Left)
 		{
 			counter--;
 			right = false;
@@ -271,6 +391,11 @@ bool TrailManager::PlaceTrail(int indexY, int indexX, int type, int dir)
 	if (indexX > 0)
 	{
 		if (mTrailList[indexY][indexX - 1]->GetIsConnected())
+		{
+			counter--;
+			left = false;
+		}
+		else if (mTrailList[indexY][indexX - 1]->GetTrailType() != TrailType::None && mTrailList[indexY][indexX - 1]->GetDirection() == TrailDirection::Left)
 		{
 			counter--;
 			left = false;
@@ -379,6 +504,86 @@ bool TrailManager::PlaceTrail(int indexY, int indexX, int type, int dir)
 
 }
 
+bool TrailManager::CheckIsLoop(int indexX, int indexY)
+{
+	if (indexX < 0 || indexX >= XTileCount)return false;
+	if (indexY < 0 || indexY >= YTileCount)return false;
+	if (mTrailList[indexY][indexX] == nullptr)return false;
+	
+	POINT nextIndex;
+	if (GetNextTrailIndex(indexX, indexY,&nextIndex) == false)return false;
+
+	if (mTrailList[nextIndex.y][nextIndex.x]->GetIsConnected())
+		return true;
+
+	return CheckIsLoop(nextIndex.x, nextIndex.y);
+
+}
+
+bool TrailManager::GetNextTrailIndex(int indexX, int indexY, POINT* pOutput)
+{
+	if (indexX < 0 || indexX >= XTileCount)return false;
+	if (indexY < 0 || indexY >= YTileCount)return false;
+	if (mTrailList[indexY][indexX]->GetTrailType() == TrailType::None)return false;
+
+	Trail* trail = mTrailList[indexY][indexX];
+
+	int targetIndexX = indexX;
+	int targetIndexY = indexY;
+	switch (trail->GetDirection())
+	{
+	case TrailDirection::Down:
+		targetIndexY--;
+		break;
+	case TrailDirection::Up:
+		targetIndexY++;
+		break;
+	case TrailDirection::Right:
+		targetIndexX++;
+		break;
+	case TrailDirection::Left:
+		targetIndexX--;
+		break;
+	}
+
+	if (targetIndexX < 0 || targetIndexX >= XTileCount)return false;
+	if (targetIndexY < 0 || targetIndexY >= YTileCount)return false;
+	if (pOutput != nullptr)
+	{
+		pOutput->x = targetIndexX;
+		pOutput->y = targetIndexY;
+	}
+
+	return true;
+}
+void TrailManager::SetTrailTail2(int indexY, int indexX)
+{
+	//if (indexX < 0 || indexX >= XTileCount)return;
+	//if (indexY < 0 || indexY >= YTileCount)return;
+	//if (mTrailList[indexY][indexX]->GetTrailType == TrailType::None)return;
+	//
+	//POINT nextIndex;
+	//if (GetNextTrailIndex(indexX, indexY, &nextIndex) == false)
+	//{
+	//	mTrailList[indexY][indexX]->SetIsConnected(true);
+	//	mTrailList[indexY][indexX]->SetIsTail(true);
+	//	return;
+	//}
+	//else if ()
+	//{
+	//	mTrailList[indexY][indexX]->SetIsConnected(true);
+	//	mTrailList[indexY][indexX]->SetIsTail(true);
+	//	return;
+	//}
+	//else
+	//{
+	//	mTrailList[indexY][indexX]->SetIsConnected(true);
+	//	SetTrailTail2(nextIndex.y, nextIndex.x);
+	//}
+
+}
+
+
 //시작 트레일의 인덱스를 넣어 꼬리를설정해주자
 void TrailManager::SetTrailTail(int indexY, int indexX)
 {
@@ -389,10 +594,10 @@ void TrailManager::SetTrailTail(int indexY, int indexX)
 		{
 			////////////아래보고있고
 		case TrailDirection::Down:
-			if (indexY < YTileCount)
+			if (indexY < YTileCount-1)
 			{
-				//아래칸에 트레일이 없거나 이미 연결된 트레일이면 
-				if (mTrailList[indexY + 1][indexX]->GetTrailType() == TrailType::None || !mTrailList[indexY + 1][indexX]->GetIsConnected())
+				//아래칸에 트레일이 없으면 
+				if (mTrailList[indexY + 1][indexX]->GetTrailType() == TrailType::None)
 				{
 					//내가 꼬리다
 					mTrailList[indexY][indexX]->SetIsTail(true);
@@ -408,7 +613,7 @@ void TrailManager::SetTrailTail(int indexY, int indexX)
 					SetTrailTail(indexY + 1, indexX);
 				}
 			}
-			//끝이면
+			//끝줄이면
 			else
 			{
 				//내가 꼬리다
@@ -422,8 +627,8 @@ void TrailManager::SetTrailTail(int indexY, int indexX)
 		case TrailDirection::Up:
 			if (indexY > 0)
 			{
-				//윗칸에 트레일이 없거나 이미 연결된 트레일이면 
-				if (mTrailList[indexY - 1][indexX]->GetTrailType() == TrailType::None || !mTrailList[indexY - 1][indexX]->GetIsConnected())
+				//윗칸에 트레일이 없으면 
+				if (mTrailList[indexY - 1][indexX]->GetTrailType() == TrailType::None)
 				{
 					//내가 꼬리다
 					mTrailList[indexY][indexX]->SetIsTail(true);
@@ -452,8 +657,8 @@ void TrailManager::SetTrailTail(int indexY, int indexX)
 		case TrailDirection::Left:
 			if (indexX > 0)
 			{
-				//왼칸에 트레일이 없거나 이미 연결된 트레일이면 
-				if (mTrailList[indexY][indexX - 1]->GetTrailType() == TrailType::None || !mTrailList[indexY][indexX - 1]->GetIsConnected())
+				//왼칸에 트레일이 없으면 
+				if (mTrailList[indexY][indexX - 1]->GetTrailType() == TrailType::None)
 				{
 					//내가 꼬리다
 					mTrailList[indexY][indexX]->SetIsTail(true);
@@ -480,10 +685,10 @@ void TrailManager::SetTrailTail(int indexY, int indexX)
 			break;
 			///////////오른쪽보고있고
 		case TrailDirection::Right:
-			if (indexX < XTileCount)
+			if (indexX < XTileCount-1)
 			{
-				//오른칸에 트레일이 없거나 이미 연결된 트레일이면 
-				if (mTrailList[indexY][indexX + 1]->GetTrailType() == TrailType::None || !mTrailList[indexY][indexX + 1]->GetIsConnected())
+				//오른칸에 트레일이 없으면 
+				if (mTrailList[indexY][indexX + 1]->GetTrailType() == TrailType::None)
 				{
 					//내가 꼬리다
 					mTrailList[indexY][indexX]->SetIsTail(true);
@@ -513,4 +718,49 @@ void TrailManager::SetTrailTail(int indexY, int indexX)
 			break;
 		}
 	}
+}
+
+
+void TrailManager::FindTail(int* indexY, int* indexX)
+{
+	for (int y = 0;y < mTrailList.size();y++)
+	{
+		for (int x = 0;x < mTrailList.size();x++)
+		{
+			if (mTrailList[y][x]->GetIsTail() == true)
+			{
+				*indexY = y;
+				*indexX = x;
+				break;
+			}
+		}
+	}
+}
+
+void TrailManager::AnimationInit()
+{
+	mDown = new Animation();
+	mDown->InitFrameByStartEnd(0, 1, 3, 1, false);
+	mDown->SetIsLoop(true);
+	mDown->SetFrameUpdateTime(0.2f);
+	mDown->Play();
+
+	mUp = new Animation();
+	mUp->InitFrameByStartEnd(0, 0, 3, 0, false);
+	mUp->SetIsLoop(true);
+	mUp->SetFrameUpdateTime(0.2f);
+	mUp->Play();
+
+	mLeft = new Animation();
+	mLeft->InitFrameByStartEnd(0, 3, 3, 3, false);
+	mLeft->SetIsLoop(true);
+	mLeft->SetFrameUpdateTime(0.2f);
+	mLeft->Play();
+
+	mRight = new Animation();
+	mRight->InitFrameByStartEnd(0, 2, 3, 2, false);
+	mRight->SetIsLoop(true);
+	mRight->SetFrameUpdateTime(0.2f);
+	mRight->Play();
+
 }

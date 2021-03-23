@@ -309,6 +309,9 @@
     <ClInclude Include="MapToolReady.h">
       <Filter>MainGame\Scene\MapToolScene</Filter>
     </ClInclude>
+    <ClInclude Include="PathFinder.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -469,6 +472,9 @@
     </ClCompile>
     <ClCompile Include="MapToolReady.cpp">
       <Filter>MainGame\Scene\MapToolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinder.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
