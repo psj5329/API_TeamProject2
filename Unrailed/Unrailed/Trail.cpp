@@ -32,8 +32,8 @@ void Trail::Init(int x, int y, int type, int direction)
     mRect = RectMake(mX, mY, mSizeX, mSizeY);
     mIsConnected = false;
     mIsTail = false;
+    mIsPassed = false;
     mOrder = 0;
-
 }
 
 void Trail::Release()
@@ -57,7 +57,12 @@ void Trail::Render(HDC hdc)
         if (mIsConnected)
         {
             CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc,mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-
+           
+            if (INPUT->GetKey('N'))
+            {
+                wstring str3 = L"No." + to_wstring(mOrder);
+                TextOut(hdc,mX + 10, mY + 10, str3.c_str(), str3.length());
+            }
         }
         else
         {
@@ -80,7 +85,8 @@ void Trail::Render(HDC hdc)
 
         }
     }
-       // mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+
+    
 }
 
 
