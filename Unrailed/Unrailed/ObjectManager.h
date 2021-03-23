@@ -1,6 +1,6 @@
 #pragma once
 
-enum ObjectLayer { BACKGROUND, ITEM, TRAIL, PLAYER, ENEMY, UI, End };
+enum ObjectLayer { BACKGROUND, ITEM, TRAIL, PLAYER, ENEMY, UI, End, TRAIN };
 
 class GameObject;
 class Player;
