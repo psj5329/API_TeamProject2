@@ -29,6 +29,9 @@ public:
 		return (mTileList[indexY][indexX]->GetRect().top + mTileList[indexY][indexX]->GetRect().bottom) / 2;
 	}
 
+	int GetXTileCount() { return mTileCountX; }
+	int GetYTileCount() { return mTileCountY; }
+
 	vector<vector<Tile*>>* GetTileListPtr() { return &mTileList; }
 	vector<vector<MapObject*>>* GetObjectListPtr() { return &mMapObjectList; }
 };

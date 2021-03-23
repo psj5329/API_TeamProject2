@@ -30,6 +30,16 @@ struct MouseRect
 	bool isOn;
 };
 
+struct PalleteBackground
+{
+	Image* image;
+	float positionX;
+	float positionY;
+	float sizeX;
+	float sizeY;
+	RECT rect;
+	bool isOpen;
+};
 class ICommand;
 class Button;
 

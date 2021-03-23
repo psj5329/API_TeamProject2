@@ -7,6 +7,10 @@ class Scene3 : public Scene
 {
 	//Player* mPlayer;
 	TileMap* mTileMap;
+	class TrailManager* mTrailManager;
+
+	int mTailX;
+	int mTailY;
 
 public:
 	void Init()override;

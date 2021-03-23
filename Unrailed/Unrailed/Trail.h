@@ -34,6 +34,9 @@ class Trail :
 
 	bool mIsConnected;
 	bool mIsTail;
+	int mOrder;
+
+	bool mIsPassed;
 
 public:
 	void Init(int x, int y, int type, int direction);
@@ -41,7 +44,7 @@ public:
 	void Release()override;
 	void Update()override;
 	void Render(HDC hdc)override;
-	void AnimationInit();
+	void AnimationInit(Animation* down, Animation* up, Animation* left, Animation* right);
 
 	TrailDirection GetDirection() const{ return mDirection; }
 	int GetDirectionInt() const{ return (int)mDirection; }
@@ -49,11 +52,15 @@ public:
 	int GetTrailTypeInt() const{ return (int)mTrailType; }
 	bool GetIsConnected() const { return mIsConnected; }
 	bool GetIsTail() const { return mIsTail; }
+	bool GetIsPassed()const { return mIsPassed; }
+	int GetOrder()const { return mOrder; }
 
 	void SetTrailType(int type);
 	void SetDirection(int dir);
 	void SetIsConnected(bool connected) { mIsConnected = connected; }
 	void SetIsTail(bool tail) { mIsTail = tail; }
+	void SetIsPassed(bool passed) { mIsPassed = passed; }
+	void SetOrder(int a) { mOrder = a; }
 
 	void Turn();//플레이어의 돌리기
 	int PickUp();
