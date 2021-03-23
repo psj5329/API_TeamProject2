@@ -147,41 +147,6 @@ void MainGame::LoadResources(LoadingScene * scene)
 {
 	LoadImageResources(scene);
 	LoadSoundResources(scene);
-
-	/*// 맵 관련 // 남훈
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save", Resources(L"/Map/Tool/save"), 60, 16, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Load", Resources(L"/Map/Tool/load"), 60, 16, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Undo", Resources(L"/Map/Tool/undo"), 60, 16, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"TinyWoods", Resources(L"/Map/TinyWoods"), 288, 144, 12, 6, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"MagmaCavern", Resources(L"/Map/MagmaCavern"), 288, 144, 12, 6, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"MtFarAway", Resources(L"/Map/MtFarAway"), 288, 144, 12, 6, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"GreenMineral", Resources(L"/Map/Green"), 144, 72, 6, 3, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"BlueMineral", Resources(L"/Map/Blue"), 144, 72, 6, 3, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"RedMineral", Resources(L"/Map/Red"), 144, 72, 6, 3, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"RightArrow", Resources(L"/Map/Tool/RightArrow"), 16, 14, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"XTile", Resources(L"/Map/Tool/XTile"), 24, 24, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Ore", Resources(L"/Item/Stone"), 39, 12, 3, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"GreenTrail", Resources(L"/Trail/DirTile_G"), 96, 96, 4, 4, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"BlueTrail", Resources(L"/Trail/DirTile_B"), 96, 96, 4, 4, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"RedTrail", Resources(L"/Trail/DirTile_R"), 96, 96, 4, 4, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save1", Resources(L"/Map/Tool/save1"), 75, 16, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save2", Resources(L"/Map/Tool/save2"), 75, 16, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save3", Resources(L"/Map/Tool/save3"), 75, 16, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save4", Resources(L"/Map/Tool/save4"), 75, 16, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Save5", Resources(L"/Map/Tool/save5"), 75, 16, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"MapReady", Resources(L"/Map/Tool/MapToolReady"), 224, 232, 1, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"Numbers", Resources(L"/Map/Tool/Numbers"), 110, 11, 10, 1, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"New", Resources(L"/Map/Tool/new"), 60, 16, 1, 1, true); });
-
-
-
-	// 캐릭터 관련 // 유찬
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"charmander", Resources(L"charmander"), 192, 1968, 4, 41, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"chikorita", Resources(L"chikorita"), 192, 1968, 4, 41, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"ditto", Resources(L"ditto"), 144, 1200, 3, 25, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"jigglypuff", Resources(L"jigglypuff"), 192, 816, 4, 17, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"lapras", Resources(L"lapras"), 192, 624, 4, 13, true); });
-	scene->AddLoadFunc([]() { IMAGEMANAGER->LoadFromFile(L"totodile", Resources(L"totodile"), 240, 1968, 5, 41, true); });*/
 }
 
 void MainGame::LoadImageResources(LoadingScene* scene)

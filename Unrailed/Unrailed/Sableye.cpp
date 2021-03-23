@@ -72,7 +72,6 @@ void Sableye::Update()
 		mX += cosf(angle) * mSpeed * TIME->DeltaTime();
 		mY += -sinf(angle) * mSpeed * TIME->DeltaTime();
 	}
-
 	
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
