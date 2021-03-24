@@ -68,7 +68,8 @@ void Player::Update()
 	Move();
 
 	InputSpaceKey();
-
+	InputZKey();
+	InputXKey();
 	InputCKey();
 
 	//ChangeForm(); // 지울 예정인 함수
@@ -502,6 +503,7 @@ void Player::InputSpaceKey()
 	{
 		CheckNextTile();
 
+		// mapObject to item
 		if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Green))
 		{
 			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
@@ -522,127 +524,10 @@ void Player::InputSpaceKey()
 			mIsAttackingTemp = false;
 		}
 
-		// 이동할 때 앞에 1. 못가는 타일 2. 맵오브젝트(안캔광물)
 		// 아이템(3) 내려놓을 때 앞에 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물)//내가 가지고 있는 것이랑 다를 때 4. 기찻길 > 일 때 놓을 수 없음
 		// 기찻길(4) 내려놓을 떄 앞에 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물) 4. 기찻길 5. 비어있더라도 타일과 기찻길의 속성이 안 맞을 때 > 일 때 놓을 수 없음
 
-		/*
-		// {{ 맵오브젝트(벽) -> 아이템(광물) // 광물 캐기
-		if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Green))
-		{
-			COLLISIONMANAGER->MapObjectCollision(this, &mColBox, mTileListPtr, mMapObjectListPtr);
-			mIsAttackingTemp = true;
-			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
-		}
-		else if ((mForm == Form::Totodile) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Blue))
-		{
-			COLLISIONMANAGER->MapObjectCollision(this, &mColBox, mTileListPtr, mMapObjectListPtr);
-			mIsAttackingTemp = true;
-			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
-		}
-		else if ((mForm == Form::Charmander) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Red))
-		{
-			COLLISIONMANAGER->MapObjectCollision(this, &mColBox, mTileListPtr, mMapObjectListPtr);
-			mIsAttackingTemp = true;
-			// 어택 시작 > 광물 체력 감소 > 광물 체력 0이면 광물 타입 바꾸고 비활성화? > 아이템 UI에 추가
-		}
-		else
-			mIsAttackingTemp = false;
-		// }} 맵오브젝트(벽) -> 아이템(광물) // 광물 캐기
-		*/
-
-		// {{ 아이템(광물) -> 인벤 소지 아이템(UI) // 아이템 줍기
-/*		GameObject* item = COLLISIONMANAGER->ItemCollision(&mColBox);
-		OreType invenType;
-
-		if (mItemList.size())
-			invenType = ((Ore*)mItemList[0])->GetOreType();
 		
-		if ((item != nullptr) && (item->GetIsActive()))
-		{
-			if ((mForm == Form::Chikorita) && (((Ore*)item)->GetOreType() == OreType::Green) && ((mItemList.size() == 0) || (invenType == OreType::Green)))
-			{
-				Ore* greenOre = new Ore();
-				greenOre = (Ore*)item;
-				mItemList.push_back((GameObject*)greenOre);
-				item->SetIsActive(false);
-				mIsGettingItemThisFrame = true;
-			}
-			else if ((mForm == Form::Totodile) && (((Ore*)item)->GetOreType() == OreType::Blue) && ((mItemList.size() == 0) || (invenType == OreType::Blue)))
-			{
-				Ore* blueOre = new Ore();
-				blueOre = (Ore*)item;
-				mItemList.push_back((GameObject*)blueOre);
-				item->SetIsActive(false);
-				mIsGettingItemThisFrame = true;
-			}
-			else if ((mForm == Form::Charmander) && (((Ore*)item)->GetOreType() == OreType::Red) && ((mItemList.size() == 0) || (invenType == OreType::Red)))
-			{
-				Ore* redOre = new Ore();
-				redOre = (Ore*)item;
-				mItemList.push_back((GameObject*)redOre);
-				item->SetIsActive(false);
-				mIsGettingItemThisFrame = true;
-			}
-		}
-		// }} 아이템(광물) -> 인벤 소지 아이템(UI) // 아이템 줍기
-
-		// {{ 인벤 소지 아이템(UI) -> 아이템(광물) // 아이템 버리기
-		if (mItemList.size() && !mIsGettingItemThisFrame) // 아이템을 소지한 경우에만 아이템 버리기 가능 // 이번 프레임에서 얻은 경우가 아닐 때만 버리기 가능(이번 프레임에서 얻으면 바로 버려짐)
-		{
-			if (!((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetActive())) // 해당 위치에 맵 오브젝트도 nonActive 상태일 때만 버리기 가능하게.
-			{
-				vector<GameObject*> itemList = OBJECTMANAGER->GetObjectList(ObjectLayer::ITEM);
-				vector<GameObject*>::iterator iter = itemList.begin();
-
-				for (; iter != itemList.end(); ++iter)
-				{
-					float x = (*iter)->GetX();
-					float y = (*iter)->GetY();
-
-					int indexX = (int)(x / TileSize);
-					int indexY = (int)(y / TileSize);
-
-					if (indexX == mNextTileX && indexY == mNextTileY) // 해당 위치에 무슨 아이템이 있다
-					{ // 아무것도 안할건데
-					}
-					else
-					{
-						Ore* greenOre = new Ore();
-						greenOre->Drop(TileSize * mNextTileX, TileSize * mNextTileY, (int)invenType);
-						OBJECTMANAGER->AddObject(ObjectLayer::ITEM, greenOre);
-
-						mItemList.erase(mItemList.begin());
-					}
-				}
-			}
-			
-
-
-			/*if (!((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetActive())) // 플레이어가 바라보는 다음 타일이 nonActive 상태일 때만 아이템 버리기 가능
-			{  // 로드맵 함수 호출할 때 오브젝트 있는 곳에 액티브가 제대로 세팅이 안된 것 같은 느낌인데!! 오브젝트 있는 곳 없는 곳 구분없이 true인 것 같다...
-				if (invenType == OreType::Green)
-				{
-					Ore* greenOre = new Ore();
-					greenOre->Drop(TileSize * mNextTileX, TileSize * mNextTileY, (int)invenType);
-					OBJECTMANAGER->AddObject(ObjectLayer::ITEM, greenOre);
-					
-					
-					MapObject* greenObject = new MapObject(
-						IMAGEMANAGER->FindImage(L"Ore"),
-						TileSize * mNextTileX, TileSize * mNextTileY, TileSize, TileSize,
-						0, 1, (int)(MapObjectType::Green)); // 레드0 그린1 블루2
-
- 					(*mMapObjectListPtr)[mNextTileY][mNextTileX] = greenObject;
-
-					//mItemList.push_back((GameObject*)greenOre);
-					//item->SetIsAzzctive(false);
-
-					mItemList.erase(mItemList.begin());
-				}
-			}
-		}
-		// }} 인벤 소지 아이템(UI) -> 아이템(광물) // 아이템 버리기
 
 		// {{ 화살표 돌리기 // 얘는 키 분리해야 할 듯.. // 스페이스바는 화살표 줍기..
 
@@ -653,7 +538,7 @@ void Player::InputSpaceKey()
 //		{}
 		// }} 화살표 돌리기
 
-		// (*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Red))*/
+		// (*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Red))
 	}
 	else
 		mIsAttackingTemp = false;
@@ -744,6 +629,197 @@ void Player::CheckNextTile()
 			mNextTileX = mTileX;
 			mNextTileY = mTileY - 1;
 		}
+	}
+}
+
+void Player::InputZKey()
+{
+	if (INPUT->GetKeyDown('Z'))
+	{
+		RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
+		vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+		//float x;
+		//float y;
+
+		for (int i = 0; i < (*itemListPtr).size(); ++i)
+		{
+			Ore* item = (Ore*)((*itemListPtr)[i]);
+			//x = (*itemListPtr)[i]->GetX();
+			//y = (*itemListPtr)[i]->GetY();
+			POINT pt = { item->GetX(), item->GetY() };
+
+			if (PtInRect(&currentRc, pt))
+			{
+				InvenItem invenItem;
+				invenItem.itemName = ItemName::ItemOre;
+
+				if (item->GetOreType() == OreType::Green)
+					invenItem.itemType = ItemTypeP::Green;
+				else if (item->GetOreType() == OreType::Blue)
+					invenItem.itemType = ItemTypeP::Blue;
+				else if (item->GetOreType() == OreType::Red)
+					invenItem.itemType = ItemTypeP::Red;
+
+				mInvenItemList.push_back(&invenItem);
+
+				(*itemListPtr).erase((*itemListPtr).begin() + i);
+
+				mIsGettingItemThisFrame = true;
+			}
+			else
+				continue;
+		}
+
+
+
+
+/*
+
+		// {{ 아이템(광물) -> 인벤 소지 아이템(UI) // 아이템 줍기
+		GameObject* item = COLLISIONMANAGER->ItemCollision(&mColBox);
+		vector<GameObject*>* itemList = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+		//OreType invenType;
+
+		//if (mItemList.size())
+		//	invenType = ((Ore*)mItemList[0])->GetOreType();
+
+		if ((item != nullptr) && (item->GetIsActive()))
+		{
+			//if ((mForm == Form::Chikorita) && (((Ore*)item)->GetOreType() == OreType::Green) && ((mItemList.size() == 0) || (invenType == OreType::Green)))
+			if (((Ore*)item)->GetOreType() == OreType::Green)
+			{
+				Ore* greenOre = new Ore();
+				greenOre = (Ore*)item;
+				mItemList.push_back((GameObject*)greenOre);
+				item->SetIsActive(false);
+				mIsGettingItemThisFrame = true;
+			}
+			//else if ((mForm == Form::Totodile) && (((Ore*)item)->GetOreType() == OreType::Blue) && ((mItemList.size() == 0) || (invenType == OreType::Blue)))
+			else if(((Ore*)item)->GetOreType() == OreType::Blue)
+			{
+				Ore* blueOre = new Ore();
+				blueOre = (Ore*)item;
+				mItemList.push_back((GameObject*)blueOre);
+				item->SetIsActive(false);
+				mIsGettingItemThisFrame = true;
+			}
+			//else if ((mForm == Form::Charmander) && (((Ore*)item)->GetOreType() == OreType::Red) && ((mItemList.size() == 0) || (invenType == OreType::Red)))
+			else if (((Ore*)item)->GetOreType() == OreType::Red)
+			{
+				Ore* redOre = new Ore();
+				redOre = (Ore*)item;
+				mItemList.push_back((GameObject*)redOre);
+				item->SetIsActive(false);
+				mIsGettingItemThisFrame = true;
+			}
+		}
+		// }} 아이템(광물) -> 인벤 소지 아이템(UI) // 아이템 줍기*/
+	}
+}
+
+void Player::InputXKey()
+{
+	if (INPUT->GetKeyDown('X'))
+	{
+		if (!mInvenItemList.size())
+			return;
+
+		RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
+		vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+
+		for (int i = 0; i < (*itemListPtr).size(); ++i)
+		{
+			GameObject* item = (*itemListPtr)[i];
+			POINT pt = { item->GetX(), item->GetY() };
+
+			if (PtInRect(&currentRc, pt))
+				return;
+		}////////////// 이 다음 줄 할 차례였응ㅁ // 예외 걸렀고 이제 구현하면 됨
+
+
+
+
+		/*
+
+
+
+				InvenItem invenItem;
+				invenItem.itemName = ItemName::ItemOre;
+
+				if (item->GetOreType() == OreType::Green)
+					invenItem.itemType = ItemTypeP::Green;
+				else if (item->GetOreType() == OreType::Blue)
+					invenItem.itemType = ItemTypeP::Blue;
+				else if (item->GetOreType() == OreType::Red)
+					invenItem.itemType = ItemTypeP::Red;
+
+				mInvenItemList.push_back(&invenItem);
+
+				(*itemListPtr).erase((*itemListPtr).begin() + i);
+
+				mIsGettingItemThisFrame = true;
+			}
+			else
+				continue;
+		}*/
+
+
+		// {{ 인벤 소지 아이템(UI) -> 아이템(광물) // 아이템 버리기
+	/*	if (mItemList.size() && !mIsGettingItemThisFrame) // 아이템을 소지한 경우에만 아이템 버리기 가능 // 이번 프레임에서 얻은 경우가 아닐 때만 버리기 가능(이번 프레임에서 얻으면 바로 버려짐)
+		{
+			if (!((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetActive())) // 해당 위치에 맵 오브젝트도 nonActive 상태일 때만 버리기 가능하게.
+			{
+				vector<GameObject*> itemList = OBJECTMANAGER->GetObjectList(ObjectLayer::ITEM);
+				vector<GameObject*>::iterator iter = itemList.begin();
+
+				for (; iter != itemList.end(); ++iter)
+				{
+					float x = (*iter)->GetX();
+					float y = (*iter)->GetY();
+
+					int indexX = (int)(x / TileSize);
+					int indexY = (int)(y / TileSize);
+
+					if (indexX == mNextTileX && indexY == mNextTileY) // 해당 위치에 무슨 아이템이 있다
+					{ // 아무것도 안할건데
+					}
+					else
+					{
+						Ore* greenOre = new Ore();
+						greenOre->Drop(TileSize * mNextTileX, TileSize * mNextTileY, (int)invenType);
+						OBJECTMANAGER->AddObject(ObjectLayer::ITEM, greenOre);
+
+						mItemList.erase(mItemList.begin());
+					}
+				}
+			}*/
+
+
+
+			/*if (!((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetActive())) // 플레이어가 바라보는 다음 타일이 nonActive 상태일 때만 아이템 버리기 가능
+			{  // 로드맵 함수 호출할 때 오브젝트 있는 곳에 액티브가 제대로 세팅이 안된 것 같은 느낌인데!! 오브젝트 있는 곳 없는 곳 구분없이 true인 것 같다...
+				if (invenType == OreType::Green)
+				{
+					Ore* greenOre = new Ore();
+					greenOre->Drop(TileSize * mNextTileX, TileSize * mNextTileY, (int)invenType);
+					OBJECTMANAGER->AddObject(ObjectLayer::ITEM, greenOre);
+
+
+					MapObject* greenObject = new MapObject(
+						IMAGEMANAGER->FindImage(L"Ore"),
+						TileSize * mNextTileX, TileSize * mNextTileY, TileSize, TileSize,
+						0, 1, (int)(MapObjectType::Green)); // 레드0 그린1 블루2
+
+					(*mMapObjectListPtr)[mNextTileY][mNextTileX] = greenObject;
+
+					//mItemList.push_back((GameObject*)greenOre);
+					//item->SetIsAzzctive(false);
+
+					mItemList.erase(mItemList.begin());
+				}
+			}
+		}
+		// }} 인벤 소지 아이템(UI) -> 아이템(광물) // 아이템 버리기
 	}
 }
 
@@ -1010,6 +1086,29 @@ void Player::RenderTestText(HDC hdc)
 	//if (mIsAttackingTemp)
 	//	TextOut(hdc, (int)mX + 55, (int)mY, strAtk.c_str(), (int)strAtk.length());
 
-	wstring strInven = L"Inven size: " + to_wstring(mItemList.size());
+	wstring strInven = L"Inven size: " + to_wstring(mInvenItemList.size());
 	TextOut(hdc, (int)mX + 25 - cam.left, (int)mY + 25 - cam.top, strInven.c_str(), (int)strInven.length());
+
+	vector<GameObject*> itemList = OBJECTMANAGER->GetObjectList(ObjectLayer::ITEM);
+	for (int i = 0; i < itemList.size(); ++i)
+	{
+		bool active = itemList[i]->GetIsActive();
+		OreType type = ((Ore*)itemList[i])->GetOreType();
+		wstring strType = L"";
+		if (type == OreType::None)
+			strType = L"Type: None";
+		else if (type == OreType::Green)
+			strType = L"Type: Green";
+		else if (type == OreType::Blue)
+			strType = L"Type: Blue";
+		else if (type == OreType::Red)
+			strType = L"Type: Red";
+		wstring strActive = L"";
+		if (active)
+			strActive = to_wstring(i) + L": active, " + strType;
+		else
+			strActive = to_wstring(i) + L": nonActive, " + strType;
+
+		TextOut(hdc, (int)WINSIZEX * 3 / 4, (int)200 + 25 * i, strActive.c_str(), (int)strActive.length());
+	}
 }

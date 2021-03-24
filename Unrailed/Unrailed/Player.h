@@ -31,6 +31,27 @@ enum Form
 	FormEnd
 };
 
+enum ItemName
+{
+	ItemOre,
+	ItemTrail,
+	ItemNameEnd
+};
+
+enum ItemTypeP // 추후에 아이템 타입 확정되면 삭제
+{
+	None,
+	Green,
+	Blue,
+	Red
+};
+
+struct InvenItem
+{
+	ItemName itemName;
+	ItemTypeP itemType; // 추후에 아이템 타입 확정되면 타입 이름만 변경
+};
+
 class Image;
 class Animation;
 class MapObject;
@@ -86,13 +107,15 @@ class Player : public GameObject
 
 	bool mIsAttackingTemp;
 
-	vector<GameObject*> mItemList;
+	//vector<GameObject*> mItemList;
 
 	bool mIsGettingItemThisFrame;
 
 	TrailManager* mTrailManager;
 
 	bool mIsChangable;
+
+	vector<InvenItem*> mInvenItemList;
 
 public:
 	Player(const string& name, float x, float y);
@@ -108,9 +131,11 @@ public:
 
 	void InputDirectionKey();
 	void Move();
-	void InputSpaceKey();
+	void InputSpaceKey(); // Space key: attack gameobject
 	void CheckNextTile();
-	void InputCKey(); // 'C' means ChangeForm // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
+	void InputZKey(); // 'Z' key: pick up item 
+	void InputXKey(); // 'X' key: throw item
+	void InputCKey(); // 'C' key: change form // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
 	bool CheckTileType(TileType tileType);
 	void ChangeForm(); // 지울 예정인 함수 // 현재 호출하지 않고 있음
 	void ChangeCurrentAnimation();

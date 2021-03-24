@@ -25,6 +25,7 @@ public:
 	vector<GameObject*> FindObjects(const string& name);
 	vector<GameObject*> FindObjects(ObjectLayer layer, const string& name);
 	vector<GameObject*> GetObjectList(ObjectLayer layer);
+	vector<GameObject*>* GetObjectListPtr(ObjectLayer layer);
 	Player* GetPlayer();
 };
 

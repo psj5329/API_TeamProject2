@@ -155,6 +155,11 @@ vector<class GameObject*> ObjectManager::GetObjectList(ObjectLayer layer)
 	return mObjectList[layer];
 }
 
+vector<GameObject*>* ObjectManager::GetObjectListPtr(ObjectLayer layer)
+{
+	return &mObjectList[layer];
+}
+
 Player * ObjectManager::GetPlayer()
 {
 	return dynamic_cast<Player*>(mObjectList[ObjectLayer::PLAYER].front());
