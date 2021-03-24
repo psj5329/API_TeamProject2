@@ -9,7 +9,7 @@ enum class TrailDirection : int
 	Right
 };
 //
-//enum class TrailType
+//enum class ItemType
 //{
 //	None,
 //	Green,

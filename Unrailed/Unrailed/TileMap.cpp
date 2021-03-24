@@ -50,7 +50,7 @@ void TileMap::Init(int tileX, int tileY, int tileSize)
 				tileSize,
 				0,
 				0,
-				0
+				ItemType::None
 			);
 			mMapObjectList[y].push_back(tempObject);
 		}
@@ -99,7 +99,7 @@ void TileMap::Update()
 	{
 		for (int x = 0;x < mMapObjectList[y].size();x++)
 		{
-			if (mMapObjectList[y][x]->GetMapObjectType() != MapObjectType::None)
+			if (mMapObjectList[y][x]->GetMapObjectType() != ItemType::None)
 			{
 				mMapObjectList[y][x]->Update();
 			}
@@ -114,7 +114,7 @@ void TileMap::Update()
 		{
 			for (int x = 0;x < mMapObjectList[y].size();x++)
 			{
-				if (mMapObjectList[y][x]->GetMapObjectType() != MapObjectType::None)
+				if (mMapObjectList[y][x]->GetMapObjectType() != ItemType::None)
 				{
 					mMapObjectList[y][x]->DeductHp();
 				}
@@ -202,7 +202,7 @@ void TileMap::LoadMap()
 				}
 				mMapObjectList[y][x]->SetFrameIndexX(objectFrameX);
 				mMapObjectList[y][x]->SetFrameIndexY(objectFrameY);
-				mMapObjectList[y][x]->SetObjectType(objectType);
+				mMapObjectList[y][x]->SetObjectType((ItemType)objectType);
 			}
 		}
 	}
@@ -274,7 +274,7 @@ void TileMap::LoadMap(int i)
 				}
 				mMapObjectList[y][x]->SetFrameIndexX(objectFrameX);
 				mMapObjectList[y][x]->SetFrameIndexY(objectFrameY);
-				mMapObjectList[y][x]->SetObjectType(objectType);
+				mMapObjectList[y][x]->SetObjectType((ItemType)objectType);
 			}
 		}
 	}
@@ -324,7 +324,7 @@ void TileMap::InitEmptyMap()
 				TileSize,
 				0,
 				0,
-				0
+				ItemType::None
 			);
 			mMapObjectList[y].push_back(tempObject);
 		}

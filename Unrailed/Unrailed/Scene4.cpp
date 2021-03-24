@@ -33,26 +33,26 @@ void Scene4::Init()
 
 	mTrailManager = new TrailManager();
 	mTrailManager->Init(mTileMap->GetYTileCount(), mTileMap->GetXTileCount());
-	mTrailManager->InsertTrail(0, 5, 1, 0); // 0: down 1: up 2: left 3: right
-	mTrailManager->InsertTrail(1, 5, 1, 0);
-	mTrailManager->InsertTrail(2, 5, 1, 0);
-	mTrailManager->InsertTrail(3, 5, 1, 0);
+	mTrailManager->InsertTrail(0, 5, ItemType::Green, 0); // 0: down 1: up 2: left 3: right
+	mTrailManager->InsertTrail(1, 5, ItemType::Green, 0);
+	mTrailManager->InsertTrail(2, 5, ItemType::Green, 0);
+	mTrailManager->InsertTrail(3, 5, ItemType::Green, 0);
 
-	mTrailManager->InsertTrail(4, 5, 1, 3);
-	mTrailManager->InsertTrail(4, 6, 1, 3);
+	mTrailManager->InsertTrail(4, 5, ItemType::Green, 3);
+	mTrailManager->InsertTrail(4, 6, ItemType::Green, 3);
 
-	mTrailManager->InsertTrail(4, 7, 1, 0);
-	mTrailManager->InsertTrail(5, 7, 1, 0);
-	mTrailManager->InsertTrail(6, 7, 1, 0);
+	mTrailManager->InsertTrail(4, 7, ItemType::Green, 0);
+	mTrailManager->InsertTrail(5, 7, ItemType::Green, 0);
+	mTrailManager->InsertTrail(6, 7, ItemType::Green, 0);
 
-	mTrailManager->InsertTrail(7, 7, 1, 2);
-	mTrailManager->InsertTrail(7, 6, 1, 2);
-	mTrailManager->InsertTrail(7, 5, 1, 2);
-	mTrailManager->InsertTrail(7, 4, 1, 2);
+	mTrailManager->InsertTrail(7, 7, ItemType::Green, 2);
+	mTrailManager->InsertTrail(7, 6, ItemType::Green, 2);
+	mTrailManager->InsertTrail(7, 5, ItemType::Green, 2);
+	mTrailManager->InsertTrail(7, 4, ItemType::Green, 2);
 
-	mTrailManager->InsertTrail(7, 3, 1, 1);
-	mTrailManager->InsertTrail(6, 3, 1, 1);
-	mTrailManager->InsertTrail(5, 3, 1, 1);
+	mTrailManager->InsertTrail(7, 3, ItemType::Green, 1);
+	mTrailManager->InsertTrail(6, 3, ItemType::Green, 1);
+	mTrailManager->InsertTrail(5, 3, ItemType::Green, 1);
 
 	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
 	mTempPlayer->SetTileListPtr(tileListPtr);

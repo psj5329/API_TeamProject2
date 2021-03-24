@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-//enum class OreType
+//enum class ItemType
 //{
 //	None,
 //	Green,

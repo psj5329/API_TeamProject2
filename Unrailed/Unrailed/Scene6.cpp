@@ -15,22 +15,22 @@ void Scene6::Init()
 	//인덱스 가져오기 : 현재 x값 나누기 타일사이즈
 	mTrailManager = new TrailManager();
 	mTrailManager->Init(mTileMap->GetYTileCount(), mTileMap->GetXTileCount());
-	mTrailManager->InsertTrail(6, 0, 1, 3);
-	mTrailManager->InsertTrail(6, 1, 1, 3);
-	mTrailManager->InsertTrail(6, 2, 1, 3);
-	mTrailManager->InsertTrail(6, 3, 1, 3);
-	mTrailManager->InsertTrail(6, 4, 1, 1);
-	mTrailManager->InsertTrail(5, 4, 1, 1);
-	mTrailManager->InsertTrail(4, 4, 1, 3);
-	mTrailManager->InsertTrail(4, 5, 1, 3);
-	mTrailManager->InsertTrail(4, 6, 1, 3);
-	mTrailManager->InsertTrail(4, 7, 1, 0);
-	mTrailManager->InsertTrail(5, 7, 1, 0);
-	mTrailManager->InsertTrail(6, 7, 1, 0);
-	mTrailManager->InsertTrail(7, 7, 1, 2);
-	mTrailManager->InsertTrail(7, 6, 1, 2);
-	mTrailManager->InsertTrail(7, 5, 1, 2);
-	mTrailManager->InsertTrail(7, 4, 1, 1);
+	mTrailManager->InsertTrail(6, 0, ItemType::Green, 3);
+	mTrailManager->InsertTrail(6, 1, ItemType::Green, 3);
+	mTrailManager->InsertTrail(6, 2, ItemType::Green, 3);
+	mTrailManager->InsertTrail(6, 3, ItemType::Green, 3);
+	mTrailManager->InsertTrail(6, 4, ItemType::Green, 1);
+	mTrailManager->InsertTrail(5, 4, ItemType::Green, 1);
+	mTrailManager->InsertTrail(4, 4, ItemType::Green, 3);
+	mTrailManager->InsertTrail(4, 5, ItemType::Green, 3);
+	mTrailManager->InsertTrail(4, 6, ItemType::Green, 3);
+	mTrailManager->InsertTrail(4, 7, ItemType::Green, 0);
+	mTrailManager->InsertTrail(5, 7, ItemType::Green, 0);
+	mTrailManager->InsertTrail(6, 7, ItemType::Green, 0);
+	mTrailManager->InsertTrail(7, 7, ItemType::Green, 2);
+	mTrailManager->InsertTrail(7, 6, ItemType::Green, 2);
+	mTrailManager->InsertTrail(7, 5, ItemType::Green, 2);
+	mTrailManager->InsertTrail(7, 4, ItemType::Green, 1);
 
 
 	//Train인잇

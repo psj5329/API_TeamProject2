@@ -328,7 +328,7 @@ void TrailManager::AnimationInit()
 //void TrailManager::TurnTrail(int indexY, int indexX)
 //{
 //	//mTrailList.back()->Turn();
-//	if (mTrailList[indexY][indexX]->GetTrailType() == TrailType::None)
+//	if (mTrailList[indexY][indexX]->GetTrailType() == ItemType::None)
 //		return;
 //
 //	//돌릴려는게 꼬리거나 연결안된친구면
@@ -348,7 +348,7 @@ void TrailManager::AnimationInit()
 //					TurnTrail(indexY, indexX);
 //				}
 //				//마주보고있으면
-//				else if (mTrailList[indexY + 1][indexX]->GetDirection() == TrailDirection::Up && mTrailList[indexY + 1][indexX]->GetTrailType() != TrailType::None)
+//				else if (mTrailList[indexY + 1][indexX]->GetDirection() == TrailDirection::Up && mTrailList[indexY + 1][indexX]->GetTrailType() != ItemType::None)
 //				{
 //					//다시돌려
 //					TurnTrail(indexY, indexX);
@@ -379,7 +379,7 @@ void TrailManager::AnimationInit()
 //					TurnTrail(indexY, indexX);
 //				}
 //				//마주보고있으면
-//				else if (mTrailList[indexY - 1][indexX]->GetDirection() == TrailDirection::Down && mTrailList[indexY - 1][indexX]->GetTrailType() != TrailType::None)
+//				else if (mTrailList[indexY - 1][indexX]->GetDirection() == TrailDirection::Down && mTrailList[indexY - 1][indexX]->GetTrailType() != ItemType::None)
 //				{
 //					//다시돌려
 //					TurnTrail(indexY, indexX);
@@ -410,7 +410,7 @@ void TrailManager::AnimationInit()
 //					TurnTrail(indexY, indexX);
 //				}
 //				//마주보고있으면
-//				else if (mTrailList[indexY][indexX+1]->GetDirection() == TrailDirection::Left && mTrailList[indexY][indexX+1]->GetTrailType() != TrailType::None)
+//				else if (mTrailList[indexY][indexX+1]->GetDirection() == TrailDirection::Left && mTrailList[indexY][indexX+1]->GetTrailType() != ItemType::None)
 //				{
 //					//다시돌려
 //					TurnTrail(indexY, indexX);
@@ -441,7 +441,7 @@ void TrailManager::AnimationInit()
 //					TurnTrail(indexY, indexX);
 //				}
 //				//마주보고있으면
-//				else if (mTrailList[indexY][indexX-1]->GetDirection() == TrailDirection::Right && mTrailList[indexY][indexX-1]->GetTrailType() != TrailType::None)
+//				else if (mTrailList[indexY][indexX-1]->GetDirection() == TrailDirection::Right && mTrailList[indexY][indexX-1]->GetTrailType() != ItemType::None)
 //				{
 //					//다시돌려
 //					TurnTrail(indexY, indexX);
@@ -466,7 +466,7 @@ void TrailManager::AnimationInit()
 //void TrailManager::SetTrailTail(int indexY, int indexX)
 //{
 //	//빈트레일이 아니고
-//	if (mTrailList[indexY][indexX]->GetTrailType() != TrailType::None)
+//	if (mTrailList[indexY][indexX]->GetTrailType() != ItemType::None)
 //	{
 //		switch (mTrailList[indexY][indexX]->GetDirection())
 //		{
@@ -475,7 +475,7 @@ void TrailManager::AnimationInit()
 //			if (indexY < YTileCount-1)
 //			{
 //				//아래칸에 트레일이 없으면 
-//				if (mTrailList[indexY + 1][indexX]->GetTrailType() == TrailType::None)
+//				if (mTrailList[indexY + 1][indexX]->GetTrailType() == ItemType::None)
 //				{
 //					//내가 꼬리다
 //					mTrailList[indexY][indexX]->SetIsTail(true);
@@ -506,7 +506,7 @@ void TrailManager::AnimationInit()
 //			if (indexY > 0)
 //			{
 //				//윗칸에 트레일이 없으면 
-//				if (mTrailList[indexY - 1][indexX]->GetTrailType() == TrailType::None)
+//				if (mTrailList[indexY - 1][indexX]->GetTrailType() == ItemType::None)
 //				{
 //					//내가 꼬리다
 //					mTrailList[indexY][indexX]->SetIsTail(true);
@@ -536,7 +536,7 @@ void TrailManager::AnimationInit()
 //			if (indexX > 0)
 //			{
 //				//왼칸에 트레일이 없으면 
-//				if (mTrailList[indexY][indexX - 1]->GetTrailType() == TrailType::None)
+//				if (mTrailList[indexY][indexX - 1]->GetTrailType() == ItemType::None)
 //				{
 //					//내가 꼬리다
 //					mTrailList[indexY][indexX]->SetIsTail(true);
@@ -566,7 +566,7 @@ void TrailManager::AnimationInit()
 //			if (indexX < XTileCount-1)
 //			{
 //				//오른칸에 트레일이 없으면 
-//				if (mTrailList[indexY][indexX + 1]->GetTrailType() == TrailType::None)
+//				if (mTrailList[indexY][indexX + 1]->GetTrailType() == ItemType::None)
 //				{
 //					//내가 꼬리다
 //					mTrailList[indexY][indexX]->SetIsTail(true);

@@ -154,11 +154,11 @@ void Machop::Render(HDC hdc)
 	wstring strOre;
 	for (int i = 0; i < mOreList.size(); ++i)
 	{
-		if (mOreList[i]->GetOreType() == OreType::Green)
+		if (mOreList[i]->GetOreType() == ItemType::Green)
 			strOre = L"그린" + to_wstring(mOreCount);
-		else if (mOreList[i]->GetOreType() == OreType::Blue)
+		else if (mOreList[i]->GetOreType() == ItemType::Blue)
 			strOre = L"블루" + to_wstring(mOreCount);
-		else if (mOreList[i]->GetOreType() == OreType::Red)
+		else if (mOreList[i]->GetOreType() == ItemType::Red)
 			strOre = L"레드" + to_wstring(mOreCount);
 
 		TextOut(hdc, mX - 20, mY - 40 - i * 15, strOre.c_str(), strOre.length());
@@ -340,7 +340,7 @@ void Machop::InterceptOre()
 
 			mOreCount++;
 
-			ore->SetOreType(1);//그린
+			ore->SetOreType(ItemType::Green);//그린
 
 			mOreList.push_back(ore);
 
@@ -353,7 +353,7 @@ void Machop::InterceptOre()
 
 			mOreCount++;
 
-			ore->SetOreType(2);//블루
+			ore->SetOreType(ItemType::Blue);//블루
 
 			mOreList.push_back(ore);
 
@@ -366,7 +366,7 @@ void Machop::InterceptOre()
 
 			mOreCount++;
 
-			ore->SetOreType(3);//레드
+			ore->SetOreType(ItemType::Red);//레드
 
 			mOreList.push_back(ore);
 
@@ -411,9 +411,9 @@ void Machop::EndExplode()
 	}
 }
 
-TrailType Machop::OreErase()
+ItemType Machop::OreErase()
 {
-	TrailType type = (TrailType)mOreList[0]->GetOreTypeInt();
+	ItemType type = (ItemType)mOreList[0]->GetOreTypeInt();
 	 mOreList.erase(mOreList.begin(), mOreList.begin() + 2); 
 
 	 return type;

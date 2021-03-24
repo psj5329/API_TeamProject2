@@ -116,7 +116,7 @@ public:
 		mTargetObject->SetImage(ImageManager::GetInstance()->FindImage(mExecutePalleteData.image->GetKeyName()));
 		mTargetObject->SetFrameIndexX(mExecutePalleteData.frameX);
 		mTargetObject->SetFrameIndexY(mExecutePalleteData.frameY);
-		mTargetObject->SetObjectType(mExecutePalleteData.type);
+		mTargetObject->SetObjectType((ItemType)mExecutePalleteData.type);
 	}
 	void Reset()override
 	{

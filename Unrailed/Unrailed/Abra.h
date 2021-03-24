@@ -8,7 +8,7 @@ class Animation;
 struct CreatedTrail
 {
 	Image* image;
-	TrailType trailType;
+	ItemType trailType;
 	bool isCreated;
 };
 
@@ -44,5 +44,5 @@ public:
 
 	void SynthesisOre();
 
-	TrailType Receive();
+	ItemType Receive();
 };
