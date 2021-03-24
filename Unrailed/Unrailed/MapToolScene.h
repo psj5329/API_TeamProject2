@@ -40,9 +40,20 @@ struct PalleteBackground
 	RECT rect;
 	bool isOpen;
 };
+
+struct AreaSelect
+{
+	vector <Tile*> mSelectedTileList;
+	bool isSelecting;
+	POINT startIndex;	//마우스로 고른
+	POINT endIndex;		//마우스로 고른
+	RECT selectedArea;
+	Tile* firstTile;	//서순
+	Tile* lastTile;		//서순
+};
+
 class ICommand;
 class Button;
-
 
 class MapToolScene : public Scene
 {
@@ -73,6 +84,9 @@ class MapToolScene : public Scene
 	//팔레트배경
 	PalleteBackground mPalleteBackground;
 
+	//범위선택용 친구
+	AreaSelect mAreaSelect;
+
 	Button* mSaveButton;
 	Button* mLoadButton;
 	Button* mUndoButton;
@@ -80,8 +94,8 @@ class MapToolScene : public Scene
 	Button* mRightArrowButton2;
 	Button* mEraseButton;
 	Button* mFoldButton;
+	Button* mUnFoldButton;
 	vector <Button*> mSaveButtons;
-
 
 	stack<ICommand*> mCommandList;
 public:
@@ -103,6 +117,7 @@ private:
 	void InitEmptyMap();
 	void ReleaseMap();
 
+
 	void Save(int i);
 	void Load(wstring fileName);
 
@@ -110,16 +125,28 @@ private:
 	void Undo();
 	void Redo();
 
+	void UnFoldButton();
 	void FoldButton();
 	void EraseButton();
 	void SwitchObjectPallete();
 	void SwitchTilePallete();
+
+	//그리기
+	void PaintTilesL();
+	//많이그리기
+	void PaintTilesR();
+	void InitSelectVecter();
+	void ReleaseSelectVecter();
 
 	//마우스
 	void InitMouseRect();
 	void SetMouseRect();
 	void UpdateMouseRect();
 	void RenderMouseRect(HDC hdc);
+	
+	//팔레트
+	void InitPalletes();
+	void RenderPalletes(HDC hdc);
 	
 	//팔레트배경
 	void InitPalleteBackground();
@@ -131,6 +158,8 @@ private:
 	void UpdateButtons();
 	void RenderButtons(HDC hdc);
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)override;
+
+
 
 };
 

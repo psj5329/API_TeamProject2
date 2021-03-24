@@ -10,73 +10,15 @@ void MapToolScene::Init()
 {
 	ImageLoad();
 	Image* tileImage2 = ImageManager::GetInstance()->FindImage(L"Tile");
-	Image* tileImage = ImageManager::GetInstance()->FindImage(L"TinyWoods");
-	Image* mineralImage = ImageManager::GetInstance()->FindImage(L"GreenMineral");
+
 
 	Image* empty = nullptr;
 
 	InitEmptyMap();
 
-	//팔레트
-	int palleteStartX = WINSIZEX / 2;
-	int palleteStartY = 50;
-	for (int y = 0; y < PalleteCountY; ++y)
-	{
-		mPallete.push_back(vector <TilePallete>());
-		for (int x = 0; x < PalleteCountX; ++x)
-		{
-			TilePallete tempTilePallete;
-			tempTilePallete.image = tileImage;
-			tempTilePallete.positionX = palleteStartX + TileSize * x;
-			tempTilePallete.positionY = palleteStartY + TileSize * y;
-			tempTilePallete.width = TileSize;
-			tempTilePallete.height = TileSize;
-			tempTilePallete.rect = RectMake(tempTilePallete.positionX, tempTilePallete.positionY, tempTilePallete.width, tempTilePallete.height);
-			tempTilePallete.frameX = x;
-			tempTilePallete.frameY = y;
-			mPallete[y].push_back(tempTilePallete);
-		}
-	}
+	InitPalletes();
 
-	//속성팔레트 넣어주기
-	//시작점
-	palleteStartX = WINSIZEX / 2 + 45;
-	palleteStartY = 346;
-	for (int i = 0;i < TypePalleteCount;i++)
-	{
-		TypePallete tempTypePallete;
-		tempTypePallete.positionX = palleteStartX + TileSize * i;
-		tempTypePallete.positionY = palleteStartY;
-		tempTypePallete.width = TileSize;
-		tempTypePallete.height = TileSize;
-		tempTypePallete.rect = RectMake(tempTypePallete.positionX, tempTypePallete.positionY, tempTypePallete.width, tempTypePallete.height);
-		tempTypePallete.type = i;
-		tempTypePallete.tiletype = (TileType)i;
-		mTypePallete.push_back(tempTypePallete);
-	}
-
-	//맵옵젝팔레트
-	palleteStartX = WINSIZEX / 2;
-	palleteStartY = 400;
-	for (int y = 0; y < ObjectPalletCountY; ++y)
-	{
-		mObjectPallete.push_back(vector <MapObjectPallete>());
-		for (int x = 0; x < ObjectPalletCountX; ++x)
-		{
-			MapObjectPallete tempPallete;
-			tempPallete.image = mineralImage;
-			tempPallete.positionX = palleteStartX + TileSize * x;
-			tempPallete.positionY = palleteStartY + TileSize * y;
-			tempPallete.width = TileSize;
-			tempPallete.height = TileSize;
-			tempPallete.rect = RectMake(tempPallete.positionX, tempPallete.positionY, tempPallete.width, tempPallete.height);
-			tempPallete.frameX = x;
-			tempPallete.frameY = y;
-			tempPallete.type = 1;
-			mObjectPallete[y].push_back(tempPallete);
-		}
-	}
-
+	mAreaSelect.isSelecting = false;
 
 	mCurrentTile = mPallete[0][0];
 	mCurrentType = TileType::Normal;
@@ -85,6 +27,7 @@ void MapToolScene::Init()
 	InitMouseRect();
 	InitButtons();
 	InitPalleteBackground();
+
 }
 
 void MapToolScene::Release()
@@ -98,20 +41,23 @@ void MapToolScene::Release()
 	SafeDelete(mEraseButton);
 	SafeDelete(mRightArrowButton);
 	SafeDelete(mRightArrowButton2);
-}
+	SafeDelete(mFoldButton);
+	SafeDelete(mUnFoldButton);
+
+}			   
 
 void MapToolScene::Update()
 {
 	
 	CAMERAMANAGER->GetMainCamera()->Update();
 
-	if (Input::GetInstance()->GetKeyDown(VK_RETURN))
-	{
-		Path::OpenFileDialog(L"", nullptr, L"../Resources/", nullptr, _hWnd);
-	}
+	//if (Input::GetInstance()->GetKeyDown(VK_RETURN))
+	//{
+	//	Path::OpenFileDialog(L"", nullptr, L"../Resources/", nullptr, _hWnd);
+	//}
 
 
-	if (Input::GetInstance()->GetKeyDown(VK_LBUTTON))
+	if (Input::GetInstance()->GetKeyDown(VK_LBUTTON) && mPalleteBackground.isOpen)
 	{
 		//팔레트 픽~
 		for (int y = 0; y < mPallete.size(); ++y)
@@ -158,67 +104,7 @@ void MapToolScene::Update()
 		}
 	}
 
-
-	float x = CAMERAMANAGER->GetMainCamera()->GetX();
-	float y = CAMERAMANAGER->GetMainCamera()->GetY();
-
-	// {{ 타일 그리기~
-	if (Input::GetInstance()->GetKey(VK_LBUTTON) && !PtInRect(&mPalleteBackground.rect,_mousePosition))
-	{
-		int indexX = (_mousePosition.x + (x - WINSIZEX / 2)) / TileSize;
-		int indexY = (_mousePosition.y + (y - WINSIZEY / 2)) / TileSize;
-
-		if (indexX >= 0 && indexX < mXTileCount &&
-			indexY >= 0 && indexY < mYTileCount)
-		{
-
-			//타일바꾸기
-			if (mCurrentPallete == CurrentPallete::Tile)
-			{
-
-				if (mTileList[indexY][indexX]->GetImage() != mCurrentTile.image ||
-					mTileList[indexY][indexX]->GetFrameIndexX() != mCurrentTile.frameX ||
-					mTileList[indexY][indexX]->GetFrameIndexY() != mCurrentTile.frameY)
-				{
-					IBrushTile* command = new IBrushTile(mTileList[indexY][indexX], mCurrentTile);
-					PushCommand(command);
-					//cout << "OnPushCommand" << endl;
-				}
-
-			}
-			//속성바꾸기
-			if (mCurrentPallete == CurrentPallete::Type)
-			{
-				if (mTileList[indexY][indexX]->GetTileType() != mCurrentType)
-				{
-					ISetTileType* command = new ISetTileType(mTileList[indexY][indexX], mCurrentType);
-					PushCommand(command);
-				}
-			}
-			//옵젝바꾸기
-			if (mCurrentPallete == CurrentPallete::Object)
-			{
-				if (mMapObjectList[indexY][indexX]->GetImage() != mCurrentObject.image ||
-					mMapObjectList[indexY][indexX]->GetFrameIndexX() != mCurrentObject.frameX ||
-					mMapObjectList[indexY][indexX]->GetFrameIndexY() != mCurrentObject.frameY)
-				{
-					IPlaceObject* command = new IPlaceObject(mMapObjectList[indexY][indexX], mCurrentObject);
-					PushCommand(command);
-				}
-			}
-
-			//옵젝지우기
-			if (mCurrentPallete == CurrentPallete::Erase)
-			{
-				if (mMapObjectList[indexY][indexX]->GetMapObjectType() != ItemType::None)
-				{
-					mMapObjectList[indexY][indexX]->SetObjectType(ItemType::None);
-					mMapObjectList[indexY][indexX]->SetImage(nullptr);
-				}
-			}
-		}
-	}
-	// }}
+	PaintTilesL();
 
 	//버튼업뎃
 	UpdateButtons();
@@ -247,75 +133,9 @@ void MapToolScene::Render(HDC hdc)
 	}
 
 	RenderPalleteBackground(hdc);
-
-	//팔렛
-	for (int y = 0; y < mPallete.size(); ++y)
-	{
-		for (int x = 0; x < mPallete[y].size(); ++x)
-		{
-			mPallete[y][x].image->ScaleFrameRender
-			(
-				hdc,
-				mPallete[y][x].rect.left,
-				mPallete[y][x].rect.top,
-				mPallete[y][x].frameX,
-				mPallete[y][x].frameY,
-				mPallete[y][x].width,
-				mPallete[y][x].height
-			);
-
-			Gizmo::GetInstance()->DrawRect(hdc, mPallete[y][x].rect, Gizmo::Color::Red);
-		}
-	}
-
-	//타입팔렛
-	for (int i = 0;i < TypePalleteCount;i++)
-	{
-		switch (mTypePallete[i].tiletype)
-		{
-		case TileType::Normal:
-			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Green);
-			break;
-
-		case TileType::Wall:
-			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Black);
-			break;
-
-		case TileType::Water:
-			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Blue);
-			break;
-
-		case TileType::Lava:
-			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Red);
-			break;
-
-		case TileType::ice:
-			Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Gray);
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	//옵젝팔렛
-	for (int y = 0; y < mObjectPallete.size(); ++y)
-	{
-		for (int x = 0; x < mObjectPallete[y].size(); ++x)
-		{
-			mObjectPallete[y][x].image->ScaleFrameRender
-			(
-				hdc,
-				mObjectPallete[y][x].rect.left,
-				mObjectPallete[y][x].rect.top,
-				mObjectPallete[y][x].frameX,
-				mObjectPallete[y][x].frameY,
-				mObjectPallete[y][x].width,
-				mObjectPallete[y][x].height
-			);
-
-		}
-	}
+	
+	if(mPalleteBackground.isOpen)
+		RenderPalletes(hdc);
 
 	RenderButtons(hdc);
 
@@ -486,8 +306,19 @@ void MapToolScene::EraseButton()
 
 void MapToolScene::FoldButton()
 {
-
+	mPalleteBackground.isOpen = false; 
+	mPalleteBackground.positionX = WINSIZEX  - 50;
+	mPalleteBackground.rect = RectMake(mPalleteBackground.positionX, mPalleteBackground.positionY, mPalleteBackground.sizeX, mPalleteBackground.sizeY);
+	
 }
+
+void MapToolScene::UnFoldButton()
+{
+	mPalleteBackground.isOpen = true;
+	mPalleteBackground.positionX = WINSIZEX / 2 - 20;
+	mPalleteBackground.rect = RectMake(mPalleteBackground.positionX, mPalleteBackground.positionY, mPalleteBackground.sizeX, mPalleteBackground.sizeY);
+}
+
 
 void MapToolScene::SwitchObjectPallete()
 {
@@ -788,12 +619,24 @@ void MapToolScene::ImageLoad()
  }
  void MapToolScene::UpdatePalleteBackground()
  {
+	 if (mPalleteBackground.isOpen)
+	 {
+
+	 }
+	 else
+	 {
+
+	 }
 
  }
 
  void MapToolScene::RenderPalleteBackground(HDC hdc)
  {
 	 if (mPalleteBackground.isOpen)
+	 {
+		 mPalleteBackground.image->AlphaScaleRender(hdc, mPalleteBackground.positionX, mPalleteBackground.positionY, mPalleteBackground.sizeX, mPalleteBackground.sizeY, 1);
+	 }
+	 else
 	 {
 		 mPalleteBackground.image->AlphaScaleRender(hdc, mPalleteBackground.positionX, mPalleteBackground.positionY, mPalleteBackground.sizeX, mPalleteBackground.sizeY, 1);
 	 }
@@ -807,6 +650,8 @@ void MapToolScene::ImageLoad()
 	 Image* undo = ImageManager::GetInstance()->FindImage(L"Undo");
 	 Image* eraser = ImageManager::GetInstance()->FindImage(L"XTile");
 	 Image* rightArrow = ImageManager::GetInstance()->FindImage(L"RightArrow");
+	 Image* brownLArrow = ImageManager::GetInstance()->FindImage(L"BrownLeftArrow");
+	 Image* brownRArrow = ImageManager::GetInstance()->FindImage(L"BrownRightArrow");
 
 	 //버튼
 	 mRightArrowButton = new Button(rightArrow, WINSIZEX - 40, 210, rightArrow->GetFrameWidth() * 2, rightArrow->GetFrameHeight() * 2, bind(&MapToolScene::SwitchTilePallete, this));
@@ -815,7 +660,8 @@ void MapToolScene::ImageLoad()
 	 mLoadButton = new Button(load, WINSIZEX / 2 + 520, WINSIZEY - 140, load->GetFrameWidth(), load->GetFrameHeight(), bind(&MapToolScene::OpenLoadWindow, this));
 	 mUndoButton = new Button(undo, WINSIZEX / 2 + 600, WINSIZEY - 140, undo->GetFrameWidth(), undo->GetFrameHeight(), bind(&MapToolScene::Undo, this));
 	 mEraseButton = new Button(eraser, WINSIZEX / 2 + 22, 370, eraser->GetFrameWidth() * 2, eraser->GetFrameHeight() * 2, bind(&MapToolScene::EraseButton, this));
-	 mFoldButton = new Button(rightArrow, WINSIZEX / 2, 20, rightArrow->GetFrameWidth() * 2, rightArrow->GetFrameHeight() * 2, bind(&MapToolScene::FoldButton, this));
+	 mFoldButton = new Button(brownRArrow, WINSIZEX / 2, 35, brownRArrow->GetFrameWidth() * 2, brownRArrow->GetFrameHeight() * 2, bind(&MapToolScene::FoldButton, this));
+	 mUnFoldButton = new Button(brownLArrow, WINSIZEX - 25, 35, brownLArrow->GetFrameWidth() * 2, brownLArrow->GetFrameHeight() * 2, bind(&MapToolScene::UnFoldButton, this));
 
 	 for (int i = 0;i < 5;i++)
 	 {
@@ -828,31 +674,377 @@ void MapToolScene::ImageLoad()
 
  void MapToolScene::UpdateButtons()
  {
-
-	 mSaveButton->Update();
-	 mLoadButton->Update();
-	 mUndoButton->Update();
-	 mEraseButton->Update();
-	 mRightArrowButton->Update();
-	 mRightArrowButton2->Update();
-	 mFoldButton->Update();
-	 for (int i = 0; i < mSaveButtons.size();i++)
+	 if (mPalleteBackground.isOpen)
 	 {
-		 mSaveButtons[i]->Update();
+		 mSaveButton->Update();
+		 mLoadButton->Update();
+		 mUndoButton->Update();
+		 mEraseButton->Update();
+		 mRightArrowButton->Update();
+		 mRightArrowButton2->Update();
+		 for (int i = 0; i < mSaveButtons.size();i++)
+		 {
+			 mSaveButtons[i]->Update();
+		 }
+	 }
+	 if (mPalleteBackground.isOpen)
+	 {
+		 mFoldButton->Update();
+	 }
+	 else
+	 {
+		 mUnFoldButton->Update();
 	 }
  }
 
  void MapToolScene::RenderButtons(HDC hdc)
  {
-	 mSaveButton->Render(hdc);
-	 mLoadButton->Render(hdc);
-	 mUndoButton->Render(hdc);
-	 mEraseButton->Render(hdc);
-	 mRightArrowButton->Render(hdc);
-	 mRightArrowButton2->Render(hdc);
-	 mFoldButton->Render(hdc);
-	 for (int i = 0; i < mSaveButtons.size();i++)
+	 if (mPalleteBackground.isOpen)
 	 {
-		 mSaveButtons[i]->Render(hdc);
+		 mSaveButton->Render(hdc);
+		 mLoadButton->Render(hdc);
+		 mUndoButton->Render(hdc);
+		 mEraseButton->Render(hdc);
+		 mRightArrowButton->Render(hdc);
+		 mRightArrowButton2->Render(hdc);
+		 for (int i = 0; i < mSaveButtons.size();i++)
+		 {
+			 mSaveButtons[i]->Render(hdc);
+		 }
 	 }
+	 if (mPalleteBackground.isOpen)
+	 {
+		mFoldButton->Render(hdc); 
+	 }
+	 else
+	 {
+		 mUnFoldButton->Render(hdc);
+	 }
+ }
+
+ void MapToolScene::InitPalletes()
+ {
+	 Image* tileImage = ImageManager::GetInstance()->FindImage(L"TinyWoods");
+	 Image* mineralImage = ImageManager::GetInstance()->FindImage(L"GreenMineral");
+
+	 //팔레트
+	 int palleteStartX = WINSIZEX / 2;
+	 int palleteStartY = 50;
+	 for (int y = 0; y < PalleteCountY; ++y)
+	 {
+		 mPallete.push_back(vector <TilePallete>());
+		 for (int x = 0; x < PalleteCountX; ++x)
+		 {
+			 TilePallete tempTilePallete;
+			 tempTilePallete.image = tileImage;
+			 tempTilePallete.positionX = palleteStartX + TileSize * x;
+			 tempTilePallete.positionY = palleteStartY + TileSize * y;
+			 tempTilePallete.width = TileSize;
+			 tempTilePallete.height = TileSize;
+			 tempTilePallete.rect = RectMake(tempTilePallete.positionX, tempTilePallete.positionY, tempTilePallete.width, tempTilePallete.height);
+			 tempTilePallete.frameX = x;
+			 tempTilePallete.frameY = y;
+			 mPallete[y].push_back(tempTilePallete);
+		 }
+	 }
+
+	 //속성팔레트 넣어주기
+	 //시작점
+	 palleteStartX = WINSIZEX / 2 + 45;
+	 palleteStartY = 346;
+	 for (int i = 0;i < TypePalleteCount;i++)
+	 {
+		 TypePallete tempTypePallete;
+		 tempTypePallete.positionX = palleteStartX + TileSize * i;
+		 tempTypePallete.positionY = palleteStartY;
+		 tempTypePallete.width = TileSize;
+		 tempTypePallete.height = TileSize;
+		 tempTypePallete.rect = RectMake(tempTypePallete.positionX, tempTypePallete.positionY, tempTypePallete.width, tempTypePallete.height);
+		 tempTypePallete.type = i;
+		 tempTypePallete.tiletype = (TileType)i;
+		 mTypePallete.push_back(tempTypePallete);
+	 }
+
+	 //맵옵젝팔레트
+	 palleteStartX = WINSIZEX / 2;
+	 palleteStartY = 400;
+	 for (int y = 0; y < ObjectPalletCountY; ++y)
+	 {
+		 mObjectPallete.push_back(vector <MapObjectPallete>());
+		 for (int x = 0; x < ObjectPalletCountX; ++x)
+		 {
+			 MapObjectPallete tempPallete;
+			 tempPallete.image = mineralImage;
+			 tempPallete.positionX = palleteStartX + TileSize * x;
+			 tempPallete.positionY = palleteStartY + TileSize * y;
+			 tempPallete.width = TileSize;
+			 tempPallete.height = TileSize;
+			 tempPallete.rect = RectMake(tempPallete.positionX, tempPallete.positionY, tempPallete.width, tempPallete.height);
+			 tempPallete.frameX = x;
+			 tempPallete.frameY = y;
+			 tempPallete.type = 1;
+			 mObjectPallete[y].push_back(tempPallete);
+		 }
+	 }
+ }
+
+ void MapToolScene::RenderPalletes(HDC hdc)
+ {
+	 //팔렛
+	 for (int y = 0; y < mPallete.size(); ++y)
+	 {
+		 for (int x = 0; x < mPallete[y].size(); ++x)
+		 {
+			 mPallete[y][x].image->ScaleFrameRender
+			 (
+				 hdc,
+				 mPallete[y][x].rect.left,
+				 mPallete[y][x].rect.top,
+				 mPallete[y][x].frameX,
+				 mPallete[y][x].frameY,
+				 mPallete[y][x].width,
+				 mPallete[y][x].height
+			 );
+			 Gizmo::GetInstance()->DrawRect(hdc, mPallete[y][x].rect, Gizmo::Color::Red);
+		 }
+	 }
+
+	 //타입팔렛
+	 for (int i = 0;i < TypePalleteCount;i++)
+	 {
+		 switch (mTypePallete[i].tiletype)
+		 {
+		 case TileType::Normal:
+			 Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Green);
+			 break;
+
+		 case TileType::Wall:
+			 Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Black);
+			 break;
+
+		 case TileType::Water:
+			 Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Blue);
+			 break;
+
+		 case TileType::Lava:
+			 Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Red);
+			 break;
+
+		 case TileType::ice:
+			 Gizmo::GetInstance()->DrawRect(hdc, mTypePallete[i].rect, Gizmo::Color::Gray);
+			 break;
+
+		 default:
+			 break;
+		 }
+	 }
+
+	 //옵젝팔렛
+	 for (int y = 0; y < mObjectPallete.size(); ++y)
+	 {
+		 for (int x = 0; x < mObjectPallete[y].size(); ++x)
+		 {
+			 mObjectPallete[y][x].image->ScaleFrameRender
+			 (
+				 hdc,
+				 mObjectPallete[y][x].rect.left,
+				 mObjectPallete[y][x].rect.top,
+				 mObjectPallete[y][x].frameX,
+				 mObjectPallete[y][x].frameY,
+				 mObjectPallete[y][x].width,
+				 mObjectPallete[y][x].height
+			 );
+
+		 }
+	 }
+ }
+
+ void MapToolScene::PaintTilesL()
+ {
+
+	 float x = CAMERAMANAGER->GetMainCamera()->GetX();
+	 float y = CAMERAMANAGER->GetMainCamera()->GetY();
+
+	 // {{ 타일 그리기~
+	 if (Input::GetInstance()->GetKey(VK_LBUTTON) && !PtInRect(&mPalleteBackground.rect, _mousePosition))
+	 {
+		 int indexX = (_mousePosition.x + (x - WINSIZEX / 2)) / TileSize;
+		 int indexY = (_mousePosition.y + (y - WINSIZEY / 2)) / TileSize;
+
+		 if (indexX >= 0 && indexX < mXTileCount &&
+			 indexY >= 0 && indexY < mYTileCount)
+		 {
+
+			 //타일바꾸기
+			 if (mCurrentPallete == CurrentPallete::Tile)
+			 {
+
+				 if (mTileList[indexY][indexX]->GetImage() != mCurrentTile.image ||
+					 mTileList[indexY][indexX]->GetFrameIndexX() != mCurrentTile.frameX ||
+					 mTileList[indexY][indexX]->GetFrameIndexY() != mCurrentTile.frameY)
+				 {
+					 IBrushTile* command = new IBrushTile(mTileList[indexY][indexX], mCurrentTile);
+					 PushCommand(command);
+					 //cout << "OnPushCommand" << endl;
+				 }
+
+			 }
+			 //속성바꾸기
+			 if (mCurrentPallete == CurrentPallete::Type)
+			 {
+				 if (mTileList[indexY][indexX]->GetTileType() != mCurrentType)
+				 {
+					 ISetTileType* command = new ISetTileType(mTileList[indexY][indexX], mCurrentType);
+					 PushCommand(command);
+				 }
+			 }
+			 //옵젝바꾸기
+			 if (mCurrentPallete == CurrentPallete::Object)
+			 {
+				 if (mMapObjectList[indexY][indexX]->GetImage() != mCurrentObject.image ||
+					 mMapObjectList[indexY][indexX]->GetFrameIndexX() != mCurrentObject.frameX ||
+					 mMapObjectList[indexY][indexX]->GetFrameIndexY() != mCurrentObject.frameY)
+				 {
+					 IPlaceObject* command = new IPlaceObject(mMapObjectList[indexY][indexX], mCurrentObject);
+					 PushCommand(command);
+				 }
+			 }
+
+			 //옵젝지우기
+			 if (mCurrentPallete == CurrentPallete::Erase)
+			 {
+				 if (mMapObjectList[indexY][indexX]->GetMapObjectType() != ItemType::None)
+				 {
+					 mMapObjectList[indexY][indexX]->SetObjectType(ItemType::None);
+					 mMapObjectList[indexY][indexX]->SetImage(nullptr);
+				 }
+			 }
+		 }
+	 }
+
+ }
+ 
+ void MapToolScene::PaintTilesR() 
+ {
+	 float x = CAMERAMANAGER->GetMainCamera()->GetX();
+	 float y = CAMERAMANAGER->GetMainCamera()->GetY();
+
+	 //영역선택
+	 //우클릭하면
+	 if (Input::GetInstance()->GetKeyDown(VK_RBUTTON) && !PtInRect(&mPalleteBackground.rect, _mousePosition))
+	 {
+		 int indexX = (_mousePosition.x + (x - WINSIZEX / 2)) / TileSize;
+		 int indexY = (_mousePosition.y + (y - WINSIZEY / 2)) / TileSize;
+
+		 if (indexX >= 0 && indexX < mXTileCount &&
+			 indexY >= 0 && indexY < mYTileCount)
+		 {
+			 mAreaSelect.isSelecting = true;
+			 //시작점고정
+			 //mAreaSelect.beginTile = mTileList[indexY][indexX];
+			 mAreaSelect.startIndex.x = indexX;
+			 mAreaSelect.startIndex.y = indexY;
+		 }
+	 }
+
+	 //우클릭때면
+	 if ((Input::GetInstance()->GetKeyUp(VK_RBUTTON) && !PtInRect(&mPalleteBackground.rect, _mousePosition)))
+	 {
+
+		 int indexX = (_mousePosition.x + (x - WINSIZEX / 2)) / TileSize;
+		 int indexY = (_mousePosition.y + (y - WINSIZEY / 2)) / TileSize;
+
+		 if (indexX >= 0 && indexX < mXTileCount &&
+			 indexY >= 0 && indexY < mYTileCount)
+		 {
+			 mAreaSelect.isSelecting = false;
+			 //끝점고정
+			// mAreaSelect.endTile = mTileList[indexY][indexX];
+			 mAreaSelect.endIndex.x = indexX;
+			 mAreaSelect.endIndex.y = indexY;
+		 }
+
+		 //select한백터만들기
+		 InitSelectVecter();
+
+
+
+		 //타일바꾸기
+		 if (mCurrentPallete == CurrentPallete::Tile)
+		 {
+
+			 if (mTileList[indexY][indexX]->GetImage() != mCurrentTile.image ||
+				 mTileList[indexY][indexX]->GetFrameIndexX() != mCurrentTile.frameX ||
+				 mTileList[indexY][indexX]->GetFrameIndexY() != mCurrentTile.frameY)
+			 {
+				 IBrushTile* command = new IBrushTile(mTileList[indexY][indexX], mCurrentTile);
+				 PushCommand(command);
+				 //cout << "OnPushCommand" << endl;
+			 }
+
+		 }
+		 //속성바꾸기
+		 if (mCurrentPallete == CurrentPallete::Type)
+		 {
+			 if (mTileList[indexY][indexX]->GetTileType() != mCurrentType)
+			 {
+				 ISetTileType* command = new ISetTileType(mTileList[indexY][indexX], mCurrentType);
+				 PushCommand(command);
+			 }
+		 }
+		 //옵젝바꾸기
+		 if (mCurrentPallete == CurrentPallete::Object)
+		 {
+			 if (mMapObjectList[indexY][indexX]->GetImage() != mCurrentObject.image ||
+				 mMapObjectList[indexY][indexX]->GetFrameIndexX() != mCurrentObject.frameX ||
+				 mMapObjectList[indexY][indexX]->GetFrameIndexY() != mCurrentObject.frameY)
+			 {
+				 IPlaceObject* command = new IPlaceObject(mMapObjectList[indexY][indexX], mCurrentObject);
+				 PushCommand(command);
+			 }
+		 }
+
+		 //옵젝지우기
+		 if (mCurrentPallete == CurrentPallete::Erase)
+		 {
+			 if (mMapObjectList[indexY][indexX]->GetMapObjectType() != ItemType::None)
+			 {
+				 mMapObjectList[indexY][indexX]->SetObjectType(ItemType::None);
+				 mMapObjectList[indexY][indexX]->SetImage(nullptr);
+			 }
+		 }
+	 }
+ }
+ 
+
+ void MapToolScene::InitSelectVecter()
+ {
+	 Tile* temp;
+	 if (mAreaSelect.startIndex.x < mAreaSelect.endIndex.x)
+	 {
+		 if (mAreaSelect.startIndex.y < mAreaSelect.endIndex.y)
+		 {
+			 //2번상황
+		 }
+		 else
+		 {
+			 //3번상황
+		 }
+	 }
+	 else
+	 {
+		 if (mAreaSelect.startIndex.y < mAreaSelect.endIndex.y)
+		 {
+			 //4번상황
+		 }
+		 else
+		 {
+			 //1번상황
+		 }
+	 }
+ }
+
+ void MapToolScene::ReleaseSelectVecter()
+ {
+
  }
