@@ -52,9 +52,6 @@ void Player::Init()
 	mIsGettingItemThisFrame = false;
 
 	mIsChangable = true;
-
-	//vector<InvenItem*>* 
-	//mInvenItemListPtr = new vector<InvenItem*>();
 }
 
 void Player::Release()
@@ -99,7 +96,7 @@ void Player::Render(HDC hdc)
 	GIZMO->DrawRect(hdc, currentRc, Gizmo::Color::Yellow);
 	GIZMO->DrawRect(hdc, nextRc, Gizmo::Color::Cyan);
 	GIZMO->DrawRect(hdc, mColBox, Gizmo::Color::Violet);
-	// }} 현재 타일, 다음 타일 확인용 // 릴리즈 전 지워주세요
+	// 현재 타일, 다음 타일 확인용 // 릴리즈 전 지워주세요 }}
 }
 
 void Player::InitAnimation()
@@ -400,18 +397,14 @@ void Player::InputDirectionKey()
 	if (mIsDirectionKeyDown)
 	{
 		if (mSpeed == 100.f && INPUT->GetKeyDown(VK_LSHIFT))
-		{
 			mSpeed = 300.f;
-		}
 
 		if (mSpeed != 100.f)
 		{
 			mSpeed -= 1.f;
 
 			if (mSpeed <= 275.f)
-			{
 				mSpeed = 100.f;
-			}
 		}
 	}
 
@@ -427,9 +420,7 @@ void Player::InputDirectionKey()
 			mNextTileY = mTileY + 1;
 
 		if (mY >= TileSize * TileCountY - TileSize / 2)
-		{
 			mY = TileSize * TileCountY - TileSize / 2;
-		}
 		else
 			mY += mSpeed * Time::GetInstance()->DeltaTime();
 	}
@@ -444,9 +435,7 @@ void Player::InputDirectionKey()
 			mNextTileY = mTileY - 1;
 
 		if (mY <= TileSize / 2)
-		{
 			mY = TileSize / 2;
-		}
 		else
 			mY -= mSpeed * Time::GetInstance()->DeltaTime();
 	}
@@ -461,9 +450,7 @@ void Player::InputDirectionKey()
 		mNextTileY = mTileY;
 
 		if (mX <= TileSize / 2)
-		{
 			mX = TileSize / 2;
-		}
 		else
 			mX -= mSpeed * Time::GetInstance()->DeltaTime();
 	}
@@ -478,9 +465,7 @@ void Player::InputDirectionKey()
 		mNextTileY = mTileY;
 
 		if (mX >= TileSize * TileCountX - TileSize / 2)
-		{
 			mX = TileSize * TileCountX - TileSize / 2;
-		}
 		else
 			mX += mSpeed * Time::GetInstance()->DeltaTime();
 	}
@@ -504,7 +489,6 @@ void Player::InputSpaceKey()
 	{
 		CheckNextTile();
 
-		// mapObject to item
 		if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Green))
 		{
 			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
@@ -525,8 +509,7 @@ void Player::InputSpaceKey()
 			mIsAttackingTemp = false;
 		}
 
-		// 아이템(3) 내려놓을 때 앞에 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물)//내가 가지고 있는 것이랑 다를 때 4. 기찻길 > 일 때 놓을 수 없음
-		// 기찻길(4) 내려놓을 떄 앞에 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물) 4. 기찻길 5. 비어있더라도 타일과 기찻길의 속성이 안 맞을 때 > 일 때 놓을 수 없음
+		
 
 		
 
@@ -643,21 +626,26 @@ void Player::InputZKey()
 		for (int i = 0; i < (*itemListPtr).size(); ++i)
 		{
 			Ore* item = (Ore*)((*itemListPtr)[i]);
-			POINT pt = { item->GetX(), item->GetY() };
+			POINT pt = { (LONG)(item->GetX()), (LONG)(item->GetY()) };
 
 			if (PtInRect(&currentRc, pt))
 			{
-				InvenItem* invenItem = new InvenItem();
-				invenItem->SetName(ItemName::ItemOre);
+				int count = item->GetCount();
 
-				if (item->GetOreType() == ItemType::Green)
-					invenItem->SetType(ItemType::Green);
-				else if (item->GetOreType() == ItemType::Blue)
-					invenItem->SetType(ItemType::Blue);
-				else if (item->GetOreType() == ItemType::Red)
-					invenItem->SetType(ItemType::Red);
+				for (int i = 0; i < count; ++i)
+				{
+					InvenItem* invenItem = new InvenItem();
+					invenItem->SetName(ItemName::ItemOre);
 
-				mInvenItemList.push_back(invenItem);
+					if (item->GetOreType() == ItemType::Green)
+						invenItem->SetType(ItemType::Green);
+					else if (item->GetOreType() == ItemType::Blue)
+						invenItem->SetType(ItemType::Blue);
+					else if (item->GetOreType() == ItemType::Red)
+						invenItem->SetType(ItemType::Red);
+
+					mInvenItemList.push_back(invenItem);
+				}
 
 				(*itemListPtr).erase((*itemListPtr).begin() + i);
 
@@ -684,19 +672,20 @@ void Player::InputXKey()
 
 		RECT currentRc = currentTile->GetRect();
 		vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
-		ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType(); // 왜.. 쓰레기값이;; // 얘를 출력해보자
+		ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
 
 		for (int i = 0; i < (*itemListPtr).size(); ++i)
 		{
 			GameObject* item = (*itemListPtr)[i];
-			POINT pt = { item->GetX(), item->GetY() };
+			POINT pt = { (LONG)(item->GetX()), (LONG)(item->GetY()) };
 		
 			if (PtInRect(&currentRc, pt))
 			{
 				if (((Ore*)item)->GetOreType() == itemType)
 				{
-					((Ore*)item)->PlusCount(); // 아직 낫테스트
-					mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1); // 아직 낫테스트
+					((Ore*)item)->PlusCount();
+					mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+					return;
 				}
 				else
 					return;
@@ -704,21 +693,21 @@ void Player::InputXKey()
 		}
 
 		vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
-		//mTrailManager->GetTrailListPtr();
-		//vector<GameObject*>* trailListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::TRAIL);
 		Trail* currentTrail = (Trail*)(*trailListPtr)[mTileY][mTileX];
 
-		if (currentTrail->GetTrailType() != ItemType::None)  /// 여기서 터짐!!!!!!
+		if (currentTrail->GetTrailType() != ItemType::None)
 			return;
 
 		Ore* ore = new Ore();
 		ore->Drop(TileSize * mTileX, TileSize * mTileY, itemType);
 		OBJECTMANAGER->AddObject(ObjectLayer::ITEM, ore);
 		mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+
+		// 아이템(3) 내려놓을 때 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물)//내가 가지고 있는 것이랑 다를 때 4. 기찻길 > 일 때 놓을 수 없음
+		// 기찻길(4) 내려놓을 때 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물) 4. 기찻길 5. 비어있더라도 타일과 기찻길의 속성이 안 맞을 때 > 일 때 놓을 수 없음
 		
 		
 		
-		////////////// 이 다음 줄 할 차례였응ㅁ // 예외 걸렀고 이제 구현하면 됨
 
 
 
@@ -1017,11 +1006,6 @@ void Player::RenderTestText(HDC hdc)
 		strChange = L"변신 불가 지역입니다";
 	if (mChangeT)
 		TextOut(hdc, (int)mX - 20 - cam.left, (int)mY - 25 - cam.top, strChange.c_str(), (int)strChange.length());
-
-	//wstring strSpeed = L"SApeed: " + to_wstring(mSpeed);
-	//wstring strKeyDown = L"IsKeyDownCheck: " + to_wstring(mIsDirectionKeyDown);
-	//TextOut(hdc, (int)mX, (int)mY + 50, strSpeed.c_str(), (int)strSpeed.length());
-	//TextOut(hdc, (int)mX, (int)mY + 75, strKeyDown.c_str(), (int)strKeyDown.length());
 
 	wstring strTile = L"tile x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
 	TextOut(hdc, (int)mX + 25 - cam.left, (int)mY - cam.top, strTile.c_str(), (int)strTile.length());

@@ -97,8 +97,8 @@ class Player : public GameObject
 	int mTileX;
 	int mTileY;
 
-	int mNextTileX; // 반드시 다음 것은 아님(순서 때문에 값이 변함)
-	int mNextTileY; // 반드시 다음 것은 아님(순서 때문에 값이 변함)
+	int mNextTileX;
+	int mNextTileY;
 
 	vector<vector<Tile*>>* mTileListPtr;
 	vector<vector<MapObject*>>* mMapObjectListPtr;
@@ -111,7 +111,6 @@ class Player : public GameObject
 
 	bool mIsChangable;
 
-	//vector<InvenItem*>* mInvenItemListPtr;
 	vector<InvenItem*> mInvenItemList;
 
 public:
@@ -145,6 +144,5 @@ public:
 
 	void SetTileListPtr(vector<vector<Tile*>>* tileListPtr) { mTileListPtr = tileListPtr; }
 	void SetMapObjectListPtr(vector<vector<MapObject*>>* mapObjectListPtr) { mMapObjectListPtr = mapObjectListPtr; }
-
 	void SetTrailManagerPtr(TrailManager* trailManager) { mTrailManager = trailManager; }
 };

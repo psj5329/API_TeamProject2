@@ -4,13 +4,10 @@
 
 void Ore::Init()
 {
-		
 }
 
 void Ore::Release()
 {
-
-
 }
 
 void Ore::Update()
@@ -21,6 +18,11 @@ void Ore::Update()
 void Ore::Render(HDC hdc)
 {
 	mImage->ScaleFrameRender(hdc, mX, mY, mFrameX, 0, mSizeX, mSizeY);
+
+	// {{ 테스트용 // 유찬
+	wstring strCount = to_wstring(mCount);
+	TextOut(hdc, (int)mX, (int)mY, strCount.c_str(), (int)strCount.length());
+	// 테스트용 // 유찬 }}
 }
 
 void Ore::Drop(int x, int y, ItemType type)
@@ -48,7 +50,6 @@ void Ore::Drop(int x, int y, ItemType type)
 	mY = y + 8;
 	mSizeX = mImage->GetFrameWidth()*2.5;
 	mSizeY = mImage->GetFrameHeight()*2.5;
-
 }
 
 ItemType Ore::PickUp()

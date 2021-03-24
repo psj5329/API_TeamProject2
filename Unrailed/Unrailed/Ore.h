@@ -1,13 +1,6 @@
 #pragma once
 #include "GameObject.h"
 
-//enum class ItemType
-//{
-//	None,
-//	Green,
-//	Blue,
-//	Red
-//};
 class Image;
 
 class Ore :
@@ -33,6 +26,5 @@ public:
 	ItemType PickUp();
 	void Place(int x, int y);
 
-	void PlusCount() { mCount += 1; }
+	void PlusCount() { ++mCount; }
 };
-

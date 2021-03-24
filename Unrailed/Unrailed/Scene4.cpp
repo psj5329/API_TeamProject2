@@ -88,6 +88,6 @@ void Scene4::Render(HDC hdc)
 
 	// {{ 완성본에서 지워야 할 내용 시작
 	wstring strScene = L"이건 4번 씬 / 방향키: 이동 / 이동 중 shift: 대시 / C: 변신";
-	TextOut(hdc, WINSIZEX / 2 - 15, 100, strScene.c_str(), strScene.length());
+	TextOut(hdc, WINSIZEX / 2 - 15, 100, strScene.c_str(), (int)strScene.length());
 	// 완성본에서 지워야 할 내용 끝 }}
 }
