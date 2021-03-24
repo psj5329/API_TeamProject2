@@ -14,7 +14,7 @@ void Scene6::Init()
 
 	//인덱스 가져오기 : 현재 x값 나누기 타일사이즈
 	mTrailManager = new TrailManager();
-	mTrailManager->Init();
+	mTrailManager->Init(mTileMap->GetYTileCount(), mTileMap->GetXTileCount());
 	mTrailManager->InsertTrail(6, 0, 1, 3);
 	mTrailManager->InsertTrail(6, 1, 1, 3);
 	mTrailManager->InsertTrail(6, 2, 1, 3);
