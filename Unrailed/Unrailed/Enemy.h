@@ -11,7 +11,8 @@ class Enemy : public Unit
 {
 protected:
 	vector<vector<Tile*>> mTileList;
-	//vector<PathFinder::> mPath;
+	vector<vector<MapObject*>> mMapObjectList;
+	vector<Tile*> mPathFinderList;
 
 	RECT mHitBox;
 	int mHp;		// 어차피 타격수에 따라 죽는다
@@ -44,6 +45,8 @@ public:
 	void SetHp(int hp) { mHp = hp; }
 	void SetSpeed(float s) { mSpeed = s; }
 	void SetTileList(vector<vector<Tile*>> tile) { mTileList = tile; }
+	void SetTileListPtr(vector<vector<Tile*>> tileList) { mTileList = tileList; }
+	void SetMapObjectListPtr(vector<vector<MapObject*>> mapObjectList) { mMapObjectList = mapObjectList; }
 
 	void DamagedHp() { mHp -= 1; }
 };

@@ -22,14 +22,24 @@ void Scene1::Init()
 	mPlayer->SetY(48 * 5);
 	OBJECTMANAGER->AddObject(ObjectLayer::PLAYER, mPlayer);
 
+	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
+	mPlayer->SetTileListPtr(tileListPtr);
+	vector<vector<MapObject*>>* mapObjectListPtr = mTileMap->GetObjectListPtr();
+	mPlayer->SetMapObjectListPtr(mapObjectListPtr);
+
 	mEnemy = new Sableye;
 	mEnemy->Init();
-	mEnemy->SetX(48);
-	mEnemy->SetY(48);
+	mEnemy->SetX(0);
+	mEnemy->SetY(0);
 	OBJECTMANAGER->AddObject(ObjectLayer::ENEMY, mEnemy);
 
+	vector<vector<Tile*>> tileList = *mTileMap->GetTileListPtr();
+	mEnemy->SetTileListPtr(tileList);
+	vector<vector<MapObject*>> mapObjectList = *mTileMap->GetObjectListPtr();
+	mEnemy->SetMapObjectListPtr(mapObjectList);
+
 	Camera* main = CAMERAMANAGER->GetMainCamera();
-	main->ChangeMode(Camera::Mode::Follow);
+	main->ChangeMode(Camera::Mode::Free);
 	main->SetTarget(mPlayer);
 	main->SetX(WINSIZEX / 2);
 	main->SetY(WINSIZEY / 2);
@@ -51,7 +61,7 @@ void Scene1::Update()
 {
 	if (INPUT->GetKeyDown(VK_SPACE))
 	{
-		GameObject* item = COLLISIONMANAGER->ItemCollision(mPlayer->GetColBoxPtr());//(&mPlayer->GetRect());
+		GameObject* item = COLLISIONMANAGER->ItemCollision(mPlayer->GetColBoxPtr());
 		if(item != nullptr)
 			item->SetIsActive(false);
 	}
