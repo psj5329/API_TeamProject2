@@ -5,7 +5,7 @@
 #include "Camera.h"
 
 MapObject::MapObject(class Image* image, float x, float y, float sizeX, float sizeY,
-	int frameIndexX, int frameIndexY, int type)
+	int frameIndexX, int frameIndexY, ItemType type)
 {
 	mImage = image;
 	mX = x;
@@ -15,7 +15,7 @@ MapObject::MapObject(class Image* image, float x, float y, float sizeX, float si
 	mRect = RectMake(mX, mY, mSizeX, mSizeY);
 	mFrameIndexX = frameIndexX;
 	mFrameIndexY = frameIndexY;
-	mType = (MapObjectType)type;
+	mType = type;
 	mHp = 3;
 
 	mActive = true;
@@ -33,17 +33,17 @@ void MapObject::Update()
 	if (mHp <= 0 && mActive == true)
 	{
 		Ore* ore = new Ore();
-		ore->Drop(mX, mY, (int)mType);
+		ore->Drop(mX, mY, mType);
 		ObjectManager::GetInstance()->AddObject(ObjectLayer::ITEM, ore);
 		mImage = nullptr;
-		mType = MapObjectType::None;
+		mType = ItemType::None;
 		mActive = false;
 	}
 }
 
 void MapObject::Render(HDC hdc)
 {
-	if (mType != MapObjectType::None)
+	if (mType != ItemType::None)
 	{
 		if (mImage != nullptr)
 			CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);

@@ -36,11 +36,11 @@ public:
 	Animation* GetCurrentAnimation() { return mCurrentAnimation; }
 
 	void SetStartIndex(int y, int x) { mStartX = x; mStartY = y; }
-	void InsertTrail(int indexY, int indexX, int type, int dir);	//맵에서 트레일인잇
+	void InsertTrail(int indexY, int indexX, ItemType type, int dir);	//맵에서 트레일인잇
 	void TurnTrail(int indexY, int indexX);		//플레이어가 트레일 돌리기
 	//void TurnTrail2(int indexY, int indexX);
-	TrailType PickUpTrail(int indexY, int indexX);			//틀레이어가 트레일줍기
-	bool PlaceTrail(int indexY, int indexX, int type, int dir);		//플레이어가 트레일설치
+	ItemType PickUpTrail(int indexY, int indexX);			//틀레이어가 트레일줍기
+	bool PlaceTrail(int indexY, int indexX, ItemType type, int dir);		//플레이어가 트레일설치
 
 
 	vector<vector<Trail*>>* GetTrailListPtr() { return &mTrailList; }

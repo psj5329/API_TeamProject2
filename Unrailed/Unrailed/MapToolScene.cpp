@@ -9,15 +9,10 @@
 void MapToolScene::Init()
 {
 	ImageLoad();
-
 	Image* tileImage2 = ImageManager::GetInstance()->FindImage(L"Tile");
 	Image* tileImage = ImageManager::GetInstance()->FindImage(L"TinyWoods");
 	Image* mineralImage = ImageManager::GetInstance()->FindImage(L"GreenMineral");
-	Image* save = ImageManager::GetInstance()->FindImage(L"Save");
-	Image* load = ImageManager::GetInstance()->FindImage(L"Load");
-	Image* undo = ImageManager::GetInstance()->FindImage(L"Undo");
-	Image* eraser = ImageManager::GetInstance()->FindImage(L"XTile");
-	Image* rightArrow = ImageManager::GetInstance()->FindImage(L"RightArrow");
+
 	Image* empty = nullptr;
 
 	InitEmptyMap();
@@ -45,8 +40,8 @@ void MapToolScene::Init()
 
 	//속성팔레트 넣어주기
 	//시작점
-	palleteStartX = WINSIZEX / 2 + 350;
-	palleteStartY = 400;
+	palleteStartX = WINSIZEX / 2 + 45;
+	palleteStartY = 346;
 	for (int i = 0;i < TypePalleteCount;i++)
 	{
 		TypePallete tempTypePallete;
@@ -82,30 +77,14 @@ void MapToolScene::Init()
 		}
 	}
 
-	//mSaveButton = RectMake(WINSIZEX / 2, WINSIZEY / 2, 200, 50);
-	//mLoadButton = RectMake(mSaveButton.right + 10, WINSIZEY / 2, 200, 50);
-
-	//버튼
-	mRightArrowButton = new Button(rightArrow, WINSIZEX - 40, 210, rightArrow->GetFrameWidth() * 2, rightArrow->GetFrameHeight() * 2, bind(&MapToolScene::SwitchTilePallete, this));
-	mRightArrowButton2 = new Button(rightArrow, WINSIZEX / 2+325, 480, rightArrow->GetFrameWidth()*2, rightArrow->GetFrameHeight()*2, bind(&MapToolScene::SwitchObjectPallete, this));
-	mSaveButton = new Button(save, WINSIZEX / 2, WINSIZEY / 2, save->GetFrameWidth(), save->GetFrameHeight(), bind(&MapToolScene::Save, this,1));
-	mLoadButton = new Button(load, WINSIZEX / 2 + 100, WINSIZEY / 2, load->GetFrameWidth(), load->GetFrameHeight(), bind(&MapToolScene::OpenLoadWindow, this));
-	mUndoButton = new Button(undo, WINSIZEX / 2 + 200, WINSIZEY / 2, undo->GetFrameWidth(), undo->GetFrameHeight(), bind(&MapToolScene::Undo, this));
-	mEraseButton = new Button(eraser, WINSIZEX / 2 + 325, 425, eraser->GetFrameWidth()*2, eraser->GetFrameHeight()*2, bind(&MapToolScene::EraseButton, this));
-	
-	for (int i = 0;i < 5;i++)
-	{
-		wstring str = L"Save" + to_wstring(i+1);
-		Image* save = ImageManager::GetInstance()->FindImage(str);
-		Button* tempButton = new Button(save, WINSIZEX / 2 + 80*i, WINSIZEY - 130, save->GetFrameWidth(), save->GetFrameHeight(), bind(&MapToolScene::Save, this,i));
-		mSaveButtons.push_back(tempButton);
-	}
 
 	mCurrentTile = mPallete[0][0];
 	mCurrentType = TileType::Normal;
 	mCurrentPallete = CurrentPallete::Tile;
-	InitMouseRect();
 
+	InitMouseRect();
+	InitButtons();
+	InitPalleteBackground();
 }
 
 void MapToolScene::Release()
@@ -184,7 +163,7 @@ void MapToolScene::Update()
 	float y = CAMERAMANAGER->GetMainCamera()->GetY();
 
 	// {{ 타일 그리기~
-	if (Input::GetInstance()->GetKey(VK_LBUTTON))
+	if (Input::GetInstance()->GetKey(VK_LBUTTON) && !PtInRect(&mPalleteBackground.rect,_mousePosition))
 	{
 		int indexX = (_mousePosition.x + (x - WINSIZEX / 2)) / TileSize;
 		int indexY = (_mousePosition.y + (y - WINSIZEY / 2)) / TileSize;
@@ -231,9 +210,9 @@ void MapToolScene::Update()
 			//옵젝지우기
 			if (mCurrentPallete == CurrentPallete::Erase)
 			{
-				if (mMapObjectList[indexY][indexX]->GetMapObjectType() != MapObjectType::None)
+				if (mMapObjectList[indexY][indexX]->GetMapObjectType() != ItemType::None)
 				{
-					mMapObjectList[indexY][indexX]->SetObjectType(0);
+					mMapObjectList[indexY][indexX]->SetObjectType(ItemType::None);
 					mMapObjectList[indexY][indexX]->SetImage(nullptr);
 				}
 			}
@@ -241,17 +220,8 @@ void MapToolScene::Update()
 	}
 	// }}
 
-
-	mSaveButton->Update();
-	mLoadButton->Update();
-	mUndoButton->Update();
-	mEraseButton->Update();
-	mRightArrowButton->Update();
-	mRightArrowButton2->Update();
-	for (int i = 0; i < mSaveButtons.size();i++)
-	{
-		mSaveButtons[i]->Update();
-	}
+	//버튼업뎃
+	UpdateButtons();
 
 	UpdateMouseRect();
 }
@@ -275,6 +245,8 @@ void MapToolScene::Render(HDC hdc)
 			mMapObjectList[y][x]->Render(hdc);
 		}
 	}
+
+	RenderPalleteBackground(hdc);
 
 	//팔렛
 	for (int y = 0; y < mPallete.size(); ++y)
@@ -345,19 +317,8 @@ void MapToolScene::Render(HDC hdc)
 		}
 	}
 
-	mSaveButton->Render(hdc);
-	mLoadButton->Render(hdc);
-	mUndoButton->Render(hdc);
-	mEraseButton->Render(hdc);
-	mRightArrowButton->Render(hdc);
-	mRightArrowButton2->Render(hdc);
+	RenderButtons(hdc);
 
-	for (int i = 0; i < mSaveButtons.size();i++)
-	{
-		mSaveButtons[i]->Render(hdc);
-	}
-
-	
 	RenderMouseRect(hdc);
 	//wstring y = L"TileY: " + to_wstring(mYTileCount);
 	//TextOut(hdc, _mousePosition.x, _mousePosition.y, y.c_str(), (int)y.length());
@@ -485,7 +446,7 @@ void MapToolScene::Load(wstring fileName)
 				}
 				mMapObjectList[y][x]->SetFrameIndexX(objectFrameX);
 				mMapObjectList[y][x]->SetFrameIndexY(objectFrameY);
-				mMapObjectList[y][x]->SetObjectType(objectType);
+				mMapObjectList[y][x]->SetObjectType((ItemType)objectType);
 			}
 		}
 	}
@@ -523,25 +484,30 @@ void MapToolScene::EraseButton()
 	SetMouseRect();
 }
 
+void MapToolScene::FoldButton()
+{
+
+}
+
 void MapToolScene::SwitchObjectPallete()
 {
 	Image* mineralImage;
-	MapObjectType type;
+	ItemType type;
 	//바꿀 이미지랑 속성 정하고
-	if (mObjectPallete[0][0].type == (int)MapObjectType::Green)
+	if (mObjectPallete[0][0].type == (int)ItemType::Green)
 	{
 		mineralImage = IMAGEMANAGER->FindImage(L"BlueMineral");
-		type = MapObjectType::Blue;
+		type = ItemType::Blue;
 	}
-	else if (mObjectPallete[0][0].type == (int)MapObjectType::Blue)
+	else if (mObjectPallete[0][0].type == (int)ItemType::Blue)
 	{
 		mineralImage = IMAGEMANAGER->FindImage(L"RedMineral");
-		type = MapObjectType::Red;
+		type = ItemType::Red;
 	}
 	else
 	{
 		mineralImage = IMAGEMANAGER->FindImage(L"GreenMineral");
-		type = MapObjectType::Green;
+		type = ItemType::Green;
 	}
 	
 	//이미지랑 속성바꾸기
@@ -633,7 +599,7 @@ void MapToolScene::InitEmptyMap()
 				TileSize,
 				0,
 				0,
-				0
+				ItemType::None
 			);
 			mMapObjectList[y].push_back(tempObject);
 
@@ -677,15 +643,6 @@ void MapToolScene::ReleaseMap()
 
 void MapToolScene::ImageLoad()
 {
-	//IMAGEMANAGER->LoadFromFile(L"Save", Resources(L"/Map/Tool/save"), 60, 16, 1, 1, true);
-	//IMAGEMANAGER->LoadFromFile(L"Load", Resources(L"/Map/Tool/load"), 60, 16, 1, 1, true);
-	//IMAGEMANAGER->LoadFromFile(L"Undo", Resources(L"/Map/Tool/undo"), 60, 16, 1, 1, true);
-	//IMAGEMANAGER->LoadFromFile(L"TinyWoods", Resources(L"/Map/TinyWoods"), 288, 144, 12, 6, true);
-	//IMAGEMANAGER->LoadFromFile(L"GreenMineral", Resources(L"/Map/Green"), 144, 72, 6, 3, true);
-	//IMAGEMANAGER->LoadFromFile(L"BlueMineral", Resources(L"/Map/Blue"), 144, 72, 6, 3, true);
-	//IMAGEMANAGER->LoadFromFile(L"RedMineral", Resources(L"/Map/Red"), 144, 72, 6, 3, true);
-	//IMAGEMANAGER->LoadFromFile(L"RightArrow", Resources(L"/Map/Tool/RightArrow"), 16, 14, 1, 1, true);
-	//IMAGEMANAGER->LoadFromFile(L"XTile", Resources(L"/Map/Tool/XTile"), 24, 24, 1, 1, true);
 }
 
  LRESULT MapToolScene::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) 
@@ -734,8 +691,8 @@ void MapToolScene::ImageLoad()
 	 }
 	 else
 	 {
-		 mMouse.positionX = _mousePosition.x;
-		 mMouse.positionY = _mousePosition.y;
+		 mMouse.positionX = _mousePosition.x + (x - WINSIZEX / 2);
+		 mMouse.positionY = _mousePosition.y + (y - WINSIZEY / 2);
 		 mMouse.rect = RectMakeCenter(mMouse.positionX, mMouse.positionY, mMouse.sizeX, mMouse.sizeY);
 	 }
 
@@ -743,6 +700,7 @@ void MapToolScene::ImageLoad()
 
  void MapToolScene::RenderMouseRect(HDC hdc)
  {
+
 	 switch (mCurrentPallete)
 	 {
 	 case CurrentPallete::Tile:
@@ -790,6 +748,7 @@ void MapToolScene::ImageLoad()
 	 default:
 		 break;
 	 }
+
  }
 
  void MapToolScene::SetMouseRect()
@@ -817,3 +776,83 @@ void MapToolScene::ImageLoad()
 	 }
  }
 
+ void MapToolScene::InitPalleteBackground()
+ {
+	 mPalleteBackground.image = IMAGEMANAGER->FindImage(L"PalleteBackground");
+	 mPalleteBackground.isOpen = true;
+	 mPalleteBackground.sizeX = mPalleteBackground.image->GetFrameWidth() * 3;
+	 mPalleteBackground.sizeY = mPalleteBackground.image->GetFrameHeight() * 3;
+	 mPalleteBackground.positionX = WINSIZEX / 2 - 20;
+	 mPalleteBackground.positionY = 20;
+	 mPalleteBackground.rect = RectMake(mPalleteBackground.positionX, mPalleteBackground.positionY, mPalleteBackground.sizeX, mPalleteBackground.sizeY);
+ }
+ void MapToolScene::UpdatePalleteBackground()
+ {
+
+ }
+
+ void MapToolScene::RenderPalleteBackground(HDC hdc)
+ {
+	 if (mPalleteBackground.isOpen)
+	 {
+		 mPalleteBackground.image->AlphaScaleRender(hdc, mPalleteBackground.positionX, mPalleteBackground.positionY, mPalleteBackground.sizeX, mPalleteBackground.sizeY, 1);
+	 }
+ }
+
+
+ void MapToolScene::InitButtons()
+ {
+	 Image* save = ImageManager::GetInstance()->FindImage(L"Save");
+	 Image* load = ImageManager::GetInstance()->FindImage(L"Load");
+	 Image* undo = ImageManager::GetInstance()->FindImage(L"Undo");
+	 Image* eraser = ImageManager::GetInstance()->FindImage(L"XTile");
+	 Image* rightArrow = ImageManager::GetInstance()->FindImage(L"RightArrow");
+
+	 //버튼
+	 mRightArrowButton = new Button(rightArrow, WINSIZEX - 40, 210, rightArrow->GetFrameWidth() * 2, rightArrow->GetFrameHeight() * 2, bind(&MapToolScene::SwitchTilePallete, this));
+	 mRightArrowButton2 = new Button(rightArrow, WINSIZEX / 2 + 325, 480, rightArrow->GetFrameWidth() * 2, rightArrow->GetFrameHeight() * 2, bind(&MapToolScene::SwitchObjectPallete, this));
+	 mSaveButton = new Button(save, WINSIZEX / 2 + 440, WINSIZEY - 140, save->GetFrameWidth(), save->GetFrameHeight(), bind(&MapToolScene::Save, this, 1));
+	 mLoadButton = new Button(load, WINSIZEX / 2 + 520, WINSIZEY - 140, load->GetFrameWidth(), load->GetFrameHeight(), bind(&MapToolScene::OpenLoadWindow, this));
+	 mUndoButton = new Button(undo, WINSIZEX / 2 + 600, WINSIZEY - 140, undo->GetFrameWidth(), undo->GetFrameHeight(), bind(&MapToolScene::Undo, this));
+	 mEraseButton = new Button(eraser, WINSIZEX / 2 + 22, 370, eraser->GetFrameWidth() * 2, eraser->GetFrameHeight() * 2, bind(&MapToolScene::EraseButton, this));
+	 mFoldButton = new Button(rightArrow, WINSIZEX / 2, 20, rightArrow->GetFrameWidth() * 2, rightArrow->GetFrameHeight() * 2, bind(&MapToolScene::FoldButton, this));
+
+	 for (int i = 0;i < 5;i++)
+	 {
+		 wstring str = L"Save" + to_wstring(i + 1);
+		 Image* save = ImageManager::GetInstance()->FindImage(str);
+		 Button* tempButton = new Button(save, WINSIZEX / 2 + 20 + 80 * i, WINSIZEY - 140, save->GetFrameWidth(), save->GetFrameHeight(), bind(&MapToolScene::Save, this, i));
+		 mSaveButtons.push_back(tempButton);
+	 }
+ }
+
+ void MapToolScene::UpdateButtons()
+ {
+
+	 mSaveButton->Update();
+	 mLoadButton->Update();
+	 mUndoButton->Update();
+	 mEraseButton->Update();
+	 mRightArrowButton->Update();
+	 mRightArrowButton2->Update();
+	 mFoldButton->Update();
+	 for (int i = 0; i < mSaveButtons.size();i++)
+	 {
+		 mSaveButtons[i]->Update();
+	 }
+ }
+
+ void MapToolScene::RenderButtons(HDC hdc)
+ {
+	 mSaveButton->Render(hdc);
+	 mLoadButton->Render(hdc);
+	 mUndoButton->Render(hdc);
+	 mEraseButton->Render(hdc);
+	 mRightArrowButton->Render(hdc);
+	 mRightArrowButton2->Render(hdc);
+	 mFoldButton->Render(hdc);
+	 for (int i = 0; i < mSaveButtons.size();i++)
+	 {
+		 mSaveButtons[i]->Render(hdc);
+	 }
+ }

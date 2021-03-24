@@ -1,19 +1,19 @@
 #pragma once
 #include "GameObject.h"
 
-enum class OreType
-{
-	None,
-	Green,
-	Blue,
-	Red
-};
+//enum class OreType
+//{
+//	None,
+//	Green,
+//	Blue,
+//	Red
+//};
 class Image;
 
 class Ore :
 	public GameObject
 {
-	OreType mType;
+	ItemType mType;
 	Image* mImage;
 	int mCount;
 	int mFrameX;
@@ -25,12 +25,12 @@ public:
 	void Render(HDC hdc)override;
 
 	int GetOreTypeInt() { return (int)mType; }
-	OreType GetOreType() { return mType; }
+	ItemType GetOreType() { return mType; }
 	int GetCount() { return mCount; }
 
-	void SetOreType(int type) { mType = (OreType)type; }
-	void Drop(int x, int y, int type);
-	int PickUp();
+	void SetOreType(ItemType type) { mType = type; }
+	void Drop(int x, int y, ItemType type);
+	ItemType PickUp();
 	void Place(int x, int y);
 };
 

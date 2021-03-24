@@ -8,15 +8,15 @@ enum class TrailDirection : int
 	Left,
 	Right
 };
-
-enum class TrailType
-{
-	None,
-	Green,
-	Blue,
-	Red
-};
-
+//
+//enum class TrailType
+//{
+//	None,
+//	Green,
+//	Blue,
+//	Red
+//};
+//
 class Image;
 class Animation;
 class Trail :
@@ -24,7 +24,7 @@ class Trail :
 {
 	Image* mImage;
 	TrailDirection mDirection;
-	TrailType mTrailType;
+	ItemType mTrailType;
 
 	Animation* mDown;
 	Animation* mUp;
@@ -48,14 +48,14 @@ public:
 
 	TrailDirection GetDirection() const{ return mDirection; }
 	int GetDirectionInt() const{ return (int)mDirection; }
-	TrailType GetTrailType() const{ return mTrailType; }
+	ItemType GetTrailType() const{ return mTrailType; }
 	int GetTrailTypeInt() const{ return (int)mTrailType; }
 	bool GetIsConnected() const { return mIsConnected; }
 	bool GetIsTail() const { return mIsTail; }
 	bool GetIsPassed()const { return mIsPassed; }
 	int GetOrder()const { return mOrder; }
 
-	void SetTrailType(int type);
+	void SetTrailType(ItemType type);
 	void SetDirection(int dir);
 	void SetIsConnected(bool connected) { mIsConnected = connected; }
 	void SetIsTail(bool tail) { mIsTail = tail; }

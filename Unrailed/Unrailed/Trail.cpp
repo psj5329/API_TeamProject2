@@ -7,15 +7,15 @@
 
 void Trail::Init(int x, int y, int type, int direction)
 {
-    mTrailType = (TrailType)type;
+    mTrailType = (ItemType)type;
     mDirection = (TrailDirection)direction;
 
     //이미지정하기
-    if (mTrailType == TrailType::Green)
+    if (mTrailType == ItemType::Green)
     {
         mImage = IMAGEMANAGER->FindImage(L"GreenTrail");
     }
-    else if (mTrailType == TrailType::Blue)
+    else if (mTrailType == ItemType::Blue)
     {
         mImage = IMAGEMANAGER->FindImage(L"BlueTrail");
     }
@@ -52,7 +52,7 @@ void Trail::Update()
 
 void Trail::Render(HDC hdc)
 {
-    if (mTrailType != TrailType::None)
+    if (mTrailType != ItemType::None)
     {
         if (mIsConnected)
         {
@@ -155,15 +155,15 @@ int Trail::PickUp()
 }
 
 //속성바꾸기
-void Trail::SetTrailType(int type) 
+void Trail::SetTrailType(ItemType type)
 { 
-    mTrailType = (TrailType)type; 
+    mTrailType = type;
     //이미지정하기
-    if (mTrailType == TrailType::Green)
+    if (mTrailType == ItemType::Green)
     {
         mImage = IMAGEMANAGER->FindImage(L"GreenTrail");
     }
-    else if (mTrailType == TrailType::Blue)
+    else if (mTrailType == ItemType::Blue)
     {
         mImage = IMAGEMANAGER->FindImage(L"BlueTrail");
     }

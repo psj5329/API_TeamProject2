@@ -23,24 +23,23 @@ void Ore::Render(HDC hdc)
 	mImage->ScaleFrameRender(hdc, mX, mY, mFrameX, 0, mSizeX, mSizeY);
 }
 
-void Ore::Drop(int x, int y, int type)
+void Ore::Drop(int x, int y, ItemType type)
 {
 	//속성정하고
 	mImage = IMAGEMANAGER->FindImage(L"Ore");
+	mType = type;
 
-	if (type == 1)
+	if (type == ItemType::Green)
 	{
-		mType = OreType::Green;
 		mFrameX = 1;
 	}
-	else if (type == 2)
+	else if (type == ItemType::Blue)
 	{
-		mType = OreType::Blue;
 		mFrameX = 2;
 	}
-	else
+	else 
 	{
-		mType = OreType::Red;
+		mType = ItemType::Red;
 		mFrameX = 0;
 	}
 
@@ -51,10 +50,10 @@ void Ore::Drop(int x, int y, int type)
 
 }
 
-int Ore::PickUp()
+ItemType Ore::PickUp()
 {
 	mIsActive = false;
-	return (int)mType;
+	return mType;
 }
 
 void Ore::Place(int x, int y)

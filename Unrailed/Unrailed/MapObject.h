@@ -1,11 +1,11 @@
 #pragma once
-enum class MapObjectType 
-{
-	None,
-	Green,
-	Blue,
-	Red
-};
+//enum class MapObjectType 
+//{
+//	None,
+//	Green,
+//	Blue,
+//	Red
+//};
 
 class MapObject
 {
@@ -17,14 +17,14 @@ class MapObject
 	RECT mRect;
 	int mFrameIndexX;
 	int mFrameIndexY;
-	MapObjectType mType;
+	ItemType mType;
 	bool mActive;
 	int mHp;
 
 public:
 
 	MapObject(class Image* image, float x, float y, float sizeX, float sizeY,
-		int frameIndexX, int frameIndexY, int type);
+		int frameIndexX, int frameIndexY, ItemType type);
 	virtual void Release();
 	virtual void Update();
 	virtual void Render(HDC hdc);
@@ -39,7 +39,7 @@ public:
 	int GetFrameIndexX()const { return mFrameIndexX; }
 	int GetFrameIndexY()const { return mFrameIndexY; }
 	int GetIntType()const { return (int)mType; }
-	MapObjectType GetMapObjectType()const { return mType; }
+	ItemType GetMapObjectType()const { return mType; }
 	bool GetActive()const { return mActive; }
 	int GetHp()const { return mHp; }
 
@@ -52,7 +52,7 @@ public:
 	void SetRect(RECT rect) { mRect = rect; }
 	void SetFrameIndexX(int indexX) { mFrameIndexX = indexX; }
 	void SetFrameIndexY(int indexY) { mFrameIndexY = indexY; }
-	void SetObjectType(int type) { mType = (MapObjectType)type; }
+	void SetObjectType(ItemType type) { mType = type; }
 	void SetActive(bool isActive) { mActive = isActive; }
   
 	void DeductHp() { mHp -= 1; }
