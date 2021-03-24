@@ -36,5 +36,5 @@ public:
 	int GetOreCount() { return mOreCount; }
 	void SetOreCount(int i) { mOreCount = i; }
 	vector <Ore*> GetOreList() { return mOreList; }
-	void OreErase() { mOreList.erase(mOreList.begin(), mOreList.begin() + 2); }
+	TrailType OreErase();
 };

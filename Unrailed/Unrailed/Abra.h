@@ -1,11 +1,22 @@
 #pragma once
 #include "Train.h"
 #include "Machop.h"
+#include "Ore.h"
 
 class Animation;
 
+struct CreatedTrail
+{
+	Image* image;
+	TrailType trailType;
+	bool isCreated;
+};
+
 class Abra : public Train
 {
+	vector <CreatedTrail*> mCreatedTrailList;
+	int mTrailCount;
+
 	Machop* mMachop;
 
 	Animation* mDownMove;
@@ -33,4 +44,5 @@ public:
 
 	void SynthesisOre();
 
+	TrailType Receive();
 };

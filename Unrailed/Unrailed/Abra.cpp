@@ -29,6 +29,7 @@ void Abra::Init()
 	mLevel = 1;
 	mSynthesisCoolTime = 0;
 	mIsSynthesis = false;
+	mTrailCount = 0;
 
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
@@ -141,6 +142,13 @@ void Abra::Update()
 	//	mState = State::Explode;
 	//	SetAnimation();
 	//}
+
+	//포문돌려서 벡터가있으면
+	//타이머 일정시간만큼빼주기
+	//타이머가 0이하면 iscreated true로
+	//
+
+
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -317,12 +325,13 @@ void Abra::SetAnimation()
 
 void Abra::SynthesisOre()
 {
-	if (mMachop->GetOreList().size() >= 2 && mIsSynthesis == false)
+	TrailType type;
+	if (mTrailCount <= 2 && mMachop->GetOreList().size() >= 2 && mIsSynthesis == false)
 	{
 		mState = State::Synthesis;
 		SetAnimation();
 
-		mMachop->OreErase();
+		type = mMachop->OreErase();
 		mMachop->SetOreCount(mMachop->GetOreCount() - 2);
 
 		mIsSynthesis = true;
@@ -330,14 +339,18 @@ void Abra::SynthesisOre()
 	if (mIsSynthesis == true)
 	{
 		mSynthesisCoolTime += TIME->DeltaTime();
+		CreatedTrail* createdTrail = new CreatedTrail;
+		createdTrail->trailType = type;
+		createdTrail->isCreated = false;
+		//createdTrail->mImage = 
+		mCreatedTrailList.push_back(createdTrail);
+
 	}
 	if (mSynthesisCoolTime >= 1.5f && mIsSynthesis == true)
 	{
 		mIsSynthesis = false;
 		mSynthesisCoolTime = 0;
-		
 	}
-	
 }
 
 void Abra::EndSynthesis()
@@ -373,4 +386,18 @@ void Abra::EndExplode()
 	{
 		SetIsDestroy(true);
 	}
+}
+
+
+TrailType Abra::Receive()
+{
+	if (mCreatedTrailList.size() > 0)
+	{
+		TrailType type = mCreatedTrailList[0]->trailType;
+		//벡터에서 첫번째 제거
+
+		return type;
+	}
+	else
+		return TrailType::None;
 }

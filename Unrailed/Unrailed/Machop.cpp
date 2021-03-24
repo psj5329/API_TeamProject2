@@ -5,7 +5,6 @@
 #include "Tile.h"
 #include "Trail.h"
 #include "Camera.h"
-#include "Ore.h"
 
 void Machop::Init()
 {
@@ -333,16 +332,15 @@ void Machop::SetAnimation()
 
 void Machop::InterceptOre()
 {
-	Ore* ore = new Ore;
-
 	if (mOreCount <= 5)
 	{
 		if (INPUT->GetKeyDown('Z'))
 		{
+			Ore* ore = new Ore;
+
 			mOreCount++;
 
 			ore->SetOreType(1);//그린
-			ore->GetOreType();
 
 			mOreList.push_back(ore);
 
@@ -351,10 +349,11 @@ void Machop::InterceptOre()
 		}
 		if (INPUT->GetKeyDown('X'))
 		{
+			Ore* ore = new Ore;
+
 			mOreCount++;
 
 			ore->SetOreType(2);//블루
-			ore->GetOreType();
 
 			mOreList.push_back(ore);
 
@@ -363,10 +362,11 @@ void Machop::InterceptOre()
 		}
 		if (INPUT->GetKeyDown('C'))
 		{
+			Ore* ore = new Ore;
+
 			mOreCount++;
 
 			ore->SetOreType(3);//레드
-			ore->GetOreType();
 
 			mOreList.push_back(ore);
 
@@ -374,9 +374,6 @@ void Machop::InterceptOre()
 			SetAnimation();
 		}
 	}
-
-	//추가로 받으면 합성끝나고 빈자리 생길때까지 상호작용X 추가요망
-
 }
 
 void Machop::EndIntercept()
@@ -412,4 +409,12 @@ void Machop::EndExplode()
 	{
 		SetIsDestroy(true);
 	}
+}
+
+TrailType Machop::OreErase()
+{
+	TrailType type = (TrailType)mOreList[0]->GetOreTypeInt();
+	 mOreList.erase(mOreList.begin(), mOreList.begin() + 2); 
+
+	 return type;
 }
