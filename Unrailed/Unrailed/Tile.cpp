@@ -27,15 +27,12 @@ void Tile::Render(HDC hdc)
 		//mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
 
 	if (mCoveImage != nullptr)
-	{
-
-		
+	{	
 		CAMERAMANAGER->GetMainCamera()->AlphaScaleFrameRender(hdc, mCoveImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY,mAlpha);
 
 		mAlpha += mAlphaRate * TIME->DeltaTime();
 		if (mAlpha > 1)
 			mAlpha = 0;
-		
 	}
 
 

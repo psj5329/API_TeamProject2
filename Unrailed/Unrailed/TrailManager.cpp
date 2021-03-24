@@ -94,7 +94,7 @@ void TrailManager::Render(HDC hdc)
 }
 
 //씬에서 인잇할때
-void TrailManager::InsertTrail(int indexY, int indexX, int type, int dir)
+void TrailManager::InsertTrail(int indexY, int indexX, ItemType type, int dir)
 {
 	//해당인덱스의 속성
 	mTrailList[indexY][indexX]->SetTrailType(type);
@@ -106,7 +106,7 @@ void TrailManager::InsertTrail(int indexY, int indexX, int type, int dir)
 
 void TrailManager::TurnTrail(int indexY, int indexX)
 {
-	if (mTrailList[indexY][indexX]->GetTrailType() == TrailType::None)
+	if (mTrailList[indexY][indexX]->GetTrailType() == ItemType::None)
 		return;
 	if (mTrailList[indexY][indexX]->GetIsTail() == false && mTrailList[indexY][indexX]->GetIsConnected() == true)
 		return;
@@ -136,13 +136,13 @@ void TrailManager::TurnTrail(int indexY, int indexX)
 }
 
 //끄트머리의 기차길을 줍기
-TrailType TrailManager::PickUpTrail(int indexY, int indexX)
+ItemType TrailManager::PickUpTrail(int indexY, int indexX)
 {
 	//건드린게 꼬리면
 	if (mTrailList[indexY][indexX]->GetIsTail())
 	{
-		TrailType type = mTrailList[indexY][indexX]->GetTrailType();
-		mTrailList[indexY][indexX]->SetTrailType(0);
+		ItemType type = mTrailList[indexY][indexX]->GetTrailType();
+		mTrailList[indexY][indexX]->SetTrailType(ItemType::None);
 		mTrailList[indexY][indexX]->SetIsActive(false);
 		mTrailList[indexY][indexX]->SetIsTail(false);
 		mTrailList[indexY][indexX]->SetIsConnected(false);
@@ -155,15 +155,15 @@ TrailType TrailManager::PickUpTrail(int indexY, int indexX)
 	else
 	{
 		//트레일타입 None을 리턴
-		return TrailType::None;
+		return ItemType::None;
 	}
 }
 
 //플레이어가 트레일 설치
-bool TrailManager::PlaceTrail(int indexY, int indexX, int type, int dir)
+bool TrailManager::PlaceTrail(int indexY, int indexX, ItemType type, int dir)
 {
 	//이미설치된자리면
-	if (mTrailList[indexY][indexX]->GetTrailType() != TrailType::None)
+	if (mTrailList[indexY][indexX]->GetTrailType() != ItemType::None)
 		return false;
 
 	mTrailList[indexY][indexX]->SetTrailType(type);
@@ -237,7 +237,7 @@ void TrailManager::SetTrailTail(int indexY, int indexX)
 {
 	if (indexX < 0 || indexX >= XTileCount)return;
 	if (indexY < 0 || indexY >= YTileCount)return;
-	if (mTrailList[indexY][indexX]->GetTrailType()== TrailType::None)return;
+	if (mTrailList[indexY][indexX]->GetTrailType()== ItemType::None)return;
 	
 	mTrailList[indexY][indexX]->SetOrder(mOrder);
 	
@@ -245,7 +245,7 @@ void TrailManager::SetTrailTail(int indexY, int indexX)
 	//다음트레일찾기
 	GetNextTrailIndex(indexX, indexY, &nextIndex);
 	//다음트레일이 없으면
-	if (mTrailList[nextIndex.y][nextIndex.x]->GetTrailType()==TrailType::None)
+	if (mTrailList[nextIndex.y][nextIndex.x]->GetTrailType()== ItemType::None)
 	{
 		//내가꼬리야
 		mTrailList[indexY][indexX]->SetIsConnected(true);

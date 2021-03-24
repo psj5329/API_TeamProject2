@@ -50,6 +50,7 @@ using namespace std;
 #include "ImageManager.h"
 #include "CameraManager.h"
 #include "Time.h"
+#include "Struct.h"
 #include "SoundManager.h"
 #include "ObjectManager.h"
 #include "CollisionManager.h"

@@ -70,12 +70,16 @@ class MapToolScene : public Scene
 	//마우스끝에 표시할친구
 	MouseRect mMouse;
 
+	//팔레트배경
+	PalleteBackground mPalleteBackground;
+
 	Button* mSaveButton;
 	Button* mLoadButton;
 	Button* mUndoButton;
 	Button* mRightArrowButton;
 	Button* mRightArrowButton2;
 	Button* mEraseButton;
+	Button* mFoldButton;
 	vector <Button*> mSaveButtons;
 
 
@@ -106,7 +110,7 @@ private:
 	void Undo();
 	void Redo();
 
-
+	void FoldButton();
 	void EraseButton();
 	void SwitchObjectPallete();
 	void SwitchTilePallete();
@@ -117,6 +121,15 @@ private:
 	void UpdateMouseRect();
 	void RenderMouseRect(HDC hdc);
 	
+	//팔레트배경
+	void InitPalleteBackground();
+	void UpdatePalleteBackground();
+	void RenderPalleteBackground(HDC hdc);
+
+	//버튼들
+	void InitButtons();
+	void UpdateButtons();
+	void RenderButtons(HDC hdc);
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)override;
 
 };
