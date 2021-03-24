@@ -325,7 +325,7 @@ void Abra::SetAnimation()
 
 void Abra::SynthesisOre()
 {
-	ItemType type;
+	ItemType type = ItemType::None;
 	if (mTrailCount <= 2 && mMachop->GetOreList().size() >= 2 && mIsSynthesis == false)
 	{
 		mState = State::Synthesis;
@@ -344,7 +344,6 @@ void Abra::SynthesisOre()
 		createdTrail->isCreated = false;
 		//createdTrail->mImage = 
 		mCreatedTrailList.push_back(createdTrail);
-
 	}
 	if (mSynthesisCoolTime >= 1.5f && mIsSynthesis == true)
 	{
