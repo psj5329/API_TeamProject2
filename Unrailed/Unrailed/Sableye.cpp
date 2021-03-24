@@ -4,13 +4,14 @@
 #include "Image.h"
 #include "Camera.h"
 #include "Animation.h"
+#include "Tile.h"
 
 void Sableye::Init()
 {
 	mImage = IMAGEMANAGER->FindImage(L"Sableye");
 	mName = "Sableye";
-	mX = WINSIZEX / 2;
-	mY = WINSIZEY / 2;
+	mX = 0;
+	mY = 0;
 	mSizeX = mImage->GetFrameWidth();
 	mSizeY = mImage->GetFrameHeight();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -22,6 +23,8 @@ void Sableye::Init()
 	mTarget = nullptr;
 
 	mIsExistTarget = false;
+
+	mPathFinderList.clear();
 
 	ReadyAnimation();
 }
@@ -43,7 +46,7 @@ void Sableye::Update()
 		float x = mVecItem[i]->GetX();
 		float y = mVecItem[i]->GetY();
 		
-		if (Math::GetDistance(mX, mY, x, y) < 150.f)	// 테스트용 거리
+		if (Math::GetDistance(mX, mY, x, y) < 5000.f)	// 테스트용 거리
 		{
 			if (!mIsExistTarget)
 			{
@@ -51,6 +54,13 @@ void Sableye::Update()
 
 				mTarget = mVecItem[i];
 				mIsExistTarget = true;
+
+				int x1 = mX / TileSize;
+				int y1 = mY / TileSize;
+				int x2 = x / TileSize;
+				int y2 = y / TileSize;
+
+				mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, x1, y1, x2, y2);
 			}
 			else
 			{
@@ -67,10 +77,13 @@ void Sableye::Update()
 
 	if (mTarget != nullptr)	// 우선은 임시로 바로 직선으로 움직이기~
 	{
-		float angle = Math::GetAngle(mX, mY, mTarget->GetX(), mTarget->GetY());
+		float angle = Math::GetAngle(mX, mY, mPathFinderList[0]->GetX(), mPathFinderList[0]->GetY());
 
 		mX += cosf(angle) * mSpeed * TIME->DeltaTime();
 		mY += -sinf(angle) * mSpeed * TIME->DeltaTime();
+
+		if (Math::GetDistance(mX, mY, mPathFinderList[0]->GetX(), mPathFinderList[0]->GetY()) <= 5.f)
+			mPathFinderList.erase(mPathFinderList.begin());
 	}
 	
 	mCurrentAnimation->Update();
@@ -80,8 +93,8 @@ void Sableye::Update()
 
 void Sableye::Render(HDC hdc)
 {
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mX, mY, mCurrentAnimation->GetNowFrameX()
-		, mCurrentAnimation->GetNowFrameY(), mSizeX * 2, mSizeY * 2);
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top
+		, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX * 2, mSizeY * 2);
 }
 
 void Sableye::ReadyAnimation()
