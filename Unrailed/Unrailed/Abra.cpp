@@ -325,7 +325,7 @@ void Abra::SetAnimation()
 
 void Abra::SynthesisOre()
 {
-	TrailType type;
+	ItemType type;
 	if (mTrailCount <= 2 && mMachop->GetOreList().size() >= 2 && mIsSynthesis == false)
 	{
 		mState = State::Synthesis;
@@ -389,15 +389,15 @@ void Abra::EndExplode()
 }
 
 
-TrailType Abra::Receive()
+ItemType Abra::Receive()
 {
 	if (mCreatedTrailList.size() > 0)
 	{
-		TrailType type = mCreatedTrailList[0]->trailType;
+		ItemType type = mCreatedTrailList[0]->trailType;
 		//벡터에서 첫번째 제거
 
 		return type;
 	}
 	else
-		return TrailType::None;
+		return ItemType::None;
 }

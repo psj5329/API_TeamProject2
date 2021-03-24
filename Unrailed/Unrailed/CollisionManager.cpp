@@ -90,9 +90,9 @@ void CollisionManager::TileMapObjectCollision(Player* player, RECT* rc, vector<v
 			{
 				MapObject* mapObject = (*mapObjectList)[j][i];
 				RECT mapObjectRc = mapObject->GetRect();
-				MapObjectType mapObjectType = mapObject->GetMapObjectType();
+				ItemType mapObjectType = mapObject->GetMapObjectType();
 
-				if (mapObjectType == MapObjectType::None)
+				if (mapObjectType == ItemType::None)
 					continue;
 
 				if (IntersectRect(&temp, rc, &mapObjectRc))
@@ -345,7 +345,7 @@ void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 					float width = temp.right - temp.left;
 					float height = temp.bottom - temp.top;
 
-					if ((*mapObjectList)[j][i]->GetMapObjectType() != MapObjectType::None)		// None이 아니라면 광물이 있음
+					if ((*mapObjectList)[j][i]->GetMapObjectType() != ItemType::None)		// None이 아니라면 광물이 있음
 					{
 						if (width > height)
 						{
@@ -418,7 +418,7 @@ void CollisionManager::MapObjectCollision(Player* player, RECT* rc, TileMap* til
 					float width = temp.right - temp.left;
 					float height = temp.bottom - temp.top;
 
-					if ((*mapObjectList)[j][i]->GetMapObjectType() != MapObjectType::None)		// None이 아니라면 광물이 있음
+					if ((*mapObjectList)[j][i]->GetMapObjectType() != ItemType::None)		// None이 아니라면 광물이 있음
 					{
 						if (width > height)
 						{

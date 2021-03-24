@@ -19,8 +19,8 @@ void Scene3::Init()
 
 	mTrailManager = new TrailManager();
 	mTrailManager->Init(y,x);
-	mTrailManager->InsertTrail(6, 0, 1, 3);
-	mTrailManager->InsertTrail(6, 1, 1, 3);
+	mTrailManager->InsertTrail(6, 0, ItemType::Green, 3);
+	mTrailManager->InsertTrail(6, 1, ItemType::Green, 3);
 	mTrailManager->SetStartIndex(6, 0);
 	
 
@@ -48,7 +48,7 @@ void Scene3::Update()
 		if (indexX >= 0 && indexX < mTrailManager->GetXTileCount() &&
 			indexY >= 0 && indexY < mTrailManager->GetYTileCount())
 		{
-			mTrailManager->PlaceTrail(indexY, indexX, 1, 3);
+			mTrailManager->PlaceTrail(indexY, indexX, ItemType::Green, 3);
 			mTrailManager->FindTail(&mTailY, &mTailX);
 		}
 	}

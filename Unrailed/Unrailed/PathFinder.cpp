@@ -71,7 +71,7 @@ vector<Tile*> PathFinder::FindPath(vector<vector<Tile*>> tileList, vector<vector
 				}
 
 				// 타일은 노말이지만 오브젝트가 있을 경우
-				if (objectList[j][i]->GetMapObjectType() != MapObjectType::None)
+				if (objectList[j][i]->GetMapObjectType() != ItemType::None)
 				{
 					loadList[j][i].isClose = true;
 					loadList[j][i].isOpen = true;
