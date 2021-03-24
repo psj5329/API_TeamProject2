@@ -28,6 +28,7 @@ void Ore::Drop(int x, int y, ItemType type)
 	//속성정하고
 	mImage = IMAGEMANAGER->FindImage(L"Ore");
 	mType = type;
+	mCount = 1;
 
 	if (type == ItemType::Green)
 	{

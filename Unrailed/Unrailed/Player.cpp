@@ -52,6 +52,9 @@ void Player::Init()
 	mIsGettingItemThisFrame = false;
 
 	mIsChangable = true;
+
+	//vector<InvenItem*>* 
+	//mInvenItemListPtr = new vector<InvenItem*>();
 }
 
 void Player::Release()
@@ -71,8 +74,6 @@ void Player::Update()
 	InputZKey();
 	InputXKey();
 	InputCKey();
-
-	//ChangeForm(); // 지울 예정인 함수
 
 	ChangeCurrentAnimation();
 
@@ -529,7 +530,7 @@ void Player::InputSpaceKey()
 
 		
 
-		// {{ 화살표 돌리기 // 얘는 키 분리해야 할 듯.. // 스페이스바는 화살표 줍기..
+		// {{ 화살표 돌리기 // 얘는 키 분리해야 할 듯..
 
 		//MapObjectType idontknowwhatitis = (*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType(); // 이건 그냥 한거고
 //		mTrailManager->TurnTrail(); // 이것부터 보면서 조건 등 주면서 고쳐야 함
@@ -638,29 +639,25 @@ void Player::InputZKey()
 	{
 		RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
 		vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
-		//float x;
-		//float y;
 
 		for (int i = 0; i < (*itemListPtr).size(); ++i)
 		{
 			Ore* item = (Ore*)((*itemListPtr)[i]);
-			//x = (*itemListPtr)[i]->GetX();
-			//y = (*itemListPtr)[i]->GetY();
 			POINT pt = { item->GetX(), item->GetY() };
 
 			if (PtInRect(&currentRc, pt))
 			{
-				InvenItem invenItem;
-				invenItem.itemName = ItemName::ItemOre;
+				InvenItem* invenItem = new InvenItem();
+				invenItem->SetName(ItemName::ItemOre);
 
 				if (item->GetOreType() == ItemType::Green)
-					invenItem.itemType = ItemTypeP::Green;
+					invenItem->SetType(ItemType::Green);
 				else if (item->GetOreType() == ItemType::Blue)
-					invenItem.itemType = ItemTypeP::Blue;
+					invenItem->SetType(ItemType::Blue);
 				else if (item->GetOreType() == ItemType::Red)
-					invenItem.itemType = ItemTypeP::Red;
+					invenItem->SetType(ItemType::Red);
 
-				mInvenItemList.push_back(&invenItem);
+				mInvenItemList.push_back(invenItem);
 
 				(*itemListPtr).erase((*itemListPtr).begin() + i);
 
@@ -669,51 +666,6 @@ void Player::InputZKey()
 			else
 				continue;
 		}
-
-
-
-
-/*
-
-		// {{ 아이템(광물) -> 인벤 소지 아이템(UI) // 아이템 줍기
-		GameObject* item = COLLISIONMANAGER->ItemCollision(&mColBox);
-		vector<GameObject*>* itemList = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
-		//ItemType invenType;
-
-		//if (mItemList.size())
-		//	invenType = ((Ore*)mItemList[0])->GetOreType();
-
-		if ((item != nullptr) && (item->GetIsActive()))
-		{
-			//if ((mForm == Form::Chikorita) && (((Ore*)item)->GetOreType() == ItemType::Green) && ((mItemList.size() == 0) || (invenType == ItemType::Green)))
-			if (((Ore*)item)->GetOreType() == ItemType::Green)
-			{
-				Ore* greenOre = new Ore();
-				greenOre = (Ore*)item;
-				mItemList.push_back((GameObject*)greenOre);
-				item->SetIsActive(false);
-				mIsGettingItemThisFrame = true;
-			}
-			//else if ((mForm == Form::Totodile) && (((Ore*)item)->GetOreType() == ItemType::Blue) && ((mItemList.size() == 0) || (invenType == ItemType::Blue)))
-			else if(((Ore*)item)->GetOreType() == ItemType::Blue)
-			{
-				Ore* blueOre = new Ore();
-				blueOre = (Ore*)item;
-				mItemList.push_back((GameObject*)blueOre);
-				item->SetIsActive(false);
-				mIsGettingItemThisFrame = true;
-			}
-			//else if ((mForm == Form::Charmander) && (((Ore*)item)->GetOreType() == ItemType::Red) && ((mItemList.size() == 0) || (invenType == ItemType::Red)))
-			else if (((Ore*)item)->GetOreType() == ItemType::Red)
-			{
-				Ore* redOre = new Ore();
-				redOre = (Ore*)item;
-				mItemList.push_back((GameObject*)redOre);
-				item->SetIsActive(false);
-				mIsGettingItemThisFrame = true;
-			}
-		}
-		// }} 아이템(광물) -> 인벤 소지 아이템(UI) // 아이템 줍기*/
 	}
 }
 
@@ -724,17 +676,49 @@ void Player::InputXKey()
 		if (!mInvenItemList.size())
 			return;
 
-		RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
+		Tile* currentTile = (*mTileListPtr)[mTileY][mTileX];
+		TileType currentTileType = currentTile->GetTileType();
+
+		if (currentTileType == TileType::Water || currentTileType == TileType::Lava || currentTileType == TileType::ice)
+			return;
+
+		RECT currentRc = currentTile->GetRect();
 		vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+		ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType(); // 왜.. 쓰레기값이;; // 얘를 출력해보자
 
 		for (int i = 0; i < (*itemListPtr).size(); ++i)
 		{
 			GameObject* item = (*itemListPtr)[i];
 			POINT pt = { item->GetX(), item->GetY() };
-
+		
 			if (PtInRect(&currentRc, pt))
-				return;
-		}////////////// 이 다음 줄 할 차례였응ㅁ // 예외 걸렀고 이제 구현하면 됨
+			{
+				if (((Ore*)item)->GetOreType() == itemType)
+				{
+					((Ore*)item)->PlusCount(); // 아직 낫테스트
+					mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1); // 아직 낫테스트
+				}
+				else
+					return;
+			}
+		}
+
+		vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+		//mTrailManager->GetTrailListPtr();
+		//vector<GameObject*>* trailListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::TRAIL);
+		Trail* currentTrail = (Trail*)(*trailListPtr)[mTileY][mTileX];
+
+		if (currentTrail->GetTrailType() != ItemType::None)  /// 여기서 터짐!!!!!!
+			return;
+
+		Ore* ore = new Ore();
+		ore->Drop(TileSize * mTileX, TileSize * mTileY, itemType);
+		OBJECTMANAGER->AddObject(ObjectLayer::ITEM, ore);
+		mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+		
+		
+		
+		////////////// 이 다음 줄 할 차례였응ㅁ // 예외 걸렀고 이제 구현하면 됨
 
 
 
@@ -916,46 +900,6 @@ bool Player::CheckTileType(TileType tileType)
 	return false;
 }
 
-void Player::ChangeForm()
-{
-	if (INPUT->GetKeyDown('7'))
-	{
-		mForm = Form::Ditto;
-		mImage = IMAGEMANAGER->FindImage(L"ditto");
-
-		mChangeT = 2.f;
-	}
-	else if (INPUT->GetKeyDown('8'))
-	{
-		mForm = Form::Charmander;
-		mImage = IMAGEMANAGER->FindImage(L"charmander");
-
-		mChangeT = 2.f;
-	}
-	else if (INPUT->GetKeyDown('9'))
-	{
-		mForm = Form::Chikorita;
-		mImage = IMAGEMANAGER->FindImage(L"chikorita");
-
-		mChangeT = 2.f;
-	}
-	else if (INPUT->GetKeyDown('0'))
-	{
-		mForm = Form::Totodile;
-		mImage = IMAGEMANAGER->FindImage(L"totodile");
-
-		mChangeT = 2.f;
-	}
-
-	if (mChangeT)
-	{
-		mChangeT -= Time::GetInstance()->DeltaTime();
-
-		if (mChangeT <= 0)
-			mChangeT = 0.f;
-	}
-}
-
 void Player::ChangeCurrentAnimation()
 {
 	if (mState == State::Idle)
@@ -1110,5 +1054,22 @@ void Player::RenderTestText(HDC hdc)
 			strActive = to_wstring(i) + L": nonActive, " + strType;
 
 		TextOut(hdc, (int)WINSIZEX * 3 / 4, (int)200 + 25 * i, strActive.c_str(), (int)strActive.length());
+	}
+
+	for (int i = 0; i < mInvenItemList.size(); ++i)
+	{
+		ItemType type = mInvenItemList[i]->GetType();
+		wstring strType = L"";
+		if (type == ItemType::None)
+			strType = L"Type: None";
+		else if (type == ItemType::Green)
+			strType = L"Type: Green";
+		else if (type == ItemType::Blue)
+			strType = L"Type: Blue";
+		else if (type == ItemType::Red)
+			strType = L"Type: Red";
+		wstring strActive = to_wstring(i) + L": " + strType;
+
+		TextOut(hdc, (int)WINSIZEX * 3 / 4, (int)350 + 25 * i, strActive.c_str(), (int)strActive.length());
 	}
 }

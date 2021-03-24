@@ -32,5 +32,7 @@ public:
 	void Drop(int x, int y, ItemType type);
 	ItemType PickUp();
 	void Place(int x, int y);
+
+	void PlusCount() { mCount += 1; }
 };
 

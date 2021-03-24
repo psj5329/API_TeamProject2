@@ -38,18 +38,16 @@ enum ItemName
 	ItemNameEnd
 };
 
-enum ItemTypeP // 추후에 아이템 타입 확정되면 삭제
-{
-	None,
-	Green,
-	Blue,
-	Red
-};
-
-struct InvenItem
+class InvenItem
 {
 	ItemName itemName;
-	ItemTypeP itemType; // 추후에 아이템 타입 확정되면 타입 이름만 변경
+	ItemType itemType;
+
+public:
+	ItemName GetName() const { return itemName; }
+	ItemType GetType() const { return itemType; }
+	void SetName(ItemName name) { itemName = name; }
+	void SetType(ItemType type) { itemType = type; }
 };
 
 class Image;
@@ -107,14 +105,13 @@ class Player : public GameObject
 
 	bool mIsAttackingTemp;
 
-	//vector<GameObject*> mItemList;
-
 	bool mIsGettingItemThisFrame;
 
 	TrailManager* mTrailManager;
 
 	bool mIsChangable;
 
+	//vector<InvenItem*>* mInvenItemListPtr;
 	vector<InvenItem*> mInvenItemList;
 
 public:
@@ -137,7 +134,6 @@ public:
 	void InputXKey(); // 'X' key: throw item
 	void InputCKey(); // 'C' key: change form // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
 	bool CheckTileType(TileType tileType);
-	void ChangeForm(); // 지울 예정인 함수 // 현재 호출하지 않고 있음
 	void ChangeCurrentAnimation();
 
 	void RenderTestText(HDC hdc);

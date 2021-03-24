@@ -1,5 +1,4 @@
-
-enum class ItemType :int
+enum class ItemType : int
 {
 	None,
 	Green,
