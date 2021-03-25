@@ -43,13 +43,15 @@ struct PalleteBackground
 
 struct AreaSelect
 {
-	vector <Tile*> mSelectedTileList;
+	vector <Tile*> selectedTileList;
 	bool isSelecting;
 	POINT startIndex;	//마우스로 고른
 	POINT endIndex;		//마우스로 고른
 	RECT selectedArea;
-	Tile* firstTile;	//서순
-	Tile* lastTile;		//서순
+	POINT leftTopIndex;	//서순
+	POINT rightBottomIndex;		//서순
+	int YTileCount;	//정해진영역의 y수
+	int XTileCount; //정해진영역의 X수
 };
 
 class ICommand;
@@ -135,8 +137,10 @@ private:
 	void PaintTilesL();
 	//많이그리기
 	void PaintTilesR();
+	void SetLeftTopRightBottom();
 	void InitSelectVecter();
-	void ReleaseSelectVecter();
+	void EmptySelectedVecter();
+	void RenderSelectedRect(HDC hdc);
 
 	//마우스
 	void InitMouseRect();

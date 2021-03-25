@@ -13,7 +13,7 @@ void Scene3::Init()
 
 	mTileMap = new TileMap();
 	//mTileMap->Init(TileCountX, TileCountY, TileSize);
-	mTileMap->LoadMap(4);
+	mTileMap->LoadMap(3);
 	int x = mTileMap->GetXTileCount();
 	int y = mTileMap->GetYTileCount();
 
@@ -22,7 +22,6 @@ void Scene3::Init()
 	mTrailManager->InsertTrail(6, 0, ItemType::Green, 3);
 	mTrailManager->InsertTrail(6, 1, ItemType::Green, 3);
 	mTrailManager->SetStartIndex(6, 0);
-	
 
 	
 }
@@ -33,9 +32,7 @@ void Scene3::Release()
 
 void Scene3::Update()
 {
-
 	//트레일 가지고놀아보기
-
 	float x = CAMERAMANAGER->GetMainCamera()->GetX();
 	float y = CAMERAMANAGER->GetMainCamera()->GetY();
 
@@ -105,8 +102,6 @@ void Scene3::Render(HDC hdc)
 
 	wstring str3 = L"SPACE 맵로드";
 	TextOut(hdc, _mousePosition.x + 10, _mousePosition.y + 40, str3.c_str(), str3.length());
-
-
 
 	//wstring strScene = L"이건 3번 씬";
 	//TextOut(hdc, WINSIZEX / 2 - 15, WINSIZEY / 2, strScene.c_str(), strScene.length());

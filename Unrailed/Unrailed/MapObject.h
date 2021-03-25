@@ -21,6 +21,7 @@ class MapObject
 	bool mActive;
 	int mHp;
 
+	float timer; //Èçµé±â¿ë
 public:
 
 	MapObject(class Image* image, float x, float y, float sizeX, float sizeY,
@@ -30,18 +31,18 @@ public:
 	virtual void Render(HDC hdc);
 
 	//°Ù
-	Image* GetImage()const { return mImage; }
-	float GetX()const { return mX; }
-	float GetY()const { return mY; }
-	float GetSizeX()const { return mSizeX; }
-	float GetSizeY()const { return mSizeY; }
-	RECT GetRect()const { return mRect; }
-	int GetFrameIndexX()const { return mFrameIndexX; }
-	int GetFrameIndexY()const { return mFrameIndexY; }
-	int GetIntType()const { return (int)mType; }
-	ItemType GetMapObjectType()const { return mType; }
-	bool GetActive()const { return mActive; }
-	int GetHp()const { return mHp; }
+	inline Image* GetImage()const { return mImage; }
+	inline float GetX()const { return mX; }
+	inline float GetY()const { return mY; }
+	inline float GetSizeX()const { return mSizeX; }
+	inline float GetSizeY()const { return mSizeY; }
+	inline RECT GetRect()const { return mRect; }
+	inline int GetFrameIndexX()const { return mFrameIndexX; }
+	inline int GetFrameIndexY()const { return mFrameIndexY; }
+	inline int GetIntType()const { return (int)mType; }
+	inline ItemType GetMapObjectType()const { return mType; }
+	inline bool GetActive()const { return mActive; }
+	inline int GetHp()const { return mHp; }
 
 	//¼Â
 	void SetImage(Image* image) { mImage = image; }
@@ -55,8 +56,12 @@ public:
 	void SetObjectType(ItemType type) { mType = type; }
 	void SetActive(bool isActive) { mActive = isActive; }
   
-	void DeductHp() { mHp -= 1; }
+	void DeductHp() { mHp -= 1; Shake(); }
 	int GetHp() { return mHp; }
 	void SetHp(int hp) { mHp = hp; }
+
+private:
+	void Shake();
+
 };
 

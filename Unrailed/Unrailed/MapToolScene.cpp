@@ -105,6 +105,7 @@ void MapToolScene::Update()
 	}
 
 	PaintTilesL();
+	PaintTilesR();
 
 	//버튼업뎃
 	UpdateButtons();
@@ -131,6 +132,8 @@ void MapToolScene::Render(HDC hdc)
 			mMapObjectList[y][x]->Render(hdc);
 		}
 	}
+
+	RenderSelectedRect(hdc);
 
 	RenderPalleteBackground(hdc);
 	
@@ -947,6 +950,27 @@ void MapToolScene::ImageLoad()
 		 }
 	 }
 
+	 //손안땟을때
+	 if (mAreaSelect.isSelecting == true)
+	 {
+		 int indexX = (_mousePosition.x + (x - WINSIZEX / 2)) / TileSize;
+		 int indexY = (_mousePosition.y + (y - WINSIZEY / 2)) / TileSize;
+
+		 if (indexX >= 0 && indexX < mXTileCount &&
+			 indexY >= 0 && indexY < mYTileCount)
+		 {
+			 mAreaSelect.endIndex.x = indexX;
+			 mAreaSelect.endIndex.y = indexY;
+
+			 SetLeftTopRightBottom();
+
+			 mAreaSelect.selectedArea = RectMake(mTileList[mAreaSelect.leftTopIndex.y][mAreaSelect.leftTopIndex.x]->GetX(),
+				 mTileList[mAreaSelect.leftTopIndex.y][mAreaSelect.leftTopIndex.x]->GetY(),
+				 mAreaSelect.XTileCount * TileSize,
+				 mAreaSelect.YTileCount * TileSize);
+		 }
+	 }
+
 	 //우클릭때면
 	 if ((Input::GetInstance()->GetKeyUp(VK_RBUTTON) && !PtInRect(&mPalleteBackground.rect, _mousePosition)))
 	 {
@@ -962,89 +986,106 @@ void MapToolScene::ImageLoad()
 			// mAreaSelect.endTile = mTileList[indexY][indexX];
 			 mAreaSelect.endIndex.x = indexX;
 			 mAreaSelect.endIndex.y = indexY;
-		 }
+			 //select한백터만들기
+			 InitSelectVecter();
 
-		 //select한백터만들기
-		 InitSelectVecter();
+			 //처리하고
 
-
-
-		 //타일바꾸기
-		 if (mCurrentPallete == CurrentPallete::Tile)
-		 {
-
-			 if (mTileList[indexY][indexX]->GetImage() != mCurrentTile.image ||
-				 mTileList[indexY][indexX]->GetFrameIndexX() != mCurrentTile.frameX ||
-				 mTileList[indexY][indexX]->GetFrameIndexY() != mCurrentTile.frameY)
+			//타일바꾸기
+			 if (mCurrentPallete == CurrentPallete::Tile)
 			 {
-				 IBrushTile* command = new IBrushTile(mTileList[indexY][indexX], mCurrentTile);
-				 PushCommand(command);
-				 //cout << "OnPushCommand" << endl;
+				 for (int i = 0; i < mAreaSelect.selectedTileList.size();i++)
+				 {
+					 mAreaSelect.selectedTileList[i]->SetImage(mCurrentTile.image);
+					 mAreaSelect.selectedTileList[i]->SetFrameIndexX(mCurrentTile.frameX);
+					 mAreaSelect.selectedTileList[i]->SetFrameIndexY(mCurrentTile.frameY);
+				 }
+				// if (mTileList[indexY][indexX]->GetImage() != mCurrentTile.image ||
+				//	 mTileList[indexY][indexX]->GetFrameIndexX() != mCurrentTile.frameX ||
+				//	 mTileList[indexY][indexX]->GetFrameIndexY() != mCurrentTile.frameY)
+				// {
+				//	 IBrushTile* command = new IBrushTile(mTileList[indexY][indexX], mCurrentTile);
+				//	 PushCommand(command);
+				//	 //cout << "OnPushCommand" << endl;
+				// }
+
+			 }
+			 //속성바꾸기
+			 if (mCurrentPallete == CurrentPallete::Type)
+			 {
+				 for (int i = 0; i < mAreaSelect.selectedTileList.size();i++)
+				 {
+					 mAreaSelect.selectedTileList[i]->SetTileType(mCurrentType);
+				 }
+				 //if (mTileList[indexY][indexX]->GetTileType() != mCurrentType)
+				 //{
+				//	 ISetTileType* command = new ISetTileType(mTileList[indexY][indexX], mCurrentType);
+				//	 PushCommand(command);
+				 //}
 			 }
 
-		 }
-		 //속성바꾸기
-		 if (mCurrentPallete == CurrentPallete::Type)
-		 {
-			 if (mTileList[indexY][indexX]->GetTileType() != mCurrentType)
-			 {
-				 ISetTileType* command = new ISetTileType(mTileList[indexY][indexX], mCurrentType);
-				 PushCommand(command);
-			 }
-		 }
-		 //옵젝바꾸기
-		 if (mCurrentPallete == CurrentPallete::Object)
-		 {
-			 if (mMapObjectList[indexY][indexX]->GetImage() != mCurrentObject.image ||
-				 mMapObjectList[indexY][indexX]->GetFrameIndexX() != mCurrentObject.frameX ||
-				 mMapObjectList[indexY][indexX]->GetFrameIndexY() != mCurrentObject.frameY)
-			 {
-				 IPlaceObject* command = new IPlaceObject(mMapObjectList[indexY][indexX], mCurrentObject);
-				 PushCommand(command);
-			 }
+			 //릴리즈하고
+			 EmptySelectedVecter();
+			 mAreaSelect.isSelecting = false;
 		 }
 
-		 //옵젝지우기
-		 if (mCurrentPallete == CurrentPallete::Erase)
-		 {
-			 if (mMapObjectList[indexY][indexX]->GetMapObjectType() != ItemType::None)
-			 {
-				 mMapObjectList[indexY][indexX]->SetObjectType(ItemType::None);
-				 mMapObjectList[indexY][indexX]->SetImage(nullptr);
-			 }
-		 }
 	 }
  }
- 
 
- void MapToolScene::InitSelectVecter()
+//왼위 오아래 설정
+ void MapToolScene::SetLeftTopRightBottom()
  {
-	 Tile* temp;
 	 if (mAreaSelect.startIndex.x < mAreaSelect.endIndex.x)
 	 {
-		 if (mAreaSelect.startIndex.y < mAreaSelect.endIndex.y)
-		 {
-			 //2번상황
-		 }
-		 else
-		 {
-			 //3번상황
-		 }
+		 mAreaSelect.leftTopIndex.x = mAreaSelect.startIndex.x;
+		 mAreaSelect.rightBottomIndex.x = mAreaSelect.endIndex.x;
 	 }
 	 else
 	 {
-		 if (mAreaSelect.startIndex.y < mAreaSelect.endIndex.y)
+		 mAreaSelect.leftTopIndex.x = mAreaSelect.endIndex.x;
+		 mAreaSelect.rightBottomIndex.x = mAreaSelect.startIndex.x;
+	 }
+	 if (mAreaSelect.startIndex.y < mAreaSelect.endIndex.y)
+	 {
+		 mAreaSelect.leftTopIndex.y = mAreaSelect.startIndex.y;
+		 mAreaSelect.rightBottomIndex.y = mAreaSelect.endIndex.y;
+	 }
+	 else
+	 {
+		 mAreaSelect.leftTopIndex.y = mAreaSelect.endIndex.y;
+		 mAreaSelect.rightBottomIndex.y = mAreaSelect.startIndex.y;
+	 }
+
+	 mAreaSelect.XTileCount = mAreaSelect.rightBottomIndex.x - mAreaSelect.leftTopIndex.x + 1;
+	 mAreaSelect.YTileCount = mAreaSelect.rightBottomIndex.y - mAreaSelect.leftTopIndex.y + 1;
+ }
+
+ //설정한백터 푸쉬백
+ void MapToolScene::InitSelectVecter()
+ {
+
+	 int size = (mAreaSelect.rightBottomIndex.x - mAreaSelect.leftTopIndex.x + 1) * (mAreaSelect.rightBottomIndex.y - mAreaSelect.leftTopIndex.y + 1);
+
+	 //벡터에 넣기
+	 for (int i = 0;i < mAreaSelect.YTileCount;i++)
+	 {
+		 for (int j = 0;j < mAreaSelect.XTileCount;j++)
 		 {
-			 //4번상황
-		 }
-		 else
-		 {
-			 //1번상황
+			 Tile* temp = mTileList[((int)mAreaSelect.leftTopIndex.y)+ i][((int)mAreaSelect.leftTopIndex.x) + j];
+			 mAreaSelect.selectedTileList.push_back(temp);
 		 }
 	 }
  }
 
- void MapToolScene::ReleaseSelectVecter()
+ void MapToolScene::EmptySelectedVecter()
  {
 
+	mAreaSelect.selectedTileList.clear();
+
+ }
+
+ void MapToolScene::RenderSelectedRect(HDC hdc)
+ {
+	 if(mAreaSelect.isSelecting)
+		 GIZMO->DrawRectInCamera(hdc, mAreaSelect.selectedArea, Gizmo::Color::Cyan);
  }

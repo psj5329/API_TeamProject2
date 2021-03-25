@@ -35,31 +35,34 @@ void Tile::Render(HDC hdc)
 			mAlpha = 0;
 	}
 
-
-	switch (mTileType)
+	if (!INPUT->GetKey(VK_CONTROL))
 	{
-	case TileType::Normal:
-		Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Green);
-		break;
+		switch (mTileType)
+		{
+		case TileType::Normal:
+			Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Green);
+			break;
 
-	case TileType::Wall:
-		Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Black);
-		break;
+		case TileType::Wall:
+			Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Black);
+			break;
 
-	case TileType::Water:
-		Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Blue);
-		break;
+		case TileType::Water:
+			Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Blue);
+			break;
 
-	case TileType::Lava:
-		Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Red);
-		break;
+		case TileType::Lava:
+			Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Red);
+			break;
 
-	case TileType::ice:
-		Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Gray);
-		break;
-	default:
-		break;
+		case TileType::ice:
+			Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Gray);
+			break;
+		default:
+			break;
+		}
 	}
+	
 }
 
 
