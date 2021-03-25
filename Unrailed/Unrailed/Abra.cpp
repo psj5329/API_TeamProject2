@@ -15,14 +15,14 @@ void Abra::Init()
 
 	ReadyAnimation();
 
-	//부모 클래스 (GameObject) 변수
+	//부�??�래??(GameObject) 변??
 	mX = WINSIZEX / 2 - 135;
 	mY = WINSIZEY / 2;
 	mSizeX = mImage->GetFrameWidth() * 2.f;
 	mSizeY = mImage->GetFrameHeight() * 2.f;
 	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 
-	//Abra 변수
+	//Abra 변??
 	mDirection = Direction::Right;
 	mState = State::Move;
 	mSpeed = 100.f;
@@ -60,7 +60,7 @@ void Abra::Update()
 
 	SynthesisOre();
 
-	//상태정하기
+	//?�태?�하�?
 	//if (mTimer == 0)
 	//{
 	//	if (mState == State::Sleep)
@@ -95,7 +95,7 @@ void Abra::Update()
 		}
 	}
 
-	//움직임
+	//?�직임
 	//if (mState == State::Sleep)
 	//{
 	//	mTimer += Time::GetInstance()->DeltaTime();
@@ -138,7 +138,7 @@ void Abra::Update()
 		mLevel = 3;
 	}
 
-	//폭발
+	//??��
 	//if (mX >= WINSIZEX - 400 && mIsExplode == false)
 	//{
 	//	mIsExplode = true;
@@ -165,7 +165,7 @@ void Abra::Render(HDC hdc)
 		else if (mCreatedTrailList[i]->trailType == ItemType::Blue)
 			strTrail = L"블루" + to_wstring(mTrailCount);
 		else if (mCreatedTrailList[i]->trailType == ItemType::Red)
-			strTrail = L"레드" + to_wstring(mTrailCount);
+			strTrail = L"?�드" + to_wstring(mTrailCount);
 
 		TextOut(hdc, mX - 20, mY - 40 - i * 15, strTrail.c_str(), strTrail.length());
 	}
@@ -409,7 +409,7 @@ ItemType Abra::Receive()
 	if (mCreatedTrailList.size() > 0)
 	{
 		ItemType type = mCreatedTrailList[0]->trailType;
-		//벡터에서 첫번째 제거
+		//벡터?�서 첫번�??�거
 
 		return type;
 	}

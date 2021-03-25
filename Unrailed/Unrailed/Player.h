@@ -24,10 +24,10 @@ enum PlayerState
 
 enum Form
 {
-	Ditto, // 메타몽
-	Chikorita, // 치코리타
-	Totodile, // 리아코
-	Charmander, // 파이리
+	Ditto,
+	Chikorita,
+	Totodile,
+	Charmander,
 	FormEnd
 };
 
@@ -118,6 +118,8 @@ class Player : public GameObject
 
 	vector<InvenItem*> mInvenItemList;
 
+	bool mIsLKeyOn;
+
 public:
 	Player(const string& name, float x, float y);
 
@@ -137,10 +139,12 @@ public:
 	void InputZKey(); // 'Z' key: pick up item 
 	void InputXKey(); // 'X' key: throw item
 	void InputCKey(); // 'C' key: change form // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
+	void InputVKey(); // 'V' key: turn item
 	bool CheckTileType(TileType tileType);
 	void CheckRange();
 	void ChangeCurrentAnimation();
 
+	void InputLKey(); // 'L' key: turn on/off gizmo
 	void RenderTestText(HDC hdc);
 
 public:
