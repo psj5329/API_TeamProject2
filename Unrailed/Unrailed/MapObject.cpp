@@ -12,7 +12,7 @@ MapObject::MapObject(class Image* image, float x, float y, float sizeX, float si
 	mY = y;
 	mSizeX = sizeX;
 	mSizeY = sizeY;
-	mRect = RectMake(mX, mY, mSizeX, mSizeY);
+	mRect = RectMake((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 	mFrameIndexX = frameIndexX;
 	mFrameIndexY = frameIndexY;
 	mType = type;
@@ -23,8 +23,6 @@ MapObject::MapObject(class Image* image, float x, float y, float sizeX, float si
 
 void MapObject::Release()
 {
-
-
 }
 
 void MapObject::Update()
@@ -33,7 +31,7 @@ void MapObject::Update()
 	if (mHp <= 0 && mActive == true)
 	{
 		Ore* ore = new Ore();
-		ore->Drop(mX, mY, mType);
+		ore->Drop((int)mX, (int)mY, mType);
 		ObjectManager::GetInstance()->AddObject(ObjectLayer::ITEM, ore);
 		mImage = nullptr;
 		mType = ItemType::None;
@@ -46,7 +44,7 @@ void MapObject::Render(HDC hdc)
 	if (mType != ItemType::None)
 	{
 		if (mImage != nullptr)
-			CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+			CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, (int)mSizeX, (int)mSizeY);
 			//mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
 	}
 }

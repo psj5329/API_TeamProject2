@@ -4,13 +4,10 @@
 
 void Ore::Init()
 {
-		
 }
 
 void Ore::Release()
 {
-
-
 }
 
 void Ore::Update()
@@ -21,6 +18,11 @@ void Ore::Update()
 void Ore::Render(HDC hdc)
 {
 	mImage->ScaleFrameRender(hdc, mX, mY, mFrameX, 0, mSizeX, mSizeY);
+
+	// {{ 테스트용 // 유찬 // 폰트랑 위치 수정해야 함
+	wstring strCount = to_wstring(mCount);
+	TextOut(hdc, (int)mX, (int)mY, strCount.c_str(), (int)strCount.length());
+	// 테스트용 // 유찬 }}
 }
 
 void Ore::Drop(int x, int y, ItemType type)
@@ -28,6 +30,7 @@ void Ore::Drop(int x, int y, ItemType type)
 	//속성정하고
 	mImage = IMAGEMANAGER->FindImage(L"Ore");
 	mType = type;
+	mCount = 1;
 
 	if (type == ItemType::Green)
 	{
@@ -47,7 +50,6 @@ void Ore::Drop(int x, int y, ItemType type)
 	mY = y + 8;
 	mSizeX = mImage->GetFrameWidth()*2.5;
 	mSizeY = mImage->GetFrameHeight()*2.5;
-
 }
 
 ItemType Ore::PickUp()

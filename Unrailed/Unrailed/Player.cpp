@@ -7,9 +7,10 @@
 #include "MapObject.h"
 #include "TrailManager.h"
 #include "Ore.h"
+#include "Machop.h"
 
 Player::Player(const string& name, float x, float y)
-	:GameObject(name, x, y)
+	: GameObject(name, x, y)
 {
 }
 
@@ -29,7 +30,7 @@ void Player::Init()
 	mColBox = RectMakeCenter((int)mX, (int)mY, TileSize, TileSize);
 
 	mDir = DirectionEight::Down;
-	mState = State::Idle;
+	mState = PlayerState::Idle;
 
 	mSpeed = 100.f;
 
@@ -47,11 +48,23 @@ void Player::Init()
 	mNextTileX = 0;
 	mNextTileY = 0;
 
+	mRangeX = 0;
+	mRangeY = 0;
+
 	mIsAttackingTemp = false; // 상호작용 전 테스트 변수
 
 	mIsGettingItemThisFrame = false;
 
 	mIsChangable = true;
+
+	// {{ 트레일 줍기 불가능해서 임시로 세팅
+	for (int i = 0; i < 3; ++i)
+	{
+		InvenItem* invenItem = new InvenItem();
+		invenItem->SetName(ItemName::ItemTrail);
+		invenItem->SetType(ItemType::Green);
+		mInvenItemList.push_back(invenItem);
+	} // 트레일 줍기 불가능해서 임시로 세팅 // 여기까지 }}
 }
 
 void Player::Release()
@@ -66,13 +79,13 @@ void Player::Update()
 
 	InputDirectionKey();
 	Move();
+	CheckRange();
 
 	InputSpaceKey();
 	InputZKey();
 	InputXKey();
 	InputCKey();
-
-	//ChangeForm(); // 지울 예정인 함수
+	//CheckRange();
 
 	ChangeCurrentAnimation();
 
@@ -95,10 +108,12 @@ void Player::Render(HDC hdc)
 	// {{ 현재 타일, 다음 타일 확인용 // 릴리즈 전 지워주세요 // 유찬
 	RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
 	RECT nextRc = (*mTileListPtr)[mNextTileY][mNextTileX]->GetRect();
+	//RECT rangeRc = RectMakeCenter(mNextRangeX, mNextRangeY, TileSize, TileSize);
 	GIZMO->DrawRect(hdc, currentRc, Gizmo::Color::Yellow);
 	GIZMO->DrawRect(hdc, nextRc, Gizmo::Color::Cyan);
+	GIZMO->DrawRect(hdc, mRangeBox, Gizmo::Color::Purple);
 	GIZMO->DrawRect(hdc, mColBox, Gizmo::Color::Violet);
-	// }} 현재 타일, 다음 타일 확인용 // 릴리즈 전 지워주세요
+	// 현재 타일, 다음 타일 확인용 // 릴리즈 전 지워주세요 }}
 }
 
 void Player::InitAnimation()
@@ -352,25 +367,25 @@ void Player::InputDirectionKey()
 	}
 	else if (INPUT->GetKeyUp(VK_DOWN))
 	{
-		mState = State::Idle;
+		mState = PlayerState::Idle;
 		mInputType = 0;
 		mIsDirectionKeyDown = false;
 	}
 	else if (INPUT->GetKeyUp(VK_UP))
 	{
-		mState = State::Idle;
+		mState = PlayerState::Idle;
 		mInputType = 0;
 		mIsDirectionKeyDown = false;
 	}
 	else if (INPUT->GetKeyUp(VK_LEFT))
 	{
-		mState = State::Idle;
+		mState = PlayerState::Idle;
 		mInputType = 0;
 		mIsDirectionKeyDown = false;
 	}
 	else if (INPUT->GetKeyUp(VK_RIGHT))
 	{
-		mState = State::Idle;
+		mState = PlayerState::Idle;
 		mInputType = 0;
 		mIsDirectionKeyDown = false;
 	}
@@ -399,25 +414,21 @@ void Player::InputDirectionKey()
 	if (mIsDirectionKeyDown)
 	{
 		if (mSpeed == 100.f && INPUT->GetKeyDown(VK_LSHIFT))
-		{
 			mSpeed = 300.f;
-		}
 
 		if (mSpeed != 100.f)
 		{
 			mSpeed -= 1.f;
 
 			if (mSpeed <= 275.f)
-			{
 				mSpeed = 100.f;
-			}
 		}
 	}
 
 
 	if (INPUT->GetKey(VK_DOWN))
 	{
-		mState = State::Move;
+		mState = PlayerState::Move;
 
 		mNextTileX = mTileX;
 		if (mTileY == TileCountY - 1)
@@ -426,15 +437,13 @@ void Player::InputDirectionKey()
 			mNextTileY = mTileY + 1;
 
 		if (mY >= TileSize * TileCountY - TileSize / 2)
-		{
 			mY = TileSize * TileCountY - TileSize / 2;
-		}
 		else
 			mY += mSpeed * Time::GetInstance()->DeltaTime();
 	}
 	if (INPUT->GetKey(VK_UP))
 	{
-		mState = State::Move;
+		mState = PlayerState::Move;
 
 		mNextTileX = mTileX;
 		if (mTileY == 0)
@@ -443,15 +452,13 @@ void Player::InputDirectionKey()
 			mNextTileY = mTileY - 1;
 
 		if (mY <= TileSize / 2)
-		{
 			mY = TileSize / 2;
-		}
 		else
 			mY -= mSpeed * Time::GetInstance()->DeltaTime();
 	}
 	if (INPUT->GetKey(VK_LEFT))
 	{
-		mState = State::Move;
+		mState = PlayerState::Move;
 
 		if (mTileX == 0)
 			mNextTileX = mTileX;
@@ -460,15 +467,13 @@ void Player::InputDirectionKey()
 		mNextTileY = mTileY;
 
 		if (mX <= TileSize / 2)
-		{
 			mX = TileSize / 2;
-		}
 		else
 			mX -= mSpeed * Time::GetInstance()->DeltaTime();
 	}
 	if (INPUT->GetKey(VK_RIGHT))
 	{
-		mState = State::Move;
+		mState = PlayerState::Move;
 
 		if (mTileX == TileCountX - 1)
 			mNextTileX = mTileX;
@@ -477,9 +482,7 @@ void Player::InputDirectionKey()
 		mNextTileY = mTileY;
 
 		if (mX >= TileSize * TileCountX - TileSize / 2)
-		{
 			mX = TileSize * TileCountX - TileSize / 2;
-		}
 		else
 			mX += mSpeed * Time::GetInstance()->DeltaTime();
 	}
@@ -503,7 +506,6 @@ void Player::InputSpaceKey()
 	{
 		CheckNextTile();
 
-		// mapObject to item
 		if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Green))
 		{
 			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
@@ -524,12 +526,11 @@ void Player::InputSpaceKey()
 			mIsAttackingTemp = false;
 		}
 
-		// 아이템(3) 내려놓을 때 앞에 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물)//내가 가지고 있는 것이랑 다를 때 4. 기찻길 > 일 때 놓을 수 없음
-		// 기찻길(4) 내려놓을 떄 앞에 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물) 4. 기찻길 5. 비어있더라도 타일과 기찻길의 속성이 안 맞을 때 > 일 때 놓을 수 없음
+		
 
 		
 
-		// {{ 화살표 돌리기 // 얘는 키 분리해야 할 듯.. // 스페이스바는 화살표 줍기..
+		// {{ 화살표 돌리기 // 얘는 키 분리해야 할 듯..
 
 		//MapObjectType idontknowwhatitis = (*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType(); // 이건 그냥 한거고
 //		mTrailManager->TurnTrail(); // 이것부터 보면서 조건 등 주면서 고쳐야 함
@@ -638,29 +639,30 @@ void Player::InputZKey()
 	{
 		RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
 		vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
-		//float x;
-		//float y;
 
 		for (int i = 0; i < (*itemListPtr).size(); ++i)
 		{
 			Ore* item = (Ore*)((*itemListPtr)[i]);
-			//x = (*itemListPtr)[i]->GetX();
-			//y = (*itemListPtr)[i]->GetY();
-			POINT pt = { item->GetX(), item->GetY() };
+			POINT pt = { (LONG)(item->GetX()), (LONG)(item->GetY()) };
 
 			if (PtInRect(&currentRc, pt))
 			{
-				InvenItem invenItem;
-				invenItem.itemName = ItemName::ItemOre;
+				int count = item->GetCount();
 
-				if (item->GetOreType() == ItemType::Green)
-					invenItem.itemType = ItemTypeP::Green;
-				else if (item->GetOreType() == ItemType::Blue)
-					invenItem.itemType = ItemTypeP::Blue;
-				else if (item->GetOreType() == ItemType::Red)
-					invenItem.itemType = ItemTypeP::Red;
+				for (int i = 0; i < count; ++i)
+				{
+					InvenItem* invenItem = new InvenItem();
+					invenItem->SetName(ItemName::ItemOre);
 
-				mInvenItemList.push_back(&invenItem);
+					if (item->GetOreType() == ItemType::Green)
+						invenItem->SetType(ItemType::Green);
+					else if (item->GetOreType() == ItemType::Blue)
+						invenItem->SetType(ItemType::Blue);
+					else if (item->GetOreType() == ItemType::Red)
+						invenItem->SetType(ItemType::Red);
+
+					mInvenItemList.push_back(invenItem);
+				}
 
 				(*itemListPtr).erase((*itemListPtr).begin() + i);
 
@@ -669,51 +671,6 @@ void Player::InputZKey()
 			else
 				continue;
 		}
-
-
-
-
-/*
-
-		// {{ 아이템(광물) -> 인벤 소지 아이템(UI) // 아이템 줍기
-		GameObject* item = COLLISIONMANAGER->ItemCollision(&mColBox);
-		vector<GameObject*>* itemList = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
-		//ItemType invenType;
-
-		//if (mItemList.size())
-		//	invenType = ((Ore*)mItemList[0])->GetOreType();
-
-		if ((item != nullptr) && (item->GetIsActive()))
-		{
-			//if ((mForm == Form::Chikorita) && (((Ore*)item)->GetOreType() == ItemType::Green) && ((mItemList.size() == 0) || (invenType == ItemType::Green)))
-			if (((Ore*)item)->GetOreType() == ItemType::Green)
-			{
-				Ore* greenOre = new Ore();
-				greenOre = (Ore*)item;
-				mItemList.push_back((GameObject*)greenOre);
-				item->SetIsActive(false);
-				mIsGettingItemThisFrame = true;
-			}
-			//else if ((mForm == Form::Totodile) && (((Ore*)item)->GetOreType() == ItemType::Blue) && ((mItemList.size() == 0) || (invenType == ItemType::Blue)))
-			else if(((Ore*)item)->GetOreType() == ItemType::Blue)
-			{
-				Ore* blueOre = new Ore();
-				blueOre = (Ore*)item;
-				mItemList.push_back((GameObject*)blueOre);
-				item->SetIsActive(false);
-				mIsGettingItemThisFrame = true;
-			}
-			//else if ((mForm == Form::Charmander) && (((Ore*)item)->GetOreType() == ItemType::Red) && ((mItemList.size() == 0) || (invenType == ItemType::Red)))
-			else if (((Ore*)item)->GetOreType() == ItemType::Red)
-			{
-				Ore* redOre = new Ore();
-				redOre = (Ore*)item;
-				mItemList.push_back((GameObject*)redOre);
-				item->SetIsActive(false);
-				mIsGettingItemThisFrame = true;
-			}
-		}
-		// }} 아이템(광물) -> 인벤 소지 아이템(UI) // 아이템 줍기*/
 	}
 }
 
@@ -724,17 +681,128 @@ void Player::InputXKey()
 		if (!mInvenItemList.size())
 			return;
 
-		RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
-		vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+		ItemName itemName = mInvenItemList[0]->GetName();
 
-		for (int i = 0; i < (*itemListPtr).size(); ++i)
+		if (itemName == ItemName::ItemOre)
 		{
-			GameObject* item = (*itemListPtr)[i];
-			POINT pt = { item->GetX(), item->GetY() };
+			RECT temp;
 
-			if (PtInRect(&currentRc, pt))
+			ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
+
+			vector<GameObject*> trainList = OBJECTMANAGER->GetObjectList(ObjectLayer::TRAIN);
+
+			for (int i = 0; i < trainList.size(); ++i)
+			{
+				// 지금은 machop인지 검사 따로 안하고 있음 // machop 아니면 continue하게 해야 함
+
+				RECT trainRc = trainList[i]->GetRect(); // 추후에 렉트 종류 새로 따면 바꾸기
+
+				if (IntersectRect(&temp, &mRangeBox, &trainRc))
+				{
+					int oreCnt = ((Machop*)trainList[i])->GetOreCount();
+					if (oreCnt > 6)
+						continue;
+
+					((Machop*)trainList[i])->InterceptOre(itemType);
+					mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+					return;
+				}
+			}
+
+			Tile* currentTile = (*mTileListPtr)[mTileY][mTileX];
+			TileType currentTileType = currentTile->GetTileType();
+
+			if (currentTileType == TileType::Water || currentTileType == TileType::Lava || currentTileType == TileType::ice)
 				return;
-		}////////////// 이 다음 줄 할 차례였응ㅁ // 예외 걸렀고 이제 구현하면 됨
+
+			RECT currentRc = currentTile->GetRect();
+			vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+
+			for (int i = 0; i < (*itemListPtr).size(); ++i)
+			{
+				GameObject* item = (*itemListPtr)[i];
+				POINT pt = { (LONG)(item->GetX()), (LONG)(item->GetY()) };
+
+				if (PtInRect(&currentRc, pt))
+				{
+					if (((Ore*)item)->GetOreType() == itemType)
+					{
+						((Ore*)item)->PlusCount();
+						mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+						return;
+					}
+					else
+						return;
+				}
+			}
+
+			vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+			Trail* currentTrail = (Trail*)(*trailListPtr)[mTileY][mTileX];
+
+			if (currentTrail->GetTrailType() != ItemType::None)
+				return;
+
+			Ore* ore = new Ore();
+			ore->Drop(TileSize * mTileX, TileSize * mTileY, itemType);
+			OBJECTMANAGER->AddObject(ObjectLayer::ITEM, ore);
+			mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+		}
+		else if (itemName == ItemName::ItemTrail)
+		{
+			Tile* currentTile = (*mTileListPtr)[mTileY][mTileX];
+			TileType currentTileType = currentTile->GetTileType();
+			ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
+
+			if (currentTileType == TileType::ice)
+				return;
+			else if ((currentTileType == TileType::Water) && (itemType != ItemType::Blue))
+				return;
+			else if ((currentTileType == TileType::Lava) && (itemType != ItemType::Red))
+				return;
+
+			RECT currentRc = currentTile->GetRect();
+			vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+
+			for (int i = 0; i < (*itemListPtr).size(); ++i)
+			{
+				GameObject* item = (*itemListPtr)[i];
+				POINT pt = { (LONG)(item->GetX()), (LONG)(item->GetY()) };
+
+				if (PtInRect(&currentRc, pt))
+					return;
+			}
+
+			vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+			Trail* currentTrail = (Trail*)(*trailListPtr)[mTileY][mTileX];
+
+			if (currentTrail->GetTrailType() != ItemType::None)
+				return;
+
+			mTrailManager->PlaceTrail(mTileY, mTileX, itemType, 0); // 0: down 1: up 2: left 3: right
+			mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+
+			
+			// 놓기까지 일단 완료 // 1. 바닥설치(완성_추가테스트필요) 2. 돌리기(오늘 끝내야함) 3. 합성소에서 받기(호준이 완성되면 시작)
+
+
+
+
+
+
+
+
+
+
+
+		}
+
+		
+
+		// 아이템(3) 내려놓을 때 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물)//내가 가지고 있는 것이랑 다를 때 4. 기찻길 > 일 때 놓을 수 없음
+		// 기찻길(4) 내려놓을 때 1. 못가는타일// 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물) 4. 기찻길 5. 비어있더라도 타일과 기찻길의 속성이 안 맞을 때 > 일 때 놓을 수 없음
+		// 기찻길은 버리기는 안하기로.(남훈)
+		
+		
 
 
 
@@ -916,49 +984,54 @@ bool Player::CheckTileType(TileType tileType)
 	return false;
 }
 
-void Player::ChangeForm()
+void Player::CheckRange()
 {
-	if (INPUT->GetKeyDown('7'))
+	int dir = 0;
+	if (mDir == DirectionEight::LeftDown)
 	{
-		mForm = Form::Ditto;
-		mImage = IMAGEMANAGER->FindImage(L"ditto");
-
-		mChangeT = 2.f;
+		dir = 1;
 	}
-	else if (INPUT->GetKeyDown('8'))
+	else if (mDir == DirectionEight::RightDown)
 	{
-		mForm = Form::Charmander;
-		mImage = IMAGEMANAGER->FindImage(L"charmander");
-
-		mChangeT = 2.f;
+		dir = 1;
 	}
-	else if (INPUT->GetKeyDown('9'))
+	else if (mDir == DirectionEight::LeftUp)
 	{
-		mForm = Form::Chikorita;
-		mImage = IMAGEMANAGER->FindImage(L"chikorita");
-
-		mChangeT = 2.f;
+		dir = 2;
 	}
-	else if (INPUT->GetKeyDown('0'))
+	else if (mDir == DirectionEight::RightUp)
 	{
-		mForm = Form::Totodile;
-		mImage = IMAGEMANAGER->FindImage(L"totodile");
-
-		mChangeT = 2.f;
+		dir = 2;
 	}
 
-	if (mChangeT)
-	{
-		mChangeT -= Time::GetInstance()->DeltaTime();
 
-		if (mChangeT <= 0)
-			mChangeT = 0.f;
+	if (mDir == DirectionEight::Down || dir == 1)
+	{
+		mRangeX = (int)mX;
+		mRangeY = (int)mY + TileSize / 2;
 	}
+	else if (mDir == DirectionEight::Up || dir == 2)
+	{
+		mRangeX = (int)mX;
+		mRangeY = (int)mY - TileSize / 2;
+	}
+	else if (mDir == DirectionEight::Left)
+	{
+		mRangeX = (int)mX - TileSize / 2;
+		mRangeY = (int)mY;
+	}
+	else if (mDir == DirectionEight::Right)
+	{
+		mRangeX = (int)mX + TileSize / 2;
+		mRangeY = (int)mY;
+	}
+
+	mRangeBox = RectMakeCenter(mRangeX, mRangeY, TileSize, TileSize);
 }
 
 void Player::ChangeCurrentAnimation()
 {
-	if (mState == State::Idle)
+	if (mState == PlayerState::Idle)
 	{
 		if (mDir == DirectionEight::Down && mCurrentAnimation != mDownIdleAnimation)
 		{
@@ -1009,7 +1082,7 @@ void Player::ChangeCurrentAnimation()
 			mCurrentAnimation->Play();
 		}
 	}
-	else if (mState == State::Move)
+	else if (mState == PlayerState::Move)
 	{
 		if (mDir == DirectionEight::Down && mCurrentAnimation != mDownMoveAnimation)
 		{
@@ -1074,11 +1147,6 @@ void Player::RenderTestText(HDC hdc)
 	if (mChangeT)
 		TextOut(hdc, (int)mX - 20 - cam.left, (int)mY - 25 - cam.top, strChange.c_str(), (int)strChange.length());
 
-	//wstring strSpeed = L"SApeed: " + to_wstring(mSpeed);
-	//wstring strKeyDown = L"IsKeyDownCheck: " + to_wstring(mIsDirectionKeyDown);
-	//TextOut(hdc, (int)mX, (int)mY + 50, strSpeed.c_str(), (int)strSpeed.length());
-	//TextOut(hdc, (int)mX, (int)mY + 75, strKeyDown.c_str(), (int)strKeyDown.length());
-
 	wstring strTile = L"tile x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
 	TextOut(hdc, (int)mX + 25 - cam.left, (int)mY - cam.top, strTile.c_str(), (int)strTile.length());
 
@@ -1110,5 +1178,32 @@ void Player::RenderTestText(HDC hdc)
 			strActive = to_wstring(i) + L": nonActive, " + strType;
 
 		TextOut(hdc, (int)WINSIZEX * 3 / 4, (int)200 + 25 * i, strActive.c_str(), (int)strActive.length());
+	}
+
+	wstring strInv = L"========== 인벤 ==========";
+	TextOut(hdc, (int)WINSIZEX * 3 / 4, 350, strInv.c_str(), (int)strInv.length());
+	for (int i = 0; i < mInvenItemList.size(); ++i)
+	{
+		ItemName name = mInvenItemList[i]->GetName();
+		ItemType type = mInvenItemList[i]->GetType();
+
+		wstring strName = L"";
+		if (name == ItemName::ItemOre)
+			strName = L"Ore, ";
+		else if (name == ItemName::ItemTrail)
+			strName = L"Trail, ";
+
+		wstring strType = L"";
+		if (type == ItemType::None)
+			strType = L"Type: None";
+		else if (type == ItemType::Green)
+			strType = L"Type: Green";
+		else if (type == ItemType::Blue)
+			strType = L"Type: Blue";
+		else if (type == ItemType::Red)
+			strType = L"Type: Red";
+		wstring strActive = to_wstring(i) + L": " + strName + strType;
+
+		TextOut(hdc, (int)WINSIZEX * 3 / 4, (int)372 + 22 * i, strActive.c_str(), (int)strActive.length());
 	}
 }

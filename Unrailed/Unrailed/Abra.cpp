@@ -18,9 +18,9 @@ void Abra::Init()
 	//부모 클래스 (GameObject) 변수
 	mX = WINSIZEX / 2 - 135;
 	mY = WINSIZEY / 2;
-	mSizeX = mImage->GetFrameWidth() * 2;
-	mSizeY = mImage->GetFrameHeight() * 2;
-	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+	mSizeX = mImage->GetFrameWidth() * 2.f;
+	mSizeY = mImage->GetFrameHeight() * 2.f;
+	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 
 	//Abra 변수
 	mDirection = Direction::Right;
@@ -53,8 +53,8 @@ void Abra::Release()
 
 void Abra::Update()
 {
-	int indexX = mX / TileSize;
-	int indexY = mY / TileSize;
+	int indexX = (int)(mX / TileSize);
+	int indexY = (int)(mY / TileSize);
 
 	SynthesisOre();
 
@@ -151,7 +151,7 @@ void Abra::Update()
 
 
 	mCurrentAnimation->Update();
-	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 }
 
 void Abra::Render(HDC hdc)
@@ -159,7 +159,7 @@ void Abra::Render(HDC hdc)
 	//RenderRect(hdc, mRect);
 	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
 }
 
 void Abra::ReadyAnimation()
@@ -387,7 +387,6 @@ void Abra::EndExplode()
 		SetIsDestroy(true);
 	}
 }
-
 
 ItemType Abra::Receive()
 {

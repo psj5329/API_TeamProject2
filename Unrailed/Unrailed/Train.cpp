@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "Train.h"
 
+//Train::Train()
+//	: GameObject()
+//{
+//}
+
 void Train::SetTarget()
 {
 	int indexX = mX / TileSize;

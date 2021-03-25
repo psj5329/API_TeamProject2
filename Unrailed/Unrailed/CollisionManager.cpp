@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "CollisionManager.h"
 #include "Player.h"
+#include "CollisionManager.h"
 #include "TileMap.h"
 
 Singleton_NULL(CollisionManager)
@@ -562,4 +562,48 @@ GameObject* CollisionManager::ItemCollision(RECT* rc)
 	}
 
 	return nullptr;
+}
+
+Train* CollisionManager::TrainCollision(RECT* rc, bool* isUpDownCollision) // 뺄.. 수도.. 있음..
+{
+	RECT temp;
+
+	vector<GameObject*> trainList = OBJECTMANAGER->GetObjectList(ObjectLayer::TRAIN);
+	vector<pair<int, int>> checkList; // first int: 2 * index + (0: width, 1:height), second int: value
+
+	for (int i = 0; i < trainList.size(); ++i)
+	{
+		RECT trainRc = trainList[i]->GetRect(); // 추후에 렉트 종류 새로 따면 바꾸기
+
+		if (IntersectRect(&temp, rc, &trainRc))
+		{
+			float width = temp.right - temp.left;
+			float height = temp.bottom - temp.top;
+
+			checkList.push_back(make_pair(2 * i, width));
+			checkList.push_back(make_pair(2 * i + 1, height));
+		}
+	}
+
+	if (checkList.size() == 0)
+		return nullptr;
+
+	float min = checkList[0].second;
+	int hint = 0;
+
+	if (checkList.size() >= 2)
+	{
+		for (int i = 1; i < checkList.size(); ++i)
+		{
+			if (min > checkList[i].second)
+			{
+				min = checkList[i].second;
+				hint = checkList[i].first;
+			}
+		}
+	}
+
+	*isUpDownCollision = (bool)(hint % 2);
+
+	return (Train*)(&trainList[(int)(hint / 2)]);
 }

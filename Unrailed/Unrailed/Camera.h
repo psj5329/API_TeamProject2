@@ -33,7 +33,7 @@ public:
 	void AlphaScaleFrameRender(HDC hdc, class Image* image, int x, int y, int frameX, int frameY, int width, int height, float alpha);
 
 	void RenderRectCam(HDC hdc, RECT rc);
-	void RenderEllipse(HDC hdc, float x, float y, float radius);
+	void RenderEllipseCam(HDC hdc, float x, float y, float radius);
 
 	bool IsInCameraArea(float x, float y, float width, float height);
 	bool IsInCameraArea(RECT rc);
