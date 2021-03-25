@@ -37,6 +37,9 @@ protected:
 	bool mStop;
 	bool mIsExplode;
 	bool mIsSynthesis;
+	int mTrailCount;
+	int mOreCount;
+	bool mOreBroken;
 
 	class Image* mCurrentImage;
 	class Image* mImage;

@@ -7,7 +7,6 @@ class Animation;
 class Machop : public Train
 {
 	vector <Ore*> mOreList;
-	int mOreCount;
 
 	Animation* mDownMove;
 	Animation* mUpMove;

@@ -8,7 +8,7 @@
 
 void Voltorb::Init()
 {
-	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
+	mExplodeImage = IMAGEMANAGER->FindImage(L"explode");
 	mImage = IMAGEMANAGER->FindImage(L"Voltorb");
 
 	ReadyAnimation();
@@ -102,11 +102,14 @@ void Voltorb::Update()
 	}
 
 	//Æø¹ß
-	//if (mX >= WINSIZEX - 400 && mIsExplode == false)
+	//if (mIsExplode == false)
 	//{
-	//	mIsExplode = true;
-	//	mState = State::Explode;
-	//	SetAnimation();
+	//	if (mX >= TileSize || mX <= TileSize || mY >= TileSize || mY <= TileSize)
+	//	{
+	//		mIsExplode = true;
+	//		mState = State::Explode;
+	//		SetAnimation();
+	//	}
 	//}
 
 	mCurrentAnimation->Update();
@@ -118,7 +121,7 @@ void Voltorb::Render(HDC hdc)
 	//RenderRect(hdc, mRect);
 	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
 
 void Voltorb::ReadyAnimation()
@@ -218,11 +221,11 @@ void Voltorb::SetImage(int i)
 {
 	if (i == 0) // 0Àº false
 	{
-		mImage = IMAGEMANAGER->FindImage(L"Electrode");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Electrode");
 	}
 	else
 	{
-		mImage = IMAGEMANAGER->FindImage(L"Voltorb");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Voltorb");
 	}
 }
 

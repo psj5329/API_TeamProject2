@@ -15,7 +15,6 @@ struct CreatedTrail
 class Abra : public Train
 {
 	vector <CreatedTrail*> mCreatedTrailList;
-	int mTrailCount;
 
 	Machop* mMachop;
 
