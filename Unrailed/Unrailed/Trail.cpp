@@ -63,6 +63,11 @@ void Trail::Render(HDC hdc)
                 wstring str3 = L"No." + to_wstring(mOrder);
                 TextOut(hdc,mX + 10, mY + 10, str3.c_str(), str3.length());
             }
+            //²¿¸®¸é
+            if (mIsTail)
+            {
+                GIZMO->DrawRectInCamera(hdc, mRect, Gizmo::Color::Blue);
+            }
         }
         else
         {
