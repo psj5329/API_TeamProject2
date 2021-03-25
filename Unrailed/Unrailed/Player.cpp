@@ -7,9 +7,10 @@
 #include "MapObject.h"
 #include "TrailManager.h"
 #include "Ore.h"
+#include "Machop.h"
 
 Player::Player(const string& name, float x, float y)
-	:GameObject(name, x, y)
+	: GameObject(name, x, y)
 {
 }
 
@@ -29,7 +30,7 @@ void Player::Init()
 	mColBox = RectMakeCenter((int)mX, (int)mY, TileSize, TileSize);
 
 	mDir = DirectionEight::Down;
-	mState = State::Idle;
+	mState = PlayerState::Idle;
 
 	mSpeed = 100.f;
 
@@ -46,6 +47,9 @@ void Player::Init()
 
 	mNextTileX = 0;
 	mNextTileY = 0;
+
+	mRangeX = 0;
+	mRangeY = 0;
 
 	mIsAttackingTemp = false; // 상호작용 전 테스트 변수
 
@@ -66,11 +70,13 @@ void Player::Update()
 
 	InputDirectionKey();
 	Move();
+	CheckRange();
 
 	InputSpaceKey();
 	InputZKey();
 	InputXKey();
 	InputCKey();
+	//CheckRange();
 
 	ChangeCurrentAnimation();
 
@@ -93,8 +99,10 @@ void Player::Render(HDC hdc)
 	// {{ 현재 타일, 다음 타일 확인용 // 릴리즈 전 지워주세요 // 유찬
 	RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
 	RECT nextRc = (*mTileListPtr)[mNextTileY][mNextTileX]->GetRect();
+	//RECT rangeRc = RectMakeCenter(mNextRangeX, mNextRangeY, TileSize, TileSize);
 	GIZMO->DrawRect(hdc, currentRc, Gizmo::Color::Yellow);
 	GIZMO->DrawRect(hdc, nextRc, Gizmo::Color::Cyan);
+	GIZMO->DrawRect(hdc, mRangeBox, Gizmo::Color::Purple);
 	GIZMO->DrawRect(hdc, mColBox, Gizmo::Color::Violet);
 	// 현재 타일, 다음 타일 확인용 // 릴리즈 전 지워주세요 }}
 }
@@ -350,25 +358,25 @@ void Player::InputDirectionKey()
 	}
 	else if (INPUT->GetKeyUp(VK_DOWN))
 	{
-		mState = State::Idle;
+		mState = PlayerState::Idle;
 		mInputType = 0;
 		mIsDirectionKeyDown = false;
 	}
 	else if (INPUT->GetKeyUp(VK_UP))
 	{
-		mState = State::Idle;
+		mState = PlayerState::Idle;
 		mInputType = 0;
 		mIsDirectionKeyDown = false;
 	}
 	else if (INPUT->GetKeyUp(VK_LEFT))
 	{
-		mState = State::Idle;
+		mState = PlayerState::Idle;
 		mInputType = 0;
 		mIsDirectionKeyDown = false;
 	}
 	else if (INPUT->GetKeyUp(VK_RIGHT))
 	{
-		mState = State::Idle;
+		mState = PlayerState::Idle;
 		mInputType = 0;
 		mIsDirectionKeyDown = false;
 	}
@@ -411,7 +419,7 @@ void Player::InputDirectionKey()
 
 	if (INPUT->GetKey(VK_DOWN))
 	{
-		mState = State::Move;
+		mState = PlayerState::Move;
 
 		mNextTileX = mTileX;
 		if (mTileY == TileCountY - 1)
@@ -426,7 +434,7 @@ void Player::InputDirectionKey()
 	}
 	if (INPUT->GetKey(VK_UP))
 	{
-		mState = State::Move;
+		mState = PlayerState::Move;
 
 		mNextTileX = mTileX;
 		if (mTileY == 0)
@@ -441,7 +449,7 @@ void Player::InputDirectionKey()
 	}
 	if (INPUT->GetKey(VK_LEFT))
 	{
-		mState = State::Move;
+		mState = PlayerState::Move;
 
 		if (mTileX == 0)
 			mNextTileX = mTileX;
@@ -456,7 +464,7 @@ void Player::InputDirectionKey()
 	}
 	if (INPUT->GetKey(VK_RIGHT))
 	{
-		mState = State::Move;
+		mState = PlayerState::Move;
 
 		if (mTileX == TileCountX - 1)
 			mNextTileX = mTileX;
@@ -664,6 +672,30 @@ void Player::InputXKey()
 		if (!mInvenItemList.size())
 			return;
 
+		RECT temp;
+
+		ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
+
+		vector<GameObject*> trainList = OBJECTMANAGER->GetObjectList(ObjectLayer::TRAIN);
+
+		for (int i = 0; i < trainList.size(); ++i)
+		{
+			// 지금은 machop인지 검사 따로 안하고 있음 // machop 아니면 continue하게 해야 함
+
+			RECT trainRc = trainList[i]->GetRect(); // 추후에 렉트 종류 새로 따면 바꾸기
+
+			if (IntersectRect(&temp, &mRangeBox, &trainRc))
+			{
+				int oreCnt = ((Machop*)trainList[i])->GetOreCount();
+				if (oreCnt > 6)
+					continue;
+
+				((Machop*)trainList[i])->InterceptOre(itemType);
+				mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+				return;
+			}
+		}
+
 		Tile* currentTile = (*mTileListPtr)[mTileY][mTileX];
 		TileType currentTileType = currentTile->GetTileType();
 
@@ -672,7 +704,6 @@ void Player::InputXKey()
 
 		RECT currentRc = currentTile->GetRect();
 		vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
-		ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
 
 		for (int i = 0; i < (*itemListPtr).size(); ++i)
 		{
@@ -889,9 +920,54 @@ bool Player::CheckTileType(TileType tileType)
 	return false;
 }
 
+void Player::CheckRange()
+{
+	int dir = 0;
+	if (mDir == DirectionEight::LeftDown)
+	{
+		dir = 1;
+	}
+	else if (mDir == DirectionEight::RightDown)
+	{
+		dir = 1;
+	}
+	else if (mDir == DirectionEight::LeftUp)
+	{
+		dir = 2;
+	}
+	else if (mDir == DirectionEight::RightUp)
+	{
+		dir = 2;
+	}
+
+
+	if (mDir == DirectionEight::Down || dir == 1)
+	{
+		mRangeX = (int)mX;
+		mRangeY = (int)mY + TileSize / 2;
+	}
+	else if (mDir == DirectionEight::Up || dir == 2)
+	{
+		mRangeX = (int)mX;
+		mRangeY = (int)mY - TileSize / 2;
+	}
+	else if (mDir == DirectionEight::Left)
+	{
+		mRangeX = (int)mX - TileSize / 2;
+		mRangeY = (int)mY;
+	}
+	else if (mDir == DirectionEight::Right)
+	{
+		mRangeX = (int)mX + TileSize / 2;
+		mRangeY = (int)mY;
+	}
+
+	mRangeBox = RectMakeCenter(mRangeX, mRangeY, TileSize, TileSize);
+}
+
 void Player::ChangeCurrentAnimation()
 {
-	if (mState == State::Idle)
+	if (mState == PlayerState::Idle)
 	{
 		if (mDir == DirectionEight::Down && mCurrentAnimation != mDownIdleAnimation)
 		{
@@ -942,7 +1018,7 @@ void Player::ChangeCurrentAnimation()
 			mCurrentAnimation->Play();
 		}
 	}
-	else if (mState == State::Move)
+	else if (mState == PlayerState::Move)
 	{
 		if (mDir == DirectionEight::Down && mCurrentAnimation != mDownMoveAnimation)
 		{

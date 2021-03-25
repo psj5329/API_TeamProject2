@@ -15,11 +15,11 @@ enum DirectionEight
 	DirectionEightEnd
 };
 
-enum State
+enum PlayerState
 {
 	Idle,
 	Move,
-	StateEnd
+	PlayerStateEnd
 };
 
 enum Form
@@ -82,7 +82,7 @@ class Player : public GameObject
 	RECT mColBox;
 
 	DirectionEight mDir;
-	State mState;
+	PlayerState mState;
 
 	float mSpeed;
 
@@ -99,6 +99,11 @@ class Player : public GameObject
 
 	int mNextTileX;
 	int mNextTileY;
+
+	int mRangeX;
+	int mRangeY;
+
+	RECT mRangeBox;
 
 	vector<vector<Tile*>>* mTileListPtr;
 	vector<vector<MapObject*>>* mMapObjectListPtr;
@@ -133,6 +138,7 @@ public:
 	void InputXKey(); // 'X' key: throw item
 	void InputCKey(); // 'C' key: change form // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
 	bool CheckTileType(TileType tileType);
+	void CheckRange();
 	void ChangeCurrentAnimation();
 
 	void RenderTestText(HDC hdc);

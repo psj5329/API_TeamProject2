@@ -6,6 +6,11 @@
 #include "Trail.h"
 #include "Camera.h"
 
+//Machop::Machop()
+//	: Train()
+//{
+//}
+
 void Machop::Init()
 {
 	mName = "Machop";
@@ -334,7 +339,7 @@ void Machop::InterceptOre()
 {
 	if (mOreCount <= 5)
 	{
-		if (INPUT->GetKeyDown('Z'))
+		if (INPUT->GetKeyDown('A'))
 		{
 			Ore* ore = new Ore;
 
@@ -347,7 +352,7 @@ void Machop::InterceptOre()
 			mState = State::Intercept;
 			SetAnimation();
 		}
-		if (INPUT->GetKeyDown('X'))
+		if (INPUT->GetKeyDown('S'))
 		{
 			Ore* ore = new Ore;
 
@@ -360,7 +365,7 @@ void Machop::InterceptOre()
 			mState = State::Intercept;
 			SetAnimation();
 		}
-		if (INPUT->GetKeyDown('C'))
+		if (INPUT->GetKeyDown('D'))
 		{
 			Ore* ore = new Ore;
 
@@ -373,6 +378,19 @@ void Machop::InterceptOre()
 			mState = State::Intercept;
 			SetAnimation();
 		}
+	}
+}
+
+void Machop::InterceptOre(ItemType itemType)
+{
+	if (mOreCount <= 5)
+	{
+		Ore* ore = new Ore();
+		++mOreCount;
+		ore->SetOreType(itemType);
+		mOreList.push_back(ore);
+		mState = State::Intercept;
+		SetAnimation();
 	}
 }
 

@@ -34,7 +34,7 @@ Gizmo::Gizmo()
 	HPEN deepSkyBluePen = CreatePen(PS_SOLID, 1, RGB(0, 191, 255));
 	HPEN skyBluePen = CreatePen(PS_SOLID, 1, RGB(135, 206, 235));
 	HPEN darkCyanPen = CreatePen(PS_SOLID, 1, RGB(0, 139, 139));
-	HPEN purplePen = CreatePen(PS_SOLID, 1, RGB(128, 0, 128));
+	HPEN purplePen = CreatePen(PS_SOLID, 3, RGB(128, 0, 128)); // 플레이어 사용 중
 	HPEN violetPen = CreatePen(PS_SOLID, 3, RGB(238, 130, 238)); // 플레이어 사용 중
 
 	mPenList.insert(make_pair(Color::Green, greenPen));

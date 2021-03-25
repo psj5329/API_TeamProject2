@@ -45,6 +45,7 @@ protected:
 	class Animation* mExplode;
 
 public:
+	//Train();
 
 	virtual void Init()override = 0;
 	virtual void Release()override = 0;
@@ -60,4 +61,3 @@ public:
 	bool CheckTile();
 	void SetSpeed();
 };
-

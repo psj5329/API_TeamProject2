@@ -1,11 +1,10 @@
 #include "pch.h"
 #include "Scene4.h"
-
 #include "Player.h"
 #include "Camera.h"
-
 #include "TileMap.h"
 #include "TrailManager.h"
+#include "Machop.h"
 
 void Scene4::Init()
 {
@@ -54,6 +53,14 @@ void Scene4::Init()
 	mTrailManager->InsertTrail(6, 3, ItemType::Green, 1);
 	mTrailManager->InsertTrail(5, 3, ItemType::Green, 1);
 
+	Machop* machop = new Machop();
+	machop->Init();
+	machop->SetX(5 * 48 + 24);
+	machop->SetY(24);
+	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, machop);
+	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+	machop->SetTrail(trailListPtr);
+
 	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
 	mTempPlayer->SetTileListPtr(tileListPtr);
 	vector<vector<MapObject*>>* mapObjectListPtr = mTileMap->GetObjectListPtr();
@@ -74,10 +81,6 @@ void Scene4::Update()
 	mTileMap->Update();
 	mTrailManager->Update();
 	OBJECTMANAGER->Update();
-
-	//	RECT* playerColBoxPtr = mTempPlayer->GetColBoxPtr(); // 이 세 줄 지우??자!!
-	//	COLLISIONMANAGER->TileCollision(mTempPlayer, playerColBoxPtr, mTileMap); // 플레이어 내부로 이동했음 지울 예정!
-	//	COLLISIONMANAGER->MapObjectCollision(mTempPlayer, playerColBoxPtr, mTileMap);
 }
 
 void Scene4::Render(HDC hdc)

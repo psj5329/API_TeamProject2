@@ -19,7 +19,7 @@ void Ore::Render(HDC hdc)
 {
 	mImage->ScaleFrameRender(hdc, mX, mY, mFrameX, 0, mSizeX, mSizeY);
 
-	// {{ 테스트용 // 유찬
+	// {{ 테스트용 // 유찬 // 폰트랑 위치 수정해야 함
 	wstring strCount = to_wstring(mCount);
 	TextOut(hdc, (int)mX, (int)mY, strCount.c_str(), (int)strCount.length());
 	// 테스트용 // 유찬 }}
