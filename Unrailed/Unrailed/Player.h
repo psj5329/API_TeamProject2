@@ -80,19 +80,11 @@ class Player : public GameObject
 	Animation* mCurrentAnimation;
 
 	RECT mColBox;
+	RECT mRangeBox;
 
 	DirectionEight mDir;
 	PlayerState mState;
-
-	float mSpeed;
-
-	int mInputType;
-
 	Form mForm;
-
-	float mChangeT;
-
-	float mIsDirectionKeyDown;
 
 	int mTileX;
 	int mTileY;
@@ -103,22 +95,26 @@ class Player : public GameObject
 	int mRangeX;
 	int mRangeY;
 
-	RECT mRangeBox;
-
 	vector<vector<Tile*>>* mTileListPtr;
 	vector<vector<MapObject*>>* mMapObjectListPtr;
+	TrailManager* mTrailManager;
+	vector<InvenItem*> mInvenItemList;
+
+	float mSpeed;
+
+	int mInputType;
+
+	float mChangeT;
+
+	float mIsDirectionKeyDown;
 
 	bool mIsAttackingTemp;
 
 	bool mIsGettingItemThisFrame;
 
-	TrailManager* mTrailManager;
-
 	bool mIsChangable;
 
-	vector<InvenItem*> mInvenItemList;
-
-	bool mIsLKeyOn;
+	bool mIsInfoOn;
 
 public:
 	Player(const string& name, float x, float y);
@@ -140,11 +136,11 @@ public:
 	void InputXKey(); // 'X' key: throw item
 	void InputCKey(); // 'C' key: change form // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
 	void InputVKey(); // 'V' key: turn item
+	void InputLKey(); // 'L' key: turn on/off gizmo
 	bool CheckTileType(TileType tileType);
 	void CheckRange();
 	void ChangeCurrentAnimation();
 
-	void InputLKey(); // 'L' key: turn on/off gizmo
 	void RenderTestText(HDC hdc);
 
 public:

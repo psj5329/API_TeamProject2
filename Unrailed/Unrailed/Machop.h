@@ -20,8 +20,6 @@ class Machop : public Train
 	Animation* mRightIntercept;
 
 public:
-	//Machop();
-
 	void Init()override;
 	void Release()override;
 	void Update()override;

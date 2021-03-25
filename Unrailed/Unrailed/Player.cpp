@@ -57,7 +57,7 @@ void Player::Init()
 
 	mIsChangable = true;
 
-	mIsLKeyOn = true;
+	mIsInfoOn = true;
 
 	// {{ 트레일 줍기 불가능해서 임시로 세팅
 	for (int i = 0; i < 3; ++i)
@@ -102,7 +102,7 @@ void Player::Render(HDC hdc)
 	//RenderRect(hdc, mColBox);
 
 	// {{ 현재 타일, 다음 타일 확인용 // 유찬
-	if (mIsLKeyOn)
+	if (mIsInfoOn)
 	{
 		RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
 		RECT nextRc = (*mTileListPtr)[mNextTileY][mNextTileX]->GetRect();
@@ -1061,10 +1061,10 @@ void Player::InputLKey()
 {
 	if (INPUT->GetKeyDown('L'))
 	{
-		if (mIsLKeyOn)
-			mIsLKeyOn = false;
+		if (mIsInfoOn)
+			mIsInfoOn = false;
 		else
-			mIsLKeyOn = true;
+			mIsInfoOn = true;
 	}
 }
 
@@ -1080,7 +1080,7 @@ void Player::RenderTestText(HDC hdc)
 	if (mChangeT)
 		TextOut(hdc, (int)mX - 20 - cam.left, (int)mY - 25 - cam.top, strChange.c_str(), (int)strChange.length());
 
-	if (mIsLKeyOn)
+	if (mIsInfoOn)
 	{
 		wstring strTile = L"tile x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
 		TextOut(hdc, (int)mX + 25 - cam.left, (int)mY - cam.top, strTile.c_str(), (int)strTile.length());
