@@ -12,7 +12,8 @@ class Voltorb : public Train
 	Animation* mSleep;
 
 public:
-	void Init()override;
+	void Init()override {};
+	void Init(int x, int y, int image);
 	void Release()override;
 	void Update()override;
 	void Render(HDC hdc)override;

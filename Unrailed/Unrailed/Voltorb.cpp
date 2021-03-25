@@ -6,7 +6,7 @@
 #include "Trail.h"
 #include "Camera.h"
 
-void Voltorb::Init()
+void Voltorb::Init(int x, int y, int image)
 {
 	mExplodeImage = IMAGEMANAGER->FindImage(L"explode");
 	mImage = IMAGEMANAGER->FindImage(L"Voltorb");
@@ -14,17 +14,22 @@ void Voltorb::Init()
 	ReadyAnimation();
 
 	//부모 클래스 (GameObject) 변수
-	mX = WINSIZEX / 2;
-	mY = WINSIZEY / 2;
+	mX = x;
+	mY = y;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+	SetImage(image);
 
 	//Electrode 변수
 	mDirection = Direction::Right;
 	mState = State::Move;
 	mSpeed = 100.f;
 
+	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, this);
+	
+	mCurrentX = mX / TileSize;
+	mCurrentY = mY / TileSize;
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
 	mCurrentAnimation->Play();
@@ -102,16 +107,30 @@ void Voltorb::Update()
 	}
 
 	//폭발
-	//if (mIsExplode == false)
-	//{
-	//	if (mX >= TileSize || mX <= TileSize || mY >= TileSize || mY <= TileSize)
-	//	{
-	//		mIsExplode = true;
-	//		mState = State::Explode;
-	//		SetAnimation();
-	//	}
-	//}
+	if (CheckTileEdge() == true)
+	{
+		//다음 녀석이 트레일인지 아닌지 불값을 뱉는 함수
+		//false면 isexplode
+		if (CheckNextTrailType() == false)
+		{
+			mIsExplode = true;
+		}
 
+		//ispassed를 true로 해주는 함수
+		//다음 (넘어가려는) 트레일에 ispassed를 체크하는 함수
+		//그 위에 함수가 true면 상태를 isexplode로
+		if (CheckNextIsPassed() == true)
+		{
+			mIsExplode = true;
+		}
+	}
+	if (mIsExplode == true && mState != State::Explode)
+	{
+		mState = State::Explode;
+		SetAnimation();
+	}
+
+	
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 }
@@ -122,6 +141,8 @@ void Voltorb::Render(HDC hdc)
 	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+
+	GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);
 }
 
 void Voltorb::ReadyAnimation()

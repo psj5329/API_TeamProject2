@@ -13,7 +13,7 @@ void Train::SetTarget()
 
 	Direction dir = (Direction)mTrailList[indexY][indexX]->GetDirection();
 	mDirection = dir;
-
+	
 	if (dir == Direction::Down)
 	{
 		mTargetX = indexX;
@@ -84,6 +84,84 @@ bool Train::CheckTile()
 		{
 			return true;
 		}
+	}
+}
+
+bool Train::CheckTileEdge()
+{
+	float trailBottom = mTrailList[mCurrentY][mCurrentX]->GetRect().bottom;
+	float trailTop = mTrailList[mCurrentY][mCurrentX]->GetRect().top;
+	float trailLeft = mTrailList[mCurrentY][mCurrentX]->GetRect().left;
+	float trailRight = mTrailList[mCurrentY][mCurrentX]->GetRect().right;
+
+	if (mDirection == Direction::Down)
+	{
+		if (mY >= trailBottom)
+		{
+			mTrailList[mCurrentY][mCurrentX]->SetIsPassed(true);
+			mCurrentY += 1;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	if (mDirection == Direction::Up)
+	{
+		if (mY <= trailTop)
+		{
+			mTrailList[mCurrentY][mCurrentX]->SetIsPassed(true);
+			mCurrentY -= 1;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	if (mDirection == Direction::Left)
+	{
+		if (mX <= trailLeft)
+		{
+			mTrailList[mCurrentY][mCurrentX]->SetIsPassed(true);
+			mCurrentX -= 1;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	if (mDirection == Direction::Right)
+	{
+		if (mX >= trailRight)
+		{
+			mTrailList[mCurrentY][mCurrentX]->SetIsPassed(true);
+			mCurrentX += 1;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+}
+
+bool Train::CheckNextIsPassed()
+{
+	return mTrailList[mCurrentY][mCurrentX]->GetIsPassed();
+}
+
+bool Train::CheckNextTrailType()
+{
+	if (mTrailList[mCurrentY][mCurrentX]->GetTrailType() == ItemType::None)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
 	}
 }
 
