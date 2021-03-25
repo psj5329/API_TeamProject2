@@ -15,11 +15,11 @@ enum DirectionEight
 	DirectionEightEnd
 };
 
-enum State
+enum PlayerState
 {
 	Idle,
 	Move,
-	StateEnd
+	PlayerStateEnd
 };
 
 enum Form
@@ -38,18 +38,16 @@ enum ItemName
 	ItemNameEnd
 };
 
-enum ItemTypeP // 추후에 아이템 타입 확정되면 삭제
-{
-	None,
-	Green,
-	Blue,
-	Red
-};
-
-struct InvenItem
+class InvenItem
 {
 	ItemName itemName;
-	ItemTypeP itemType; // 추후에 아이템 타입 확정되면 타입 이름만 변경
+	ItemType itemType;
+
+public:
+	ItemName GetName() const { return itemName; }
+	ItemType GetType() const { return itemType; }
+	void SetName(ItemName name) { itemName = name; }
+	void SetType(ItemType type) { itemType = type; }
 };
 
 class Image;
@@ -84,7 +82,7 @@ class Player : public GameObject
 	RECT mColBox;
 
 	DirectionEight mDir;
-	State mState;
+	PlayerState mState;
 
 	float mSpeed;
 
@@ -99,15 +97,18 @@ class Player : public GameObject
 	int mTileX;
 	int mTileY;
 
-	int mNextTileX; // 반드시 다음 것은 아님(순서 때문에 값이 변함)
-	int mNextTileY; // 반드시 다음 것은 아님(순서 때문에 값이 변함)
+	int mNextTileX;
+	int mNextTileY;
+
+	int mRangeX;
+	int mRangeY;
+
+	RECT mRangeBox;
 
 	vector<vector<Tile*>>* mTileListPtr;
 	vector<vector<MapObject*>>* mMapObjectListPtr;
 
 	bool mIsAttackingTemp;
-
-	//vector<GameObject*> mItemList;
 
 	bool mIsGettingItemThisFrame;
 
@@ -137,7 +138,7 @@ public:
 	void InputXKey(); // 'X' key: throw item
 	void InputCKey(); // 'C' key: change form // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
 	bool CheckTileType(TileType tileType);
-	void ChangeForm(); // 지울 예정인 함수 // 현재 호출하지 않고 있음
+	void CheckRange();
 	void ChangeCurrentAnimation();
 
 	void RenderTestText(HDC hdc);
@@ -149,6 +150,5 @@ public:
 
 	void SetTileListPtr(vector<vector<Tile*>>* tileListPtr) { mTileListPtr = tileListPtr; }
 	void SetMapObjectListPtr(vector<vector<MapObject*>>* mapObjectListPtr) { mMapObjectListPtr = mapObjectListPtr; }
-
 	void SetTrailManagerPtr(TrailManager* trailManager) { mTrailManager = trailManager; }
 };

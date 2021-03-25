@@ -1,6 +1,7 @@
 #pragma once
 #include "Tile.h"
 #include "MapObject.h"
+
 class Tile;
 class TileMap
 {
@@ -35,4 +36,3 @@ public:
 	vector<vector<Tile*>>* GetTileListPtr() { return &mTileList; }
 	vector<vector<MapObject*>>* GetObjectListPtr() { return &mMapObjectList; }
 };
-

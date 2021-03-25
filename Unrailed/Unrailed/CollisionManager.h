@@ -4,6 +4,7 @@ class Player;
 class TileMap;
 class Tile;
 class MapObject;
+class Train;
 
 class CollisionManager
 {
@@ -26,6 +27,7 @@ public:
 	//void MapObjectCollision(Player* player, RECT* rc, vector<vector<Tile*>>* tileList, vector<vector<MapObject*>>* mapObjectList); // 유찬 생성 추가 테스트 중 아마도 지울 예정
 	void MapObjectCollision(RECT* rc, vector<vector<MapObject*>>* mapObjectList, int tileIndexX, int tileIndexY); // 유찬 생성 // 아직 디테일 부족해서 수정해야 함
 	GameObject* ItemCollision(RECT* rc);
+	Train* TrainCollision(RECT* rc, bool* isUpDownCollision); // 유찬 생성 // 가장 짧은 기차 충돌 방향 체크
 };
 
 #define COLLISIONMANAGER CollisionManager::GetInstance()

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Button.h"
 #include "Image.h"
+
 Button::Button(Image* image,float x, float y, float sizeX, float sizeY, function<void(void)> func)
 {
 	mImage = image;
@@ -8,7 +9,7 @@ Button::Button(Image* image,float x, float y, float sizeX, float sizeY, function
 	mY = y;
 	mSizeX = sizeX;
 	mSizeY = sizeY;
-	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 	mFunc = func;
 	mState = State::Normal;
 }
@@ -51,14 +52,13 @@ void Button::Render(HDC hdc)
 	//	RenderRect(hdc, rc);
 	//}
 
-	TextOut(hdc, mX - mSizeX / 4, mY - mSizeY / 4, mText.c_str(), mText.length());
+	TextOut(hdc, mX - mSizeX / 4, mY - mSizeY / 4, mText.c_str(), (int)mText.length());
 	if (mState == State::Normal)
-		mImage->ScaleRender(hdc,mRect.left,mRect.top,mSizeX,mSizeY);
+		mImage->ScaleRender(hdc, mRect.left, mRect.top, (int)mSizeX, (int)mSizeY);
 	else
 	{
 		float sizeX = mSizeX * 0.75f;
 		float sizeY = mSizeY * 0.75f;
-		mImage->ScaleRender(hdc, mRect.left, mRect.top, sizeX, sizeY);
-
+		mImage->ScaleRender(hdc, mRect.left, mRect.top, (int)sizeX, (int)sizeY);
 	}
 }

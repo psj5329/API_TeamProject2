@@ -6,6 +6,11 @@
 #include "Trail.h"
 #include "Camera.h"
 
+//Machop::Machop()
+//	: Train()
+//{
+//}
+
 void Machop::Init()
 {
 	mName = "Machop";
@@ -374,6 +379,19 @@ void Machop::InterceptOre()
 			mState = State::Intercept;
 			SetAnimation();
 		}
+	}
+}
+
+void Machop::InterceptOre(ItemType itemType)
+{
+	if (mOreCount <= 5)
+	{
+		Ore* ore = new Ore();
+		++mOreCount;
+		ore->SetOreType(itemType);
+		mOreList.push_back(ore);
+		mState = State::Intercept;
+		SetAnimation();
 	}
 }
 
