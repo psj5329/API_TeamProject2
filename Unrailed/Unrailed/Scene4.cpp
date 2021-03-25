@@ -32,34 +32,36 @@ void Scene4::Init()
 
 	mTrailManager = new TrailManager();
 	mTrailManager->Init(mTileMap->GetYTileCount(), mTileMap->GetXTileCount());
-	mTrailManager->InsertTrail(0, 5, ItemType::Green, 0); // 0: down 1: up 2: left 3: right
-	mTrailManager->InsertTrail(1, 5, ItemType::Green, 0);
-	mTrailManager->InsertTrail(2, 5, ItemType::Green, 0);
-	mTrailManager->InsertTrail(3, 5, ItemType::Green, 0);
+	mTrailManager->PlaceTrail(0, 5, ItemType::Green, 0); // 0: down 1: up 2: left 3: right
+	mTrailManager->PlaceTrail(1, 5, ItemType::Green, 0);
+	mTrailManager->SetStartIndex(0, 5);
 
-	mTrailManager->InsertTrail(4, 5, ItemType::Green, 3);
-	mTrailManager->InsertTrail(4, 6, ItemType::Green, 3);
+	mTrailManager->PlaceTrail(2, 5, ItemType::Green, 0);
+	mTrailManager->PlaceTrail(3, 5, ItemType::Green, 0);
+				   
+	mTrailManager->PlaceTrail(4, 5, ItemType::Green, 3);
+	mTrailManager->PlaceTrail(4, 6, ItemType::Green, 3);
+				   
+	mTrailManager->PlaceTrail(4, 7, ItemType::Green, 0);
+	mTrailManager->PlaceTrail(5, 7, ItemType::Green, 0);
+	mTrailManager->PlaceTrail(6, 7, ItemType::Green, 0);
+				   
+	mTrailManager->PlaceTrail(7, 7, ItemType::Green, 2);
+	mTrailManager->PlaceTrail(7, 6, ItemType::Green, 2);
+	mTrailManager->PlaceTrail(7, 5, ItemType::Green, 2);
+	mTrailManager->PlaceTrail(7, 4, ItemType::Green, 2);
+				   
+	mTrailManager->PlaceTrail(7, 3, ItemType::Green, 1);
+	mTrailManager->PlaceTrail(6, 3, ItemType::Green, 1);
+	mTrailManager->PlaceTrail(5, 3, ItemType::Green, 1);
 
-	mTrailManager->InsertTrail(4, 7, ItemType::Green, 0);
-	mTrailManager->InsertTrail(5, 7, ItemType::Green, 0);
-	mTrailManager->InsertTrail(6, 7, ItemType::Green, 0);
-
-	mTrailManager->InsertTrail(7, 7, ItemType::Green, 2);
-	mTrailManager->InsertTrail(7, 6, ItemType::Green, 2);
-	mTrailManager->InsertTrail(7, 5, ItemType::Green, 2);
-	mTrailManager->InsertTrail(7, 4, ItemType::Green, 2);
-
-	mTrailManager->InsertTrail(7, 3, ItemType::Green, 1);
-	mTrailManager->InsertTrail(6, 3, ItemType::Green, 1);
-	mTrailManager->InsertTrail(5, 3, ItemType::Green, 1);
-
-	Machop* machop = new Machop();
-	machop->Init();
-	machop->SetX(5 * 48 + 24);
-	machop->SetY(24);
-	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, machop);
-	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
-	machop->SetTrail(trailListPtr);
+//	Machop* machop = new Machop();
+//	machop->Init();
+//	machop->SetX(5 * 48 + 24);
+//	machop->SetY(24);
+//	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, machop);
+//	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+//	machop->SetTrail(trailListPtr);
 
 	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
 	mTempPlayer->SetTileListPtr(tileListPtr);
@@ -80,6 +82,8 @@ void Scene4::Update()
 {
 	mTileMap->Update();
 	mTrailManager->Update();
+	//mTrailManager->FindTail(&mTailY, &mTailX);
+
 	OBJECTMANAGER->Update();
 }
 
@@ -88,6 +92,13 @@ void Scene4::Render(HDC hdc)
 	mTileMap->Render(hdc);
 	mTrailManager->Render(hdc);
 	OBJECTMANAGER->Render(hdc);
+
+	//wstring tailY = L"tailY : " + to_wstring(mTailY);
+	//wstring tailX = L"tailX : " + to_wstring(mTailX);
+	//wstring strFPS = L"FPS : " + to_wstring(fps);
+
+	//TextOut(hdc, 10, 55, tailY.c_str(), tailY.length());
+	//TextOut(hdc, 10, 70, tailX.c_str(), tailX.length());
 
 	// {{ 완성본에서 지워야 할 내용 시작
 	wstring strScene = L"이건 4번 씬 / 방향키: 이동 / 이동 중 shift: 대시 / C: 변신";

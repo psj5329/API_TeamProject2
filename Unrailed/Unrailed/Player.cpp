@@ -56,6 +56,15 @@ void Player::Init()
 	mIsGettingItemThisFrame = false;
 
 	mIsChangable = true;
+
+	// {{ 트레일 줍기 불가능해서 임시로 세팅
+	for (int i = 0; i < 3; ++i)
+	{
+		InvenItem* invenItem = new InvenItem();
+		invenItem->SetName(ItemName::ItemTrail);
+		invenItem->SetType(ItemType::Green);
+		mInvenItemList.push_back(invenItem);
+	} // 트레일 줍기 불가능해서 임시로 세팅 // 여기까지 }}
 }
 
 void Player::Release()
@@ -672,71 +681,126 @@ void Player::InputXKey()
 		if (!mInvenItemList.size())
 			return;
 
-		RECT temp;
+		ItemName itemName = mInvenItemList[0]->GetName();
 
-		ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
-
-		vector<GameObject*> trainList = OBJECTMANAGER->GetObjectList(ObjectLayer::TRAIN);
-
-		for (int i = 0; i < trainList.size(); ++i)
+		if (itemName == ItemName::ItemOre)
 		{
-			// 지금은 machop인지 검사 따로 안하고 있음 // machop 아니면 continue하게 해야 함
+			RECT temp;
 
-			RECT trainRc = trainList[i]->GetRect(); // 추후에 렉트 종류 새로 따면 바꾸기
+			ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
 
-			if (IntersectRect(&temp, &mRangeBox, &trainRc))
+			vector<GameObject*> trainList = OBJECTMANAGER->GetObjectList(ObjectLayer::TRAIN);
+
+			for (int i = 0; i < trainList.size(); ++i)
 			{
-				int oreCnt = ((Machop*)trainList[i])->GetOreCount();
-				if (oreCnt > 6)
-					continue;
+				// 지금은 machop인지 검사 따로 안하고 있음 // machop 아니면 continue하게 해야 함
 
-				((Machop*)trainList[i])->InterceptOre(itemType);
-				mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
-				return;
-			}
-		}
+				RECT trainRc = trainList[i]->GetRect(); // 추후에 렉트 종류 새로 따면 바꾸기
 
-		Tile* currentTile = (*mTileListPtr)[mTileY][mTileX];
-		TileType currentTileType = currentTile->GetTileType();
-
-		if (currentTileType == TileType::Water || currentTileType == TileType::Lava || currentTileType == TileType::ice)
-			return;
-
-		RECT currentRc = currentTile->GetRect();
-		vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
-
-		for (int i = 0; i < (*itemListPtr).size(); ++i)
-		{
-			GameObject* item = (*itemListPtr)[i];
-			POINT pt = { (LONG)(item->GetX()), (LONG)(item->GetY()) };
-		
-			if (PtInRect(&currentRc, pt))
-			{
-				if (((Ore*)item)->GetOreType() == itemType)
+				if (IntersectRect(&temp, &mRangeBox, &trainRc))
 				{
-					((Ore*)item)->PlusCount();
+					int oreCnt = ((Machop*)trainList[i])->GetOreCount();
+					if (oreCnt > 6)
+						continue;
+
+					((Machop*)trainList[i])->InterceptOre(itemType);
 					mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
 					return;
 				}
-				else
+			}
+
+			Tile* currentTile = (*mTileListPtr)[mTileY][mTileX];
+			TileType currentTileType = currentTile->GetTileType();
+
+			if (currentTileType == TileType::Water || currentTileType == TileType::Lava || currentTileType == TileType::ice)
+				return;
+
+			RECT currentRc = currentTile->GetRect();
+			vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+
+			for (int i = 0; i < (*itemListPtr).size(); ++i)
+			{
+				GameObject* item = (*itemListPtr)[i];
+				POINT pt = { (LONG)(item->GetX()), (LONG)(item->GetY()) };
+
+				if (PtInRect(&currentRc, pt))
+				{
+					if (((Ore*)item)->GetOreType() == itemType)
+					{
+						((Ore*)item)->PlusCount();
+						mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+						return;
+					}
+					else
+						return;
+				}
+			}
+
+			vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+			Trail* currentTrail = (Trail*)(*trailListPtr)[mTileY][mTileX];
+
+			if (currentTrail->GetTrailType() != ItemType::None)
+				return;
+
+			Ore* ore = new Ore();
+			ore->Drop(TileSize * mTileX, TileSize * mTileY, itemType);
+			OBJECTMANAGER->AddObject(ObjectLayer::ITEM, ore);
+			mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+		}
+		else if (itemName == ItemName::ItemTrail)
+		{
+			Tile* currentTile = (*mTileListPtr)[mTileY][mTileX];
+			TileType currentTileType = currentTile->GetTileType();
+			ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
+
+			if (currentTileType == TileType::ice)
+				return;
+			else if ((currentTileType == TileType::Water) && (itemType != ItemType::Blue))
+				return;
+			else if ((currentTileType == TileType::Lava) && (itemType != ItemType::Red))
+				return;
+
+			RECT currentRc = currentTile->GetRect();
+			vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+
+			for (int i = 0; i < (*itemListPtr).size(); ++i)
+			{
+				GameObject* item = (*itemListPtr)[i];
+				POINT pt = { (LONG)(item->GetX()), (LONG)(item->GetY()) };
+
+				if (PtInRect(&currentRc, pt))
 					return;
 			}
+
+			vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+			Trail* currentTrail = (Trail*)(*trailListPtr)[mTileY][mTileX];
+
+			if (currentTrail->GetTrailType() != ItemType::None)
+				return;
+
+			mTrailManager->PlaceTrail(mTileY, mTileX, itemType, 0); // 0: down 1: up 2: left 3: right
+			mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+
+			
+			// 놓기까지 일단 완료 // 1. 바닥설치(완성_추가테스트필요) 2. 돌리기(오늘 끝내야함) 3. 합성소에서 받기(호준이 완성되면 시작)
+
+
+
+
+
+
+
+
+
+
+
 		}
 
-		vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
-		Trail* currentTrail = (Trail*)(*trailListPtr)[mTileY][mTileX];
-
-		if (currentTrail->GetTrailType() != ItemType::None)
-			return;
-
-		Ore* ore = new Ore();
-		ore->Drop(TileSize * mTileX, TileSize * mTileY, itemType);
-		OBJECTMANAGER->AddObject(ObjectLayer::ITEM, ore);
-		mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+		
 
 		// 아이템(3) 내려놓을 때 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물)//내가 가지고 있는 것이랑 다를 때 4. 기찻길 > 일 때 놓을 수 없음
-		// 기찻길(4) 내려놓을 때 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물) 4. 기찻길 5. 비어있더라도 타일과 기찻길의 속성이 안 맞을 때 > 일 때 놓을 수 없음
-		
+		// 기찻길(4) 내려놓을 때 1. 못가는타일// 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물) 4. 기찻길 5. 비어있더라도 타일과 기찻길의 속성이 안 맞을 때 > 일 때 놓을 수 없음
+		// 기찻길은 버리기는 안하기로.(남훈)
 		
 		
 
@@ -1116,9 +1180,19 @@ void Player::RenderTestText(HDC hdc)
 		TextOut(hdc, (int)WINSIZEX * 3 / 4, (int)200 + 25 * i, strActive.c_str(), (int)strActive.length());
 	}
 
+	wstring strInv = L"========== 인벤 ==========";
+	TextOut(hdc, (int)WINSIZEX * 3 / 4, 350, strInv.c_str(), (int)strInv.length());
 	for (int i = 0; i < mInvenItemList.size(); ++i)
 	{
+		ItemName name = mInvenItemList[i]->GetName();
 		ItemType type = mInvenItemList[i]->GetType();
+
+		wstring strName = L"";
+		if (name == ItemName::ItemOre)
+			strName = L"Ore, ";
+		else if (name == ItemName::ItemTrail)
+			strName = L"Trail, ";
+
 		wstring strType = L"";
 		if (type == ItemType::None)
 			strType = L"Type: None";
@@ -1128,8 +1202,8 @@ void Player::RenderTestText(HDC hdc)
 			strType = L"Type: Blue";
 		else if (type == ItemType::Red)
 			strType = L"Type: Red";
-		wstring strActive = to_wstring(i) + L": " + strType;
+		wstring strActive = to_wstring(i) + L": " + strName + strType;
 
-		TextOut(hdc, (int)WINSIZEX * 3 / 4, (int)350 + 25 * i, strActive.c_str(), (int)strActive.length());
+		TextOut(hdc, (int)WINSIZEX * 3 / 4, (int)372 + 22 * i, strActive.c_str(), (int)strActive.length());
 	}
 }
