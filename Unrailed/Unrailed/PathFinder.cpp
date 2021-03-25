@@ -40,8 +40,8 @@ vector<Tile*> PathFinder::FindPath(vector<vector<Tile*>> tileList, vector<vector
 		if (currentTile == nullptr)
 			return path;
 
-		int currentX = currentTile->GetX() / tileList[0].size();
-		int currentY = currentTile->GetY() / tileList.size();
+		int currentX = currentTile->GetX() / TileSize;
+		int currentY = currentTile->GetY() / TileSize;
 
 		// 주변 타일 검사하자
 		for (int j = currentY - 1; j <= currentY + 1; ++j)
@@ -132,17 +132,24 @@ vector<Tile*> PathFinder::FindPath(vector<vector<Tile*>> tileList, vector<vector
 			currentTile = tileMin;
 		}
 		else
+			return path;
+
+		if(tileMin == endTile)
 		{
 			Tile* temp = tileMin;
+			temp->SetX(temp->GetX() + TileSize / 2);		// 칸에 맞춰서 움직이자
+			temp->SetY(temp->GetY() + TileSize / 2);
 			path.push_back(temp);
 			while (loadList[temp->GetY() / TileSize][temp->GetX() / TileSize].parent != nullptr)
 			{
 				temp = loadList[temp->GetY() / TileSize][temp->GetX() / TileSize].parent;
+				temp->SetX(temp->GetX() + TileSize / 2);
+				temp->SetY(temp->GetY() + TileSize / 2);
 				path.push_back(temp);
 			}
 
 			reverse(path.begin(), path.end());
-
+			path.erase(path.begin());
 			return path;
 		}
 	}
@@ -154,6 +161,5 @@ float PathFinder::CalcMinDistance(int x1, int y1, int x2, int y2)
 	int minPathX = abs(x2 - x1);
 	int minPathY = abs(y2 - y1);
 	//int minimum = min(minPathX, minPathY);
-	float distance = sqrtf(pow(minPathX, 2) + pow(minPathY, 2));
-	return distance;
+	return minPathX + minPathY;
 }
