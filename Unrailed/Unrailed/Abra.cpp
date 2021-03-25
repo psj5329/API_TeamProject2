@@ -26,7 +26,7 @@ void Abra::Init()
 	mDirection = Direction::Right;
 	mState = State::Move;
 	mSpeed = 100.f;
-	mLevel = 1;
+	mLevel = 3;
 	mSynthesisCoolTime = 0;
 	mIsSynthesis = false;
 	mTrailCount = 0;
@@ -34,6 +34,8 @@ void Abra::Init()
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
 	mCurrentAnimation->Play();
+
+	mOreBroken = false;
 }
 
 void Abra::Release()
@@ -114,41 +116,35 @@ void Abra::Update()
 	switch (mLevel)
 	{
 	case 1:
-		mImage = IMAGEMANAGER->FindImage(L"Abra");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Abra");
 		break;
 	case 2:
-		mImage = IMAGEMANAGER->FindImage(L"Kadabra");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Kadabra");
 		break;
 	case 3:
-		mImage = IMAGEMANAGER->FindImage(L"Alakazam");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Alakazam");
 		break;
 	}
-	if (INPUT->GetKeyDown('A'))
+	if (INPUT->GetKeyDown('Q'))
 	{
 		mLevel = 1;
 	}
-	if (INPUT->GetKeyDown('S'))
+	if (INPUT->GetKeyDown('W'))
 	{
 		mLevel = 2;
 	}
-	if (INPUT->GetKeyDown('D'))
+	if (INPUT->GetKeyDown('E'))
 	{
 		mLevel = 3;
 	}
 
+	//폭발
 	//if (mX >= WINSIZEX - 400 && mIsExplode == false)
 	//{
 	//	mIsExplode = true;
 	//	mState = State::Explode;
 	//	SetAnimation();
 	//}
-
-	//포문돌려서 벡터가있으면
-	//타이머 일정시간만큼빼주기
-	//타이머가 0이하면 iscreated true로
-	//
-
-
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -159,7 +155,20 @@ void Abra::Render(HDC hdc)
 	//RenderRect(hdc, mRect);
 	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+
+	wstring strTrail;
+	for (int i = 0; i < mCreatedTrailList.size(); ++i)
+	{
+		if (mCreatedTrailList[i]->trailType == ItemType::Green)
+			strTrail = L"그린" + to_wstring(mTrailCount);
+		else if (mCreatedTrailList[i]->trailType == ItemType::Blue)
+			strTrail = L"블루" + to_wstring(mTrailCount);
+		else if (mCreatedTrailList[i]->trailType == ItemType::Red)
+			strTrail = L"레드" + to_wstring(mTrailCount);
+
+		TextOut(hdc, mX - 20, mY - 40 - i * 15, strTrail.c_str(), strTrail.length());
+	}
 }
 
 void Abra::ReadyAnimation()
@@ -203,25 +212,25 @@ void Abra::ReadyAnimation()
 	mDownSynthesis = new Animation();
 	mDownSynthesis->InitFrameByStartEnd(0, 6, 1, 6, false);
 	mDownSynthesis->SetIsLoop(false);
-	mDownSynthesis->SetFrameUpdateTime(0.3f);
+	mDownSynthesis->SetFrameUpdateTime(0.8f);
 	mDownSynthesis->SetCallbackFunc(bind(&Abra::EndSynthesis, this));
 
 	mUpSynthesis = new Animation();
 	mUpSynthesis->InitFrameByStartEnd(2, 6, 3, 6, false);
 	mUpSynthesis->SetIsLoop(false);
-	mUpSynthesis->SetFrameUpdateTime(0.3f);
+	mUpSynthesis->SetFrameUpdateTime(0.8f);
 	mUpSynthesis->SetCallbackFunc(bind(&Abra::EndSynthesis, this));
 
 	mLeftSynthesis = new Animation();
 	mLeftSynthesis->InitFrameByStartEnd(0, 7, 1, 7, false);
 	mLeftSynthesis->SetIsLoop(false);
-	mLeftSynthesis->SetFrameUpdateTime(0.4f);
+	mLeftSynthesis->SetFrameUpdateTime(0.8f);
 	mLeftSynthesis->SetCallbackFunc(bind(&Abra::EndSynthesis, this));
 
 	mRightSynthesis = new Animation();
 	mRightSynthesis->InitFrameByStartEnd(2, 7, 3, 7, false);
 	mRightSynthesis->SetIsLoop(false);
-	mRightSynthesis->SetFrameUpdateTime(0.4f);
+	mRightSynthesis->SetFrameUpdateTime(0.8f);
 	mRightSynthesis->SetCallbackFunc(bind(&Abra::EndSynthesis, this));
 }
 
@@ -326,7 +335,7 @@ void Abra::SetAnimation()
 void Abra::SynthesisOre()
 {
 	ItemType type = ItemType::None;
-	if (mTrailCount <= 2 && mMachop->GetOreList().size() >= 2 && mIsSynthesis == false)
+	if (mTrailCount <= 2 && mMachop->GetOreList().size() >= 2 && mIsSynthesis == false && mOreBroken == false)
 	{
 		mState = State::Synthesis;
 		SetAnimation();
@@ -335,20 +344,28 @@ void Abra::SynthesisOre()
 		mMachop->SetOreCount(mMachop->GetOreCount() - 2);
 
 		mIsSynthesis = true;
+		mOreBroken = true;
 	}
 	if (mIsSynthesis == true)
 	{
 		mSynthesisCoolTime += TIME->DeltaTime();
+	}
+	if (mOreBroken == true)
+	{
 		CreatedTrail* createdTrail = new CreatedTrail;
 		createdTrail->trailType = type;
 		createdTrail->isCreated = false;
 		//createdTrail->mImage = 
 		mCreatedTrailList.push_back(createdTrail);
+
+		mOreBroken = false;
 	}
 	if (mSynthesisCoolTime >= 1.5f && mIsSynthesis == true)
 	{
 		mIsSynthesis = false;
 		mSynthesisCoolTime = 0;
+
+		mTrailCount += 1;
 	}
 }
 

@@ -25,7 +25,7 @@ void Machop::Init()
 	mDirection = Direction::Right;
 	mState = State::Move;
 	mSpeed = 100.f;
-	mLevel = 1;
+	mLevel = 3;
 	mOreCount = 0;
 
 	mCurrentImage = mImage;
@@ -111,28 +111,29 @@ void Machop::Update()
 	switch (mLevel)
 	{
 	case 1:
-		mImage = IMAGEMANAGER->FindImage(L"Machop");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Machop");
 		break;
 	case 2:
-		mImage = IMAGEMANAGER->FindImage(L"Machoke");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Machoke");
 		break;
 	case 3:
-		mImage = IMAGEMANAGER->FindImage(L"Machamp");
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Machamp");
 		break;
 	}
-	if (INPUT->GetKeyDown('A'))
+	if (INPUT->GetKeyDown('Q'))
 	{
 		mLevel = 1;
 	}
-	if (INPUT->GetKeyDown('S'))
+	if (INPUT->GetKeyDown('W'))
 	{
 		mLevel = 2;
 	}
-	if (INPUT->GetKeyDown('D'))
+	if (INPUT->GetKeyDown('E'))
 	{
 		mLevel = 3;
 	}
 
+	//Æø¹ß
 	//if (mX >= WINSIZEX - 400 && mIsExplode == false)
 	//{
 	//	mIsExplode = true;
@@ -149,7 +150,7 @@ void Machop::Render(HDC hdc)
 	//RenderRect(hdc, mRect);
 	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
 	wstring strOre;
 	for (int i = 0; i < mOreList.size(); ++i)
@@ -334,7 +335,7 @@ void Machop::InterceptOre()
 {
 	if (mOreCount <= 5)
 	{
-		if (INPUT->GetKeyDown('Z'))
+		if (INPUT->GetKeyDown('A'))
 		{
 			Ore* ore = new Ore;
 
@@ -347,7 +348,7 @@ void Machop::InterceptOre()
 			mState = State::Intercept;
 			SetAnimation();
 		}
-		if (INPUT->GetKeyDown('X'))
+		if (INPUT->GetKeyDown('S'))
 		{
 			Ore* ore = new Ore;
 
@@ -360,7 +361,7 @@ void Machop::InterceptOre()
 			mState = State::Intercept;
 			SetAnimation();
 		}
-		if (INPUT->GetKeyDown('C'))
+		if (INPUT->GetKeyDown('D'))
 		{
 			Ore* ore = new Ore;
 
@@ -415,6 +416,6 @@ ItemType Machop::OreErase()
 {
 	ItemType type = (ItemType)mOreList[0]->GetOreTypeInt();
 	 mOreList.erase(mOreList.begin(), mOreList.begin() + 2); 
-
+	 
 	 return type;
 }
