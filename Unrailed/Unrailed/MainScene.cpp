@@ -65,7 +65,7 @@ void MainScene::StartButton()
 {
 	// 우선은 씬 넘어가자
 	// 나중에 창 띄워서 버트ㅡㄴ 할거얌
-	SCENEMANAGER->LoadScene(L"Scene4");
+	SCENEMANAGER->LoadScene(L"Scene1");
 }
 
 void MainScene::OptionButton()

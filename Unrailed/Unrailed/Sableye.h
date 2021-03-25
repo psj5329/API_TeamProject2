@@ -4,6 +4,7 @@
 class Sableye : public Enemy
 {
 	vector<GameObject*> mVecItem;
+	GameObject* mItem;
 	GameObject* mTarget;
 	bool mIsExistTarget;
 
@@ -13,6 +14,7 @@ public:
 	void Update();
 	void Render(HDC hdc);
 
+	void MoveToOre();
 	void ReadyAnimation();
 	void SetAnimation();
 
