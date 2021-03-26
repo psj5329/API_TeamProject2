@@ -64,6 +64,12 @@ class Tile
 
 	TileType mTileType;
 
+	int mCoverFrameIndexX;
+	int mCoverFrameIndexY;
+	float mCurrentFrameTime;	//현재 프레임 감는 시간
+	float mFrameUpdateTime;		//프레임 갱신(증가) 해야하는 시간
+	int mMaxFrame;
+
 public:
 	Tile(class Image* image, class Image* coverImage, float x, float y, float sizeX, float sizeY,
 		int frameIndexX, int frameIndexY, int type);
@@ -91,4 +97,8 @@ public:
 	void SetFrameIndexY(int indexY) { mFrameIndexY = indexY; }
 	void SetTileType(TileType tiletype) { mTileType = tiletype; }
 	void SetCoverImage();
+
+
+private:
+	void UpdateCoverFrame();
 };

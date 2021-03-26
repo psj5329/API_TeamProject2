@@ -16,6 +16,7 @@ public:
 	Animation();
 
 	void Update();
+	void UpdateMapCover();
 
 	void Play();
 	void Stop();
