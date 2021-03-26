@@ -20,7 +20,7 @@ public:
 	};
 
 public:
-	vector<Tile*> FindPath(vector<vector<Tile*>> tileList, vector<vector<MapObject*>> objectList
+	vector<Tile*> FindPath(const vector<vector<Tile*>> tileList, const vector<vector<MapObject*>> objectList
 		, int startX, int startY, int endX, int endY);
 	float CalcMinDistance(int x1, int y1, int x2, int y2);
 };
