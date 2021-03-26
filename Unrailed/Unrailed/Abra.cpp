@@ -5,32 +5,35 @@
 #include "Tile.h"
 #include "Trail.h"
 #include "Camera.h"
-#include "Ore.h"
 
-void Abra::Init()
+void Abra::Init(int x, int y, int image)
 {
-	mMachop = (Machop*)OBJECTMANAGER->FindObject("Machop");
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Abra");
+	mMachop = (Machop*)OBJECTMANAGER->FindObject("Machop");
 
 	ReadyAnimation();
+	SetImage(image);
 
-	//ºÎ¸ğ Å¬·¡½º (GameObject) º¯¼ö
-	mX = WINSIZEX / 2 - 135;
-	mY = WINSIZEY / 2;
+	//ë¶€ëª¨ í´ë˜ìŠ¤ (GameObject) ë³€ìˆ˜
+	mX = x;
+	mY = y;
 	mSizeX = mImage->GetFrameWidth() * 2.f;
 	mSizeY = mImage->GetFrameHeight() * 2.f;
 	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 
-	//Abra º¯¼ö
+	//Abra ë³€ìˆ˜
 	mDirection = Direction::Right;
 	mState = State::Move;
 	mSpeed = 100.f;
-	mLevel = 3;
 	mSynthesisCoolTime = 0;
 	mIsSynthesis = false;
 	mTrailCount = 0;
 
+	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, this);
+
+	mCurrentX = mX / TileSize;
+	mCurrentY = mY / TileSize;
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
 	mCurrentAnimation->Play();
@@ -60,7 +63,7 @@ void Abra::Update()
 
 	SynthesisOre();
 
-	//»óÅÂÁ¤ÇÏ±â
+	//ìƒíƒœì •í•˜ê¸°
 	//if (mTimer == 0)
 	//{
 	//	if (mState == State::Sleep)
@@ -95,7 +98,7 @@ void Abra::Update()
 		}
 	}
 
-	//¿òÁ÷ÀÓ
+	//ì›€ì§ì„
 	//if (mState == State::Sleep)
 	//{
 	//	mTimer += Time::GetInstance()->DeltaTime();
@@ -112,39 +115,11 @@ void Abra::Update()
 		SetTarget();
 	}
 
-	//ÁøÈ­
-	switch (mLevel)
+	if (GetIsExplode() == true && mState != State::Explode)
 	{
-	case 1:
-		mCurrentImage = IMAGEMANAGER->FindImage(L"Abra");
-		break;
-	case 2:
-		mCurrentImage = IMAGEMANAGER->FindImage(L"Kadabra");
-		break;
-	case 3:
-		mCurrentImage = IMAGEMANAGER->FindImage(L"Alakazam");
-		break;
+		mState = State::Explode;
+		SetAnimation();
 	}
-	if (INPUT->GetKeyDown('Q'))
-	{
-		mLevel = 1;
-	}
-	if (INPUT->GetKeyDown('W'))
-	{
-		mLevel = 2;
-	}
-	if (INPUT->GetKeyDown('E'))
-	{
-		mLevel = 3;
-	}
-
-	//Æø¹ß
-	//if (mX >= WINSIZEX - 400 && mIsExplode == false)
-	//{
-	//	mIsExplode = true;
-	//	mState = State::Explode;
-	//	SetAnimation();
-	//}
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
@@ -161,11 +136,11 @@ void Abra::Render(HDC hdc)
 	for (int i = 0; i < mCreatedTrailList.size(); ++i)
 	{
 		if (mCreatedTrailList[i]->trailType == ItemType::Green)
-			strTrail = L"±×¸°" + to_wstring(mTrailCount);
+			strTrail = L"ê·¸ë¦°" + to_wstring(mTrailCount);
 		else if (mCreatedTrailList[i]->trailType == ItemType::Blue)
-			strTrail = L"ºí·ç" + to_wstring(mTrailCount);
+			strTrail = L"ë¸”ë£¨" + to_wstring(mTrailCount);
 		else if (mCreatedTrailList[i]->trailType == ItemType::Red)
-			strTrail = L"·¹µå" + to_wstring(mTrailCount);
+			strTrail = L"ë ˆë“œ" + to_wstring(mTrailCount);
 
 		TextOut(hdc, mX - 20, mY - 40 - i * 15, strTrail.c_str(), strTrail.length());
 	}
@@ -396,6 +371,34 @@ void Abra::EndSynthesis()
 	}
 }
 
+void Abra::SetImage(int level)
+{
+	switch(level)
+	{
+	case 1:
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Abra");
+		break;
+	case 2:
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Kadabra");
+		break;
+	case 3:
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Alakazam");
+		break;
+	}
+	if (INPUT->GetKeyDown('Q'))
+	{
+		level = 1;
+	}
+	if (INPUT->GetKeyDown('W'))
+	{
+		level = 2;
+	}
+	if (INPUT->GetKeyDown('E'))
+	{
+		level = 3;
+	}
+}
+
 void Abra::EndExplode()
 {
 	if (mState == State::Explode)
@@ -409,7 +412,7 @@ ItemType Abra::Receive()
 	if (mCreatedTrailList.size() > 0)
 	{
 		ItemType type = mCreatedTrailList[0]->trailType;
-		//º¤ÅÍ¿¡¼­ Ã¹¹øÂ° Á¦°Å
+		//ë²¡í„°ì—ì„œ ì²«ë²ˆì§¸ ì œê±°
 
 		return type;
 	}

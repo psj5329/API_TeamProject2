@@ -32,8 +32,9 @@ protected:
 	float mSpeedY;
 	int mTargetX;
 	int mTargetY;
+	int mCurrentX;
+	int mCurrentY;
 	float mSynthesisCoolTime;
-	int mLevel;
 	bool mStop;
 	bool mIsExplode;
 	bool mIsSynthesis;
@@ -60,5 +61,11 @@ public:
 	void SetTrail(vector <vector <Trail*>>* trail) { mTrailList = *trail; }
 	void SetTarget();
 	bool CheckTile();
+	bool CheckTileEdge();
 	void SetSpeed();
+	bool CheckNextIsPassed();
+	bool CheckNextTrailType();
+	
+	bool GetIsExplode() { return mIsExplode; }
+	void SetIsExplode(bool explode) { mIsExplode = explode; }
 };

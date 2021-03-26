@@ -15,6 +15,7 @@ class Scene6 : public Scene
 	vector <Voltorb*> mVoltorbVec;
 	Abra* mAbra;
 	Machop* mMachop;
+	Voltorb* mVoltorb;
 
 public:
 	void Init()override;
