@@ -15,14 +15,14 @@ void Machop::Init(int x, int y, int image)
 	ReadyAnimation();
 	SetImage(image);
 
-	//Î∂ÄÎ™® ÌÅ¥ÎûòÏä§ (GameObject) Î≥ÄÏàò
+	//∫Œ∏ ≈¨∑°Ω∫ (GameObject) ∫Øºˆ
 	mX = x;
 	mY = y;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Machop Î≥ÄÏàò
+	//Machop ∫Øºˆ
 	mDirection = Direction::Right;
 	mState = State::Move;
 	mSpeed = 100.f;
@@ -59,7 +59,7 @@ void Machop::Update()
 
 	InterceptOre();
 
-	//ÏÉÅÌÉúÏ†ïÌïòÍ∏∞
+	//ªÛ≈¬¡§«œ±‚
 	//if (mTimer == 0)
 	//{
 	//	if (mState == State::Sleep)
@@ -94,7 +94,7 @@ void Machop::Update()
 		}
 	}
 
-	//ÏõÄÏßÅÏûÑ
+	//øÚ¡˜¿”
 	//if (mState == State::Sleep)
 	//{
 	//	mTimer += Time::GetInstance()->DeltaTime();
@@ -112,7 +112,7 @@ void Machop::Update()
 	}
 
 
-	//Ìè≠Î∞ú
+	//∆¯πﬂ
 	if (GetIsExplode() == true && mState != State::Explode)
 	{
 		mState = State::Explode;
@@ -134,20 +134,20 @@ void Machop::Render(HDC hdc)
 	for (int i = 0; i < mOreList.size(); ++i)
 	{
 		if (mOreList[i]->GetOreType() == ItemType::Green)
-			strOre = L"Í∑∏Î¶∞" + to_wstring(mOreCount);
+			strOre = L"±◊∏∞" + to_wstring(mOreCount);
 		else if (mOreList[i]->GetOreType() == ItemType::Blue)
-			strOre = L"Î∏îÎ£®" + to_wstring(mOreCount);
+			strOre = L"∫Ì∑Á" + to_wstring(mOreCount);
 		else if (mOreList[i]->GetOreType() == ItemType::Red)
-			strOre = L"Î†àÎìú" + to_wstring(mOreCount);
+			strOre = L"∑πµÂ" + to_wstring(mOreCount);
 
 		TextOut(hdc, mX - 20, mY - 40 - i * 15, strOre.c_str(), strOre.length());
 	}
 
-/*	wstring strBlue = L"Î∏îÎ£®:" + to_wstring(mOreCount);
-	TextOut(hdc, mX - 20, mY - 55, strBlue.c_str(), strBlue.length());
+	/*	wstring strBlue = L"∫Ì∑Á:" + to_wstring(mOreCount);
+		TextOut(hdc, mX - 20, mY - 55, strBlue.c_str(), strBlue.length());
 
-	wstring strRed = L"Î†àÎìú:" + to_wstring(mOreCount);
-	TextOut(hdc, mX - 20, mY - 70, strRed.c_str(), strRed.length());*/
+		wstring strRed = L"∑πµÂ:" + to_wstring(mOreCount);
+		TextOut(hdc, mX - 20, mY - 70, strRed.c_str(), strRed.length());*/
 }
 
 void Machop::ReadyAnimation()
@@ -319,7 +319,7 @@ void Machop::InterceptOre()
 
 			mOreCount++;
 
-			ore->SetOreType(ItemType::Green);//Í∑∏Î¶∞
+			ore->SetOreType(ItemType::Green);//±◊∏∞
 
 			mOreList.push_back(ore);
 
@@ -332,7 +332,7 @@ void Machop::InterceptOre()
 
 			mOreCount++;
 
-			ore->SetOreType(ItemType::Blue);//Î∏îÎ£®
+			ore->SetOreType(ItemType::Blue);//∫Ì∑Á
 
 			mOreList.push_back(ore);
 
@@ -345,7 +345,7 @@ void Machop::InterceptOre()
 
 			mOreCount++;
 
-			ore->SetOreType(ItemType::Red);//Î†àÎìú
+			ore->SetOreType(ItemType::Red);//∑πµÂ
 
 			mOreList.push_back(ore);
 
@@ -434,7 +434,7 @@ void Machop::EndExplode()
 ItemType Machop::OreErase()
 {
 	ItemType type = (ItemType)mOreList[0]->GetOreTypeInt();
-	 mOreList.erase(mOreList.begin(), mOreList.begin() + 2); 
-	 
-	 return type;
+	mOreList.erase(mOreList.begin(), mOreList.begin() + 2);
+
+	return type;
 }

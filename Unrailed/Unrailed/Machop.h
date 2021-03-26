@@ -7,7 +7,7 @@ class Animation;
 class Machop : public Train
 {
 	vector <Ore*> mOreList;
-	
+
 	Animation* mDownMove;
 	Animation* mUpMove;
 	Animation* mLeftMove;
@@ -34,7 +34,7 @@ public:
 	void EndIntercept();
 
 	void InterceptOre();
-	void InterceptOre(ItemType itemType); // À¯Âù Ãß°¡
+	void InterceptOre(ItemType itemType); // �ּ� ���Ģa~~~
 	int GetOreCount() { return mOreCount; }
 	void SetOreCount(int i) { mOreCount = i; }
 	vector <Ore*> GetOreList() { return mOreList; }
