@@ -8,6 +8,8 @@
 #include "TrailManager.h"
 #include "Ore.h"
 #include "Machop.h"
+#include "Bag.h"
+#include "BagItem.h"
 
 Player::Player(const string& name, float x, float y)
 	: GameObject(name, x, y)
@@ -59,13 +61,18 @@ void Player::Init()
 
 	mIsInfoOn = true;
 
+	mBag = new Bag();
+	mBagItemListPtr = mBag->GetBagItemListPtr();
+
 	// {{ 트레일 줍기 불가능해서 임시로 세팅
 	for (int i = 0; i < 3; ++i)
 	{
-		InvenItem* invenItem = new InvenItem();
-		invenItem->SetName(ItemName::ItemTrail);
-		invenItem->SetType(ItemType::Green);
-		mInvenItemList.push_back(invenItem);
+		BagItem* bagItem = new BagItem();
+		//bagItem->SetName(ItemName::ItemTrail);
+		//bagItem->SetType(ItemType::Green);
+		bagItem->Init(ItemName::ItemTrail, ItemType::Green);
+		mBagItemListPtr->push_back(bagItem);
+		//mBagItemList.push_back(bagItem);
 	} // 트레일 줍기 불가능해서 임시로 세팅 // 여기까지 }}
 }
 
@@ -95,6 +102,8 @@ void Player::Update()
 	// 플레이어 업데이트 시 기능 추가하려면 여기에 추가하기
 
 	mCurrentAnimation->Update();
+
+	mBag->Update((int)mX, (int)mY);
 }
 
 void Player::Render(HDC hdc)
@@ -118,6 +127,8 @@ void Player::Render(HDC hdc)
 
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
 		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
+
+	mBag->Render(hdc);
 }
 
 void Player::InitAnimation()
@@ -626,24 +637,30 @@ void Player::InputZKey()
 {
 	if (INPUT->GetKeyDown('Z'))
 	{
-		if (!mInvenItemList.size() || (mInvenItemList[0]->GetName() == ItemName::ItemTrail))
+		int bagSize = mBag->GetBagItemSize();
+
+		if (!bagSize || (mBag->GetBagItemName() == ItemName::ItemTrail))
 		{
 			vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
 			Trail* currentTrail = (*trailListPtr)[mTileY][mTileX];
 
 			if ((currentTrail->GetIsTail()) || ((currentTrail->GetTrailType() != ItemType::None) && (!currentTrail->GetIsConnected())))
 			{
-				InvenItem* invenItem = new InvenItem();
-				invenItem->SetName(ItemName::ItemTrail);
+				BagItem* bagItem = new BagItem();
+				//bagItem->SetName(ItemName::ItemTrail);
 
 				if (currentTrail->GetTrailType() == ItemType::Green)
-					invenItem->SetType(ItemType::Green);
+					bagItem->Init(ItemName::ItemTrail, ItemType::Green);
+					//bagItem->SetType(ItemType::Green);
 				else if (currentTrail->GetTrailType() == ItemType::Blue)
-					invenItem->SetType(ItemType::Blue);
+					bagItem->Init(ItemName::ItemTrail, ItemType::Blue);
+					//bagItem->SetType(ItemType::Blue);
 				else if (currentTrail->GetTrailType() == ItemType::Red)
-					invenItem->SetType(ItemType::Red);
+					bagItem->Init(ItemName::ItemTrail, ItemType::Red);
+					//bagItem->SetType(ItemType::Red);
 
-				mInvenItemList.push_back(invenItem);
+				mBagItemListPtr->push_back(bagItem);
+				//mBagItemList.push_back(bagItem);
 
 				mTrailManager->PickUpTrail(mTileY, mTileX);
 
@@ -651,7 +668,7 @@ void Player::InputZKey()
 			}
 		}
 
-		if (!mInvenItemList.size() || (mInvenItemList[0]->GetName() == ItemName::ItemOre))
+		if (!bagSize || (mBag->GetBagItemName() == ItemName::ItemOre))
 		{
 			RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
 			vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
@@ -667,17 +684,21 @@ void Player::InputZKey()
 
 					for (int i = 0; i < count; ++i)
 					{
-						InvenItem* invenItem = new InvenItem();
-						invenItem->SetName(ItemName::ItemOre);
+						BagItem* bagItem = new BagItem();
+						//bagItem->SetName(ItemName::ItemOre);
 
 						if (item->GetOreType() == ItemType::Green)
-							invenItem->SetType(ItemType::Green);
+							bagItem->Init(ItemName::ItemOre, ItemType::Green);
+							//bagItem->SetType(ItemType::Green);
 						else if (item->GetOreType() == ItemType::Blue)
-							invenItem->SetType(ItemType::Blue);
+							bagItem->Init(ItemName::ItemOre, ItemType::Blue);
+							//bagItem->SetType(ItemType::Blue);
 						else if (item->GetOreType() == ItemType::Red)
-							invenItem->SetType(ItemType::Red);
+							bagItem->Init(ItemName::ItemOre, ItemType::Red);
+							//bagItem->SetType(ItemType::Red);
 
-						mInvenItemList.push_back(invenItem);
+						mBagItemListPtr->push_back(bagItem);
+						//mBagItemList.push_back(bagItem);
 					}
 
 					(*itemListPtr).erase((*itemListPtr).begin() + i);
@@ -695,15 +716,19 @@ void Player::InputXKey()
 {
 	if (INPUT->GetKeyDown('X'))
 	{
-		if (!mInvenItemList.size())
+		//int bagSize = mBag->GetBagItemSize();
+		if (!mBag->GetBagItemSize())
 			return;
 
-		ItemName itemName = mInvenItemList[0]->GetName();
+		ItemName itemName = mBag->GetBagItemName();
+		//ItemName itemName = mBagItemList[0]->GetName();
 
 		if (itemName == ItemName::ItemOre)
 		{
 			RECT temp;
-			ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
+
+			ItemType itemType = mBag->GetBagItemType(mBag->GetBagItemSize() - 1);
+			//ItemType itemType = mBagItemList[mBagItemList.size() - 1]->GetType();
 			vector<GameObject*> trainList = OBJECTMANAGER->GetObjectList(ObjectLayer::TRAIN);
 
 			for (int i = 0; i < trainList.size(); ++i)
@@ -719,7 +744,8 @@ void Player::InputXKey()
 						continue;
 
 					((Machop*)trainList[i])->InterceptOre(itemType);
-					mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+					mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
+					//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 					return;
 				}
 			}
@@ -743,7 +769,8 @@ void Player::InputXKey()
 					if (((Ore*)item)->GetOreType() == itemType)
 					{
 						((Ore*)item)->PlusCount();
-						mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+						mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
+						//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 						return;
 					}
 					else
@@ -760,13 +787,15 @@ void Player::InputXKey()
 			Ore* ore = new Ore();
 			ore->Drop(TileSize * mTileX, TileSize * mTileY, itemType);
 			OBJECTMANAGER->AddObject(ObjectLayer::ITEM, ore);
-			mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+			mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
+			//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 		}
 		else if (itemName == ItemName::ItemTrail)
 		{
 			Tile* currentTile = (*mTileListPtr)[mTileY][mTileX];
 			TileType currentTileType = currentTile->GetTileType();
-			ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
+			ItemType itemType = mBag->GetBagItemType(mBag->GetBagItemSize() - 1);
+			//ItemType itemType = mBagItemList[mBagItemList.size() - 1]->GetType();
 
 			if (currentTileType == TileType::ice)
 				return;
@@ -794,7 +823,8 @@ void Player::InputXKey()
 				return;
 
 			mTrailManager->PlaceTrail(mTileY, mTileX, itemType, 0); // 0: down 1: up 2: left 3: right
-			mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+			mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
+			//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 		}
 	}
 }
@@ -1090,7 +1120,7 @@ void Player::RenderTestText(HDC hdc)
 	//if (mIsAttackingTemp)
 	//	TextOut(hdc, (int)mX + 55, (int)mY, strAtk.c_str(), (int)strAtk.length());
 
-	//wstring strInven = L"Inven size: " + to_wstring(mInvenItemList.size());
+	//wstring strInven = L"Inven size: " + to_wstring(mBagItemList.size());
 	//TextOut(hdc, (int)mX + 25 - cam.left, (int)mY + 25 - cam.top, strInven.c_str(), (int)strInven.length());
 
 	wstring strObj = L"========== 바닥 오브젝트 ==========";
@@ -1120,10 +1150,10 @@ void Player::RenderTestText(HDC hdc)
 
 	wstring strInv = L"========== 인벤 ==========";
 	TextOut(hdc, 520, 350, strInv.c_str(), (int)strInv.length());
-	for (int i = 0; i < mInvenItemList.size(); ++i)
+	for (int i = 0; i < mBagItemListPtr->size(); ++i)
 	{
-		ItemName name = mInvenItemList[i]->GetName();
-		ItemType type = mInvenItemList[i]->GetType();
+		ItemName name = mBag->GetBagItemName();// mBagItemList[i]->GetName();
+		ItemType type = mBag->GetBagItemType(i);// ItemList[i]->GetType();
 
 		wstring strName = L"";
 		if (name == ItemName::ItemOre)

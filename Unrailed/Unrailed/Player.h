@@ -31,29 +31,12 @@ enum Form
 	FormEnd
 };
 
-enum ItemName
-{
-	ItemOre,
-	ItemTrail,
-	ItemNameEnd
-};
-
-class InvenItem
-{
-	ItemName itemName;
-	ItemType itemType;
-
-public:
-	ItemName GetName() const { return itemName; }
-	ItemType GetType() const { return itemType; }
-	void SetName(ItemName name) { itemName = name; }
-	void SetType(ItemType type) { itemType = type; }
-};
-
 class Image;
 class Animation;
 class MapObject;
 class TrailManager;
+class Bag;
+class BagItem;
 
 class Player : public GameObject
 {
@@ -98,7 +81,10 @@ class Player : public GameObject
 	vector<vector<Tile*>>* mTileListPtr;
 	vector<vector<MapObject*>>* mMapObjectListPtr;
 	TrailManager* mTrailManager;
-	vector<InvenItem*> mInvenItemList;
+	Bag* mBag;
+	vector<BagItem*>* mBagItemListPtr;
+	//bagItemListPtr
+	//vector<BagItem*> mBagItemList;
 
 	float mSpeed;
 
