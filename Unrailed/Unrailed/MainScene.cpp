@@ -12,11 +12,17 @@ void MainScene::Init()
 	Image* OptionButton = IMAGEMANAGER->FindImage(L"OptionButton");
 	Image* ExitButton = IMAGEMANAGER->FindImage(L"ExitButton");
 	Image* XButton = IMAGEMANAGER->FindImage(L"XButton");
+	Image* VolumeButton = IMAGEMANAGER->FindImage(L"VolumeButton");
+	Image* VolumeBar = IMAGEMANAGER->FindImage(L"VolumeBar");
 
 	mStartButton = new Button(StartButton, WINSIZEX / 2, WINSIZEY / 2, StartButton->GetWidth(), StartButton->GetHeight(), bind(&MainScene::StartButton, this));
 	mOptionButton = new Button(OptionButton, WINSIZEX / 2, WINSIZEY / 2 + 120, OptionButton->GetWidth(), OptionButton->GetHeight(), bind(&MainScene::OptionButton, this));
 	mExitButton = new Button(ExitButton, WINSIZEX / 2, WINSIZEY / 2 + 240, ExitButton->GetWidth(), ExitButton->GetHeight(), bind(&MainScene::ExitButton, this));
 	mXButton = new Button(XButton, WINSIZEX / 2 + 460, 75, XButton->GetWidth(), XButton->GetHeight(), bind(&MainScene::XButton, this));
+	mVolumeEffectBar = new Button(VolumeBar, WINSIZEX / 2 + 120, WINSIZEY / 2 + 60, VolumeBar->GetWidth() * 2, VolumeBar->GetHeight() * 2, bind(&Scene::VolumeEffectBar, this));
+	mVolumeEffectButton = new Button(VolumeButton, WINSIZEX / 2 + 120, WINSIZEY / 2 + 60, VolumeButton->GetWidth() * 2, VolumeButton->GetHeight() * 2, bind(&Scene::VolumeEffectButton, this));
+	mVolumeBackgroundBar = new Button(VolumeBar, WINSIZEX / 2 + 120, WINSIZEY / 2 - 90, VolumeBar->GetWidth() * 2, VolumeBar->GetHeight() * 2, bind(&Scene::VolumeBackgroundBar, this));
+	mVolumeBackgroundButton = new Button(VolumeButton, WINSIZEX / 2 + 120, WINSIZEY / 2 - 90, VolumeButton->GetWidth() * 2, VolumeButton->GetHeight() * 2, bind(&Scene::VolumeBackgroundButton, this));
 
 	mIsShowWindow = false;
 }
@@ -44,20 +50,38 @@ void MainScene::Update()
 	{
 		if (mXButton != nullptr)
 			mXButton->Update();
+		if (mVolumeEffectBar != nullptr)
+		{
+			mVolumeEffectBar->Update();
+			mVolumeEffectButton->Update();
+		}
+		if (mVolumeEffectButton != nullptr)
+			mVolumeEffectButton->Update();
+		if (mVolumeBackgroundBar != nullptr)
+		{
+			mVolumeBackgroundBar->Update();
+			mVolumeBackgroundButton->Update();
+		}
+		if (mVolumeBackgroundButton != nullptr)
+			mVolumeBackgroundButton->Update();
 	}
 }
 
 void MainScene::Render(HDC hdc)
 {
 	mBackground->ScaleRender(hdc, 0, 0, mBackground->GetWidth(), mBackground->GetHeight());
-	mStartButton->Render(hdc);
-	mOptionButton->Render(hdc);
-	mExitButton->Render(hdc);
+	mStartButton->ScaleRender(hdc, 0.9f, 0.9f);
+	mOptionButton->ScaleRender(hdc, 0.9f, 0.9f);
+	mExitButton->ScaleRender(hdc, 0.9f, 0.9f);
 
 	if (mIsShowWindow)
 	{
 		mOptionWindow->ScaleRender(hdc, 140, 35, mOptionWindow->GetWidth(), mOptionWindow->GetHeight());
-		mXButton->Render(hdc);
+		mXButton->ScaleRender(hdc, 0.9f, 0.9f);
+		mVolumeEffectBar->Render(hdc);
+		mVolumeEffectButton->Render(hdc);
+		mVolumeBackgroundBar->Render(hdc);
+		mVolumeBackgroundButton->Render(hdc);
 	}
 }
 

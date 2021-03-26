@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="헤더 파일">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
@@ -138,6 +134,16 @@
     </Filter>
     <Filter Include="Framework\PathFinder">
       <UniqueIdentifier>{903fd37e-54cd-43e3-96ff-8a6ec1db7c79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\UI\Bag">
+      <UniqueIdentifier>{768e5789-d007-4e05-8995-b74f1add1c42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\UI\BagItem">
+      <UniqueIdentifier>{f34cd2c3-39f9-4ed2-bc8f-84b446be99d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -318,6 +324,15 @@
     <ClInclude Include="Electrode.h">
       <Filter>MainGame\Object\Unit\Train</Filter>
     </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>MainGame\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="BagItem.h">
+      <Filter>MainGame\UI\BagItem</Filter>
+    </ClInclude>
+    <ClInclude Include="Bag.h">
+      <Filter>MainGame\UI\Bag</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -484,6 +499,15 @@
     </ClCompile>
     <ClCompile Include="Electrode.cpp">
       <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>MainGame\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BagItem.cpp">
+      <Filter>MainGame\UI\BagItem</Filter>
+    </ClCompile>
+    <ClCompile Include="Bag.cpp">
+      <Filter>MainGame\UI\Bag</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

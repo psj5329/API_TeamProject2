@@ -95,32 +95,30 @@ void TileMap::Update()
 {
 
 	//±¤¹° ¾÷µ«
-	for (int y = 0; y < mMapObjectList.size();y++)
-	{
-		for (int x = 0;x < mMapObjectList[y].size();x++)
-		{
-			if (mMapObjectList[y][x]->GetMapObjectType() != ItemType::None)
-			{
-				mMapObjectList[y][x]->Update();
-			}
-		}
-	}
-
-
+	//for (int y = 0; y < mMapObjectList.size();y++)
+	//{
+	//	for (int x = 0;x < mMapObjectList[y].size();x++)
+	//	{
+	//		if (mMapObjectList[y][x]->GetMapObjectType() != ItemType::None)
+	//		{
+	//			mMapObjectList[y][x]->Update();
+	//		}
+	//	}
+	//}
 	//±¤¹°Ã¼·Â±ð±â
-	if (INPUT->GetKeyDown('P'))
-	{
-		for (int y = 0; y < mMapObjectList.size();y++)
-		{
-			for (int x = 0;x < mMapObjectList[y].size();x++)
-			{
-				if (mMapObjectList[y][x]->GetMapObjectType() != ItemType::None)
-				{
-					mMapObjectList[y][x]->DeductHp();
-				}
-			}
-		}
-	}
+	//if (INPUT->GetKeyDown('P'))
+	//{
+	//	for (int y = 0; y < mMapObjectList.size();y++)
+	//	{
+	//		for (int x = 0;x < mMapObjectList[y].size();x++)
+	//		{
+	//			if (mMapObjectList[y][x]->GetMapObjectType() != ItemType::None)
+	//			{
+	//				mMapObjectList[y][x]->DeductHp();
+	//			}
+	//		}
+	//	}
+	//}
 
 
 }

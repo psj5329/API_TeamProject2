@@ -154,8 +154,20 @@ ItemType TrailManager::PickUpTrail(int indexY, int indexX)
 	//꼬리가아니면
 	else
 	{
-		//트레일타입 None을 리턴
-		return ItemType::None;
+		// {{ 원래 남훈이가 했던 부분
+			//트레일타입 None을 리턴
+			//return ItemType::None;
+		// 원래 남훈이가 했던 부분 }}
+		
+		// 남훈아 확인하고 위에 지워줘 // tail이 아니라서 아래에서 settrailtail은 호출하지 않음
+
+		ItemType type = mTrailList[indexY][indexX]->GetTrailType();
+		mTrailList[indexY][indexX]->SetTrailType(ItemType::None);
+		mTrailList[indexY][indexX]->SetIsActive(false);
+		mTrailList[indexY][indexX]->SetIsTail(false);
+		mTrailList[indexY][indexX]->SetIsConnected(false);
+
+		return type;
 	}
 }
 

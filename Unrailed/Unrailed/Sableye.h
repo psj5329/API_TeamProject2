@@ -7,6 +7,9 @@ class Sableye : public Enemy
 	GameObject* mItem;
 	GameObject* mTarget;
 	bool mIsExistTarget;
+	bool mIsRunAway;
+	int mItemCount;
+	float mDistance;
 
 public:
 	void Init();

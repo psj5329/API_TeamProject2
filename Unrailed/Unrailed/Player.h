@@ -24,36 +24,19 @@ enum PlayerState
 
 enum Form
 {
-	Ditto, // 메타몽
-	Chikorita, // 치코리타
-	Totodile, // 리아코
-	Charmander, // 파이리
+	Ditto,
+	Chikorita,
+	Totodile,
+	Charmander,
 	FormEnd
-};
-
-enum ItemName
-{
-	ItemOre,
-	ItemTrail,
-	ItemNameEnd
-};
-
-class InvenItem
-{
-	ItemName itemName;
-	ItemType itemType;
-
-public:
-	ItemName GetName() const { return itemName; }
-	ItemType GetType() const { return itemType; }
-	void SetName(ItemName name) { itemName = name; }
-	void SetType(ItemType type) { itemType = type; }
 };
 
 class Image;
 class Animation;
 class MapObject;
 class TrailManager;
+class Bag;
+class BagItem;
 
 class Player : public GameObject
 {
@@ -80,19 +63,11 @@ class Player : public GameObject
 	Animation* mCurrentAnimation;
 
 	RECT mColBox;
+	RECT mRangeBox;
 
 	DirectionEight mDir;
 	PlayerState mState;
-
-	float mSpeed;
-
-	int mInputType;
-
 	Form mForm;
-
-	float mChangeT;
-
-	float mIsDirectionKeyDown;
 
 	int mTileX;
 	int mTileY;
@@ -103,20 +78,29 @@ class Player : public GameObject
 	int mRangeX;
 	int mRangeY;
 
-	RECT mRangeBox;
-
 	vector<vector<Tile*>>* mTileListPtr;
 	vector<vector<MapObject*>>* mMapObjectListPtr;
+	TrailManager* mTrailManager;
+	Bag* mBag;
+	vector<BagItem*>* mBagItemListPtr;
+	//bagItemListPtr
+	//vector<BagItem*> mBagItemList;
+
+	float mSpeed;
+
+	int mInputType;
+
+	float mChangeT;
+
+	float mIsDirectionKeyDown;
 
 	bool mIsAttackingTemp;
 
 	bool mIsGettingItemThisFrame;
 
-	TrailManager* mTrailManager;
-
 	bool mIsChangable;
 
-	vector<InvenItem*> mInvenItemList;
+	bool mIsInfoOn;
 
 public:
 	Player(const string& name, float x, float y);
@@ -137,6 +121,8 @@ public:
 	void InputZKey(); // 'Z' key: pick up item 
 	void InputXKey(); // 'X' key: throw item
 	void InputCKey(); // 'C' key: change form // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
+	void InputVKey(); // 'V' key: turn item
+	void InputLKey(); // 'L' key: turn on/off gizmo
 	bool CheckTileType(TileType tileType);
 	void CheckRange();
 	void ChangeCurrentAnimation();

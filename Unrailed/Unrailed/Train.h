@@ -49,7 +49,6 @@ protected:
 	class Animation* mExplode;
 
 public:
-
 	virtual void Init()override = 0;
 	virtual void Release()override = 0;
 	virtual void Update()override = 0;

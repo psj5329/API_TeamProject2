@@ -30,12 +30,12 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -48,7 +48,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -155,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="Abra.h" />
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Bag.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraManager.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="MapToolReady.h" />
     <ClInclude Include="MapToolScene.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="BagItem.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Ore.h" />
     <ClInclude Include="Path.h" />
@@ -212,6 +214,7 @@
     <ClInclude Include="Trail.h" />
     <ClInclude Include="TrailManager.h" />
     <ClInclude Include="Train.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Unrailed.h" />
     <ClInclude Include="Voltorb.h" />
@@ -219,6 +222,7 @@
   <ItemGroup>
     <ClCompile Include="Abra.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Bag.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraManager.cpp" />
@@ -243,6 +247,7 @@
     <ClCompile Include="MapToolReady.cpp" />
     <ClCompile Include="MapToolScene.cpp" />
     <ClCompile Include="Math.cpp" />
+    <ClCompile Include="BagItem.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Ore.cpp" />
     <ClCompile Include="Path.cpp" />
@@ -271,6 +276,7 @@
     <ClCompile Include="Trail.cpp" />
     <ClCompile Include="TrailManager.cpp" />
     <ClCompile Include="Train.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Unrailed.cpp" />
     <ClCompile Include="Voltorb.cpp" />

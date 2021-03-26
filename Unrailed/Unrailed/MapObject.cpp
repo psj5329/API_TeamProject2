@@ -17,7 +17,7 @@ MapObject::MapObject(class Image* image, float x, float y, float sizeX, float si
 	mFrameIndexY = frameIndexY;
 	mType = type;
 	mHp = 3;
-
+	mTimer = 0;
 	mActive = true;
 }
 
@@ -27,8 +27,53 @@ void MapObject::Release()
 
 void MapObject::Update()
 {
-	//광물 부셔지면 아이템 만들어두기?
-	if (mHp <= 0 && mActive == true)
+
+}
+
+void MapObject::Render(HDC hdc)
+{
+	if (mType != ItemType::None)
+	{
+		if (mImage != nullptr)
+		{
+			//흔들기
+			if (mIsShaking)
+			{
+				if (mTimer >= 0 && mTimer < 42) {
+					mTimer++;
+					if (mTimer % 6 == 0|| mTimer % 6 == 1|| mTimer % 6 == 2) {
+						mX -= 2;
+					}
+					else {
+						mX += 2;
+					}
+					mRect = RectMake((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
+				}
+				else
+				{
+					mTimer = 0;
+					mIsShaking = false;
+				}
+			}
+
+
+			CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, (int)mSizeX, (int)mSizeY);
+		}
+
+	}
+}
+
+void MapObject::Shake()
+{
+	mIsShaking = true;
+}
+
+void MapObject::DeductHp()
+{
+	mHp -= 1; 
+	Shake(); 
+
+	if (mHp <= 0)
 	{
 		Ore* ore = new Ore();
 		ore->Drop((int)mX, (int)mY, mType);
@@ -37,19 +82,4 @@ void MapObject::Update()
 		mType = ItemType::None;
 		mActive = false;
 	}
-}
-
-void MapObject::Render(HDC hdc)
-{
-	if (mType != ItemType::None)
-	{
-		if (mImage != nullptr)
-			CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, (int)mSizeX, (int)mSizeY);
-			//mImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
-	}
-}
-
-void MapObject::Shake()
-{
-	
 }

@@ -2,6 +2,7 @@
 #include "Tile.h"
 #include "Image.h"
 #include "Camera.h"
+#include "Animation.h"
 
 Tile::Tile(Image* image, Image* coverImage, float x, float y, float sizeX, float sizeY, int frameIndexX, int frameIndexY, int type)
 {
@@ -17,22 +18,27 @@ Tile::Tile(Image* image, Image* coverImage, float x, float y, float sizeX, float
 	mTileType = (TileType)type;
 	mAlpha = 0.1;
 	mAlphaRate = 0.5;
+
+	mCurrentFrameTime = 0;
+	mFrameUpdateTime = 0.2;
 }
 
 void Tile::Render(HDC hdc)
 {
 
 	if (mImage != nullptr)
+	{
+		//CAMERAMANAGER->GetMainCamera().
 		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
-		//mImage->ScaleFrameRender(hdc, mRect.left, mRect.top,mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+	}
 
 	if (mCoveImage != nullptr)
 	{	
-		CAMERAMANAGER->GetMainCamera()->AlphaScaleFrameRender(hdc, mCoveImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY,mAlpha);
-
-		mAlpha += mAlphaRate * TIME->DeltaTime();
-		if (mAlpha > 1)
-			mAlpha = 0;
+		if (mTileType == TileType::Lava || mTileType == TileType::Water)
+		{
+			UpdateCoverFrame();
+			CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCoveImage, mRect.left, mRect.top, mCoverFrameIndexX, mCoverFrameIndexY, mSizeX, mSizeY);
+		}
 	}
 
 	if (!INPUT->GetKey(VK_CONTROL))
@@ -65,19 +71,48 @@ void Tile::Render(HDC hdc)
 	
 }
 
-
 void Tile::SetCoverImage()
 {
 	if (wcscmp(mImage->GetKeyName().c_str(), L"MagmaCavern") == 0)
 	{
-		mCoveImage = IMAGEMANAGER->FindImage(L"MagmaCavernCover");
+		mCoveImage = IMAGEMANAGER->FindImage(L"MagmaCover");
+		mMaxFrame = 276;
 	}
 	else if (wcscmp(mImage->GetKeyName().c_str(), L"LushPrairie") == 0)
 	{
-		mCoveImage = IMAGEMANAGER->FindImage(L"LushPrairieCover");
+		mCoveImage = IMAGEMANAGER->FindImage(L"WaterCover");
+		mMaxFrame = 48;
 	}
 	else
 	{
 		mCoveImage = nullptr;
+	}
+	mCoverFrameIndexX = mFrameIndexX;
+	mCoverFrameIndexY = mFrameIndexY;
+}
+
+void Tile::UpdateCoverFrame()
+{
+
+	float deltaTime = Time::GetInstance()->DeltaTime();
+
+	mCurrentFrameTime += deltaTime;
+
+	if (mCurrentFrameTime >= mFrameUpdateTime)
+	{
+		//손실 다 없애준다
+		while (mCurrentFrameTime >= mFrameUpdateTime)
+		{
+			mCurrentFrameTime -= mFrameUpdateTime;
+		}
+
+		mCoverFrameIndexX += 12;
+	}
+
+	if (mCoverFrameIndexX >= mMaxFrame)
+	{
+
+		mCoverFrameIndexX = mFrameIndexX;
+
 	}
 }

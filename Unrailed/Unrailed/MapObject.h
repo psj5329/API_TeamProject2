@@ -21,7 +21,9 @@ class MapObject
 	bool mActive;
 	int mHp;
 
-	float timer; //Èçµé±â¿ë
+
+	int mTimer; //Èçµé±â¿ë
+	bool mIsShaking;
 public:
 
 	MapObject(class Image* image, float x, float y, float sizeX, float sizeY,
@@ -56,7 +58,7 @@ public:
 	void SetObjectType(ItemType type) { mType = type; }
 	void SetActive(bool isActive) { mActive = isActive; }
   
-	void DeductHp() { mHp -= 1; Shake(); }
+	void DeductHp();
 	int GetHp() { return mHp; }
 	void SetHp(int hp) { mHp = hp; }
 

@@ -20,7 +20,6 @@ class Machop : public Train
 	Animation* mRightIntercept;
 
 public:
-
 	void Init()override {};
 	void Init(int x, int y, int image);
 	void Release()override;
@@ -35,7 +34,7 @@ public:
 	void EndIntercept();
 
 	void InterceptOre();
-	void InterceptOre(ItemType itemType); // À¯Âù Ãß°¡
+	void InterceptOre(ItemType itemType); // Ã€Â¯Ã‚Ã¹ ÃƒÃŸÂ°Â¡
 	int GetOreCount() { return mOreCount; }
 	void SetOreCount(int i) { mOreCount = i; }
 	vector <Ore*> GetOreList() { return mOreList; }
