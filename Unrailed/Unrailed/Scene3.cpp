@@ -13,7 +13,7 @@ void Scene3::Init()
 
 	mTileMap = new TileMap();
 	//mTileMap->Init(TileCountX, TileCountY, TileSize);
-	mTileMap->LoadMap(3);
+	mTileMap->LoadMap(4);
 	int x = mTileMap->GetXTileCount();
 	int y = mTileMap->GetYTileCount();
 

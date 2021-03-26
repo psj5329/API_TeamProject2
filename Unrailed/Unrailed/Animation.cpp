@@ -93,3 +93,43 @@ void Animation::SetCallbackFunc(const function<void(void)>& func)
 {
 	mCallbackFunc = func;
 }
+
+
+void Animation::UpdateMapCover()
+{
+	if (mIsPlay == false)
+		return;
+
+	float deltaTime = Time::GetInstance()->DeltaTime();
+
+	mCurrentFrameTime += deltaTime;
+
+	if (mCurrentFrameTime >= mFrameUpdateTime)
+	{
+		//손실 다 없애준다
+		while (mCurrentFrameTime >= mFrameUpdateTime)
+		{
+			mCurrentFrameTime -= mFrameUpdateTime;
+		}
+
+		mCurrentFrameIndex+=12;
+		//프레임이 마지막 프레임보다 커지려고 한다면
+		if (mCurrentFrameIndex >= mFrameList.size())
+		{
+			if (mIsLoop == false)
+			{
+				mIsPlay = false;
+				--mCurrentFrameIndex;
+			}
+			else
+			{
+				mCurrentFrameIndex = 0;
+			}
+			//콜백함수가 바인딩 되어 있다면 그 함수 실행
+			if (mCallbackFunc != nullptr)
+			{
+				mCallbackFunc();
+			}
+		}
+	}
+}
