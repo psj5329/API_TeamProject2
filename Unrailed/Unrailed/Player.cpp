@@ -8,6 +8,8 @@
 #include "TrailManager.h"
 #include "Ore.h"
 #include "Machop.h"
+#include "Bag.h"
+#include "BagItem.h"
 
 Player::Player(const string& name, float x, float y)
 	: GameObject(name, x, y)
@@ -57,13 +59,20 @@ void Player::Init()
 
 	mIsChangable = true;
 
+	mIsInfoOn = true;
+
+	mBag = new Bag();
+	mBagItemListPtr = mBag->GetBagItemListPtr();
+
 	// {{ 트레일 줍기 불가능해서 임시로 세팅
 	for (int i = 0; i < 3; ++i)
 	{
-		InvenItem* invenItem = new InvenItem();
-		invenItem->SetName(ItemName::ItemTrail);
-		invenItem->SetType(ItemType::Green);
-		mInvenItemList.push_back(invenItem);
+		BagItem* bagItem = new BagItem();
+		//bagItem->SetName(ItemName::ItemTrail);
+		//bagItem->SetType(ItemType::Green);
+		bagItem->Init(ItemName::ItemTrail, ItemType::Green);
+		mBagItemListPtr->push_back(bagItem);
+		//mBagItemList.push_back(bagItem);
 	} // 트레일 줍기 불가능해서 임시로 세팅 // 여기까지 }}
 }
 
@@ -85,35 +94,41 @@ void Player::Update()
 	InputZKey();
 	InputXKey();
 	InputCKey();
-	//CheckRange();
+	InputVKey();
+	InputLKey(); // on/off gizmo
 
 	ChangeCurrentAnimation();
 
 	// 플레이어 업데이트 시 기능 추가하려면 여기에 추가하기
 
 	mCurrentAnimation->Update();
+
+	mBag->Update((int)mX, (int)mY);
 }
 
 void Player::Render(HDC hdc)
 {
-#ifdef DEBUG
-	RenderRect(hdc, mColBox);
-#endif
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
-		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
+	//RenderRect(hdc, mColBox);
+
+	// {{ 현재 타일, 다음 타일 확인용 // 유찬
+	if (mIsInfoOn)
+	{
+		RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
+		RECT nextRc = (*mTileListPtr)[mNextTileY][mNextTileX]->GetRect();
+		GIZMO->DrawRect(hdc, currentRc, Gizmo::Color::Yellow);
+		GIZMO->DrawRect(hdc, nextRc, Gizmo::Color::Cyan);
+		GIZMO->DrawRect(hdc, mRangeBox, Gizmo::Color::Purple);
+		GIZMO->DrawRect(hdc, mColBox, Gizmo::Color::Violet);
+	}
+	// 현재 타일, 다음 타일 확인용 }}
 
 	// 테스트 텍스트 // 릴리즈 전 지워주세요
 	RenderTestText(hdc);
 
-	// {{ 현재 타일, 다음 타일 확인용 // 릴리즈 전 지워주세요 // 유찬
-	RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
-	RECT nextRc = (*mTileListPtr)[mNextTileY][mNextTileX]->GetRect();
-	//RECT rangeRc = RectMakeCenter(mNextRangeX, mNextRangeY, TileSize, TileSize);
-	GIZMO->DrawRect(hdc, currentRc, Gizmo::Color::Yellow);
-	GIZMO->DrawRect(hdc, nextRc, Gizmo::Color::Cyan);
-	GIZMO->DrawRect(hdc, mRangeBox, Gizmo::Color::Purple);
-	GIZMO->DrawRect(hdc, mColBox, Gizmo::Color::Violet);
-	// 현재 타일, 다음 타일 확인용 // 릴리즈 전 지워주세요 }}
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
+		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
+
+	mBag->Render(hdc);
 }
 
 void Player::InitAnimation()
@@ -525,21 +540,6 @@ void Player::InputSpaceKey()
 		{
 			mIsAttackingTemp = false;
 		}
-
-		
-
-		
-
-		// {{ 화살표 돌리기 // 얘는 키 분리해야 할 듯..
-
-		//MapObjectType idontknowwhatitis = (*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType(); // 이건 그냥 한거고
-//		mTrailManager->TurnTrail(); // 이것부터 보면서 조건 등 주면서 고쳐야 함
-
-//		if (!((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetActive())) // 플레이어가 바라보는 다음 타일이 nonActive 상태일 때만 아이템 버리기 가능
-//		{}
-		// }} 화살표 돌리기
-
-		// (*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == MapObjectType::Red))
 	}
 	else
 		mIsAttackingTemp = false;
@@ -637,39 +637,77 @@ void Player::InputZKey()
 {
 	if (INPUT->GetKeyDown('Z'))
 	{
-		RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
-		vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+		int bagSize = mBag->GetBagItemSize();
 
-		for (int i = 0; i < (*itemListPtr).size(); ++i)
+		if (!bagSize || (mBag->GetBagItemName() == ItemName::ItemTrail))
 		{
-			Ore* item = (Ore*)((*itemListPtr)[i]);
-			POINT pt = { (LONG)(item->GetX()), (LONG)(item->GetY()) };
+			vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+			Trail* currentTrail = (*trailListPtr)[mTileY][mTileX];
 
-			if (PtInRect(&currentRc, pt))
+			if ((currentTrail->GetIsTail()) || ((currentTrail->GetTrailType() != ItemType::None) && (!currentTrail->GetIsConnected())))
 			{
-				int count = item->GetCount();
+				BagItem* bagItem = new BagItem();
+				//bagItem->SetName(ItemName::ItemTrail);
 
-				for (int i = 0; i < count; ++i)
-				{
-					InvenItem* invenItem = new InvenItem();
-					invenItem->SetName(ItemName::ItemOre);
+				if (currentTrail->GetTrailType() == ItemType::Green)
+					bagItem->Init(ItemName::ItemTrail, ItemType::Green);
+					//bagItem->SetType(ItemType::Green);
+				else if (currentTrail->GetTrailType() == ItemType::Blue)
+					bagItem->Init(ItemName::ItemTrail, ItemType::Blue);
+					//bagItem->SetType(ItemType::Blue);
+				else if (currentTrail->GetTrailType() == ItemType::Red)
+					bagItem->Init(ItemName::ItemTrail, ItemType::Red);
+					//bagItem->SetType(ItemType::Red);
 
-					if (item->GetOreType() == ItemType::Green)
-						invenItem->SetType(ItemType::Green);
-					else if (item->GetOreType() == ItemType::Blue)
-						invenItem->SetType(ItemType::Blue);
-					else if (item->GetOreType() == ItemType::Red)
-						invenItem->SetType(ItemType::Red);
+				mBagItemListPtr->push_back(bagItem);
+				//mBagItemList.push_back(bagItem);
 
-					mInvenItemList.push_back(invenItem);
-				}
+				mTrailManager->PickUpTrail(mTileY, mTileX);
 
-				(*itemListPtr).erase((*itemListPtr).begin() + i);
-
-				mIsGettingItemThisFrame = true;
+				return;
 			}
-			else
-				continue;
+		}
+
+		if (!bagSize || (mBag->GetBagItemName() == ItemName::ItemOre))
+		{
+			RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
+			vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+
+			for (int i = 0; i < (*itemListPtr).size(); ++i)
+			{
+				Ore* item = (Ore*)((*itemListPtr)[i]);
+				POINT pt = { (LONG)(item->GetX()), (LONG)(item->GetY()) };
+
+				if (PtInRect(&currentRc, pt))
+				{
+					int count = item->GetCount();
+
+					for (int i = 0; i < count; ++i)
+					{
+						BagItem* bagItem = new BagItem();
+						//bagItem->SetName(ItemName::ItemOre);
+
+						if (item->GetOreType() == ItemType::Green)
+							bagItem->Init(ItemName::ItemOre, ItemType::Green);
+							//bagItem->SetType(ItemType::Green);
+						else if (item->GetOreType() == ItemType::Blue)
+							bagItem->Init(ItemName::ItemOre, ItemType::Blue);
+							//bagItem->SetType(ItemType::Blue);
+						else if (item->GetOreType() == ItemType::Red)
+							bagItem->Init(ItemName::ItemOre, ItemType::Red);
+							//bagItem->SetType(ItemType::Red);
+
+						mBagItemListPtr->push_back(bagItem);
+						//mBagItemList.push_back(bagItem);
+					}
+
+					(*itemListPtr).erase((*itemListPtr).begin() + i);
+
+					mIsGettingItemThisFrame = true;
+				}
+				else
+					continue;
+			}
 		}
 	}
 }
@@ -678,17 +716,19 @@ void Player::InputXKey()
 {
 	if (INPUT->GetKeyDown('X'))
 	{
-		if (!mInvenItemList.size())
+		//int bagSize = mBag->GetBagItemSize();
+		if (!mBag->GetBagItemSize())
 			return;
 
-		ItemName itemName = mInvenItemList[0]->GetName();
+		ItemName itemName = mBag->GetBagItemName();
+		//ItemName itemName = mBagItemList[0]->GetName();
 
 		if (itemName == ItemName::ItemOre)
 		{
 			RECT temp;
 
-			ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
-
+			ItemType itemType = mBag->GetBagItemType(mBag->GetBagItemSize() - 1);
+			//ItemType itemType = mBagItemList[mBagItemList.size() - 1]->GetType();
 			vector<GameObject*> trainList = OBJECTMANAGER->GetObjectList(ObjectLayer::TRAIN);
 
 			for (int i = 0; i < trainList.size(); ++i)
@@ -704,7 +744,8 @@ void Player::InputXKey()
 						continue;
 
 					((Machop*)trainList[i])->InterceptOre(itemType);
-					mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+					mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
+					//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 					return;
 				}
 			}
@@ -728,7 +769,8 @@ void Player::InputXKey()
 					if (((Ore*)item)->GetOreType() == itemType)
 					{
 						((Ore*)item)->PlusCount();
-						mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+						mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
+						//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 						return;
 					}
 					else
@@ -745,13 +787,15 @@ void Player::InputXKey()
 			Ore* ore = new Ore();
 			ore->Drop(TileSize * mTileX, TileSize * mTileY, itemType);
 			OBJECTMANAGER->AddObject(ObjectLayer::ITEM, ore);
-			mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
+			mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
+			//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 		}
 		else if (itemName == ItemName::ItemTrail)
 		{
 			Tile* currentTile = (*mTileListPtr)[mTileY][mTileX];
 			TileType currentTileType = currentTile->GetTileType();
-			ItemType itemType = mInvenItemList[mInvenItemList.size() - 1]->GetType();
+			ItemType itemType = mBag->GetBagItemType(mBag->GetBagItemSize() - 1);
+			//ItemType itemType = mBagItemList[mBagItemList.size() - 1]->GetType();
 
 			if (currentTileType == TileType::ice)
 				return;
@@ -773,121 +817,15 @@ void Player::InputXKey()
 			}
 
 			vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
-			Trail* currentTrail = (Trail*)(*trailListPtr)[mTileY][mTileX];
+			Trail* currentTrail = (*trailListPtr)[mTileY][mTileX];
 
 			if (currentTrail->GetTrailType() != ItemType::None)
 				return;
 
 			mTrailManager->PlaceTrail(mTileY, mTileX, itemType, 0); // 0: down 1: up 2: left 3: right
-			mInvenItemList.erase(mInvenItemList.begin() + mInvenItemList.size() - 1);
-
-			
-			// 놓기까지 일단 완료 // 1. 바닥설치(완성_추가테스트필요) 2. 돌리기(오늘 끝내야함) 3. 합성소에서 받기(호준이 완성되면 시작)
-
-
-
-
-
-
-
-
-
-
-
+			mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
+			//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 		}
-
-		
-
-		// 아이템(3) 내려놓을 때 1. 못가는타일 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물)//내가 가지고 있는 것이랑 다를 때 4. 기찻길 > 일 때 놓을 수 없음
-		// 기찻길(4) 내려놓을 때 1. 못가는타일// 2. 맵오브젝트(안캔광물) 3. 아이템(캔광물) 4. 기찻길 5. 비어있더라도 타일과 기찻길의 속성이 안 맞을 때 > 일 때 놓을 수 없음
-		// 기찻길은 버리기는 안하기로.(남훈)
-		
-		
-
-
-
-
-		/*
-
-
-
-				InvenItem invenItem;
-				invenItem.itemName = ItemName::ItemOre;
-
-				if (item->GetOreType() == ItemType::Green)
-					invenItem.itemType = ItemTypeP::Green;
-				else if (item->GetOreType() == ItemType::Blue)
-					invenItem.itemType = ItemTypeP::Blue;
-				else if (item->GetOreType() == ItemType::Red)
-					invenItem.itemType = ItemTypeP::Red;
-
-				mInvenItemList.push_back(&invenItem);
-
-				(*itemListPtr).erase((*itemListPtr).begin() + i);
-
-				mIsGettingItemThisFrame = true;
-			}
-			else
-				continue;
-		}*/
-
-		/*
-		// {{ 인벤 소지 아이템(UI) -> 아이템(광물) // 아이템 버리기
-		if (mItemList.size() && !mIsGettingItemThisFrame) // 아이템을 소지한 경우에만 아이템 버리기 가능 // 이번 프레임에서 얻은 경우가 아닐 때만 버리기 가능(이번 프레임에서 얻으면 바로 버려짐)
-		{
-			if (!((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetActive())) // 해당 위치에 맵 오브젝트도 nonActive 상태일 때만 버리기 가능하게.
-			{
-				vector<GameObject*> itemList = OBJECTMANAGER->GetObjectList(ObjectLayer::ITEM);
-				vector<GameObject*>::iterator iter = itemList.begin();
-
-				for (; iter != itemList.end(); ++iter)
-				{
-					float x = (*iter)->GetX();
-					float y = (*iter)->GetY();
-
-					int indexX = (int)(x / TileSize);
-					int indexY = (int)(y / TileSize);
-
-					if (indexX == mNextTileX && indexY == mNextTileY) // 해당 위치에 무슨 아이템이 있다
-					{ // 아무것도 안할건데
-					}
-					else
-					{
-						Ore* greenOre = new Ore();
-						greenOre->Drop(TileSize * mNextTileX, TileSize * mNextTileY, (int)invenType);
-						OBJECTMANAGER->AddObject(ObjectLayer::ITEM, greenOre);
-
-						mItemList.erase(mItemList.begin());
-					}
-				}
-			}*/
-
-
-			/*
-			if (!((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetActive())) // 플레이어가 바라보는 다음 타일이 nonActive 상태일 때만 아이템 버리기 가능
-			{  // 로드맵 함수 호출할 때 오브젝트 있는 곳에 액티브가 제대로 세팅이 안된 것 같은 느낌인데!! 오브젝트 있는 곳 없는 곳 구분없이 true인 것 같다...
-				if (invenType == ItemType::Green)
-				{
-					Ore* greenOre = new Ore();
-					greenOre->Drop(TileSize * mNextTileX, TileSize * mNextTileY, (int)invenType);
-					OBJECTMANAGER->AddObject(ObjectLayer::ITEM, greenOre);
-
-
-					MapObject* greenObject = new MapObject(
-						IMAGEMANAGER->FindImage(L"Ore"),
-						TileSize * mNextTileX, TileSize * mNextTileY, TileSize, TileSize,
-						0, 1, (int)(MapObjectType::Green)); // 레드0 그린1 블루2
-
-					(*mMapObjectListPtr)[mNextTileY][mNextTileX] = greenObject;
-
-					//mItemList.push_back((GameObject*)greenOre);
-					//item->SetIsAzzctive(false);
-
-					mItemList.erase(mItemList.begin());
-				}
-			}
-		}
-		// }} 인벤 소지 아이템(UI) -> 아이템(광물) // 아이템 버리기*/
 	}
 }
 
@@ -956,6 +894,20 @@ void Player::InputCKey()
 			mChangeT = 0.f;
 			mIsChangable = true;
 		}
+	}
+}
+
+void Player::InputVKey()
+{
+	if (INPUT->GetKeyDown('V'))
+	{
+		vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+		Trail* currentTrail = (*trailListPtr)[mTileY][mTileX];
+
+		if (currentTrail->GetTrailType() == ItemType::None)
+			return;
+
+		mTrailManager->TurnTrail(mTileY, mTileX);
 	}
 }
 
@@ -1135,6 +1087,17 @@ void Player::ChangeCurrentAnimation()
 	}
 }
 
+void Player::InputLKey()
+{
+	if (INPUT->GetKeyDown('L'))
+	{
+		if (mIsInfoOn)
+			mIsInfoOn = false;
+		else
+			mIsInfoOn = true;
+	}
+}
+
 void Player::RenderTestText(HDC hdc)
 {
 	RECT cam = CAMERAMANAGER->GetMainCamera()->GetRect();
@@ -1147,16 +1110,21 @@ void Player::RenderTestText(HDC hdc)
 	if (mChangeT)
 		TextOut(hdc, (int)mX - 20 - cam.left, (int)mY - 25 - cam.top, strChange.c_str(), (int)strChange.length());
 
-	wstring strTile = L"tile x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
-	TextOut(hdc, (int)mX + 25 - cam.left, (int)mY - cam.top, strTile.c_str(), (int)strTile.length());
+	if (mIsInfoOn)
+	{
+		wstring strTile = L"tile x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
+		TextOut(hdc, (int)mX + 25 - cam.left, (int)mY - cam.top, strTile.c_str(), (int)strTile.length());
+	}
 
 	//wstring strAtk = L"공격 중이다";
 	//if (mIsAttackingTemp)
 	//	TextOut(hdc, (int)mX + 55, (int)mY, strAtk.c_str(), (int)strAtk.length());
 
-	wstring strInven = L"Inven size: " + to_wstring(mInvenItemList.size());
-	TextOut(hdc, (int)mX + 25 - cam.left, (int)mY + 25 - cam.top, strInven.c_str(), (int)strInven.length());
+	//wstring strInven = L"Inven size: " + to_wstring(mBagItemList.size());
+	//TextOut(hdc, (int)mX + 25 - cam.left, (int)mY + 25 - cam.top, strInven.c_str(), (int)strInven.length());
 
+	wstring strObj = L"========== 바닥 오브젝트 ==========";
+	TextOut(hdc, 520, 178, strObj.c_str(), (int)strObj.length());
 	vector<GameObject*> itemList = OBJECTMANAGER->GetObjectList(ObjectLayer::ITEM);
 	for (int i = 0; i < itemList.size(); ++i)
 	{
@@ -1177,15 +1145,15 @@ void Player::RenderTestText(HDC hdc)
 		else
 			strActive = to_wstring(i) + L": nonActive, " + strType;
 
-		TextOut(hdc, (int)WINSIZEX * 3 / 4, (int)200 + 25 * i, strActive.c_str(), (int)strActive.length());
+		TextOut(hdc, 550, (int)200 + 22 * i, strActive.c_str(), (int)strActive.length());
 	}
 
 	wstring strInv = L"========== 인벤 ==========";
-	TextOut(hdc, (int)WINSIZEX * 3 / 4, 350, strInv.c_str(), (int)strInv.length());
-	for (int i = 0; i < mInvenItemList.size(); ++i)
+	TextOut(hdc, 520, 350, strInv.c_str(), (int)strInv.length());
+	for (int i = 0; i < mBagItemListPtr->size(); ++i)
 	{
-		ItemName name = mInvenItemList[i]->GetName();
-		ItemType type = mInvenItemList[i]->GetType();
+		ItemName name = mBag->GetBagItemName();// mBagItemList[i]->GetName();
+		ItemType type = mBag->GetBagItemType(i);// ItemList[i]->GetType();
 
 		wstring strName = L"";
 		if (name == ItemName::ItemOre)
@@ -1204,6 +1172,6 @@ void Player::RenderTestText(HDC hdc)
 			strType = L"Type: Red";
 		wstring strActive = to_wstring(i) + L": " + strName + strType;
 
-		TextOut(hdc, (int)WINSIZEX * 3 / 4, (int)372 + 22 * i, strActive.c_str(), (int)strActive.length());
+		TextOut(hdc, 550, (int)372 + 22 * i, strActive.c_str(), (int)strActive.length());
 	}
 }

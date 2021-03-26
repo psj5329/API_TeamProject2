@@ -15,14 +15,14 @@ void Abra::Init()
 
 	ReadyAnimation();
 
-	//ë¶€ëª¨ í´ë˜ìŠ¤ (GameObject) ë³€ìˆ˜
+	//ºÎ¸ğ Å¬·¡½º (GameObject) º¯¼ö
 	mX = WINSIZEX / 2 - 135;
 	mY = WINSIZEY / 2;
 	mSizeX = mImage->GetFrameWidth() * 2.f;
 	mSizeY = mImage->GetFrameHeight() * 2.f;
 	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 
-	//Abra ë³€ìˆ˜
+	//Abra º¯¼ö
 	mDirection = Direction::Right;
 	mState = State::Move;
 	mSpeed = 100.f;
@@ -60,7 +60,7 @@ void Abra::Update()
 
 	SynthesisOre();
 
-	//ìƒíƒœì •í•˜ê¸°
+	//»óÅÂÁ¤ÇÏ±â
 	//if (mTimer == 0)
 	//{
 	//	if (mState == State::Sleep)
@@ -95,7 +95,7 @@ void Abra::Update()
 		}
 	}
 
-	//ì›€ì§ì„
+	//¿òÁ÷ÀÓ
 	//if (mState == State::Sleep)
 	//{
 	//	mTimer += Time::GetInstance()->DeltaTime();
@@ -112,7 +112,7 @@ void Abra::Update()
 		SetTarget();
 	}
 
-	//ì§„í™”
+	//ÁøÈ­
 	switch (mLevel)
 	{
 	case 1:
@@ -138,7 +138,7 @@ void Abra::Update()
 		mLevel = 3;
 	}
 
-	//í­ë°œ
+	//Æø¹ß
 	//if (mX >= WINSIZEX - 400 && mIsExplode == false)
 	//{
 	//	mIsExplode = true;
@@ -161,11 +161,11 @@ void Abra::Render(HDC hdc)
 	for (int i = 0; i < mCreatedTrailList.size(); ++i)
 	{
 		if (mCreatedTrailList[i]->trailType == ItemType::Green)
-			strTrail = L"ê·¸ë¦°" + to_wstring(mTrailCount);
+			strTrail = L"±×¸°" + to_wstring(mTrailCount);
 		else if (mCreatedTrailList[i]->trailType == ItemType::Blue)
-			strTrail = L"ë¸”ë£¨" + to_wstring(mTrailCount);
+			strTrail = L"ºí·ç" + to_wstring(mTrailCount);
 		else if (mCreatedTrailList[i]->trailType == ItemType::Red)
-			strTrail = L"ë ˆë“œ" + to_wstring(mTrailCount);
+			strTrail = L"·¹µå" + to_wstring(mTrailCount);
 
 		TextOut(hdc, mX - 20, mY - 40 - i * 15, strTrail.c_str(), strTrail.length());
 	}
@@ -409,7 +409,7 @@ ItemType Abra::Receive()
 	if (mCreatedTrailList.size() > 0)
 	{
 		ItemType type = mCreatedTrailList[0]->trailType;
-		//ë²¡í„°ì—ì„œ ì²«ë²ˆì§¸ ì œê±°
+		//º¤ÅÍ¿¡¼­ Ã¹¹øÂ° Á¦°Å
 
 		return type;
 	}

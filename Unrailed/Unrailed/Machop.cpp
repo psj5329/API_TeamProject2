@@ -6,11 +6,6 @@
 #include "Trail.h"
 #include "Camera.h"
 
-//Machop::Machop()
-//	: Train()
-//{
-//}
-
 void Machop::Init()
 {
 	mName = "Machop";
