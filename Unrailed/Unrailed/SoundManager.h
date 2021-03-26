@@ -25,7 +25,7 @@ private:
 
 public:
 	void Update();
-	void LoadFromFile(const wstring& keyName, const wstring& fileName, bool isLoop);
+	void LoadFromFile(const wstring& keyName, const wstring& fileName, bool isLoop = false);
 	void Play(const wstring& keyName, float volume);
 	void Pause(const wstring& keyName);
 	void Stop(const wstring& keyName);

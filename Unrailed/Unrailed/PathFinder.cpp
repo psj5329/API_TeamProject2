@@ -6,7 +6,7 @@
 
 Singleton_NULL(PathFinder)
 
-vector<Tile*> PathFinder::FindPath(vector<vector<Tile*>> tileList, vector<vector<MapObject*>> objectList, int startX, int startY, int endX, int endY)
+vector<Tile*> PathFinder::FindPath(const vector<vector<Tile*>> tileList, const vector<vector<MapObject*>> objectList, int startX, int startY, int endX, int endY)
 {
 	vector<Tile*> path;		// 반납할 것
 	vector<Tile*> openLoad;		// 길찾을 때 검색??
@@ -136,15 +136,20 @@ vector<Tile*> PathFinder::FindPath(vector<vector<Tile*>> tileList, vector<vector
 
 		if(tileMin == endTile)
 		{
+			tileList;
+			//Tile* temp = new Tile(tileMin->GetImage(), tileMin->GetCoverImage(), tileMin->GetX(), tileMin->GetY(), tileMin->GetSizeX(), tileMin->GetSizeY(), tileMin->GetFrameIndexX(), tileMin->GetFrameIndexY(), (int)tileMin->GetTileType());
+			//Tile* temp = new Tile(*tileMin);
 			Tile* temp = tileMin;
-			temp->SetX(temp->GetX() + TileSize / 2);		// 칸에 맞춰서 움직이자
-			temp->SetY(temp->GetY() + TileSize / 2);
+			temp->SetX(tileMin->GetX());// +TileSize / 2);
+			temp->SetY(tileMin->GetY());// +TileSize / 2);
+			//temp->SetX(temp->GetX() + TileSize / 2);		// 칸에 맞춰서 움직이자
+			//temp->SetY(temp->GetY() + TileSize / 2);
 			path.push_back(temp);
 			while (loadList[temp->GetY() / TileSize][temp->GetX() / TileSize].parent != nullptr)
 			{
 				temp = loadList[temp->GetY() / TileSize][temp->GetX() / TileSize].parent;
-				temp->SetX(temp->GetX() + TileSize / 2);
-				temp->SetY(temp->GetY() + TileSize / 2);
+				temp->SetX(temp->GetX());// +TileSize / 2);
+				temp->SetY(temp->GetY());// +TileSize / 2);
 				path.push_back(temp);
 			}
 

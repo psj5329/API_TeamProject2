@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Player.h"
 #include "Sableye.h"
+#include "Button.h"
 
 void Scene1::Init()
 {
@@ -50,6 +51,9 @@ void Scene1::Init()
 	vector<GameObject*> object = OBJECTMANAGER->GetObjectList(ObjectLayer::ENEMY);
 	for (int i = 0; i < object.size(); ++i)
 		dynamic_cast<Enemy*>(object[i])->SetTileList(*mTileMap->GetTileListPtr());
+
+
+	WindowInit();		// 일시정지 창 이닛
 }
 
 void Scene1::Release()
@@ -62,15 +66,51 @@ void Scene1::Update()
 	if (INPUT->GetKeyDown(VK_SPACE))
 	{
 		GameObject* item = COLLISIONMANAGER->ItemCollision(mPlayer->GetColBoxPtr());
-		if(item != nullptr)
+		if (item != nullptr)
 			item->SetIsActive(false);
 	}
 
-	OBJECTMANAGER->Update();
-	mTileMap->Update();
-	COLLISIONMANAGER->TileCollision(mPlayer, mTileMap);
-	COLLISIONMANAGER->MapObjectCollision(mPlayer, mTileMap);
-	CAMERAMANAGER->Update();
+	if (INPUT->GetKeyDown(VK_ESCAPE))
+		mIsPause = !mIsPause;
+
+	if (mIsPause && !mIsOption)
+	{
+		if (mContinueButton != nullptr)
+			mContinueButton->Update();
+		if (mOptionButton != nullptr)
+			mOptionButton->Update();
+		if (mMainButton != nullptr)
+			mMainButton->Update();
+	}
+
+	if (mIsPause)
+	{
+		if (mXButton != nullptr)
+			mXButton->Update();
+		if (mVolumeEffectBar != nullptr)
+		{
+			mVolumeEffectBar->Update();
+			mVolumeEffectButton->Update();
+		}
+		if (mVolumeEffectButton != nullptr)
+			mVolumeEffectButton->Update();
+		if (mVolumeBackgroundBar != nullptr)
+		{
+			mVolumeBackgroundBar->Update();
+			mVolumeBackgroundButton->Update();
+		}
+		if (mVolumeBackgroundButton != nullptr)
+			mVolumeBackgroundButton->Update();
+	}
+
+	if (!mIsPause)
+	{
+		OBJECTMANAGER->Update();
+		mTileMap->Update();
+		COLLISIONMANAGER->TileCollision(mPlayer, mTileMap);
+		COLLISIONMANAGER->MapObjectCollision(mPlayer, mTileMap);
+		CAMERAMANAGER->Update();
+	}
 }
 
 void Scene1::Render(HDC hdc)
@@ -78,7 +118,25 @@ void Scene1::Render(HDC hdc)
 	mTileMap->Render(hdc);
 	OBJECTMANAGER->Render(hdc);
 
-	wstring strScene = L"이건 1번 씬, 후에 사라질거야....";
-	TextOut(hdc, WINSIZEX / 2 - 150, WINSIZEY / 2, strScene.c_str(), strScene.length());
+
+	if (mIsPause)
+	{
+		if (!mIsOption)
+		{
+			CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mPauseWindow, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
+			mContinueButton->ScaleRender(hdc, 0.9f, 0.9f);
+			mOptionButton->ScaleRender(hdc, 0.9f, 0.9f);
+			mMainButton->ScaleRender(hdc, 0.9f, 0.9f);
+		}
+		else
+		{
+			CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mPauseOptionWindow, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
+			mXButton->ScaleRender(hdc, 0.9f, 0.9f);
+			mVolumeEffectBar->Render(hdc);
+			mVolumeEffectButton->Render(hdc);
+			mVolumeBackgroundBar->Render(hdc);
+			mVolumeBackgroundButton->Render(hdc);
+		}
+	}
 }
 

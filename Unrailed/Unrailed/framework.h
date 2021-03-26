@@ -58,6 +58,7 @@ using namespace std;
 #include "GameEventManager.h"
 #include "Gizmo.h"
 #include "PathFinder.h"
+#include "Button.h"
 
 //#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
