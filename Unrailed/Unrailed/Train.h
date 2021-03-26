@@ -35,7 +35,6 @@ protected:
 	int mCurrentX;
 	int mCurrentY;
 	float mSynthesisCoolTime;
-	int mLevel;
 	bool mStop;
 	bool mIsExplode;
 	bool mIsSynthesis;
@@ -50,7 +49,6 @@ protected:
 	class Animation* mExplode;
 
 public:
-	//Train();
 
 	virtual void Init()override = 0;
 	virtual void Release()override = 0;
@@ -68,4 +66,7 @@ public:
 	void SetSpeed();
 	bool CheckNextIsPassed();
 	bool CheckNextTrailType();
+	
+	bool GetIsExplode() { return mIsExplode; }
+	void SetIsExplode(bool explode) { mIsExplode = explode; }
 };

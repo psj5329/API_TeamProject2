@@ -48,18 +48,9 @@ void Scene6::Init()
 	//}
 
 	mVoltorb = new Voltorb;
-	mVoltorb->Init(120, WINSIZEY / 2 - 40, 0);
+	mVoltorb->Init(120, WINSIZEY / 2 - 40);
 	vector <vector <Trail*>>* temp = mTrailManager->GetTrailListPtr();
 	mVoltorb->SetTrail(temp);
-
-	//mVoltorbVec[0]->SetImage(0);
-	//mVoltorbVec[1]->SetImage(1);
-	//mVoltorbVec[2]->SetImage(1);
-	//
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	mVoltorbVec[i]->SetY(WINSIZEY / 2 - 40);
-	//}
 
 	//mMachop = new Machop;
 	//mMachop->Init();

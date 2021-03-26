@@ -3,7 +3,7 @@
 
 class Animation;
 
-class Voltorb : public Train
+class Electrode : public Train
 {
 	Animation* mDownMove;
 	Animation* mUpMove;
@@ -20,7 +20,7 @@ public:
 
 	void ReadyAnimation()override;
 	void SetAnimation()override;
-	
+
 	void EndExplode()override;
 };
 

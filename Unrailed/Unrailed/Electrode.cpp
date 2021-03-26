@@ -1,15 +1,15 @@
 #include "pch.h"
-#include "Voltorb.h"
+#include "Electrode.h"
 #include "Image.h"
 #include "Animation.h"
 #include "Tile.h"
 #include "Trail.h"
 #include "Camera.h"
 
-void Voltorb::Init(int x, int y)
+void Electrode::Init(int x, int y)
 {
 	mExplodeImage = IMAGEMANAGER->FindImage(L"explode");
-	mImage = IMAGEMANAGER->FindImage(L"Voltorb");
+	mImage = IMAGEMANAGER->FindImage(L"Electrode");
 
 	ReadyAnimation();
 
@@ -19,7 +19,6 @@ void Voltorb::Init(int x, int y)
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
-	//SetImage(image);
 
 	//Electrode 변수
 	mDirection = Direction::Right;
@@ -27,7 +26,7 @@ void Voltorb::Init(int x, int y)
 	mSpeed = 100.f;
 
 	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, this);
-	
+
 	mCurrentX = mX / TileSize;
 	mCurrentY = mY / TileSize;
 	mCurrentImage = mImage;
@@ -35,7 +34,7 @@ void Voltorb::Init(int x, int y)
 	mCurrentAnimation->Play();
 }
 
-void Voltorb::Release()
+void Electrode::Release()
 {
 	SafeDelete(mDownMove);
 	SafeDelete(mUpMove);
@@ -45,7 +44,7 @@ void Voltorb::Release()
 	SafeDelete(mExplode);
 }
 
-void Voltorb::Update()
+void Electrode::Update()
 {
 	//인덱스 가져오기
 	int indexX = mX / TileSize;
@@ -107,18 +106,35 @@ void Voltorb::Update()
 	}
 
 	//폭발
+	if (CheckTileEdge() == true)
+	{
+		//다음 녀석이 트레일인지 아닌지 불값을 뱉는 함수
+		//false면 isexplode	
+		if (CheckNextTrailType() == false)
+		{
+			SetIsExplode(true);
+		}
+
+		//ispassed를 true로 해주는 함수
+		//다음 (넘어가려는) 트레일에 ispassed를 체크하는 함수
+		//그 위에 함수가 true면 상태를 isexplode로
+		if (CheckNextIsPassed() == true)
+		{
+			SetIsExplode(true);
+		}
+	}
 	if (GetIsExplode() == true && mState != State::Explode)
 	{
 		mState = State::Explode;
 		SetAnimation();
 	}
-	
+
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 }
 
-void Voltorb::Render(HDC hdc)
+void Electrode::Render(HDC hdc)
 {
 	//RenderRect(hdc, mRect);
 	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
@@ -128,7 +144,7 @@ void Voltorb::Render(HDC hdc)
 	GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);
 }
 
-void Voltorb::ReadyAnimation()
+void Electrode::ReadyAnimation()
 {
 	mDownMove = new Animation();
 	mDownMove->InitFrameByStartEnd(0, 0, 2, 0, false);
@@ -162,7 +178,7 @@ void Voltorb::ReadyAnimation()
 	mExplode->SetCallbackFunc(bind(&Train::EndExplode, this));
 }
 
-void Voltorb::SetAnimation()
+void Electrode::SetAnimation()
 {
 	if (mState == State::Move)
 	{
@@ -221,7 +237,7 @@ void Voltorb::SetAnimation()
 	}
 }
 
-//void Voltorb::SetImage(int i)
+//void Electrode::SetImage(int i)
 //{
 //	if (i == 0) // 0은 false
 //	{
@@ -233,7 +249,7 @@ void Voltorb::SetAnimation()
 //	}
 //}
 
-void Voltorb::EndExplode()
+void Electrode::EndExplode()
 {
 	if (mState == State::Explode)
 	{

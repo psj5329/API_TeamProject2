@@ -315,6 +315,9 @@
     <ClInclude Include="Struct.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Electrode.h">
+      <Filter>MainGame\Object\Unit\Train</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -478,6 +481,9 @@
     </ClCompile>
     <ClCompile Include="PathFinder.cpp">
       <Filter>Framework\PathFinder</Filter>
+    </ClCompile>
+    <ClCompile Include="Electrode.cpp">
+      <Filter>MainGame\Object\Unit\Train</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

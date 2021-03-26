@@ -6,22 +6,18 @@
 #include "Trail.h"
 #include "Camera.h"
 
-//Machop::Machop()
-//	: Train()
-//{
-//}
-
-void Machop::Init()
+void Machop::Init(int x, int y, int image)
 {
 	mName = "Machop";
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Machop");
 
 	ReadyAnimation();
+	SetImage(image);
 
 	//부모 클래스 (GameObject) 변수
-	mX = WINSIZEX / 2 - 135;
-	mY = WINSIZEY / 2;
+	mX = x;
+	mY = y;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -30,9 +26,12 @@ void Machop::Init()
 	mDirection = Direction::Right;
 	mState = State::Move;
 	mSpeed = 100.f;
-	mLevel = 3;
 	mOreCount = 0;
 
+	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, this);
+
+	mCurrentX = mX / TileSize;
+	mCurrentY = mY / TileSize;
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
 	mCurrentAnimation->Play();
@@ -112,39 +111,13 @@ void Machop::Update()
 		SetTarget();
 	}
 
-	//진화
-	switch (mLevel)
-	{
-	case 1:
-		mCurrentImage = IMAGEMANAGER->FindImage(L"Machop");
-		break;
-	case 2:
-		mCurrentImage = IMAGEMANAGER->FindImage(L"Machoke");
-		break;
-	case 3:
-		mCurrentImage = IMAGEMANAGER->FindImage(L"Machamp");
-		break;
-	}
-	if (INPUT->GetKeyDown('Q'))
-	{
-		mLevel = 1;
-	}
-	if (INPUT->GetKeyDown('W'))
-	{
-		mLevel = 2;
-	}
-	if (INPUT->GetKeyDown('E'))
-	{
-		mLevel = 3;
-	}
 
 	//폭발
-	//if (mX >= WINSIZEX - 400 && mIsExplode == false)
-	//{
-	//	mIsExplode = true;
-	//	mState = State::Explode;
-	//	SetAnimation();
-	//}
+	if (GetIsExplode() == true && mState != State::Explode)
+	{
+		mState = State::Explode;
+		SetAnimation();
+	}
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -419,6 +392,34 @@ void Machop::EndIntercept()
 			mState = State::Move;
 			SetAnimation();
 		}
+	}
+}
+
+void Machop::SetImage(int level)
+{
+	switch (level)
+	{
+	case 1:
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Machop");
+		break;
+	case 2:
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Machoke");
+		break;
+	case 3:
+		mCurrentImage = IMAGEMANAGER->FindImage(L"Machamp");
+		break;
+	}
+	if (INPUT->GetKeyDown('Q'))
+	{
+		level = 1;
+	}
+	if (INPUT->GetKeyDown('W'))
+	{
+		level = 2;
+	}
+	if (INPUT->GetKeyDown('E'))
+	{
+		level = 3;
 	}
 }
 

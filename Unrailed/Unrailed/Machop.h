@@ -7,7 +7,7 @@ class Animation;
 class Machop : public Train
 {
 	vector <Ore*> mOreList;
-
+	
 	Animation* mDownMove;
 	Animation* mUpMove;
 	Animation* mLeftMove;
@@ -20,15 +20,16 @@ class Machop : public Train
 	Animation* mRightIntercept;
 
 public:
-	//Machop();
 
-	void Init()override;
+	void Init()override {};
+	void Init(int x, int y, int image);
 	void Release()override;
 	void Update()override;
 	void Render(HDC hdc)override;
 
 	void ReadyAnimation()override;
 	void SetAnimation()override;
+	void SetImage(int level);
 
 	void EndExplode()override;
 	void EndIntercept();
