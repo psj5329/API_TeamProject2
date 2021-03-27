@@ -18,6 +18,7 @@ class Hut :
 	HutType mtype;
 
 public:
+	void Init()override {};
 	void Init(float x, float y, HutType type);
 	void Release() override;
 	void Update()override;

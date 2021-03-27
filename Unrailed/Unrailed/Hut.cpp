@@ -1,12 +1,16 @@
 #include "pch.h"
 #include "Hut.h"
-
+#include "Image.h"
+#include "Camera.h"
 
 void Hut::Init(float x, float y, HutType type)
 {
     SetType(type);
 	mX = x;
 	mY = y;
+    mSizeX = mImage->GetFrameWidth();
+    mSizeY = mImage->GetFrameHeight();
+    mRect = RectMakeCenter(mX, mY,mSizeX,mSizeY);
 }
 
 void Hut::Release()
@@ -22,7 +26,8 @@ void Hut::Update()
 
 void Hut::Render(HDC hdc)
 {
-
+    if(mImage != nullptr && mtype != HutType::None)
+     CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mImage, mX, mY, mSizeX, mSizeY);
 }
 
 void Hut::SetType(HutType type)

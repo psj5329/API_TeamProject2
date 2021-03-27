@@ -5,6 +5,7 @@
 #include "Button.h"
 #include "Path.h"
 #include "Camera.h"
+#include "Hut.h"
 
 void MapToolScene::Init()
 {
@@ -102,6 +103,14 @@ void MapToolScene::Update()
 				}
 			}
 		}
+
+		//hutÇÈ
+		if (PtInRect(&mHutPallete.rect, _mousePosition))
+		{
+			mCurrentHut = mHutPallete;
+			mCurrentPallete = CurrentPallete::Hut;
+			SetMouseRect();
+		}
 	}
 
 	PaintTilesL();
@@ -155,6 +164,10 @@ void MapToolScene::Render(HDC hdc)
 	RenderButtons(hdc);
 
 	RenderMouseRect(hdc);
+
+
+	//hut
+	mHut.Render(hdc);
 	//wstring y = L"TileY: " + to_wstring(mYTileCount);
 	//TextOut(hdc, _mousePosition.x, _mousePosition.y, y.c_str(), (int)y.length());
 	//wstring x = L"TileX: " + to_wstring(mXTileCount);
@@ -531,9 +544,15 @@ void MapToolScene::ImageLoad()
 		 mMouse.isOn = false;
 	 }
 
-	 if (mMouse.isOn)
+	 if (mMouse.isOn && (mCurrentPallete != CurrentPallete::Hut))
 	 {
 		 mMouse.rect = mTileList[indexY][indexX]->GetRect();
+	 }
+	 else if (mCurrentPallete == CurrentPallete::Hut)
+	 {
+		 mMouse.positionX = _mousePosition.x + (x - WINSIZEX / 2);
+		 mMouse.positionY = _mousePosition.y + (y - WINSIZEY / 2);
+		 mMouse.rect = RectMakeCenter(mMouse.positionX, mMouse.positionY, mMouse.image->GetFrameWidth()*2, mMouse.image->GetFrameHeight()*2);
 	 }
 	 else
 	 {
@@ -587,9 +606,15 @@ void MapToolScene::ImageLoad()
 		 }
 		 break;
 	 case CurrentPallete::Erase:
-		 CAMERAMANAGER->GetMainCamera()->AlphaScaleFrameRender(
-			 hdc, mMouse.image, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
+		 CAMERAMANAGER->GetMainCamera()->AlphaScaleRender(
+			 hdc, mMouse.image, mMouse.rect.left, mMouse.rect.top, mMouse.sizeX, mMouse.sizeY, 0.7);
 		 //mMouse.image->AlphaScaleFrameRender(hdc, mMouse.rect.left, mMouse.rect.top, mMouse.frameX, mMouse.frameY, mMouse.sizeX, mMouse.sizeY, 0.7);
+		 break;
+	 case CurrentPallete::Hut:
+		// CAMERAMANAGER->GetMainCamera()->AlphaScaleRender(
+		//	 hdc, mMouse.image, (mMouse.rect.left+mMouse.rect.right)/2 , (mMouse.rect.top+mMouse.rect.bottom)/2, mMouse.image->GetFrameWidth() * 2, mMouse.image->GetFrameHeight() * 2, 0.7);
+		 CAMERAMANAGER->GetMainCamera()->AlphaScaleRender(
+			 hdc, mMouse.image, mMouse.rect.left, mMouse.rect.top, mMouse.image->GetFrameWidth() * 2, mMouse.image->GetFrameHeight() * 2, 0.7);
 		 break;
 	 default:
 		 break;
@@ -617,6 +642,8 @@ void MapToolScene::ImageLoad()
 	 case CurrentPallete::Erase:
 		 mMouse.image = IMAGEMANAGER->FindImage(L"XTile");
 		 break;
+	 case CurrentPallete::Hut:
+		 mMouse.image = mCurrentHut.mImage;
 	 default:
 		 break;
 	 }
@@ -739,8 +766,9 @@ void MapToolScene::ImageLoad()
 
  void MapToolScene::InitPalletes()
  {
-	 Image* tileImage = ImageManager::GetInstance()->FindImage(L"TinyWoods");
-	 Image* mineralImage = ImageManager::GetInstance()->FindImage(L"GreenMineral");
+	 Image* tileImage = IMAGEMANAGER->FindImage(L"TinyWoods");
+	 Image* mineralImage = IMAGEMANAGER->FindImage(L"GreenMineral");
+	 Image* hutImage = IMAGEMANAGER->FindImage(L"ChikoritaHut");
 
 	 //ÆÈ·¹Æ®
 	 int palleteStartX = WINSIZEX / 2;
@@ -801,6 +829,15 @@ void MapToolScene::ImageLoad()
 			 mObjectPallete[y].push_back(tempPallete);
 		 }
 	 }
+
+	 //hut ÆÈ·¿
+	 mHutPallete.mImage = hutImage;
+	 mHutPallete.positionX = 1000;
+	 mHutPallete.positionY = 400;
+	 mHutPallete.width = mHutPallete.mImage->GetFrameWidth();
+	 mHutPallete.height = mHutPallete.mImage->GetFrameHeight();
+	 mHutPallete.rect = RectMakeCenter(mHutPallete.positionX, mHutPallete.positionY, mHutPallete.width, mHutPallete.height);
+	 mHutPallete.type = HutType::ChikoritaHut;
  }
 
  void MapToolScene::RenderPalletes(HDC hdc)
@@ -872,6 +909,8 @@ void MapToolScene::ImageLoad()
 
 		 }
 	 }
+	 
+	 mHutPallete.mImage->Render(hdc, mHutPallete.rect.left, mHutPallete.rect.top);
  }
 
  void MapToolScene::PaintTilesL()
@@ -933,6 +972,14 @@ void MapToolScene::ImageLoad()
 					 mMapObjectList[indexY][indexX]->SetObjectType(ItemType::None);
 					 mMapObjectList[indexY][indexX]->SetImage(nullptr);
 				 }
+			 }
+
+			 //hut
+			 if (mCurrentPallete == CurrentPallete::Hut)
+			 {
+				 
+					 
+				 mHut.Init((_mousePosition.x + (x - WINSIZEX / 2)), (_mousePosition.y + (y - WINSIZEY / 2)), mCurrentHut.type);
 			 }
 		 }
 	 }

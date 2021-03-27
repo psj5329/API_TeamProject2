@@ -4,7 +4,7 @@
 #include "Image.h"
 #include "ICommand.h"
 #include "MapObject.h"
-
+#include "Hut.h"
 
 
 enum class CurrentPallete
@@ -12,7 +12,8 @@ enum class CurrentPallete
 	Tile,
 	Object,
 	Type,
-	Erase
+	Erase,
+	Hut
 };
 
 struct MouseRect
@@ -54,6 +55,17 @@ struct AreaSelect
 	int XTileCount; //Á¤ÇØÁø¿µ¿ªÀÇ X¼ö
 };
 
+struct HutPallete
+{
+	Image* mImage;
+	int positionX;
+	int positionY;
+	RECT rect;
+	int width;
+	int height;
+	HutType type;
+};
+
 class ICommand;
 class Button;
 
@@ -74,6 +86,10 @@ class MapToolScene : public Scene
 	vector <TypePallete> mTypePallete;
 	//¸Ê¿ÀºêÁ§Æ® ÆÈ·¿
 	vector <vector <MapObjectPallete>> mObjectPallete;
+	//hut
+	HutPallete mHutPallete;
+	HutPallete mCurrentHut;
+	class Hut mHut;
 
 	TilePallete mCurrentTile;
 	TileType mCurrentType;
