@@ -56,6 +56,8 @@ void Trail::Render(HDC hdc)
     {
         if (mIsConnected)
         {
+            //클리핑용
+            
             CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc,mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
            
             if (INPUT->GetKey('N'))
@@ -152,11 +154,11 @@ void Trail::AnimationInit(Animation* down, Animation* up, Animation* left, Anima
 
 }
 
-int Trail::PickUp()
+ItemType Trail::PickUp()
 {
     mIsActive = false;
     mIsDestroy = true;
-    return (int)mTrailType;
+    return mTrailType;
 }
 
 //속성바꾸기
@@ -201,4 +203,10 @@ void Trail::SetDirection(int dir)
         break;
     }
 
+}
+
+
+bool Trail::IsInCamera()
+{
+    return true;
 }

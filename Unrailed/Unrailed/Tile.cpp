@@ -25,49 +25,53 @@ Tile::Tile(Image* image, Image* coverImage, float x, float y, float sizeX, float
 
 void Tile::Render(HDC hdc)
 {
-
-	if (mImage != nullptr)
+	//카메라 안일때만
+	UpdateCoverFrame();
+	if (IsInCamera())
 	{
-		//CAMERAMANAGER->GetMainCamera().
-		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
-	}
-
-	if (mCoveImage != nullptr)
-	{	
-		if (mTileType == TileType::Lava || mTileType == TileType::Water)
+		if (mImage != nullptr)
 		{
-			UpdateCoverFrame();
-			CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCoveImage, mRect.left, mRect.top, mCoverFrameIndexX, mCoverFrameIndexY, mSizeX, mSizeY);
+			//CAMERAMANAGER->GetMainCamera().
+			CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+		}
+
+		if (mCoveImage != nullptr)
+		{	
+			if (mTileType == TileType::Lava || mTileType == TileType::Water)
+			{
+				CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCoveImage, mRect.left, mRect.top, mCoverFrameIndexX, mCoverFrameIndexY, mSizeX, mSizeY);
+			}
+		}
+
+		if (!INPUT->GetKey(VK_CONTROL))
+		{
+			switch (mTileType)
+			{
+			case TileType::Normal:
+				Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Green);
+				break;
+
+			case TileType::Wall:
+				Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Black);
+				break;
+
+			case TileType::Water:
+				Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Blue);
+				break;
+
+			case TileType::Lava:
+				Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Red);
+				break;
+
+			case TileType::ice:
+				Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Gray);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
-	if (!INPUT->GetKey(VK_CONTROL))
-	{
-		switch (mTileType)
-		{
-		case TileType::Normal:
-			Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Green);
-			break;
-
-		case TileType::Wall:
-			Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Black);
-			break;
-
-		case TileType::Water:
-			Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Blue);
-			break;
-
-		case TileType::Lava:
-			Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Red);
-			break;
-
-		case TileType::ice:
-			Gizmo::GetInstance()->DrawRectInCamera(hdc, mRect, Gizmo::Color::Gray);
-			break;
-		default:
-			break;
-		}
-	}
 	
 }
 
@@ -114,5 +118,19 @@ void Tile::UpdateCoverFrame()
 
 		mCoverFrameIndexX = mFrameIndexX;
 
+	}
+}
+
+bool Tile::IsInCamera()
+{
+	RECT temp;
+	RECT cam = CAMERAMANAGER->GetMainCamera()->GetRect();
+	if (IntersectRect(&temp, &cam, &mRect))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }

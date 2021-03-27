@@ -117,7 +117,7 @@ void MapToolScene::Render(HDC hdc)
 {
 	//배경
 	RECT rc = RectMakeCenter(WINSIZEX / 2, WINSIZEY / 2, WINSIZEX, WINSIZEY);
-	HPEN yellowPen = CreatePen(PS_SOLID, 3, RGB(255, 236, 204)); // 플레이어 사용 중
+	HPEN yellowPen = CreatePen(PS_SOLID, 3, RGB(255, 236, 204)); 
 	HPEN prevPen = (HPEN)SelectObject(hdc, yellowPen);
 	HBRUSH colorBrush = CreateSolidBrush(RGB(255, 236, 204));
 	HBRUSH prevBrush = (HBRUSH)SelectObject(hdc, colorBrush);

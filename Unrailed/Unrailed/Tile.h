@@ -101,4 +101,5 @@ public:
 
 private:
 	void UpdateCoverFrame();
+	bool IsInCamera();
 };

@@ -59,5 +59,7 @@ public:
 	void CreateNew();
 	void Load();
 
+private:
+	void RenderBackBackground(HDC hdc);
 };
 

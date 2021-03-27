@@ -5,6 +5,7 @@
 #include "MapToolScene.h"
 #include "Camera.h"
 #include "TrailManager.h"
+#include "Image.h" //Hut»©¸é »©µµ ¤¡¤º
 
 void Scene3::Init()
 {
@@ -13,7 +14,7 @@ void Scene3::Init()
 
 	mTileMap = new TileMap();
 	//mTileMap->Init(TileCountX, TileCountY, TileSize);
-	mTileMap->LoadMap(4);
+	mTileMap->LoadMap(3);
 	int x = mTileMap->GetXTileCount();
 	int y = mTileMap->GetYTileCount();
 
@@ -23,9 +24,11 @@ void Scene3::Init()
 	mTrailManager->InsertTrail(6, 1, ItemType::Green, 3);
 	mTrailManager->SetStartIndex(6, 0);
 
-	
+	mImage = IMAGEMANAGER->FindImage(L"Hut");
+	//mImage = IMAGEMANAGER->FindImage(L"ChikoritaHut");
+	//mImage = IMAGEMANAGER->FindImage(L"CharmanderHut");
 }
-
+	
 void Scene3::Release()
 {
 }
@@ -99,10 +102,7 @@ void Scene3::Render(HDC hdc)
 
 	OBJECTMANAGER->Render(hdc);
 
-
-	wstring str3 = L"SPACE ¸Ê·Îµå";
-	TextOut(hdc, _mousePosition.x + 10, _mousePosition.y + 40, str3.c_str(), str3.length());
-
+	mImage->ScaleRender(hdc, WINSIZEX / 2, WINSIZEY / 2, mImage->GetFrameWidth()*2, mImage->GetFrameHeight()*2);
 	//wstring strScene = L"ÀÌ°Ç 3¹ø ¾À";
 	//TextOut(hdc, WINSIZEX / 2 - 15, WINSIZEY / 2, strScene.c_str(), strScene.length());
 }
