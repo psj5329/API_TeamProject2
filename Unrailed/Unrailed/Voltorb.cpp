@@ -8,6 +8,7 @@
 
 void Voltorb::Init(int x, int y)
 {
+	mName = "Voltorb";
 	mExplodeImage = IMAGEMANAGER->FindImage(L"explode");
 	mImage = IMAGEMANAGER->FindImage(L"Voltorb");
 
@@ -34,7 +35,7 @@ void Voltorb::Init(int x, int y)
 	mCurrentAnimation = mRightMove;
 	mCurrentAnimation->Play();
 
-	mExplosionTimer = 0.5;
+	mExplosionTimer = 0.3;
 }
 
 void Voltorb::Release()
@@ -108,6 +109,7 @@ void Voltorb::Update()
 		SetTarget();
 	}
 
+	//Æø¹ß
 	if (mState == State::Exploding)
 	{
 		mExplosionTimer -= TIME->DeltaTime();
@@ -119,7 +121,6 @@ void Voltorb::Update()
 		}
 	}
 
-	//Æø¹ß
 	if (GetIsExplode() == true && mState != State::Explode)
 	{
 		mState = State::Explode;

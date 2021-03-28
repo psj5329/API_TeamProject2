@@ -11,6 +11,7 @@ void Machop::Init(int x, int y, int image)
 	mName = "Machop";
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Machop");
+	mElectrode = (Electrode*)OBJECTMANAGER->FindObject("Electrode");
 
 	ReadyAnimation();
 	SetImage(image);
@@ -113,9 +114,9 @@ void Machop::Update()
 
 
 	//Æø¹ß
-	if (GetIsExplode() == true && mState != State::Explode)
+	if (mElectrode->GetIsExplode() == true)
 	{
-		mState = State::Explode;
+		mState = State::Hurt;
 		SetAnimation();
 	}
 
@@ -127,7 +128,7 @@ void Machop::Render(HDC hdc)
 {
 	//RenderRect(hdc, mRect);
 	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
+	//CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
 	wstring strOre;
@@ -211,6 +212,26 @@ void Machop::ReadyAnimation()
 	mRightIntercept->SetIsLoop(false);
 	mRightIntercept->SetFrameUpdateTime(0.15f);
 	mRightIntercept->SetCallbackFunc(bind(&Machop::EndIntercept, this));
+
+	mDownHurt = new Animation();
+	mDownHurt->InitFrameByStartEnd(0, 4, 0, 4, false);
+	mDownHurt->SetIsLoop(false);
+	mDownHurt->SetFrameUpdateTime(0.8f);
+
+	mUpHurt = new Animation();
+	mUpHurt->InitFrameByStartEnd(1, 4, 1, 4, false);
+	mUpHurt->SetIsLoop(false);
+	mUpHurt->SetFrameUpdateTime(0.8f);
+
+	mLeftHurt = new Animation();
+	mLeftHurt->InitFrameByStartEnd(2, 4, 2, 4, false);
+	mLeftHurt->SetIsLoop(false);
+	mLeftHurt->SetFrameUpdateTime(0.8f);
+
+	mRightHurt = new Animation();
+	mRightHurt->InitFrameByStartEnd(3, 4, 3, 4, false);
+	mRightHurt->SetIsLoop(false);
+	mRightHurt->SetFrameUpdateTime(0.8f);
 }
 
 void Machop::SetAnimation()
@@ -281,6 +302,36 @@ void Machop::SetAnimation()
 		{
 			mCurrentAnimation->Stop();
 			mCurrentAnimation = mRightIntercept;
+			mCurrentAnimation->Play();
+		}
+	}
+
+	if (mState == State::Hurt)
+	{
+		if (mDirection == Direction::Down)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mDownHurt;
+			mCurrentAnimation->Play();
+		}
+		if (mDirection == Direction::Up)
+		{
+
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mUpHurt;
+			mCurrentAnimation->Play();
+		}
+		if (mDirection == Direction::Left)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mLeftHurt;
+			mCurrentAnimation->Play();
+
+		}
+		if (mDirection == Direction::Right)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mRightHurt;
 			mCurrentAnimation->Play();
 		}
 	}

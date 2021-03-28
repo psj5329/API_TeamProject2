@@ -9,6 +9,7 @@
 
 void Electrode::Init(int x, int y)
 {
+	mName = "Electrode";
 	mExplodeImage = IMAGEMANAGER->FindImage(L"explode");
 	mImage = IMAGEMANAGER->FindImage(L"Electrode");
 

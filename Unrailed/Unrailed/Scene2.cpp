@@ -48,7 +48,9 @@ void Scene2::Init()
 		mVoltorbVec.push_back(voltorb);
 		mVoltorbVec[i]->SetTrail(temp);
 	}
+
 	mElectrode->SetNextTrain(mVoltorbVec[0]);
+
 	for (int i = 0; i < 3; i++)
 	{
 		if (i != 2)
@@ -61,19 +63,14 @@ void Scene2::Init()
 		}
 	}
 
+	mMachop = new Machop;
+	mMachop->Init(-35, WINSIZEY / 2 - 40, 1);
+	mMachop->SetTrail(temp);
 
+	mAbra = new Abra;
+	mAbra->Init(-85, WINSIZEY / 2 - 40, 1);
+	mAbra->SetTrail(temp);
 	
-
-	//mMachop = new Machop;
-	//mMachop->Init(-35, WINSIZEY / 2 - 40, 1);
-	//mMachop->SetTrail(temp);
-	////여기도설정
-	//
-	//mAbra = new Abra;
-	//mAbra->Init(-85, WINSIZEY / 2 - 40, 1);
-	//mAbra->SetTrail(temp);
-	//여기도설정
-
 }
 
 void Scene2::Release()

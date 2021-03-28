@@ -18,7 +18,8 @@ enum class State : int
 	Intercept,
 	Synthesis,
 	Explode,
-	Exploding
+	Exploding,
+	Hurt
 };
 
 class Train : public GameObject
