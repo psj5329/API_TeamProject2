@@ -287,6 +287,8 @@
     <ResourceCompile Include="Unrailed.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\Resources\Icon\Unrailed.ico" />
+    <Image Include="..\Resources\Icon\Unrailed2.ico" />
     <Image Include="small.ico" />
     <Image Include="Unrailed.ico" />
   </ItemGroup>

@@ -528,6 +528,12 @@
     <Image Include="small.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="..\Resources\Icon\Unrailed.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\Resources\Icon\Unrailed2.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
     <Image Include="Unrailed.ico">
       <Filter>리소스 파일</Filter>
     </Image>
