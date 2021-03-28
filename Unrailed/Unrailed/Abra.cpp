@@ -8,9 +8,11 @@
 
 void Abra::Init(int x, int y, int image)
 {
+	mName = "Abra";
 	mExplodeImage = IMAGEMANAGER->FindImage(L"Explode");
 	mImage = IMAGEMANAGER->FindImage(L"Abra");
 	mMachop = (Machop*)OBJECTMANAGER->FindObject("Machop");
+	mElectrode = (Electrode*)OBJECTMANAGER->FindObject("Electrode");
 
 	ReadyAnimation();
 	SetImage(image);
@@ -115,9 +117,10 @@ void Abra::Update()
 		SetTarget();
 	}
 
-	if (GetIsExplode() == true && mState != State::Explode)
+	//Æø¹ß
+	if (mElectrode->GetIsExplode() == true)
 	{
-		mState = State::Explode;
+		mState = State::Hurt;
 		SetAnimation();
 	}
 
@@ -129,7 +132,7 @@ void Abra::Render(HDC hdc)
 {
 	//RenderRect(hdc, mRect);
 	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
+	//CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
 	wstring strTrail;
@@ -207,6 +210,26 @@ void Abra::ReadyAnimation()
 	mRightSynthesis->SetIsLoop(false);
 	mRightSynthesis->SetFrameUpdateTime(0.8f);
 	mRightSynthesis->SetCallbackFunc(bind(&Abra::EndSynthesis, this));
+
+	mDownHurt = new Animation();
+	mDownHurt->InitFrameByStartEnd(0, 4, 0, 4, false);
+	mDownHurt->SetIsLoop(false);
+	mDownHurt->SetFrameUpdateTime(0.8f);
+
+	mUpHurt = new Animation();
+	mUpHurt->InitFrameByStartEnd(1, 4, 1, 4, false);
+	mUpHurt->SetIsLoop(false);
+	mUpHurt->SetFrameUpdateTime(0.8f);
+
+	mLeftHurt = new Animation();
+	mLeftHurt->InitFrameByStartEnd(2, 4, 2, 4, false);
+	mLeftHurt->SetIsLoop(false);
+	mLeftHurt->SetFrameUpdateTime(0.8f);
+
+	mRightHurt = new Animation();
+	mRightHurt->InitFrameByStartEnd(3, 4, 3, 4, false);
+	mRightHurt->SetIsLoop(false);
+	mRightHurt->SetFrameUpdateTime(0.8f);
 }
 
 void Abra::SetAnimation()
@@ -279,6 +302,36 @@ void Abra::SetAnimation()
 		{
 			mCurrentAnimation->Stop();
 			mCurrentAnimation = mRightSynthesis;
+			mCurrentAnimation->Play();
+		}
+	}
+
+	if (mState == State::Hurt)
+	{
+		if (mDirection == Direction::Down)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mDownHurt;
+			mCurrentAnimation->Play();
+		}
+		if (mDirection == Direction::Up)
+		{
+
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mUpHurt;
+			mCurrentAnimation->Play();
+		}
+		if (mDirection == Direction::Left)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mLeftHurt;
+			mCurrentAnimation->Play();
+
+		}
+		if (mDirection == Direction::Right)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mRightHurt;
 			mCurrentAnimation->Play();
 		}
 	}

@@ -8,6 +8,7 @@
 
 void Voltorb::Init(int x, int y)
 {
+	mName = "Voltorb";
 	mExplodeImage = IMAGEMANAGER->FindImage(L"explode");
 	mImage = IMAGEMANAGER->FindImage(L"Voltorb");
 
@@ -33,6 +34,8 @@ void Voltorb::Init(int x, int y)
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
 	mCurrentAnimation->Play();
+
+	mExplosionTimer = 0.3;
 }
 
 void Voltorb::Release()
@@ -96,7 +99,7 @@ void Voltorb::Update()
 	//올라가있는 기차길의 현재 기차길/타일의 중간오면 방향확인
 	//방향이 가리키는 타일의 중간까지이동
 	SetSpeed();
-	if (mState == State::Move)
+	if (mState == State::Move|| mState == State::Exploding)
 	{
 		mX += mSpeedX * Time::GetInstance()->DeltaTime() / 2;
 		mY += mSpeedY * Time::GetInstance()->DeltaTime() / 2;
@@ -107,6 +110,17 @@ void Voltorb::Update()
 	}
 
 	//폭발
+	if (mState == State::Exploding)
+	{
+		mExplosionTimer -= TIME->DeltaTime();
+		if (mExplosionTimer < 0)
+		{
+			mIsExplode = true;
+			if(mNextTrain != nullptr)
+				mNextTrain->SetState(State::Exploding);
+		}
+	}
+
 	if (GetIsExplode() == true && mState != State::Explode)
 	{
 		mState = State::Explode;
@@ -122,7 +136,7 @@ void Voltorb::Render(HDC hdc)
 {
 	//RenderRect(hdc, mRect);
 	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
+	//CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
 	GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);

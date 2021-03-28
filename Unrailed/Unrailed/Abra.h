@@ -1,6 +1,7 @@
 #pragma once
 #include "Train.h"
 #include "Machop.h"
+#include "Electrode.h"
 #include "Ore.h"
 
 class Animation;
@@ -17,6 +18,7 @@ class Abra : public Train
 	vector <CreatedTrail*> mCreatedTrailList;
 
 	Machop* mMachop;
+	Electrode* mElectrode;
 
 	Animation* mDownMove;
 	Animation* mUpMove;
@@ -28,6 +30,10 @@ class Abra : public Train
 	Animation* mUpSynthesis;
 	Animation* mLeftSynthesis;
 	Animation* mRightSynthesis;
+	Animation* mDownHurt;
+	Animation* mUpHurt;
+	Animation* mLeftHurt;
+	Animation* mRightHurt;
 
 public:
 	void Init()override {};

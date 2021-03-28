@@ -9,7 +9,7 @@ class Electrode : public Train
 	Animation* mUpMove;
 	Animation* mLeftMove;
 	Animation* mRightMove;
-	Animation* mSleep;
+	Animation* mSleep;	
 
 public:
 	void Init()override {};

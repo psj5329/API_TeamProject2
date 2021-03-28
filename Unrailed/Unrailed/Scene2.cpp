@@ -49,7 +49,19 @@ void Scene2::Init()
 		mVoltorbVec[i]->SetTrail(temp);
 	}
 
-	
+	mElectrode->SetNextTrain(mVoltorbVec[0]);
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (i != 2)
+		{
+			mVoltorbVec[i]->SetNextTrain(mVoltorbVec[i + 1]);
+		}
+		else
+		{
+			mVoltorbVec[i]->SetNextTrain(nullptr);
+		}
+	}
 
 	mMachop = new Machop;
 	mMachop->Init(-35, WINSIZEY / 2 - 40, 1);
@@ -58,7 +70,7 @@ void Scene2::Init()
 	mAbra = new Abra;
 	mAbra->Init(-85, WINSIZEY / 2 - 40, 1);
 	mAbra->SetTrail(temp);
-
+	
 }
 
 void Scene2::Release()

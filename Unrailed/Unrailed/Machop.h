@@ -1,5 +1,6 @@
 #pragma once
 #include "Train.h"
+#include "Electrode.h"
 #include "Ore.h"
 
 class Animation;
@@ -7,6 +8,8 @@ class Animation;
 class Machop : public Train
 {
 	vector <Ore*> mOreList;
+
+	Electrode* mElectrode;
 
 	Animation* mDownMove;
 	Animation* mUpMove;
@@ -18,6 +21,10 @@ class Machop : public Train
 	Animation* mUpIntercept;
 	Animation* mLeftIntercept;
 	Animation* mRightIntercept;
+	Animation* mDownHurt;
+	Animation* mUpHurt;
+	Animation* mLeftHurt;
+	Animation* mRightHurt;
 
 public:
 	void Init()override {};
@@ -34,7 +41,7 @@ public:
 	void EndIntercept();
 
 	void InterceptOre();
-	void InterceptOre(ItemType itemType); // 주석 고쳐줭~~~
+	void InterceptOre(ItemType itemType);
 	int GetOreCount() { return mOreCount; }
 	void SetOreCount(int i) { mOreCount = i; }
 	vector <Ore*> GetOreList() { return mOreList; }

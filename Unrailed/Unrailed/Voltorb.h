@@ -11,6 +11,7 @@ class Voltorb : public Train
 	Animation* mRightMove;
 	Animation* mSleep;
 
+
 public:
 	void Init()override {};
 	void Init(int x, int y);
@@ -22,6 +23,7 @@ public:
 	void SetAnimation()override;
 	
 	void EndExplode()override;
+
 };
 
 
