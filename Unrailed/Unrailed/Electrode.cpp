@@ -208,7 +208,6 @@ void Electrode::SetAnimation()
 		}
 		if (mDirection == Direction::Left)
 		{
-
 			if (mCurrentAnimation != mLeftMove)
 			{
 				mCurrentAnimation->Stop();
@@ -223,7 +222,6 @@ void Electrode::SetAnimation()
 				mCurrentAnimation->Stop();
 				mCurrentAnimation = mRightMove;
 				mCurrentAnimation->Play();
-
 			}
 		}
 	}

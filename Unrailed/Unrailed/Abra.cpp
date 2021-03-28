@@ -124,6 +124,24 @@ void Abra::Update()
 		SetAnimation();
 	}
 
+	//ÁøÈ­
+	int level = 1;
+	if (INPUT->GetKeyDown('Q'))
+	{
+		level = 1;
+		SetImage(level);
+	}
+	if (INPUT->GetKeyDown('W'))
+	{
+		level = 2;
+		SetImage(level);
+	}
+	if (INPUT->GetKeyDown('E'))
+	{
+		level = 3;
+		SetImage(level);
+	}
+
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 }
@@ -256,7 +274,6 @@ void Abra::SetAnimation()
 		}
 		if (mDirection == Direction::Left)
 		{
-
 			if (mCurrentAnimation != mLeftMove)
 			{
 				mCurrentAnimation->Stop();
@@ -363,7 +380,7 @@ void Abra::SetAnimation()
 void Abra::SynthesisOre()
 {
 	ItemType type = ItemType::None;
-	if (mTrailCount <= 2 && mMachop->GetOreList().size() >= 2 && mIsSynthesis == false && mOreBroken == false)
+	if (mState != State::Hurt && mTrailCount <= 2 && mMachop->GetOreList().size() >= 2 && mIsSynthesis == false && mOreBroken == false)
 	{
 		mState = State::Synthesis;
 		SetAnimation();
@@ -437,18 +454,6 @@ void Abra::SetImage(int level)
 	case 3:
 		mCurrentImage = IMAGEMANAGER->FindImage(L"Alakazam");
 		break;
-	}
-	if (INPUT->GetKeyDown('Q'))
-	{
-		level = 1;
-	}
-	if (INPUT->GetKeyDown('W'))
-	{
-		level = 2;
-	}
-	if (INPUT->GetKeyDown('E'))
-	{
-		level = 3;
 	}
 }
 
