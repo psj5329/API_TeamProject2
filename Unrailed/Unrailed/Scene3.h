@@ -12,6 +12,8 @@ class Scene3 : public Scene
 	int mTailX;
 	int mTailY;
 
+	class Image* mImage;
+
 public:
 	void Init()override;
 	void Release()override;

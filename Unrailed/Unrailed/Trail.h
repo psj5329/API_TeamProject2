@@ -63,5 +63,8 @@ public:
 	void SetOrder(int a) { mOrder = a; }
 
 	void Turn();//플레이어의 돌리기
-	int PickUp();
+	ItemType PickUp();
+
+private:
+	bool IsInCamera();
 };

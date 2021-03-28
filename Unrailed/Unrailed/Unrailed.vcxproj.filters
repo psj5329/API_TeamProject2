@@ -145,6 +145,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="MainGame\Object\Hut">
+      <UniqueIdentifier>{dfca97f2-4bd4-4d3b-9d4a-fb3ff374d366}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -333,6 +336,9 @@
     <ClInclude Include="Bag.h">
       <Filter>MainGame\UI\Bag</Filter>
     </ClInclude>
+    <ClInclude Include="Hut.h">
+      <Filter>MainGame\Object\Hut</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -508,6 +514,9 @@
     </ClCompile>
     <ClCompile Include="Bag.cpp">
       <Filter>MainGame\UI\Bag</Filter>
+    </ClCompile>
+    <ClCompile Include="Hut.cpp">
+      <Filter>MainGame\Object\Hut</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -130,6 +130,9 @@ void MapToolReady::Update()
 
 void MapToolReady::Render(HDC hdc)
 {
+	//뒷배경
+	RenderBackBackground(hdc);
+
 	//배경
 	mBackgroundImg->ScaleRender(hdc, 0, 0, mBackgroundImg->GetFrameWidth() * 2, mBackgroundImg->GetFrameHeight() * 2);
 
@@ -211,4 +214,18 @@ void MapToolReady::SetTileCounts()
 {
 	mYTileCount = mYTens * 10 + mYOnes;
 	mXTileCount = mXTens * 10 + mXOnes;
+}
+
+void MapToolReady::RenderBackBackground(HDC hdc)
+{
+	//배경
+	RECT rc = RectMakeCenter(WINSIZEX / 2, WINSIZEY / 2, WINSIZEX, WINSIZEY);
+	HPEN yellowPen = CreatePen(PS_SOLID, 3, RGB(255, 236, 204));
+	HPEN prevPen = (HPEN)SelectObject(hdc, yellowPen);
+	HBRUSH colorBrush = CreateSolidBrush(RGB(255, 236, 204));
+	HBRUSH prevBrush = (HBRUSH)SelectObject(hdc, colorBrush);
+	RenderRect(hdc, rc);
+	SelectObject(hdc, prevBrush);
+	DeleteObject(colorBrush);
+	DeleteObject(yellowPen);
 }
