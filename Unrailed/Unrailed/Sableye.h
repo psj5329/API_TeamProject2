@@ -10,6 +10,10 @@ class Sableye : public Enemy
 	bool mIsRunAway;
 	int mItemCount;
 	float mDistance;
+	Image* mDustImage;
+	int mDustFrameX;
+	float mDustFrameTime;
+	float mAlpha;
 
 public:
 	void Init();

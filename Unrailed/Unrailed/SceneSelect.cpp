@@ -7,7 +7,7 @@
 void SceneSelect::Init()
 {
 	mBackground = IMAGEMANAGER->FindImage(L"MainScene");
-	mStageRound = IMAGEMANAGER->FindImage(L"Test1");
+	mStageRound = IMAGEMANAGER->FindImage(L"SceneSelect1");
 	Image* StageSelectButton = IMAGEMANAGER->FindImage(L"StartButton");
 	Image* LeftButton = IMAGEMANAGER->FindImage(L"Left");
 	Image* RightButton = IMAGEMANAGER->FindImage(L"Right");
@@ -19,7 +19,7 @@ void SceneSelect::Init()
 	mBackButton = new Button(BackButton, WINSIZEX / 2 + 590, WINSIZEY / 2 - 310, BackButton->GetWidth(), BackButton->GetHeight(), bind(&SceneSelect::BackButton, this));
 
 	mRound = 1;
-	mMaxRound = 3;
+	mMaxRound = 4;
 }
 
 void SceneSelect::Release()
@@ -61,7 +61,7 @@ void SceneSelect::LeftButton()
 	mRound--;
 	if (mRound <= 0)
 		mRound = mMaxRound;
-	wstring round = L"Test" + to_wstring(mRound);
+	wstring round = L"SceneSelect" + to_wstring(mRound);
 	mStageRound = IMAGEMANAGER->FindImage(round);
 }
 
@@ -70,7 +70,7 @@ void SceneSelect::RightButton()
 	mRound++;
 	if (mRound > mMaxRound)
 		mRound = 1;
-	wstring round = L"Test" + to_wstring(mRound);
+	wstring round = L"SceneSelect" + to_wstring(mRound);
 	mStageRound = IMAGEMANAGER->FindImage(round);
 }
 

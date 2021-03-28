@@ -26,6 +26,8 @@ protected:
 	Animation* mDeadAnimation;
 	Animation* mCurrentAnimation;
 
+	bool mIsDead;
+
 public:
 	virtual void Init() override;
 	virtual void Release()override;
@@ -40,6 +42,7 @@ public:
 	int GetHp() { return mHp; }
 	float GetSpeed() { return mSpeed; }
 	vector<vector<Tile*>> GetTileList() { return mTileList; }
+	bool GetIsDead() { return mIsDead; }
 
 	// Set
 	void SetHp(int hp) { mHp = hp; }
