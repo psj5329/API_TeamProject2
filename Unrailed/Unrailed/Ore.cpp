@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Ore.h"
 #include "Image.h"
+#include "Camera.h"
 
 void Ore::Init()
 {
@@ -17,7 +18,8 @@ void Ore::Update()
 
 void Ore::Render(HDC hdc)
 {
-	mImage->ScaleFrameRender(hdc, mX, mY, mFrameX, 0, mSizeX, mSizeY);
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mX, mY, mFrameX, 0, mSizeX, mSizeY);
+	//mImage->ScaleFrameRender(hdc, mX, mY, mFrameX, 0, mSizeX, mSizeY);
 
 	// {{ 테스트용 // 유찬 // 폰트랑 위치 수정해야 함
 	wstring strCount = to_wstring(mCount);

@@ -23,7 +23,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	wndClass.cbWndExtra = 0;										//윈도우 여분 메모리 설정
 	wndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);	//윈도우 백그라운드
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);					//윈도우 커서 모양
-	wndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);				//윈도우 아이콘 모양
+	//wndClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	wndClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_UNRAILED));	//윈도우 아이콘 모양
 	wndClass.hInstance = hInstance;									//윈도우 인스턴스 번호
 	wndClass.lpfnWndProc = (WNDPROC)WndProc;						//윈도우 프로시져
 	wndClass.lpszClassName = _className.c_str();					//윈도우 클래스 이름

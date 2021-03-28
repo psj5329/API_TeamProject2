@@ -148,6 +148,9 @@
     <Filter Include="MainGame\Scene\SceneSelect">
       <UniqueIdentifier>{ebbee86a-9d96-4c6a-987e-0b44c16d0156}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Object\Hut">
+      <UniqueIdentifier>{dfca97f2-4bd4-4d3b-9d4a-fb3ff374d366}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -339,6 +342,9 @@
     <ClInclude Include="SceneSelect.h">
       <Filter>MainGame\Scene\SceneSelect</Filter>
     </ClInclude>
+    <ClInclude Include="Hut.h">
+      <Filter>MainGame\Object\Hut</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -517,6 +523,9 @@
     </ClCompile>
     <ClCompile Include="SceneSelect.cpp">
       <Filter>MainGame\Scene\SceneSelect</Filter>
+    </ClInclude>
+    <ClCompile Include="Hut.cpp">
+      <Filter>MainGame\Object\Hut</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -526,6 +535,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\Resources\Icon\Unrailed.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\Resources\Icon\Unrailed2.ico">
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="Unrailed.ico">
