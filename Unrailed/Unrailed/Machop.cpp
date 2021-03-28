@@ -120,6 +120,24 @@ void Machop::Update()
 		SetAnimation();
 	}
 
+	//ÁøÈ­
+	int level = 1;
+	if (INPUT->GetKeyDown('Q'))
+	{
+		level = 1;
+		SetImage(level);
+	}
+	if (INPUT->GetKeyDown('W'))
+	{
+		level = 2;
+		SetImage(level);
+	}
+	if (INPUT->GetKeyDown('E'))
+	{
+		level = 3;
+		SetImage(level);
+	}
+
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 }
@@ -362,7 +380,7 @@ void Machop::SetAnimation()
 
 void Machop::InterceptOre()
 {
-	if (mOreCount <= 5)
+	if (mOreCount <= 5 && mState != State::Hurt)
 	{
 		if (INPUT->GetKeyDown('A'))
 		{
@@ -459,18 +477,6 @@ void Machop::SetImage(int level)
 	case 3:
 		mCurrentImage = IMAGEMANAGER->FindImage(L"Machamp");
 		break;
-	}
-	if (INPUT->GetKeyDown('Q'))
-	{
-		level = 1;
-	}
-	if (INPUT->GetKeyDown('W'))
-	{
-		level = 2;
-	}
-	if (INPUT->GetKeyDown('E'))
-	{
-		level = 3;
 	}
 }
 

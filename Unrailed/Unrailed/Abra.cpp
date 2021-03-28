@@ -124,6 +124,24 @@ void Abra::Update()
 		SetAnimation();
 	}
 
+	//ÁøÈ­
+	int level = 1;
+	if (INPUT->GetKeyDown('Q'))
+	{
+		level = 1;
+		SetImage(level);
+	}
+	if (INPUT->GetKeyDown('W'))
+	{
+		level = 2;
+		SetImage(level);
+	}
+	if (INPUT->GetKeyDown('E'))
+	{
+		level = 3;
+		SetImage(level);
+	}
+
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 }
@@ -256,7 +274,6 @@ void Abra::SetAnimation()
 		}
 		if (mDirection == Direction::Left)
 		{
-
 			if (mCurrentAnimation != mLeftMove)
 			{
 				mCurrentAnimation->Stop();
@@ -363,7 +380,7 @@ void Abra::SetAnimation()
 void Abra::SynthesisOre()
 {
 	ItemType type = ItemType::None;
-	if (mTrailCount <= 2 && mMachop->GetOreList().size() >= 2 && mIsSynthesis == false && mOreBroken == false)
+	if (mState != State::Hurt && mTrailCount <= 2 && mMachop->GetOreList().size() >= 2 && mIsSynthesis == false && mOreBroken == false)
 	{
 		mState = State::Synthesis;
 		SetAnimation();
@@ -394,6 +411,11 @@ void Abra::SynthesisOre()
 		mSynthesisCoolTime = 0;
 
 		mTrailCount += 1;
+	}
+
+	if (INPUT->GetKeyDown('F'))
+	{
+		TrailErase();
 	}
 }
 
@@ -438,18 +460,6 @@ void Abra::SetImage(int level)
 		mCurrentImage = IMAGEMANAGER->FindImage(L"Alakazam");
 		break;
 	}
-	if (INPUT->GetKeyDown('Q'))
-	{
-		level = 1;
-	}
-	if (INPUT->GetKeyDown('W'))
-	{
-		level = 2;
-	}
-	if (INPUT->GetKeyDown('E'))
-	{
-		level = 3;
-	}
 }
 
 void Abra::EndExplode()
@@ -471,4 +481,13 @@ ItemType Abra::Receive()
 	}
 	else
 		return ItemType::None;
+}
+
+ItemType Abra::TrailErase()
+{
+	ItemType type = mCreatedTrailList[0]->trailType;
+	mCreatedTrailList.erase(mCreatedTrailList.begin());
+	mTrailCount -= 1;
+
+	return type;
 }
