@@ -20,6 +20,8 @@ void Sableye::Init()
 	mState = EnemyState::IDLE;
 	mSpeed = 100.f;
 
+	mDustImage = IMAGEMANAGER->FindImage(L"Dust");
+
 	mVecItem = OBJECTMANAGER->GetObjectList(ObjectLayer::ITEM);
 	mPlayer = OBJECTMANAGER->GetPlayer();
 	mTarget = nullptr;
@@ -32,6 +34,14 @@ void Sableye::Init()
 	ReadyAnimation();
 
 	mItemCount = 0;
+	mDustFrameX = 0;
+	mDustFrameTime = 0.f;
+
+	mIsDead = false;
+
+	mHp = 3;
+
+	mAlpha = 1.f;
 }
 
 void Sableye::Release()
@@ -42,7 +52,35 @@ void Sableye::Update()
 {
 	mVecItem = OBJECTMANAGER->GetObjectList(ObjectLayer::ITEM);
 
-	MoveToOre();
+	if (mHp <= 0)
+	{
+		mIsDead = true;
+		mState = EnemyState::DEAD;
+		SetAnimation();
+	}
+
+	if (mIsDead)
+	{
+		mDustFrameTime += TIME->DeltaTime();
+
+		if (mDustFrameTime >= 0.1f)
+		{
+			mDustFrameX++;
+			mDustFrameTime = 0.f;
+			mAlpha -= 0.15f;
+
+			if (mAlpha <= 0.f)
+				mAlpha = 0.f;
+		}
+
+		if (mDustFrameX >= 7)
+		{
+			mDustFrameTime = 0;
+			mIsDestroy = true;
+		}
+	}
+	else
+		MoveToOre();
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -55,8 +93,16 @@ void Sableye::Render(HDC hdc)
 	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 #endif
 
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top
-		, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	CAMERAMANAGER->GetMainCamera()->AlphaScaleFrameRender(hdc, mImage, mRect.left, mRect.top
+		, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY, mAlpha);
+
+	if (mIsDead)
+	{
+		float width = mDustImage->GetWidth() / 7 * 2;
+		float height = mDustImage->GetHeight() * 2;
+		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mDustImage, mRect.left - width / 4
+			, mRect.top - height / 4, mDustFrameX, 0, width, height);
+	}
 }
 
 void Sableye::MoveToOre()
@@ -206,7 +252,7 @@ void Sableye::MoveToOre()
 					// 도착했으니까 아이템 훔치게 공격 모션
 					if (mState != EnemyState::ATTACK)
 					{
-						vector<GameObject*>* itemPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+						/*vector<GameObject*>* itemPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
 
 						for (int i = 0; i < (*itemPtr).size(); ++i)
 						{
@@ -217,30 +263,13 @@ void Sableye::MoveToOre()
 
 								(*itemPtr).erase((*itemPtr).begin() + i);
 							}
-						}
+						}*/
 
 						mIsExistTarget = false;
 						mState = EnemyState::ATTACK;
 						SetAnimation();
 					}
-					else
-					{
-						if (!mCurrentAnimation->GetIsPlay())
-						{
-							mState = EnemyState::IDLE;
-							SetAnimation();
-						}
-					}
 				}
-			}
-		}
-		else
-		{
-			//if (mState == EnemyState::ATTACK && mCurrentAnimation->GetNowFrameX() == 0)
-			if (!mCurrentAnimation->GetIsPlay())
-			{
-				mState = EnemyState::IDLE;
-				SetAnimation();
 			}
 		}
 	}
@@ -260,6 +289,29 @@ void Sableye::MoveToOre()
 	{
 		if (!mIsExistTarget)
 			mPathFinderList.clear();
+	}
+
+	if (!mCurrentAnimation->GetIsPlay())
+	{
+		if (mState == EnemyState::ATTACK)
+		{
+			vector<GameObject*>* itemPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+
+			for (int i = 0; i < (*itemPtr).size(); ++i)
+			{
+				if ((*itemPtr)[i] == mTarget)
+				{
+					mItem = mTarget;
+					mTarget = nullptr;
+
+					(*itemPtr).erase((*itemPtr).begin() + i);
+				}
+			}
+			mIsDead = true;
+		}
+
+		mState = EnemyState::IDLE;
+		SetAnimation();
 	}
 }
 
