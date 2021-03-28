@@ -36,6 +36,8 @@ void Machop::Init(int x, int y, int image)
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
 	mCurrentAnimation->Play();
+
+	mBagItemListPtr = mBag.GetBagItemListPtr();
 }
 
 void Machop::Release()
@@ -140,6 +142,8 @@ void Machop::Update()
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+
+	//mBag.Update((int)mX, (int)mY);
 }
 
 void Machop::Render(HDC hdc)
@@ -162,15 +166,13 @@ void Machop::Render(HDC hdc)
 		TextOut(hdc, mX - 20, mY - 40 - i * 15, strOre.c_str(), strOre.length());
 	}
 
+	//mBag.Render(hdc);
+
 	/*	wstring strBlue = L"블루:" + to_wstring(mOreCount);
 		TextOut(hdc, mX - 20, mY - 55, strBlue.c_str(), strBlue.length());
 
 		wstring strRed = L"레드:" + to_wstring(mOreCount);
 		TextOut(hdc, mX - 20, mY - 70, strRed.c_str(), strRed.length());*/
-
-	int a = mOreList.size();
-	wstring strA = to_wstring(a);
-	TextOut(hdc, 400, 400, strA.c_str(), (int)strA.length());
 }
 
 void Machop::ReadyAnimation()
@@ -398,6 +400,12 @@ void Machop::InterceptOre()
 
 			mState = State::Intercept;
 			SetAnimation();
+
+			/////
+			///BagItem* bagItem = new BagItem();
+			///bagItem->Init(ItemName::ItemOre, ItemType::Green);
+			///mBagItemListPtr->push_back(bagItem);
+			/////
 		}
 		if (INPUT->GetKeyDown('S'))
 		{
@@ -411,6 +419,12 @@ void Machop::InterceptOre()
 
 			mState = State::Intercept;
 			SetAnimation();
+
+			/////
+			///BagItem* bagItem = new BagItem();
+			///bagItem->Init(ItemName::ItemOre, ItemType::Blue);
+			///mBagItemListPtr->push_back(bagItem);
+			/////
 		}
 		if (INPUT->GetKeyDown('D'))
 		{
@@ -424,6 +438,12 @@ void Machop::InterceptOre()
 
 			mState = State::Intercept;
 			SetAnimation();
+
+			/////
+			///BagItem* bagItem = new BagItem();
+			///bagItem->Init(ItemName::ItemOre, ItemType::Red);
+			///mBagItemListPtr->push_back(bagItem);
+			/////
 		}
 	}
 }
@@ -438,6 +458,12 @@ void Machop::InterceptOre(ItemType itemType)
 		mOreList.push_back(ore);
 		mState = State::Intercept;
 		SetAnimation();
+
+		/////
+		///BagItem* bagItem = new BagItem();
+		///bagItem->Init(ItemName::ItemOre, itemType);
+		///mBagItemListPtr->push_back(bagItem);
+		/////
 	}
 }
 

@@ -41,6 +41,8 @@ void Abra::Init(int x, int y, int image)
 	mCurrentAnimation->Play();
 
 	mOreBroken = false;
+
+	mBagItemListPtr = mBag.GetBagItemListPtr();
 }
 
 void Abra::Release()
@@ -144,6 +146,8 @@ void Abra::Update()
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
+
+	//mBag.Update((int)mX, (int)mY);
 }
 
 void Abra::Render(HDC hdc)
@@ -165,6 +169,8 @@ void Abra::Render(HDC hdc)
 
 		TextOut(hdc, mX - 20, mY - 40 - i * 15, strTrail.c_str(), strTrail.length());
 	}
+
+	//mBag.Render(hdc);
 }
 
 void Abra::ReadyAnimation()

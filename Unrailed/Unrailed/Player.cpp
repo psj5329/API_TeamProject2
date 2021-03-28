@@ -8,9 +8,11 @@
 #include "TrailManager.h"
 #include "Ore.h"
 #include "Machop.h"
+#include "Abra.h"
 //#include "Bag.h"
 #include "Inven.h"
 #include "BagItem.h"
+#include "Enemy.h"
 
 Player::Player(const string& name, float x, float y)
 	: GameObject(name, x, y)
@@ -47,10 +49,8 @@ void Player::Init()
 
 	mTileX = 0;
 	mTileY = 0;
-
 	mNextTileX = 0;
 	mNextTileY = 0;
-
 	mRangeX = 0;
 	mRangeY = 0;
 
@@ -526,6 +526,22 @@ void Player::InputSpaceKey()
 	{
 		CheckNextTile();
 
+		vector<GameObject*>* enemyListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ENEMY);
+		if((*enemyListPtr).size())
+		{
+			RECT temp;
+
+			for (int i = 0; i < (*enemyListPtr).size(); ++i)
+			{
+				RECT enemyRc = ((*enemyListPtr)[i])->GetRect();
+				if (IntersectRect(&temp, &mRangeBox, &enemyRc))
+				{
+					((Enemy*)(*enemyListPtr)[i])->DamagedHp();
+					return;
+				}
+			}
+		}
+
 		if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Green))
 		{
 			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
@@ -659,30 +675,18 @@ void Player::InputZKey()
 
 				if (IntersectRect(&temp, &mRangeBox, &trainRc))
 				{
-					//trailerase??? 인가를 호출해야 함
-					//얘가 타입 뱉으면 타입 생성해서 인벤에 넣어주면 됨
-					
+					int trailCnt = ((Abra*)trainList[i])->GetTrailCount();
+					if (trailCnt <= 0)
+						continue;
 
-					//////int oreCnt = ((Machop*)trainList[i])->GetOreCount();
-					//////if (oreCnt > 6)
-					//////	continue;
-					//////
-					//////((Machop*)trainList[i])->InterceptOre(itemType);
-					//////mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
-					////////mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
-					//////return;
+					ItemType itemType = ((Abra*)trainList[i])->TrailErase();
+
+					BagItem* bagItem = new BagItem();
+					bagItem->Init(ItemName::ItemTrail, itemType);
+					mBagItemListPtr->push_back(bagItem);
+					return;
 				}
 			}
-
-			///////////////////////////////
-			/////////////////////////////
-			////////////////////////////////////////////
-			///////////////////////////
-			//////////////////////////////
-			////////////////////////////
-			///////////////////////////////////
-			//////////////////////////////////////////////////
-
 
 			vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
 			Trail* currentTrail = (*trailListPtr)[mTileY][mTileX];
@@ -841,6 +845,8 @@ void Player::InputXKey()
 			//ItemType itemType = mBagItemList[mBagItemList.size() - 1]->GetType();
 
 			if (currentTileType == TileType::ice)
+				return;
+			else if ((currentTileType == TileType::Normal) && (itemType != ItemType::Green))
 				return;
 			else if ((currentTileType == TileType::Water) && (itemType != ItemType::Blue))
 				return;

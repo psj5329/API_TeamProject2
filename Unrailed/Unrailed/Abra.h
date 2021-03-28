@@ -3,6 +3,7 @@
 #include "Machop.h"
 #include "Electrode.h"
 #include "Ore.h"
+#include "Bag.h"
 
 class Animation;
 
@@ -35,6 +36,9 @@ class Abra : public Train
 	Animation* mLeftHurt;
 	Animation* mRightHurt;
 
+	Bag mBag;
+	vector<BagItem*>* mBagItemListPtr;
+
 public:
 	void Init()override {};
 	void Init(int x, int y, int image);
@@ -54,4 +58,6 @@ public:
 	ItemType Receive();
 
 	ItemType TrailErase();
+
+	int GetTrailCount() { return mCreatedTrailList.size(); }
 };

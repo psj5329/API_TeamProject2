@@ -28,9 +28,9 @@ void BagItem::Init(ItemName name, ItemType type)
 		mFrameIndexX = 2;
 
 	if (mItemName == ItemName::ItemOre)
-		mFrameIndexY = 0;// 1;
+		mFrameIndexY = 0;
 	else if (mItemName == ItemName::ItemTrail)
-		mFrameIndexY = 1;// 2;
+		mFrameIndexY = 1;
 }
 
 void BagItem::Release()

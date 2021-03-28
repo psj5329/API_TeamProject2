@@ -72,10 +72,8 @@ class Player : public GameObject
 
 	int mTileX;
 	int mTileY;
-
 	int mNextTileX;
 	int mNextTileY;
-
 	int mRangeX;
 	int mRangeY;
 
@@ -116,7 +114,7 @@ public:
 
 	void InputDirectionKey();
 	void Move();
-	void InputSpaceKey(); // Space key: attack gameobject
+	void InputSpaceKey(); // Space key: attack
 	void CheckNextTile();
 	void InputZKey(); // 'Z' key: pick up item 
 	void InputXKey(); // 'X' key: throw item
