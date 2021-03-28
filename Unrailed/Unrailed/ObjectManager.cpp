@@ -77,6 +77,24 @@ void ObjectManager::Render(HDC hdc)
 	}
 }
 
+void ObjectManager::ReleaseInScene()
+{
+	ObjectIter iter = mObjectList.begin();
+	for (; iter != mObjectList.end(); ++iter)
+	{
+		if (iter->first != ObjectLayer::PLAYER && iter->first != ObjectLayer::ITEM
+			&& iter->first != ObjectLayer::TRAIN)	// 설치 안한 trail도 지우면 안대
+		{
+			for (int i = 0; i < iter->second.size(); ++i)
+			{
+				iter->second[i]->Release();
+				SafeDelete(iter->second[i]);
+				iter->second.erase(iter->second.begin() + i);
+			}
+		}
+	}
+}
+
 void ObjectManager::AddObject(ObjectLayer layer, GameObject * object)
 {
 	//map도 배열연산자가 정의되어 있다. 

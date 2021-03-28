@@ -145,6 +145,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="MainGame\Scene\SceneSelect">
+      <UniqueIdentifier>{ebbee86a-9d96-4c6a-987e-0b44c16d0156}</UniqueIdentifier>
+    </Filter>
     <Filter Include="MainGame\Object\Hut">
       <UniqueIdentifier>{dfca97f2-4bd4-4d3b-9d4a-fb3ff374d366}</UniqueIdentifier>
     </Filter>
@@ -336,6 +339,9 @@
     <ClInclude Include="Bag.h">
       <Filter>MainGame\UI\Bag</Filter>
     </ClInclude>
+    <ClInclude Include="SceneSelect.h">
+      <Filter>MainGame\Scene\SceneSelect</Filter>
+    </ClInclude>
     <ClInclude Include="Hut.h">
       <Filter>MainGame\Object\Hut</Filter>
     </ClInclude>
@@ -515,6 +521,9 @@
     <ClCompile Include="Bag.cpp">
       <Filter>MainGame\UI\Bag</Filter>
     </ClCompile>
+    <ClCompile Include="SceneSelect.cpp">
+      <Filter>MainGame\Scene\SceneSelect</Filter>
+    </ClInclude>
     <ClCompile Include="Hut.cpp">
       <Filter>MainGame\Object\Hut</Filter>
     </ClCompile>

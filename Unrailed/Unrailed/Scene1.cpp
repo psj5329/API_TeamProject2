@@ -59,6 +59,7 @@ void Scene1::Init()
 void Scene1::Release()
 {
 	//OBJECTMANAGER->Release();
+	OBJECTMANAGER->ReleaseInScene();	// 플레이어, 아이템 제외 지우기
 }
 
 void Scene1::Update()
