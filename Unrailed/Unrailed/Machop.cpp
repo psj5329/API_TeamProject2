@@ -149,6 +149,10 @@ void Machop::Render(HDC hdc)
 
 		wstring strRed = L"ทนตๅ:" + to_wstring(mOreCount);
 		TextOut(hdc, mX - 20, mY - 70, strRed.c_str(), strRed.length());*/
+
+	int a = mOreList.size();
+	wstring strA = to_wstring(a);
+	TextOut(hdc, 400, 400, strA.c_str(), (int)strA.length());
 }
 
 void Machop::ReadyAnimation()

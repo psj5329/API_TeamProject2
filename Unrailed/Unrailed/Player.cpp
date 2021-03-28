@@ -69,15 +69,13 @@ void Player::Init()
 	mBagItemListPtr = mInven->GetBagItemListPtr();
 
 	// {{ 트레일 줍기 불가능해서 임시로 세팅
-	for (int i = 0; i < 3; ++i)
-	{
-		BagItem* bagItem = new BagItem();
-		//bagItem->SetName(ItemName::ItemTrail);
-		//bagItem->SetType(ItemType::Green);
-		bagItem->Init(ItemName::ItemTrail, ItemType::Green);
-		mBagItemListPtr->push_back(bagItem);
-		//mBagItemList.push_back(bagItem);
-	} // 트레일 줍기 불가능해서 임시로 세팅 // 여기까지 }}
+	//for (int i = 0; i < 3; ++i)
+	//{
+	//	BagItem* bagItem = new BagItem();
+	//	bagItem->Init(ItemName::ItemTrail, ItemType::Green);
+	//	mBagItemListPtr->push_back(bagItem);
+	//}
+	// 트레일 줍기 불가능해서 임시로 세팅 // 여기까지 }}
 }
 
 void Player::Release()
@@ -100,6 +98,7 @@ void Player::Update()
 	InputCKey();
 	InputVKey();
 	InputLKey(); // on/off gizmo
+	InputCheatKey(); // for test
 
 	ChangeCurrentAnimation();
 
@@ -648,6 +647,43 @@ void Player::InputZKey()
 
 		if (!bagSize || (mInven->GetBagItemName() == ItemName::ItemTrail))//mBag->GetBagItemName() == ItemName::ItemTrail))
 		{
+			RECT temp;
+			vector<GameObject*> trainList = OBJECTMANAGER->GetObjectList(ObjectLayer::TRAIN);
+
+			for (int i = 0; i < trainList.size(); ++i)
+			{
+				if (trainList[i]->GetName() != "Abra")
+					continue; // abra 아니면 continue하게 해야 함
+
+				RECT trainRc = trainList[i]->GetRect(); // 추후에 렉트 종류 새로 따면 바꾸기
+
+				if (IntersectRect(&temp, &mRangeBox, &trainRc))
+				{
+					//trailerase??? 인가를 호출해야 함
+					//얘가 타입 뱉으면 타입 생성해서 인벤에 넣어주면 됨
+					
+
+					//////int oreCnt = ((Machop*)trainList[i])->GetOreCount();
+					//////if (oreCnt > 6)
+					//////	continue;
+					//////
+					//////((Machop*)trainList[i])->InterceptOre(itemType);
+					//////mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
+					////////mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
+					//////return;
+				}
+			}
+
+			///////////////////////////////
+			/////////////////////////////
+			////////////////////////////////////////////
+			///////////////////////////
+			//////////////////////////////
+			////////////////////////////
+			///////////////////////////////////
+			//////////////////////////////////////////////////
+
+
 			vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
 			Trail* currentTrail = (*trailListPtr)[mTileY][mTileX];
 
@@ -728,7 +764,6 @@ void Player::InputXKey()
 			return;
 
 		ItemName itemName = mInven->GetBagItemName();//mBag->GetBagItemName();
-		//ItemName itemName = mBagItemList[0]->GetName();
 
 		if (itemName == ItemName::ItemOre)
 		{
@@ -740,7 +775,8 @@ void Player::InputXKey()
 
 			for (int i = 0; i < trainList.size(); ++i)
 			{
-				// 지금은 machop인지 검사 따로 안하고 있음 // machop 아니면 continue하게 해야 함
+				if (trainList[i]->GetName() != "Machop")
+					continue; // machop 아니면 continue하게 해야 함
 
 				RECT trainRc = trainList[i]->GetRect(); // 추후에 렉트 종류 새로 따면 바꾸기
 
@@ -1102,6 +1138,21 @@ void Player::InputLKey()
 			mIsInfoOn = false;
 		else
 			mIsInfoOn = true;
+	}
+}
+
+void Player::InputCheatKey()
+{
+	if (INPUT->GetKeyDown('J'))
+	{
+		int hidden = mInven->GetHiddenItem();
+
+		if (hidden == 0)
+			mInven->SetHiddenItem(1);
+		else if (hidden == 1)
+			mInven->SetHiddenItem(2);
+		else if (hidden == 2)
+			mInven->SetHiddenItem(0);
 	}
 }
 

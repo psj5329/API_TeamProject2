@@ -8,18 +8,6 @@ void BagItem::Init()
 {
 	mImage = IMAGEMANAGER->FindImage(L"ItemUI");
 }
-/*
-void BagItem::Init(const wstring& key, int x, int y, int sizeX, int sizeY, int frameIndexX, int frameIndexY)
-{
-	mImage = IMAGEMANAGER->FindImage(key);
-	mX = x;
-	mY = y;
-	mSizeX = sizeX;
-	mSizeY = sizeY;
-	mFrameIndexX = frameIndexX;
-	mFrameIndexY = frameIndexY;
-	//mCount = 0;
-}*/
 
 void BagItem::Init(ItemName name, ItemType type)
 {

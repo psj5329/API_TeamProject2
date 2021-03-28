@@ -90,9 +90,8 @@ void MainGame::Update()
 
 void MainGame::Render(HDC hdc)
 {
-	//백버퍼의 HDC 가져온다
 	HDC backDC = mBackBuffer->GetHDC();
-	//HDC 영역을 특정 색으로 밀어버리는 녀석
+
 	if(SCENEMANAGER->GetCurrentSceneName() == L"LoadingScene")
 		PatBlt(backDC, 0, 0, WINSIZEX, WINSIZEY, BLACKNESS);
 	else
@@ -103,7 +102,7 @@ void MainGame::Render(HDC hdc)
 		RenderTime(backDC);
 	}
 	//====================================================
-	//후면버퍼 내용을 윈도우 창에 고속 복사
+
 	mBackBuffer->Render(hdc, 0, 0);
 }
 
@@ -240,4 +239,3 @@ void MainGame::LoadSoundResources(LoadingScene* scene)
 		}
 	}
 }
-

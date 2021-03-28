@@ -4,7 +4,10 @@
 #include "Camera.h"
 #include "TileMap.h"
 #include "TrailManager.h"
+
+#include "Electrode.h"
 #include "Machop.h"
+#include "Abra.h"
 
 void Scene4::Init()
 {
@@ -51,14 +54,19 @@ void Scene4::Init()
 	mTrailManager->PlaceTrail(6, 3, ItemType::Green, 1);
 	mTrailManager->PlaceTrail(5, 3, ItemType::Green, 1);
 
+	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+
+	Electrode* electrode = new Electrode();
+	electrode->Init(5 * 48 + 24, 72);
+	electrode->SetTrail(trailListPtr);
+
 	Machop* machop = new Machop();
 	machop->Init(5 * 48 + 24, 24, 1);
-	//machop->Init();
-	//machop->SetX(5 * 48 + 24);
-	//machop->SetY(24);
-	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, machop);
-	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
 	machop->SetTrail(trailListPtr);
+
+	Abra* abra = new Abra();
+	abra->Init(5 * 48 + 24, -24, 1);
+	abra->SetTrail(trailListPtr);
 
 	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
 	mTempPlayer->SetTileListPtr(tileListPtr);
