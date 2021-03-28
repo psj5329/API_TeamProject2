@@ -523,7 +523,7 @@
     </ClCompile>
     <ClCompile Include="SceneSelect.cpp">
       <Filter>MainGame\Scene\SceneSelect</Filter>
-    </ClInclude>
+    </ClCompile>
     <ClCompile Include="Hut.cpp">
       <Filter>MainGame\Object\Hut</Filter>
     </ClCompile>
