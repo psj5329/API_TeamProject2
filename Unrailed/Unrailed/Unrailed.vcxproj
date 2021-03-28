@@ -175,6 +175,7 @@
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Inven.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="Machop.h" />
     <ClInclude Include="MainGame.h" />
@@ -241,6 +242,7 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Inven.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="Machop.cpp" />
     <ClCompile Include="MainGame + MainProc.cpp" />
@@ -290,9 +292,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Resources\Icon\Unrailed.ico" />
-    <Image Include="..\Resources\Icon\Unrailed2.ico" />
-    <Image Include="small.ico" />
-    <Image Include="Unrailed.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

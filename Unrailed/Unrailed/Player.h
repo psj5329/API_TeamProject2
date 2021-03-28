@@ -35,7 +35,8 @@ class Image;
 class Animation;
 class MapObject;
 class TrailManager;
-class Bag;
+//class Bag;
+class Inven;
 class BagItem;
 
 class Player : public GameObject
@@ -81,7 +82,8 @@ class Player : public GameObject
 	vector<vector<Tile*>>* mTileListPtr;
 	vector<vector<MapObject*>>* mMapObjectListPtr;
 	TrailManager* mTrailManager;
-	Bag* mBag;
+	//Bag* mBag;
+	Inven* mInven;
 	vector<BagItem*>* mBagItemListPtr;
 	//bagItemListPtr
 	//vector<BagItem*> mBagItemList;

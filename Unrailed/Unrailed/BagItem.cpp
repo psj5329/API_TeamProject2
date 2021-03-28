@@ -6,11 +6,9 @@
 
 void BagItem::Init()
 {
-	//mCount = 0; // 현재 카운트는 따로 출력은 안하고 있음
-
 	mImage = IMAGEMANAGER->FindImage(L"ItemUI");
 }
-
+/*
 void BagItem::Init(const wstring& key, int x, int y, int sizeX, int sizeY, int frameIndexX, int frameIndexY)
 {
 	mImage = IMAGEMANAGER->FindImage(key);
@@ -21,7 +19,7 @@ void BagItem::Init(const wstring& key, int x, int y, int sizeX, int sizeY, int f
 	mFrameIndexX = frameIndexX;
 	mFrameIndexY = frameIndexY;
 	//mCount = 0;
-}
+}*/
 
 void BagItem::Init(ItemName name, ItemType type)
 {
@@ -42,12 +40,9 @@ void BagItem::Init(ItemName name, ItemType type)
 		mFrameIndexX = 2;
 
 	if (mItemName == ItemName::ItemOre)
-		mFrameIndexY = 1;
+		mFrameIndexY = 0;// 1;
 	else if (mItemName == ItemName::ItemTrail)
-		mFrameIndexY = 2;
-
-	//mX = x;
-	//mY = y;
+		mFrameIndexY = 1;// 2;
 }
 
 void BagItem::Release()
