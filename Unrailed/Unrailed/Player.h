@@ -85,8 +85,6 @@ class Player : public GameObject
 	//Bag* mBag;
 	Inven* mInven;
 	vector<BagItem*>* mBagItemListPtr;
-	//bagItemListPtr
-	//vector<BagItem*> mBagItemList;
 
 	float mSpeed;
 
@@ -125,6 +123,7 @@ public:
 	void InputCKey(); // 'C' key: change form // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
 	void InputVKey(); // 'V' key: turn item
 	void InputLKey(); // 'L' key: turn on/off gizmo
+	void InputCheatKey(); // Cheat key for test
 	bool CheckTileType(TileType tileType);
 	void CheckRange();
 	void ChangeCurrentAnimation();

@@ -8,12 +8,9 @@ class Inven
 	Image* mImage;
 	int mSizeX;
 	int mSizeY;
+	int mHiddenItem; // 0: not find 1: find 2: used
 
 	vector<BagItem*> mBagItemList;
-	//int mOwnerX;
-	//int mOwnery;
-
-	int mHiddenItem; // 0: not find 1: find 2: used
 
 public:
 	void Init();
@@ -25,6 +22,8 @@ public:
 	size_t GetBagItemSize() { return mBagItemList.size(); }
 	ItemName GetBagItemName() { return mBagItemList[0]->GetName(); }
 	ItemType GetBagItemType(int index) { return mBagItemList[index]->GetType(); }
+	int GetHiddenItem() { return mHiddenItem; }
 
 	void SetBagItemListPtr(vector<BagItem*>* bagItemListPtr) { mBagItemList = *bagItemListPtr; }
+	void SetHiddenItem(int hiddenItem) { mHiddenItem = hiddenItem; }
 };
