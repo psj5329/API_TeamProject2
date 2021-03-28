@@ -82,8 +82,7 @@ void ObjectManager::ReleaseInScene()
 	ObjectIter iter = mObjectList.begin();
 	for (; iter != mObjectList.end(); ++iter)
 	{
-		if (iter->first != ObjectLayer::PLAYER && iter->first != ObjectLayer::ITEM
-			&& iter->first != ObjectLayer::TRAIN)	// 설치 안한 trail도 지우면 안대
+		if (iter->first != ObjectLayer::PLAYER && iter->first != ObjectLayer::TRAIN)
 		{
 			for (int i = 0; i < iter->second.size(); ++i)
 			{
