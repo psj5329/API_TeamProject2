@@ -1,6 +1,7 @@
 #pragma once
 #include "Tile.h"
 #include "MapObject.h"
+#include "Hut.h"
 
 class Tile;
 class TileMap
@@ -9,6 +10,8 @@ class TileMap
 	vector <vector <MapObject*>> mMapObjectList;
 	int mTileCountX;
 	int mTileCountY;
+
+	class Hut mHut;
 
 public:
 	void Init(int tileX, int tileY, int tileSize);
@@ -35,4 +38,8 @@ public:
 
 	vector<vector<Tile*>>* GetTileListPtr() { return &mTileList; }
 	vector<vector<MapObject*>>* GetObjectListPtr() { return &mMapObjectList; }
+
+private:
+	void RenderBackground(HDC hdc);
+
 };

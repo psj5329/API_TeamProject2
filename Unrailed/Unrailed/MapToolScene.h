@@ -110,6 +110,7 @@ class MapToolScene : public Scene
 	Button* mUndoButton;
 	Button* mRightArrowButton;
 	Button* mRightArrowButton2;
+	Button* mRightArrowButton3;
 	Button* mEraseButton;
 	Button* mFoldButton;
 	Button* mUnFoldButton;
@@ -148,6 +149,7 @@ private:
 	void EraseButton();
 	void SwitchObjectPallete();
 	void SwitchTilePallete();
+	void SwitchHutPallete();
 
 	//±×¸®±â
 	void PaintTilesL();

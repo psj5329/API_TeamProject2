@@ -15,7 +15,7 @@ class Hut :
 	public GameObject
 {
 	class Image* mImage;
-	HutType mtype;
+	HutType mType;
 
 public:
 	void Init()override {};
@@ -25,6 +25,7 @@ public:
 	void Render(HDC hdc)override;
 
 	void SetType(HutType type);
+	int GetHutTypeInt() { return (int)mType; }
 private:
 };
 

@@ -8,8 +8,8 @@ void Hut::Init(float x, float y, HutType type)
     SetType(type);
 	mX = x;
 	mY = y;
-    mSizeX = mImage->GetFrameWidth();
-    mSizeY = mImage->GetFrameHeight();
+    mSizeX = mImage->GetFrameWidth()*2;
+    mSizeY = mImage->GetFrameHeight()*2;
     mRect = RectMakeCenter(mX, mY,mSizeX,mSizeY);
 }
 
@@ -26,13 +26,13 @@ void Hut::Update()
 
 void Hut::Render(HDC hdc)
 {
-    if(mImage != nullptr && mtype != HutType::None)
-     CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mImage, mX, mY, mSizeX, mSizeY);
+    if(mImage != nullptr && mType != HutType::None)
+     CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mImage, mRect.left,mRect.top, mSizeX, mSizeY);
 }
 
 void Hut::SetType(HutType type)
 {
-    mtype = type;
+    mType = type;
     switch (type)
     {
     case HutType::None:

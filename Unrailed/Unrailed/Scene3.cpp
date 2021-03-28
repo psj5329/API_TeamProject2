@@ -6,11 +6,13 @@
 #include "Camera.h"
 #include "TrailManager.h"
 #include "Image.h" //Hut»©¸é »©µµ ¤¡¤º
+#include "Player.h"
 
 void Scene3::Init()
 {
-	//mPlayer = new Player();
-	//mPlayer->Init();
+	mTempPlayer = new Player("Player", TileSize * 4.5, TileSize * 4.5);
+	OBJECTMANAGER->AddObject(ObjectLayer::PLAYER, mTempPlayer);
+	OBJECTMANAGER->Init();
 
 	mTileMap = new TileMap();
 	//mTileMap->Init(TileCountX, TileCountY, TileSize);
@@ -18,15 +20,26 @@ void Scene3::Init()
 	int x = mTileMap->GetXTileCount();
 	int y = mTileMap->GetYTileCount();
 
+
 	mTrailManager = new TrailManager();
 	mTrailManager->Init(y,x);
-	mTrailManager->InsertTrail(6, 0, ItemType::Green, 3);
-	mTrailManager->InsertTrail(6, 1, ItemType::Green, 3);
-	mTrailManager->SetStartIndex(6, 0);
+	mTrailManager->PlaceTrail(5, 0, ItemType::Green, 3); // 0: down 1: up 2: left 3: right
+	mTrailManager->PlaceTrail(5, 1, ItemType::Green, 3);
+	mTrailManager->SetStartIndex(5, 0);
 
-	mImage = IMAGEMANAGER->FindImage(L"Hut");
-	//mImage = IMAGEMANAGER->FindImage(L"ChikoritaHut");
-	//mImage = IMAGEMANAGER->FindImage(L"CharmanderHut");
+	mTrailManager->PlaceTrail(5, 2, ItemType::Green, 3);
+	mTrailManager->PlaceTrail(5, 3, ItemType::Green, 3);
+	mTrailManager->PlaceTrail(5, 4, ItemType::Green, 3);
+
+
+	//ÇÃ·¹ÀÌ¾î
+	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
+	mTempPlayer->SetTileListPtr(tileListPtr);
+	vector<vector<MapObject*>>* mapObjectListPtr = mTileMap->GetObjectListPtr();
+	mTempPlayer->SetMapObjectListPtr(mapObjectListPtr);
+
+	mTempPlayer->SetTrailManagerPtr(mTrailManager);
+
 }
 	
 void Scene3::Release()
@@ -102,7 +115,6 @@ void Scene3::Render(HDC hdc)
 
 	OBJECTMANAGER->Render(hdc);
 
-	mImage->ScaleRender(hdc, WINSIZEX / 2, WINSIZEY / 2, mImage->GetFrameWidth()*2, mImage->GetFrameHeight()*2);
 	//wstring strScene = L"ÀÌ°Ç 3¹ø ¾À";
 	//TextOut(hdc, WINSIZEX / 2 - 15, WINSIZEY / 2, strScene.c_str(), strScene.length());
 }

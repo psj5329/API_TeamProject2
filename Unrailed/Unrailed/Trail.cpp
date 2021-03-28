@@ -34,6 +34,7 @@ void Trail::Init(int x, int y, int type, int direction)
     mIsTail = false;
     mIsPassed = false;
     mOrder = 0;
+    mIsFinish = false;
 }
 
 void Trail::Release()
