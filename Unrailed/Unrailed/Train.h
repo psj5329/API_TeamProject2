@@ -17,7 +17,8 @@ enum class State : int
 	Sleep,
 	Intercept,
 	Synthesis,
-	Explode
+	Explode,
+	Exploding
 };
 
 class Train : public GameObject
@@ -41,6 +42,7 @@ protected:
 	int mTrailCount;
 	int mOreCount;
 	bool mOreBroken;
+	float mExplosionTimer;
 
 	class Image* mCurrentImage;
 	class Image* mImage;
@@ -48,6 +50,9 @@ protected:
 	class Animation* mCurrentAnimation;
 	class Animation* mExplode;
 
+	//뒤의 포인터
+	Train* mNextTrain;
+	
 public:
 	virtual void Init()override = 0;
 	virtual void Release()override = 0;
@@ -58,7 +63,9 @@ public:
 	virtual void SetAnimation() = 0;
 	virtual void EndExplode() = 0;
 
+	void SetState(State state) { mState = state; }
 	void SetTrail(vector <vector <Trail*>>* trail) { mTrailList = *trail; }
+	void SetNextTrain(Train* next) { mNextTrain = next; }
 	void SetTarget();
 	bool CheckTile();
 	bool CheckTileEdge();
@@ -68,4 +75,5 @@ public:
 	
 	bool GetIsExplode() { return mIsExplode; }
 	void SetIsExplode(bool explode) { mIsExplode = explode; }
+
 };

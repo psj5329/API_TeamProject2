@@ -113,10 +113,7 @@ void Electrode::Update()
 		//false면 isexplode	
 		if (CheckNextTrailType() == false)
 		{
-			for (int i = 0; i < (*mVoltorbVecPtr).size(); i++)
-			{
-				(*mVoltorbVecPtr)[i]->SetIsExplode(true);
-			}
+			mNextTrain->SetState(State::Exploding);
 
 			SetIsExplode(true);
 		}
@@ -126,10 +123,7 @@ void Electrode::Update()
 		//그 위에 함수가 true면 상태를 isexplode로
 		if (CheckNextIsPassed() == true)
 		{
-			for (int i = 0; i < (*mVoltorbVecPtr).size(); i++)
-			{
-				(*mVoltorbVecPtr)[i]->SetIsExplode(true);
-			}
+			mNextTrain->SetState(State::Exploding);
 
 			SetIsExplode(true);
 		}

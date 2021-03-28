@@ -33,6 +33,8 @@ void Voltorb::Init(int x, int y)
 	mCurrentImage = mImage;
 	mCurrentAnimation = mRightMove;
 	mCurrentAnimation->Play();
+
+	mExplosionTimer = 0.5;
 }
 
 void Voltorb::Release()
@@ -96,7 +98,7 @@ void Voltorb::Update()
 	//올라가있는 기차길의 현재 기차길/타일의 중간오면 방향확인
 	//방향이 가리키는 타일의 중간까지이동
 	SetSpeed();
-	if (mState == State::Move)
+	if (mState == State::Move|| mState == State::Exploding)
 	{
 		mX += mSpeedX * Time::GetInstance()->DeltaTime() / 2;
 		mY += mSpeedY * Time::GetInstance()->DeltaTime() / 2;
@@ -104,6 +106,17 @@ void Voltorb::Update()
 	if (CheckTile() == true)
 	{
 		SetTarget();
+	}
+
+	if (mState == State::Exploding)
+	{
+		mExplosionTimer -= TIME->DeltaTime();
+		if (mExplosionTimer < 0)
+		{
+			mIsExplode = true;
+			if(mNextTrain != nullptr)
+				mNextTrain->SetState(State::Exploding);
+		}
 	}
 
 	//폭발
