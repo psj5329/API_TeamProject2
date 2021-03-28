@@ -412,6 +412,11 @@ void Abra::SynthesisOre()
 
 		mTrailCount += 1;
 	}
+
+	if (INPUT->GetKeyDown('F'))
+	{
+		TrailErase();
+	}
 }
 
 void Abra::EndSynthesis()
@@ -476,4 +481,13 @@ ItemType Abra::Receive()
 	}
 	else
 		return ItemType::None;
+}
+
+ItemType Abra::TrailErase()
+{
+	ItemType type = mCreatedTrailList[0]->trailType;
+	mCreatedTrailList.erase(mCreatedTrailList.begin());
+	mTrailCount -= 1;
+
+	return type;
 }

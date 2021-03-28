@@ -52,4 +52,6 @@ public:
 	void SynthesisOre();
 
 	ItemType Receive();
+
+	ItemType TrailErase();
 };
