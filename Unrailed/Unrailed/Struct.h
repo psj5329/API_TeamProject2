@@ -5,3 +5,10 @@ enum class ItemType : int
 	Blue,
 	Red
 };
+
+enum class ItemName : int
+{
+	ItemOre,
+	ItemTrail,
+	ItemNameEnd
+};

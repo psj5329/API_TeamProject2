@@ -8,7 +8,8 @@
 #include "TrailManager.h"
 #include "Ore.h"
 #include "Machop.h"
-#include "Bag.h"
+//#include "Bag.h"
+#include "Inven.h"
 #include "BagItem.h"
 
 Player::Player(const string& name, float x, float y)
@@ -61,8 +62,11 @@ void Player::Init()
 
 	mIsInfoOn = true;
 
-	mBag = new Bag();
-	mBagItemListPtr = mBag->GetBagItemListPtr();
+	//mBag = new Bag();
+	mInven = new Inven();
+	mInven->Init();
+	//mBagItemListPtr = mBag->GetBagItemListPtr();
+	mBagItemListPtr = mInven->GetBagItemListPtr();
 
 	// {{ 트레일 줍기 불가능해서 임시로 세팅
 	for (int i = 0; i < 3; ++i)
@@ -103,7 +107,8 @@ void Player::Update()
 
 	mCurrentAnimation->Update();
 
-	mBag->Update((int)mX, (int)mY);
+	//mBag->Update((int)mX, (int)mY);
+	mInven->Update();
 }
 
 void Player::Render(HDC hdc)
@@ -128,7 +133,8 @@ void Player::Render(HDC hdc)
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
 		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
 
-	mBag->Render(hdc);
+	//mBag->Render(hdc);
+	mInven->Render(hdc);
 }
 
 void Player::InitAnimation()
@@ -637,9 +643,10 @@ void Player::InputZKey()
 {
 	if (INPUT->GetKeyDown('Z'))
 	{
-		int bagSize = mBag->GetBagItemSize();
+		//int bagSize = mBag->GetBagItemSize();
+		int bagSize = mInven->GetBagItemSize();
 
-		if (!bagSize || (mBag->GetBagItemName() == ItemName::ItemTrail))
+		if (!bagSize || (mInven->GetBagItemName() == ItemName::ItemTrail))//mBag->GetBagItemName() == ItemName::ItemTrail))
 		{
 			vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
 			Trail* currentTrail = (*trailListPtr)[mTileY][mTileX];
@@ -668,7 +675,7 @@ void Player::InputZKey()
 			}
 		}
 
-		if (!bagSize || (mBag->GetBagItemName() == ItemName::ItemOre))
+		if (!bagSize || (mInven->GetBagItemName() == ItemName::ItemOre))//mBag->GetBagItemName() == ItemName::ItemOre))
 		{
 			RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
 			vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
@@ -717,17 +724,17 @@ void Player::InputXKey()
 	if (INPUT->GetKeyDown('X'))
 	{
 		//int bagSize = mBag->GetBagItemSize();
-		if (!mBag->GetBagItemSize())
+		if (!mInven->GetBagItemSize())//mBag->GetBagItemSize())
 			return;
 
-		ItemName itemName = mBag->GetBagItemName();
+		ItemName itemName = mInven->GetBagItemName();//mBag->GetBagItemName();
 		//ItemName itemName = mBagItemList[0]->GetName();
 
 		if (itemName == ItemName::ItemOre)
 		{
 			RECT temp;
 
-			ItemType itemType = mBag->GetBagItemType(mBag->GetBagItemSize() - 1);
+			ItemType itemType = mInven->GetBagItemType(mInven->GetBagItemSize() - 1);//mBag->GetBagItemType(mBag->GetBagItemSize() - 1);
 			//ItemType itemType = mBagItemList[mBagItemList.size() - 1]->GetType();
 			vector<GameObject*> trainList = OBJECTMANAGER->GetObjectList(ObjectLayer::TRAIN);
 
@@ -794,7 +801,7 @@ void Player::InputXKey()
 		{
 			Tile* currentTile = (*mTileListPtr)[mTileY][mTileX];
 			TileType currentTileType = currentTile->GetTileType();
-			ItemType itemType = mBag->GetBagItemType(mBag->GetBagItemSize() - 1);
+			ItemType itemType = mInven->GetBagItemType(mInven->GetBagItemSize() - 1);//mBag->GetBagItemType(mBag->GetBagItemSize() - 1);
 			//ItemType itemType = mBagItemList[mBagItemList.size() - 1]->GetType();
 
 			if (currentTileType == TileType::ice)
@@ -1152,8 +1159,8 @@ void Player::RenderTestText(HDC hdc)
 	TextOut(hdc, 520, 350, strInv.c_str(), (int)strInv.length());
 	for (int i = 0; i < mBagItemListPtr->size(); ++i)
 	{
-		ItemName name = mBag->GetBagItemName();// mBagItemList[i]->GetName();
-		ItemType type = mBag->GetBagItemType(i);// ItemList[i]->GetType();
+		ItemName name = mInven->GetBagItemName();//mBag->GetBagItemName();// mBagItemList[i]->GetName();
+		ItemType type = mInven->GetBagItemType(i);//mBag->GetBagItemType(i);// ItemList[i]->GetType();
 
 		wstring strName = L"";
 		if (name == ItemName::ItemOre)

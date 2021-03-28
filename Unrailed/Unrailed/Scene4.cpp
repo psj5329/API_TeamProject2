@@ -52,9 +52,10 @@ void Scene4::Init()
 	mTrailManager->PlaceTrail(5, 3, ItemType::Green, 1);
 
 	Machop* machop = new Machop();
-	machop->Init();
-	machop->SetX(5 * 48 + 24);
-	machop->SetY(24);
+	machop->Init(5 * 48 + 24, 24, 1);
+	//machop->Init();
+	//machop->SetX(5 * 48 + 24);
+	//machop->SetY(24);
 	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, machop);
 	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
 	machop->SetTrail(trailListPtr);
