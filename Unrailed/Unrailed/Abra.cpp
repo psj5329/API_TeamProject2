@@ -115,6 +115,7 @@ void Abra::Update()
 		SetTarget();
 	}
 
+	//Æø¹ß
 	if (GetIsExplode() == true && mState != State::Explode)
 	{
 		mState = State::Explode;

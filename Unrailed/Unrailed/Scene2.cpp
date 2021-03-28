@@ -49,15 +49,19 @@ void Scene2::Init()
 		mVoltorbVec[i]->SetTrail(temp);
 	}
 
+	mElectrode->SetVoltorbVec(&mVoltorbVec);
+
 	
 
 	mMachop = new Machop;
 	mMachop->Init(-35, WINSIZEY / 2 - 40, 1);
 	mMachop->SetTrail(temp);
+	//여기도설정
 
 	mAbra = new Abra;
 	mAbra->Init(-85, WINSIZEY / 2 - 40, 1);
 	mAbra->SetTrail(temp);
+	//여기도설정
 
 }
 

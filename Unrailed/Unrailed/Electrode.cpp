@@ -5,6 +5,7 @@
 #include "Tile.h"
 #include "Trail.h"
 #include "Camera.h"
+#include "Voltorb.h"
 
 void Electrode::Init(int x, int y)
 {
@@ -112,6 +113,11 @@ void Electrode::Update()
 		//false면 isexplode	
 		if (CheckNextTrailType() == false)
 		{
+			for (int i = 0; i < (*mVoltorbVecPtr).size(); i++)
+			{
+				(*mVoltorbVecPtr)[i]->SetIsExplode(true);
+			}
+
 			SetIsExplode(true);
 		}
 
@@ -120,6 +126,11 @@ void Electrode::Update()
 		//그 위에 함수가 true면 상태를 isexplode로
 		if (CheckNextIsPassed() == true)
 		{
+			for (int i = 0; i < (*mVoltorbVecPtr).size(); i++)
+			{
+				(*mVoltorbVecPtr)[i]->SetIsExplode(true);
+			}
+
 			SetIsExplode(true);
 		}
 	}
@@ -138,7 +149,7 @@ void Electrode::Render(HDC hdc)
 {
 	//RenderRect(hdc, mRect);
 	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-	CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
+	//CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
 	GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);

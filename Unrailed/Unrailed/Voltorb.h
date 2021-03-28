@@ -11,6 +11,8 @@ class Voltorb : public Train
 	Animation* mRightMove;
 	Animation* mSleep;
 
+	class Electrode* mElectrode;
+
 public:
 	void Init()override {};
 	void Init(int x, int y);
@@ -22,6 +24,9 @@ public:
 	void SetAnimation()override;
 	
 	void EndExplode()override;
+
+	//머리설정
+	void SetElectrode(Electrode* electrode) { mElectrode = electrode; }
 };
 
 

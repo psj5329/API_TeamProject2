@@ -11,6 +11,9 @@ class Electrode : public Train
 	Animation* mRightMove;
 	Animation* mSleep;
 
+	vector <class Voltorb*>* mVoltorbVecPtr;
+	
+
 public:
 	void Init()override {};
 	void Init(int x, int y);
@@ -22,6 +25,8 @@ public:
 	void SetAnimation()override;
 
 	void EndExplode()override;
+
+	void SetVoltorbVec(vector <class Voltorb*>* vol) { mVoltorbVecPtr = vol; }
 };
 
 
