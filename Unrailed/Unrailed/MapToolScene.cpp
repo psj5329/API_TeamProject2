@@ -154,6 +154,8 @@ void MapToolScene::Render(HDC hdc)
 		}
 	}
 
+	mHut.Render(hdc);
+
 	RenderSelectedRect(hdc);
 
 	RenderPalleteBackground(hdc);
@@ -167,7 +169,7 @@ void MapToolScene::Render(HDC hdc)
 
 
 	//hut
-	mHut.Render(hdc);
+	
 	//wstring y = L"TileY: " + to_wstring(mYTileCount);
 	//TextOut(hdc, _mousePosition.x, _mousePosition.y, y.c_str(), (int)y.length());
 	//wstring x = L"TileX: " + to_wstring(mXTileCount);
@@ -189,6 +191,14 @@ void MapToolScene::Save(int i)
 		saveStream << mYTileCount;
 		saveStream << ",";
 		saveStream << mXTileCount;
+		saveStream << endl;
+
+		//hut저장
+		saveStream << mHut.GetX();
+		saveStream << ",";
+		saveStream << mHut.GetY();
+		saveStream << ",";
+		saveStream << (int)mHut.GetHutTypeInt();
 		saveStream << endl;
 
 		for (int y = 0; y < mYTileCount; ++y)
@@ -243,8 +253,19 @@ void MapToolScene::Load(wstring fileName)
 		mYTileCount = stoi(buffer);
 		getline(loadStream, buffer);
 		mXTileCount = stoi(buffer);
-		InitEmptyMap();
 
+		int x;
+		int y;
+		HutType type;
+		getline(loadStream, buffer, ',');
+		x = (stoi(buffer));
+		getline(loadStream, buffer, ',');
+		y = (stoi(buffer));
+		getline(loadStream, buffer);
+		type = ((HutType)(stoi(buffer)));
+		mHut.Init(x, y, type);
+
+		InitEmptyMap();
 		for (int y = 0; y < mYTileCount; ++y)
 		{
 			for (int x = 0; x < mXTileCount; ++x)
@@ -409,8 +430,37 @@ void MapToolScene::SwitchTilePallete()
 			mPallete[y][x].image = mapImage;
 		}
 	}
+}
 
-
+void MapToolScene::SwitchHutPallete()
+{
+	Image* hutImage;
+	//바꿀이미지 정하기
+	if (wcscmp(mHutPallete.mImage->GetKeyName().c_str(), L"ChikoritaHut") == 0)
+	{
+		mHutPallete.mImage = IMAGEMANAGER->FindImage(L"TotodileHut");
+		mHutPallete.type = HutType::TotodileHut;
+	}
+	else if (wcscmp(mHutPallete.mImage->GetKeyName().c_str(), L"TotodileHut") == 0)
+	{
+		mHutPallete.mImage = IMAGEMANAGER->FindImage(L"CharmanderHut");
+		mHutPallete.type = HutType::CharmanderHut;
+	}
+	else if (wcscmp(mHutPallete.mImage->GetKeyName().c_str(), L"CharmanderHut") == 0)
+	{
+		mHutPallete.mImage = IMAGEMANAGER->FindImage(L"MachopHut");
+		mHutPallete.type = HutType::MachopHut;
+	}
+	else if (wcscmp(mHutPallete.mImage->GetKeyName().c_str(), L"MachopHut") == 0)
+	{
+		mHutPallete.mImage = IMAGEMANAGER->FindImage(L"Hut");
+		mHutPallete.type = HutType::NormalHut;
+	}
+	else
+	{
+		mHutPallete.mImage = IMAGEMANAGER->FindImage(L"ChikoritaHut");
+		mHutPallete.type = HutType::ChikoritaHut;
+	}
 }
 
 void MapToolScene::InitEmptyMap()
@@ -698,6 +748,8 @@ void MapToolScene::ImageLoad()
 	 //버튼
 	 mRightArrowButton = new Button(rightArrow, WINSIZEX - 40, 210, rightArrow->GetFrameWidth() * 2, rightArrow->GetFrameHeight() * 2, bind(&MapToolScene::SwitchTilePallete, this));
 	 mRightArrowButton2 = new Button(rightArrow, WINSIZEX / 2 + 325, 480, rightArrow->GetFrameWidth() * 2, rightArrow->GetFrameHeight() * 2, bind(&MapToolScene::SwitchObjectPallete, this));
+	 mRightArrowButton3 = new Button(rightArrow, WINSIZEX / 2 + 450, 380, rightArrow->GetFrameWidth() * 2, rightArrow->GetFrameHeight() * 2, bind(&MapToolScene::SwitchHutPallete, this));
+
 	 mSaveButton = new Button(save, WINSIZEX / 2 + 440, WINSIZEY - 140, save->GetFrameWidth(), save->GetFrameHeight(), bind(&MapToolScene::Save, this, 1));
 	 mLoadButton = new Button(load, WINSIZEX / 2 + 520, WINSIZEY - 140, load->GetFrameWidth(), load->GetFrameHeight(), bind(&MapToolScene::OpenLoadWindow, this));
 	 mUndoButton = new Button(undo, WINSIZEX / 2 + 600, WINSIZEY - 140, undo->GetFrameWidth(), undo->GetFrameHeight(), bind(&MapToolScene::Undo, this));
@@ -724,6 +776,8 @@ void MapToolScene::ImageLoad()
 		 mEraseButton->Update();
 		 mRightArrowButton->Update();
 		 mRightArrowButton2->Update();
+		 mRightArrowButton3->Update();
+
 		 for (int i = 0; i < mSaveButtons.size();i++)
 		 {
 			 mSaveButtons[i]->Update();
@@ -749,6 +803,8 @@ void MapToolScene::ImageLoad()
 		 mEraseButton->Render(hdc);
 		 mRightArrowButton->Render(hdc);
 		 mRightArrowButton2->Render(hdc);
+		 mRightArrowButton3->Render(hdc);
+
 		 for (int i = 0; i < mSaveButtons.size();i++)
 		 {
 			 mSaveButtons[i]->Render(hdc);
@@ -932,7 +988,6 @@ void MapToolScene::ImageLoad()
 			 //타일바꾸기
 			 if (mCurrentPallete == CurrentPallete::Tile)
 			 {
-
 				 if (mTileList[indexY][indexX]->GetImage() != mCurrentTile.image ||
 					 mTileList[indexY][indexX]->GetFrameIndexX() != mCurrentTile.frameX ||
 					 mTileList[indexY][indexX]->GetFrameIndexY() != mCurrentTile.frameY)
@@ -941,7 +996,6 @@ void MapToolScene::ImageLoad()
 					 PushCommand(command);
 					 //cout << "OnPushCommand" << endl;
 				 }
-
 			 }
 			 //속성바꾸기
 			 if (mCurrentPallete == CurrentPallete::Type)
@@ -977,8 +1031,6 @@ void MapToolScene::ImageLoad()
 			 //hut
 			 if (mCurrentPallete == CurrentPallete::Hut)
 			 {
-				 
-					 
 				 mHut.Init((_mousePosition.x + (x - WINSIZEX / 2)), (_mousePosition.y + (y - WINSIZEY / 2)), mCurrentHut.type);
 			 }
 		 }

@@ -3,6 +3,7 @@
 #include "Tile.h"
 #include "MapToolScene.h"
 #include "Trail.h"
+#include "Hut.h"
 
 void TileMap::Init(int tileX, int tileY, int tileSize)
 {
@@ -125,6 +126,7 @@ void TileMap::Update()
 
 void TileMap::Render(HDC hdc)
 {
+	RenderBackground(hdc);
 	//타일들
 	for (int y = 0; y < mTileCountY; ++y)
 	{
@@ -142,6 +144,10 @@ void TileMap::Render(HDC hdc)
 			mMapObjectList[y][x]->Render(hdc);
 		}
 	}
+
+	//hut
+	mHut.Render(hdc);
+
 
 }
 
@@ -220,6 +226,18 @@ void TileMap::LoadMap(int i)
 		mTileCountY = stoi(buffer);
 		getline(loadStream, buffer);
 		mTileCountX = stoi(buffer);
+
+		int x;
+		int y;
+		HutType type;
+		getline(loadStream, buffer, ',');
+		x = (stoi(buffer));
+		getline(loadStream, buffer, ',');
+		y = (stoi(buffer));
+		getline(loadStream, buffer);
+		type = ((HutType)(stoi(buffer)));
+		mHut.Init(x, y, type);
+
 		InitEmptyMap();
 
 		for (int y = 0; y < mTileCountY; ++y)
@@ -327,4 +345,18 @@ void TileMap::InitEmptyMap()
 			mMapObjectList[y].push_back(tempObject);
 		}
 	}
+}
+
+void TileMap::RenderBackground(HDC hdc)
+{
+	//배경
+	RECT rc = RectMakeCenter(WINSIZEX / 2, WINSIZEY / 2, WINSIZEX, WINSIZEY);
+	HPEN yellowPen = CreatePen(PS_SOLID, 3, RGB(255, 236, 204));
+	HPEN prevPen = (HPEN)SelectObject(hdc, yellowPen);
+	HBRUSH colorBrush = CreateSolidBrush(RGB(255, 236, 204));
+	HBRUSH prevBrush = (HBRUSH)SelectObject(hdc, colorBrush);
+	RenderRect(hdc, rc);
+	SelectObject(hdc, prevBrush);
+	DeleteObject(colorBrush);
+	DeleteObject(yellowPen);
 }
