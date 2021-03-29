@@ -11,6 +11,7 @@ void Voltorb::Init(int x, int y)
 	mName = "Voltorb";
 	mExplodeImage = IMAGEMANAGER->FindImage(L"explode");
 	mImage = IMAGEMANAGER->FindImage(L"Voltorb");
+	mElectrode = (Electrode*)OBJECTMANAGER->FindObject("Electrode");
 
 	ReadyAnimation();
 
@@ -37,7 +38,7 @@ void Voltorb::Init(int x, int y)
 
 	mExplosionTimer = 0.3;
 	mStartTimer = 3.5f;
-	mSleepTimer = 10.f;
+	mSleepTimer = 1000.f;
 }
 
 void Voltorb::Release()
@@ -110,6 +111,18 @@ void Voltorb::Update()
 		SetTarget();
 	}
 
+	//«™∏∞
+	if (mElectrode->GetIsHurt() == true && mState != State::Exploding && mState != State::Explode)
+	{
+		mState = State::Hurt;
+		SetAnimation();
+	}
+	else if (mElectrode->GetIsHurt() == false && mState != State::Sleep)
+	{
+		mState = State::Move;
+		SetAnimation();
+	}
+
 	//∆¯πﬂ
 	if (mState == State::Exploding)
 	{
@@ -121,27 +134,12 @@ void Voltorb::Update()
 				mNextTrain->SetState(State::Exploding);
 		}
 	}
-	
-	//«™∏∞
-	if (CheckJigglypuff() == true)
-	{
-		mSleepTimer = 10.f;
-	}
-	else
-	{
-		mSleepTimer -= TIME->DeltaTime();
-	}
-	if (mSleepTimer <= 5)
-	{
-		mState = State::Hurt;
-		SetAnimation();
-	}
-
 	if (GetIsExplode() == true && mState != State::Explode)
 	{
 		mState = State::Explode;
 		SetAnimation();
 	}
+
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -304,6 +302,7 @@ void Voltorb::EndExplode()
 {
 	if (mState == State::Explode)
 	{
-		SetIsDestroy(true);
+		//SetIsDestroy(true); //ªË¡¶
+		SetIsActive(false); //∑ª¥ı æ»«‘
 	}
 }

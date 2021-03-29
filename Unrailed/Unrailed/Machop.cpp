@@ -144,7 +144,7 @@ void Machop::Update()
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//mBag.Update((int)mX, (int)mY);
+	mBag.Update((int)mX, (int)mY);
 }
 
 void Machop::Render(HDC hdc)
@@ -154,20 +154,20 @@ void Machop::Render(HDC hdc)
 	//CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
-	wstring strOre;
-	for (int i = 0; i < mOreList.size(); ++i)
-	{
-		if (mOreList[i]->GetOreType() == ItemType::Green)
-			strOre = L"그린" + to_wstring(mOreCount);
-		else if (mOreList[i]->GetOreType() == ItemType::Blue)
-			strOre = L"블루" + to_wstring(mOreCount);
-		else if (mOreList[i]->GetOreType() == ItemType::Red)
-			strOre = L"레드" + to_wstring(mOreCount);
+	//wstring strOre;
+	//for (int i = 0; i < mOreList.size(); ++i)
+	//{
+	//	if (mOreList[i]->GetOreType() == ItemType::Green)
+	//		strOre = L"그린" + to_wstring(mOreCount);
+	//	else if (mOreList[i]->GetOreType() == ItemType::Blue)
+	//		strOre = L"블루" + to_wstring(mOreCount);
+	//	else if (mOreList[i]->GetOreType() == ItemType::Red)
+	//		strOre = L"레드" + to_wstring(mOreCount);
+	//
+	//	TextOut(hdc, mX - 20, mY - 40 - i * 15, strOre.c_str(), strOre.length());
+	//}
 
-		TextOut(hdc, mX - 20, mY - 40 - i * 15, strOre.c_str(), strOre.length());
-	}
-
-	//mBag.Render(hdc);
+	mBag.Render(hdc);
 
 	/*	wstring strBlue = L"블루:" + to_wstring(mOreCount);
 		TextOut(hdc, mX - 20, mY - 55, strBlue.c_str(), strBlue.length());
@@ -391,13 +391,16 @@ void Machop::InterceptOre()
 	{
 		if (INPUT->GetKeyDown('A'))
 		{
-			Ore* ore = new Ore;
+			//Ore* ore = new Ore;
+			BagItem* bagItem = new BagItem();
 
 			mOreCount++;
 
-			ore->SetOreType(ItemType::Green);//그린
+			//ore->SetOreType(ItemType::Green);//그린
+			bagItem->Init(ItemName::ItemOre, ItemType::Green);
 
-			mOreList.push_back(ore);
+			//mOreList.push_back(ore);
+			mBagItemListPtr->push_back(bagItem);
 
 			mState = State::Intercept;
 			SetAnimation();
@@ -410,13 +413,16 @@ void Machop::InterceptOre()
 		}
 		if (INPUT->GetKeyDown('S'))
 		{
-			Ore* ore = new Ore;
+			//Ore* ore = new Ore;
+			BagItem* bagItem = new BagItem();
 
 			mOreCount++;
 
-			ore->SetOreType(ItemType::Blue);//블루
+			//ore->SetOreType(ItemType::Blue);//블루
+			bagItem->Init(ItemName::ItemOre, ItemType::Blue);
 
-			mOreList.push_back(ore);
+			//mOreList.push_back(ore);
+			mBagItemListPtr->push_back(bagItem);
 
 			mState = State::Intercept;
 			SetAnimation();
@@ -429,13 +435,16 @@ void Machop::InterceptOre()
 		}
 		if (INPUT->GetKeyDown('D'))
 		{
-			Ore* ore = new Ore;
+			//Ore* ore = new Ore;
+			BagItem* bagItem = new BagItem();
 
 			mOreCount++;
 
-			ore->SetOreType(ItemType::Red);//레드
+			//ore->SetOreType(ItemType::Red);//레드
+			bagItem->Init(ItemName::ItemOre, ItemType::Red);
 
-			mOreList.push_back(ore);
+			//mOreList.push_back(ore);
+			mBagItemListPtr->push_back(bagItem);
 
 			mState = State::Intercept;
 			SetAnimation();
@@ -453,10 +462,17 @@ void Machop::InterceptOre(ItemType itemType)
 {
 	if (mOreCount <= 5)
 	{
-		Ore* ore = new Ore();
+		//Ore* ore = new Ore();
+		BagItem* bagItem = new BagItem();
+
 		++mOreCount;
-		ore->SetOreType(itemType);
-		mOreList.push_back(ore);
+
+		//ore->SetOreType(itemType);
+		bagItem->Init(ItemName::ItemOre, itemType);
+
+		//mOreList.push_back(ore);
+		mBagItemListPtr->push_back(bagItem);
+
 		mState = State::Intercept;
 		SetAnimation();
 
@@ -521,8 +537,8 @@ void Machop::EndExplode()
 
 ItemType Machop::OreErase()
 {
-	ItemType type = (ItemType)mOreList[0]->GetOreTypeInt();
-	mOreList.erase(mOreList.begin(), mOreList.begin() + 2);
+	ItemType type = (*mBagItemListPtr)[0]->GetType();
+	(*mBagItemListPtr).erase((*mBagItemListPtr).begin(), (*mBagItemListPtr).begin() + 2);
 
 	return type;
 }

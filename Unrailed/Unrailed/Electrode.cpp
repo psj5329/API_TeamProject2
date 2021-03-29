@@ -37,7 +37,7 @@ void Electrode::Init(int x, int y)
 
 
 	mStartTimer = 3.5f;
-	mSleepTimer = 10.f;
+	mSleepTimer = 1000.f;
 }
 
 void Electrode::Release()
@@ -107,6 +107,34 @@ void Electrode::Update()
 		SetTarget();
 	}
 
+	//«™∏∞
+	if (CheckJigglypuff() == true)
+	{
+		mState = State::Move;
+		SetAnimation();
+
+		mSleepTimer = 10.f;
+
+		SetIsHurt(false);
+	}
+	else
+	{
+		mSleepTimer -= TIME->DeltaTime();
+	}
+	if (mSleepTimer <= 5 && GetIsExplode() == false)
+	{
+		mState = State::Hurt;
+		SetAnimation();
+
+		SetIsHurt(true);
+	}
+	if (GetIsHurt() == true && mSleepTimer <= 0 && GetIsExplode() == false)
+	{
+		mNextTrain->SetState(State::Exploding);
+
+		SetIsExplode(true);
+	}
+
 	//∆¯πﬂ
 	if (CheckTileEdge() == true)
 	{
@@ -129,28 +157,6 @@ void Electrode::Update()
 			SetIsExplode(true);
 		}
 	}
-
-	//«™∏∞
-	if (CheckJigglypuff() == true)
-	{
-		mSleepTimer = 10.f;
-	}
-	else
-	{
-		mSleepTimer -= TIME->DeltaTime();
-	}
-	if (mSleepTimer <= 5)
-	{
-		mState = State::Hurt;
-		SetAnimation();
-	}
-	if (mSleepTimer <= 0)
-	{
-		mNextTrain->SetState(State::Exploding);
-
-		SetIsExplode(true);
-	}
-
 	if (GetIsExplode() == true && mState != State::Explode)
 	{
 		mState = State::Explode;
@@ -313,22 +319,12 @@ void Electrode::SetAnimation()
 	}
 }
 
-//void Electrode::SetImage(int i)
-//{
-//	if (i == 0) // 0¿∫ false
-//	{
-//		mCurrentImage = IMAGEMANAGER->FindImage(L"Electrode");
-//	}
-//	else
-//	{
-//		mCurrentImage = IMAGEMANAGER->FindImage(L"Voltorb");
-//	}
-//}
-
 void Electrode::EndExplode()
 {
 	if (mState == State::Explode)
 	{
-		SetIsDestroy(true);
+		//SetIsDestroy(true); //ªË¡¶
+		SetIsActive(false); //∑ª¥ı æ»«‘
+
 	}
 }
