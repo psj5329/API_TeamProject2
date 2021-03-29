@@ -97,7 +97,7 @@ void Electrode::Update()
 	//올라가있는 기차길의 현재 기차길/타일의 중간오면 방향확인
 	//방향이 가리키는 타일의 중간까지이동
 	SetSpeed();
-	if (mState == State::Move)
+	if (mState == State::Move || mState == State::Hurt)
 	{
 		mX += mSpeedX * Time::GetInstance()->DeltaTime() / 2;
 		mY += mSpeedY * Time::GetInstance()->DeltaTime() / 2;
@@ -146,9 +146,6 @@ void Electrode::Update()
 	}
 	if (mSleepTimer <= 0)
 	{
-		mState = State::Explode;
-		SetAnimation();
-
 		mNextTrain->SetState(State::Exploding);
 
 		SetIsExplode(true);

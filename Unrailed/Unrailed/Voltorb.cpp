@@ -100,7 +100,7 @@ void Voltorb::Update()
 	//방향이 가리키는 타일의 중간까지이동
 
 	SetSpeed();
-	if (mState == State::Move || mState == State::Exploding)
+	if (mState == State::Move || mState == State::Exploding || mState == State::Hurt)
 	{
 		mX += mSpeedX * Time::GetInstance()->DeltaTime() / 2;
 		mY += mSpeedY * Time::GetInstance()->DeltaTime() / 2;
