@@ -19,6 +19,7 @@ enum PlayerState
 {
 	Idle,
 	Move,
+	Attack,
 	PlayerStateEnd
 };
 
@@ -35,7 +36,6 @@ class Image;
 class Animation;
 class MapObject;
 class TrailManager;
-//class Bag;
 class Inven;
 class BagItem;
 
@@ -61,6 +61,33 @@ class Player : public GameObject
 	Animation* mLUMoveAnimation;
 	Animation* mRUMoveAnimation;
 
+	Animation* mDownAttackChikoAnimation;
+	Animation* mUpAttackChikoAnimation;
+	Animation* mLeftAttackChikoAnimation;
+	Animation* mRightAttackChikoAnimation;
+	Animation* mLDAttackChikoAnimation;
+	Animation* mRDAttackChikoAnimation;
+	Animation* mLUAttackChikoAnimation;
+	Animation* mRUAttackChikoAnimation;
+
+	Animation* mDownAttackTotoAnimation;
+	Animation* mUpAttackTotoAnimation;
+	Animation* mLeftAttackTotoAnimation;
+	Animation* mRightAttackTotoAnimation;
+	Animation* mLDAttackTotoAnimation;
+	Animation* mRDAttackTotoAnimation;
+	Animation* mLUAttackTotoAnimation;
+	Animation* mRUAttackTotoAnimation;
+
+	Animation* mDownAttackCharAnimation;
+	Animation* mUpAttackCharAnimation;
+	Animation* mLeftAttackCharAnimation;
+	Animation* mRightAttackCharAnimation;
+	Animation* mLDAttackCharAnimation;
+	Animation* mRDAttackCharAnimation;
+	Animation* mLUAttackCharAnimation;
+	Animation* mRUAttackCharAnimation;
+
 	Animation* mCurrentAnimation;
 
 	RECT mColBox;
@@ -80,7 +107,6 @@ class Player : public GameObject
 	vector<vector<Tile*>>* mTileListPtr;
 	vector<vector<MapObject*>>* mMapObjectListPtr;
 	TrailManager* mTrailManager;
-	//Bag* mBag;
 	Inven* mInven;
 	vector<BagItem*>* mBagItemListPtr;
 
@@ -100,6 +126,9 @@ class Player : public GameObject
 
 	bool mIsInfoOn;
 
+	int mTileCountX;
+	int mTileCountY;
+
 public:
 	Player(const string& name, float x, float y);
 
@@ -109,6 +138,7 @@ public:
 	void Render(HDC hdc)override;
 
 	void InitAnimation();
+	void SetIdleAnimation();
 
 	void SafeDeleteAnimation();
 
@@ -136,4 +166,5 @@ public:
 	void SetTileListPtr(vector<vector<Tile*>>* tileListPtr) { mTileListPtr = tileListPtr; }
 	void SetMapObjectListPtr(vector<vector<MapObject*>>* mapObjectListPtr) { mMapObjectListPtr = mapObjectListPtr; }
 	void SetTrailManagerPtr(TrailManager* trailManager) { mTrailManager = trailManager; }
+	void SetTileCount(int tileCountX, int tileCountY) { mTileCountX = tileCountX; mTileCountY = tileCountY; }
 };

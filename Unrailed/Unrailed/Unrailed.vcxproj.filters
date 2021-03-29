@@ -154,6 +154,9 @@
     <Filter Include="MainGame\UI\Inven">
       <UniqueIdentifier>{dce464ce-4962-4ece-9093-ef851bb5a497}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Object\Unit\Jigglypuff">
+      <UniqueIdentifier>{09b23719-35b9-4288-8486-6dd84b9745bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -351,6 +354,9 @@
     <ClInclude Include="Inven.h">
       <Filter>MainGame\UI\Inven</Filter>
     </ClInclude>
+    <ClInclude Include="Jigglypuff.h">
+      <Filter>MainGame\Object\Unit\Jigglypuff</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -535,6 +541,9 @@
     </ClCompile>
     <ClCompile Include="Inven.cpp">
       <Filter>MainGame\UI\Inven</Filter>
+    </ClCompile>
+    <ClCompile Include="Jigglypuff.cpp">
+      <Filter>MainGame\Object\Unit\Jigglypuff</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

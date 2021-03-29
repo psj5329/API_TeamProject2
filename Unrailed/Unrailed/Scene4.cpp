@@ -32,6 +32,7 @@ void Scene4::Init()
 	mTileMap = new TileMap();
 	mTileMap->Init(TileCountX, TileCountY, TileSize);
 	mTileMap->LoadMap();
+	mTempPlayer->SetTileCount(TileCountX, TileCountY); // 이 함수 매개변수로 타일 개수 넣어주면 됨
 
 	mTrailManager = new TrailManager();
 	mTrailManager->Init(mTileMap->GetYTileCount(), mTileMap->GetXTileCount());
@@ -55,7 +56,7 @@ void Scene4::Init()
 	mTrailManager->PlaceTrail(5, 3, ItemType::Green, 1);
 
 	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
-
+	/*
 	Electrode* electrode = new Electrode();
 	electrode->Init(5 * 48 + 24, 72);
 	electrode->SetTrail(trailListPtr);
@@ -67,7 +68,7 @@ void Scene4::Init()
 	Abra* abra = new Abra();
 	abra->Init(5 * 48 + 24, -24, 1);
 	abra->SetTrail(trailListPtr);
-
+	*/
 	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
 	mTempPlayer->SetTileListPtr(tileListPtr);
 	vector<vector<MapObject*>>* mapObjectListPtr = mTileMap->GetObjectListPtr();

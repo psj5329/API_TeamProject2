@@ -13,4 +13,10 @@ enum class ItemName : int
 	ItemNameEnd
 };
 
-enum UnitDirection { LEFT, RIGHT, UP, DOWN, DIREND };
+enum class Direction : int
+{
+	Down,
+	Up,
+	Left,
+	Right
+};
