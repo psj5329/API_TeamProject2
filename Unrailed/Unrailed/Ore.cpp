@@ -25,7 +25,9 @@ void Ore::Render(HDC hdc)
 	else if (mCount >= 3)
 		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mX, mY, mFrameX, 2, mSizeX, mSizeY);
 
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mNumImage, mX + 28, mY + 22, mCount - 1, 0, 8, 16);
+	if (mCount >= 10)
+		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mNumImage, mX + 20, mY + 22, (mCount / 10) - 1, 0, 8, 16);
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mNumImage, mX + 28, mY + 22, (mCount - 1) % 10, 0, 8, 16);
 }
 
 void Ore::Drop(int x, int y, ItemType type)

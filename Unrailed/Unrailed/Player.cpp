@@ -9,11 +9,11 @@
 #include "Ore.h"
 #include "Machop.h"
 #include "Abra.h"
-//#include "Bag.h"
 #include "Inven.h"
 #include "BagItem.h"
 #include "Enemy.h"
 #include "Sableye.h"
+#include "Jigglypuff.h"
 
 Player::Player(const string& name, float x, float y)
 	: GameObject(name, x, y)
@@ -37,16 +37,7 @@ void Player::Init()
 
 	mDir = DirectionEight::Down;
 	mState = PlayerState::Idle;
-
-	mSpeed = 100.f;
-
-	mInputType = 0;
-
 	mForm = Form::Ditto;
-
-	mChangeT = 0.f;
-
-	mIsDirectionKeyDown = false;
 
 	mTileX = 0;
 	mTileY = 0;
@@ -55,26 +46,18 @@ void Player::Init()
 	mRangeX = 0;
 	mRangeY = 0;
 
-	mIsAttackingTemp = false; // 상호작용 전 테스트 변수
-
-	mIsGettingItemThisFrame = false;
-
-	mIsChangable = true;
-
-	mIsInfoOn = false;
-
 	mInven = new Inven();
 	mInven->Init();
 	mBagItemListPtr = mInven->GetBagItemListPtr();
 
-	// {{ 트레일 줍기 불가능해서 임시로 세팅
-	//for (int i = 0; i < 3; ++i)
-	//{
-	//	BagItem* bagItem = new BagItem();
-	//	bagItem->Init(ItemName::ItemTrail, ItemType::Green);
-	//	mBagItemListPtr->push_back(bagItem);
-	//}
-	// 트레일 줍기 불가능해서 임시로 세팅 // 여기까지 }}
+	mSpeed = 100.f;
+
+	mInputType = 0;
+	mIsDirectionKeyDown = false;
+
+	mIsGettingItemThisFrame = false;
+
+	mIsInfoOn = false;
 
 	mMic = 0;
 }
@@ -103,8 +86,6 @@ void Player::Update()
 	InputCheatKey(); // for test
 
 	ChangeCurrentAnimation();
-
-	// 플레이어 업데이트 시 기능 추가하려면 여기에 추가하기
 
 	mCurrentAnimation->Update();
 
@@ -373,11 +354,62 @@ void Player::InitAnimation()
 	mRUAttackCharAnimation->SetIsLoop(true);
 	mRUAttackCharAnimation->SetFrameUpdateTime(0.3f);
 	mRUAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+
+	mChangeDittoAnimation = new Animation();
+	mChangeDittoAnimation->InitFrameByStartEnd(0, 25, 4, 25, false);
+	mChangeDittoAnimation->SetIsLoop(true);
+	mChangeDittoAnimation->SetFrameUpdateTime(0.3f);
+	mChangeDittoAnimation->SetCallbackFunc(bind(&Player::ChangeForm, this));
+
+	mChangeChikoAnimation = new Animation();
+	mChangeChikoAnimation->InitFrameByStartEnd(0, 41, 4, 41, false);
+	mChangeChikoAnimation->SetIsLoop(true);
+	mChangeChikoAnimation->SetFrameUpdateTime(0.3f);
+	mChangeChikoAnimation->SetCallbackFunc(bind(&Player::ChangeForm, this));
+
+	mChangeTotoAnimation = new Animation();
+	mChangeTotoAnimation->InitFrameByStartEnd(0, 41, 4, 41, false);
+	mChangeTotoAnimation->SetIsLoop(true);
+	mChangeTotoAnimation->SetFrameUpdateTime(0.3f);
+	mChangeTotoAnimation->SetCallbackFunc(bind(&Player::ChangeForm, this));
+
+	mChangeCharAnimation = new Animation();
+	mChangeCharAnimation->InitFrameByStartEnd(0, 41, 4, 41, false);
+	mChangeCharAnimation->SetIsLoop(true);
+	mChangeCharAnimation->SetFrameUpdateTime(0.3f);
+	mChangeCharAnimation->SetCallbackFunc(bind(&Player::ChangeForm, this));
 }
 
 void Player::SetIdleAnimation()
 {
 	mState = PlayerState::Idle;
+}
+
+void Player::ChangeForm()
+{
+	mState = PlayerState::Idle;
+
+	if (mForm == Form::Ditto)
+	{
+		mForm = Form::Chikorita;
+		mImage = IMAGEMANAGER->FindImage(L"chikorita");
+	}
+	else if (mForm == Form::Chikorita)
+	{
+		mForm = Form::Totodile;
+		mImage = IMAGEMANAGER->FindImage(L"totodile");
+	}
+	else if (mForm == Form::Totodile)
+	{
+		mForm = Form::Charmander;
+		mImage = IMAGEMANAGER->FindImage(L"charmander");
+	}
+	else if (mForm == Form::Charmander)
+	{
+		mForm = Form::Ditto;
+		mImage = IMAGEMANAGER->FindImage(L"ditto");
+	}
 }
 
 void Player::SafeDeleteAnimation()
@@ -714,11 +746,25 @@ void Player::InputSpaceKey()
 	{
 		CheckNextTile();
 
-		if (mState == PlayerState::Attack)
+		if ((mState == PlayerState::Attack) || (mState == PlayerState::Change))
 			return;
 
 		if (mForm == Form::Ditto)
 			return;
+
+		GameObject* jigglypuffPtr = OBJECTMANAGER->FindObject("Jigglypuff");
+		if ((jigglypuffPtr != nullptr) && (mMic != 1))
+		{
+			RECT temp;
+			RECT nextRc = (*mTileListPtr)[mNextTileY][mNextTileX]->GetRect();
+			RECT jigglyRc = jigglypuffPtr->GetRect();
+			if (IntersectRect(&temp, &nextRc, &jigglyRc))
+			{
+				mMic = 1;
+				mInven->SetHiddenItem(1);
+				((Jigglypuff*)jigglypuffPtr)->TakeMike();
+			}
+		}
 
 		vector<GameObject*>* enemyListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ENEMY);
 		if((*enemyListPtr).size())
@@ -742,27 +788,18 @@ void Player::InputSpaceKey()
 		{
 			mState = PlayerState::Attack;
 			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
-			mIsAttackingTemp = true;
 		}
 		else if ((mForm == Form::Totodile) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Blue))
 		{
 			mState = PlayerState::Attack;
 			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
-			mIsAttackingTemp = true;
 		}
 		else if ((mForm == Form::Charmander) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Red))
 		{
 			mState = PlayerState::Attack;
 			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
-			mIsAttackingTemp = true;
-		}
-		else
-		{
-			mIsAttackingTemp = false;
 		}
 	}
-	else
-		mIsAttackingTemp = false;
 }
 
 void Player::CheckNextTile()
@@ -857,7 +894,7 @@ void Player::InputZKey()
 {
 	if (INPUT->GetKeyDown('Z'))
 	{
-		if (mState == PlayerState::Attack)
+		if ((mState == PlayerState::Attack) || (mState == PlayerState::Change))
 			return;
 
 		//int bagSize = mBag->GetBagItemSize();
@@ -936,8 +973,11 @@ void Player::InputZKey()
 				{
 					int count = item->GetCount();
 
-					for (int i = 0; i < count; ++i)
+					for (int j = 0; j < count; ++j)
 					{
+						if (j >= 6 - bagSize)
+							continue;
+
 						BagItem* bagItem = new BagItem();
 						//bagItem->SetName(ItemName::ItemOre);
 
@@ -955,7 +995,10 @@ void Player::InputZKey()
 						//mBagItemList.push_back(bagItem);
 					}
 
-					(*itemListPtr).erase((*itemListPtr).begin() + i);
+					if (count <= 6 - bagSize)
+						(*itemListPtr).erase((*itemListPtr).begin() + i);
+					else
+						item->MinusCount(6 - bagSize);
 
 					mIsGettingItemThisFrame = true;
 				}
@@ -963,13 +1006,6 @@ void Player::InputZKey()
 					continue;
 			}
 		}
-
-		// 마이크 조건
-		//if ()
-		//{
-		// mMic = 1; // 가지고 있다
-		//mInven->SetHiddenItem(1);
-		//}
 	}
 }
 
@@ -977,7 +1013,7 @@ void Player::InputXKey()
 {
 	if (INPUT->GetKeyDown('X'))
 	{
-		if (mState == PlayerState::Attack)
+		if ((mState == PlayerState::Attack) || (mState == PlayerState::Change))
 			return;
 
 		//int bagSize = mBag->GetBagItemSize();
@@ -1032,7 +1068,7 @@ void Player::InputXKey()
 				{
 					if (((Ore*)item)->GetOreType() == itemType)
 					{
-						((Ore*)item)->PlusCount();
+						((Ore*)item)->PlusOneCount();
 						mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
 						//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 						return;
@@ -1099,69 +1135,20 @@ void Player::InputCKey()
 {
 	if (INPUT->GetKeyDown('C')) // Loop Order: normal -> leaf -> water -> fire -> normal -> ...
 	{
-		if (mState == PlayerState::Attack)
+		if ((mState == PlayerState::Attack) || (mState == PlayerState::Change))
 			return;
 
-		if (mForm == Form::Ditto)
-		{
-			mIsChangable = true;
-			mForm = Form::Chikorita;
-			mImage = IMAGEMANAGER->FindImage(L"chikorita");
-		}
-		else if (mForm == Form::Chikorita)
-		{
-			mIsChangable = true;
-			mForm = Form::Totodile;
-			mImage = IMAGEMANAGER->FindImage(L"totodile");
-		}
+		if ((mForm == Form::Ditto) || (mForm == Form::Chikorita))
+			mState = PlayerState::Change;
 		else if (mForm == Form::Totodile)
 		{
-			if (CheckTileType(TileType::Water))
-			{
-				mIsChangable = false;
-			}
-			else
-			{
-				mIsChangable = true;
-				mForm = Form::Charmander;
-				mImage = IMAGEMANAGER->FindImage(L"charmander");
-			}
+			if (!CheckTileType(TileType::Water))
+				mState = PlayerState::Change;
 		}
 		else if (mForm == Form::Charmander)
 		{
-			if (CheckTileType(TileType::Lava))
-			{
-				mIsChangable = false;
-			}
-			else
-			{
-				mIsChangable = true;
-				mForm = Form::Ditto;
-				mImage = IMAGEMANAGER->FindImage(L"ditto");
-			}
-		}
-
-		// {{ 이 변수 굳이 필요없으면 지우기 // 이펙트 등 사용할 거면 살려두기
-		mChangeT = 2.f; 
-
-		//if (mChangeT)
-		//{
-		//	mChangeT -= TIME->DeltaTime();
-		//
-		//	if (mChangeT <= 0)
-		//		mChangeT = 0.f;
-		//}
-		// }} 이 변수 굳이 필요없으면 지우기 // 이펙트 등 사용할 거면 살려두기
-	}
-
-	if (mChangeT)
-	{
-		mChangeT -= TIME->DeltaTime();
-
-		if (mChangeT <= 0)
-		{
-			mChangeT = 0.f;
-			mIsChangable = true;
+			if (!CheckTileType(TileType::Lava))
+				mState = PlayerState::Change;
 		}
 	}
 }
@@ -1170,7 +1157,7 @@ void Player::InputVKey()
 {
 	if (INPUT->GetKeyDown('V'))
 	{
-		if (mState == PlayerState::Attack)
+		if ((mState == PlayerState::Attack) || (mState == PlayerState::Change))
 			return;
 
 		vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
@@ -1185,11 +1172,16 @@ void Player::InputVKey()
 
 void Player::InputMKey()
 {
-	if (INPUT->GetKeyDown('V'))
+	if (INPUT->GetKeyDown('M') && (mMic == 1))
 	{
-		// 해당 타일이 비었을 때 바닥에 마이크를 놓고 푸린 소환 함수를 호출한다.
-		//mMic = 2; // 사용했다
-		//mInven->SetHiddenItem(2);
+		if ((mState == PlayerState::Attack) || (mState == PlayerState::Change))
+			return;
+
+		mMic = 2;
+		mInven->SetHiddenItem(2);
+
+		GameObject* jigglypuffPtr = OBJECTMANAGER->FindObject("Jigglypuff");
+		((Jigglypuff*)jigglypuffPtr)->PlaceMike(mTileX, mTileY);
 	}
 }
 
@@ -1538,6 +1530,33 @@ void Player::ChangeCurrentAnimation()
 			}
 		}
 	}
+	else if (mState == PlayerState::Change)
+	{
+		if (mForm == Form::Ditto && mCurrentAnimation != mChangeDittoAnimation)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mChangeDittoAnimation;
+			mCurrentAnimation->Play();
+		}
+		else if (mForm == Form::Chikorita && mCurrentAnimation != mChangeChikoAnimation)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mChangeChikoAnimation;
+			mCurrentAnimation->Play();
+		}
+		else if (mForm == Form::Totodile && mCurrentAnimation != mChangeTotoAnimation)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mChangeTotoAnimation;
+			mCurrentAnimation->Play();
+		}
+		else if (mForm == Form::Charmander && mCurrentAnimation != mChangeCharAnimation)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mChangeCharAnimation;
+			mCurrentAnimation->Play();
+		}
+	}
 }
 
 void Player::InputLKey()
@@ -1572,21 +1591,11 @@ void Player::RenderTestText(HDC hdc)
 	//wstring strInput = L"InputType : " + to_wstring(mInputType);
 	//TextOut(hdc, 10, 100, strInput.c_str(), (int)strInput.length());
 
-	wstring strChange = L"포켓몬 변!신! ";
-	if (!mIsChangable)
-		strChange = L"변신 불가 지역입니다";
-	if (mChangeT)
-		TextOut(hdc, (int)mX - 20 - cam.left, (int)mY - 25 - cam.top, strChange.c_str(), (int)strChange.length());
-
 	if (mIsInfoOn)
 	{
 		wstring strTile = L"tile x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
 		TextOut(hdc, (int)mX + 25 - cam.left, (int)mY - cam.top, strTile.c_str(), (int)strTile.length());
 	}
-
-	//wstring strAtk = L"공격 중이다";
-	//if (mIsAttackingTemp)
-	//	TextOut(hdc, (int)mX + 55, (int)mY, strAtk.c_str(), (int)strAtk.length());
 
 	//wstring strInven = L"Inven size: " + to_wstring(mBagItemList.size());
 	//TextOut(hdc, (int)mX + 25 - cam.left, (int)mY + 25 - cam.top, strInven.c_str(), (int)strInven.length());
