@@ -10,6 +10,10 @@ class Voltorb : public Train
 	Animation* mLeftMove;
 	Animation* mRightMove;
 	Animation* mSleep;
+	Animation* mDownHurt;
+	Animation* mUpHurt;
+	Animation* mLeftHurt;
+	Animation* mRightHurt;
 
 
 public:

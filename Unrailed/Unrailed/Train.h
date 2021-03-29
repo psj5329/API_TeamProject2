@@ -13,7 +13,6 @@ enum class Direction : int
 enum class State : int
 {
 	Move,
-	Shock,
 	Sleep,
 	Intercept,
 	Synthesis,
@@ -37,13 +36,13 @@ protected:
 	int mCurrentX;
 	int mCurrentY;
 	float mSynthesisCoolTime;
-	bool mStop;
 	bool mIsExplode;
 	bool mIsSynthesis;
 	int mTrailCount;
 	int mOreCount;
 	bool mOreBroken;
 	float mExplosionTimer;
+	float mSleepTimer;
 
 	class Image* mCurrentImage;
 	class Image* mImage;
@@ -76,5 +75,4 @@ public:
 	
 	bool GetIsExplode() { return mIsExplode; }
 	void SetIsExplode(bool explode) { mIsExplode = explode; }
-
 };

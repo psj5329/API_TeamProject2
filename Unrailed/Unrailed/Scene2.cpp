@@ -20,7 +20,7 @@ void Scene2::Init()
 	mTrailManager->InsertTrail(6, 2, ItemType::Green, 3);
 	mTrailManager->InsertTrail(6, 3, ItemType::Green, 3);
 	mTrailManager->InsertTrail(6, 4, ItemType::Green, 1);
-	//mTrailManager->InsertTrail(5, 4, ItemType::Green, 0);
+	mTrailManager->InsertTrail(5, 4, ItemType::Green, 1);
 	mTrailManager->InsertTrail(4, 4, ItemType::Green, 3);
 	mTrailManager->InsertTrail(4, 5, ItemType::Green, 3);
 	mTrailManager->InsertTrail(4, 6, ItemType::Green, 3);
@@ -37,13 +37,13 @@ void Scene2::Init()
 	vector <vector <Trail*>>* temp = mTrailManager->GetTrailListPtr();
 
 	mElectrode = new Electrode;
-	mElectrode->Init(120, WINSIZEY / 2 - 40);
+	mElectrode->Init(120, WINSIZEY / 2 - 50);
 	mElectrode->SetTrail(temp);
 
 	for (int i = 0; i < 3; i++)
 	{
 		Voltorb* voltorb = new Voltorb;
-		voltorb->Init(100 - 50 * i, WINSIZEY / 2 - 40);
+		voltorb->Init(80 - 35 * i, WINSIZEY / 2 - 50);
 		//voltorb->SetElectrode(mElectrode);
 		mVoltorbVec.push_back(voltorb);
 		mVoltorbVec[i]->SetTrail(temp);
@@ -64,11 +64,11 @@ void Scene2::Init()
 	}
 
 	mMachop = new Machop;
-	mMachop->Init(-35, WINSIZEY / 2 - 40, 1);
+	mMachop->Init(-30, WINSIZEY / 2 - 50, 1);
 	mMachop->SetTrail(temp);
 
 	mAbra = new Abra;
-	mAbra->Init(-85, WINSIZEY / 2 - 40, 1);
+	mAbra->Init(-70, WINSIZEY / 2 - 50, 1);
 	mAbra->SetTrail(temp);
 	
 }

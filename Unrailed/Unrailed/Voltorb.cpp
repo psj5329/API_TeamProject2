@@ -174,6 +174,26 @@ void Voltorb::ReadyAnimation()
 	mExplode->SetIsLoop(false);
 	mExplode->SetFrameUpdateTime(0.1f);
 	mExplode->SetCallbackFunc(bind(&Train::EndExplode, this));
+
+	mDownHurt = new Animation();
+	mDownHurt->InitFrameByStartEnd(0, 4, 0, 4, false);
+	mDownHurt->SetIsLoop(false);
+	mDownHurt->SetFrameUpdateTime(0.8f);
+
+	mUpHurt = new Animation();
+	mUpHurt->InitFrameByStartEnd(1, 4, 1, 4, false);
+	mUpHurt->SetIsLoop(false);
+	mUpHurt->SetFrameUpdateTime(0.8f);
+
+	mLeftHurt = new Animation();
+	mLeftHurt->InitFrameByStartEnd(0, 5, 0, 5, false);
+	mLeftHurt->SetIsLoop(false);
+	mLeftHurt->SetFrameUpdateTime(0.8f);
+
+	mRightHurt = new Animation();
+	mRightHurt->InitFrameByStartEnd(1, 5, 1, 5, false);
+	mRightHurt->SetIsLoop(false);
+	mRightHurt->SetFrameUpdateTime(0.8f);
 }
 
 void Voltorb::SetAnimation()
@@ -220,6 +240,36 @@ void Voltorb::SetAnimation()
 		}
 	}
 
+	if (mState == State::Hurt)
+	{
+		if (mDirection == Direction::Down)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mDownHurt;
+			mCurrentAnimation->Play();
+		}
+		if (mDirection == Direction::Up)
+		{
+
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mUpHurt;
+			mCurrentAnimation->Play();
+		}
+		if (mDirection == Direction::Left)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mLeftHurt;
+			mCurrentAnimation->Play();
+
+		}
+		if (mDirection == Direction::Right)
+		{
+			mCurrentAnimation->Stop();
+			mCurrentAnimation = mRightHurt;
+			mCurrentAnimation->Play();
+		}
+	}
+
 	if (mState == State::Sleep)
 	{
 		mCurrentAnimation->Stop();
@@ -234,18 +284,6 @@ void Voltorb::SetAnimation()
 		mCurrentImage = mExplodeImage;
 	}
 }
-
-//void Voltorb::SetImage(int i)
-//{
-//	if (i == 0) // 0Àº false
-//	{
-//		mCurrentImage = IMAGEMANAGER->FindImage(L"Electrode");
-//	}
-//	else
-//	{
-//		mCurrentImage = IMAGEMANAGER->FindImage(L"Voltorb");
-//	}
-//}
 
 void Voltorb::EndExplode()
 {
