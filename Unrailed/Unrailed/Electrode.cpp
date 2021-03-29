@@ -37,7 +37,10 @@ void Electrode::Init(int x, int y)
 
 
 	mStartTimer = 3.5f;
-	mSleepTimer = 1000.f;
+	mSleepTimer = 10.f;
+
+	mDustFrameTime = 0;
+	mAlpha = 1.f;
 }
 
 void Electrode::Release()
@@ -135,6 +138,36 @@ void Electrode::Update()
 		SetIsExplode(true);
 	}
 
+	//¼îÅ© ÁßÀÏ¶§ ±ôºý°Å¸²
+	if (GetIsHurt() == true)
+	{
+		mDustFrameTime += TIME->DeltaTime();
+
+		if (mDustFrameTime >= 0.2f)
+		{
+			mDustFrameTime = 0.f;
+			mAlpha -= 0.2f;
+
+			if (mAlpha <= 0.5f)
+			{
+				SetIsHurt(false);
+			}
+		}
+	}
+	else
+	{
+		if (mAlpha < 1.f)
+		{
+			mAlpha += 0.2f;
+
+			if (mAlpha >= 1.f)
+			{
+				mAlpha = 1.f;
+			}
+		}
+	}
+
+
 	//Æø¹ß
 	if (CheckTileEdge() == true)
 	{
@@ -170,10 +203,10 @@ void Electrode::Update()
 
 void Electrode::Render(HDC hdc)
 {
-	//RenderRect(hdc, mRect);
-	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-	//CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	//CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+
+	CAMERAMANAGER->GetMainCamera()->AlphaScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
+		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY, mAlpha);
 
 	GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);
 }

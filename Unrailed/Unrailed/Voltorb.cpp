@@ -38,7 +38,10 @@ void Voltorb::Init(int x, int y)
 
 	mExplosionTimer = 0.3;
 	mStartTimer = 3.5f;
-	mSleepTimer = 1000.f;
+	mSleepTimer = 10.f;
+
+	mDustFrameTime = 0;
+	mAlpha = 1.f;
 }
 
 void Voltorb::Release()

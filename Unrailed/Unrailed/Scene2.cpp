@@ -74,11 +74,11 @@ void Scene2::Init()
 	}
 
 	mMachop = new Machop;
-	mMachop->Init(-30, WINSIZEY / 2 - 50, 1);
+	mMachop->Init(30, WINSIZEY / 2 - 50, 1);
 	mMachop->SetTrail(temp);
 
 	mAbra = new Abra;
-	mAbra->Init(-70, WINSIZEY / 2 - 50, 1);
+	mAbra->Init(70, WINSIZEY / 2 - 50, 1);
 	mAbra->SetTrail(temp);
 	
 }

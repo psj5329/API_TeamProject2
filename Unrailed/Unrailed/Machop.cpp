@@ -39,7 +39,7 @@ void Machop::Init(int x, int y, int image)
 
 	mBagItemListPtr = mBag.GetBagItemListPtr();
 
-	mStartTimer = 60.5f;
+	mStartTimer = 3.5f;
 }
 
 void Machop::Release()
