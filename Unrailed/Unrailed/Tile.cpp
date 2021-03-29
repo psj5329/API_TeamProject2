@@ -43,7 +43,7 @@ void Tile::Render(HDC hdc)
 			}
 		}
 
-		if (!INPUT->GetKey(VK_CONTROL))
+		if (INPUT->GetKey(VK_CONTROL))
 		{
 			switch (mTileType)
 			{

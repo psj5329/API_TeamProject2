@@ -3,6 +3,8 @@
 #include "Image.h"
 #include "Animation.h"
 #include "Camera.h"
+#include "Mike.h"
+#include "Tile.h"
 
 void Jigglypuff::Init()
 {
@@ -17,16 +19,25 @@ void Jigglypuff::Init(int x, int y, bool isUpgraded)
 	mIsUpgraded = isUpgraded;
 	mHoldMike = true;
 	mDirection = Direction::Down;
-	mState = JigglyState::Idle;
-
+	mState = JigglyState::Sing;
+	mSongImage = IMAGEMANAGER->FindImage(L"PinkArea");
+	mName = "Jigglypuff";
 
 	if (!mIsUpgraded)
 	{
 		mImage = IMAGEMANAGER->FindImage(L"Jigglypuff");
-		mSizeX = mImage->GetFrameWidth() * 2;
-		mSizeY = mImage->GetFrameHeight() * 2;
-		mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
+		mSpeed = 40;
+		mSongRadius = 180;
 	}
+	else
+	{
+		mImage = IMAGEMANAGER->FindImage(L"Wigglypuff");
+		mSpeed = 30;
+		mSongRadius = 200;
+	}
+	mSizeX = mImage->GetFrameWidth() * 2;
+	mSizeY = mImage->GetFrameHeight() * 2;
+	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
 	OBJECTMANAGER->AddObject(ObjectLayer::ITEM, this);
 
@@ -36,6 +47,10 @@ void Jigglypuff::Init(int x, int y, bool isUpgraded)
 	mCurrentAnimation = mSing;
 	mCurrentAnimation->Play();
 
+
+	//마이크
+	mMike = new Mike();
+	mMike->Init();
 }
 
 void Jigglypuff::Release()
@@ -52,14 +67,27 @@ void Jigglypuff::Update()
 {
 	mCurrentAnimation->Update();
 
-	UpdateSongRect();
+	if (mState == JigglyState::Sing)
+	{
+		UpdateSongRect();
+	}
+	
+	//마이크로가
+	if (mState == JigglyState::Move)
+	{
+		MoveToMike();
+	}
 }
 
 void Jigglypuff::Render(HDC hdc)
 {
+	if (mState == JigglyState::Sing)
+	{
+		CAMERAMANAGER->GetMainCamera()->AlphaScaleRender(hdc, mSongImage, mSongRect.left - 88, mSongRect.top - 88, mSongRadius * 2, mSongRadius * 2, 0.5);
+		RenderSongRect(hdc);
+	}
+
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-	
-	RenderSongRect(hdc);
 }
 
 
@@ -142,7 +170,7 @@ void Jigglypuff::SetAnimation()
 
 void Jigglypuff::InitSongRect()
 {
-	int size = 12;
+	int size = 14;
 	for (int i = 0;i < size;i++)
 	{
 		Note* tempNote = new Note();
@@ -155,7 +183,6 @@ void Jigglypuff::InitSongRect()
 		mNoteList.push_back(tempNote);
 	}
 
-	mSongRadius = 140;
 	mSongRect = RectMakeCenter(mX, mY, mSongRadius, mSongRadius);
 }
 
@@ -188,7 +215,10 @@ void Jigglypuff::UpdateNotes(Note* note)
 
 bool Jigglypuff::IsInSongRange(RECT rect)
 {
-	return IntersectRectToCircle(rect, mX, mY, mSongRadius);
+	if (mState == JigglyState::Sing)
+		return IntersectRectToCircle(rect, mX, mY, mSongRadius);
+	else
+		return false;
 }
 
 bool Jigglypuff::TakeMike()
@@ -206,12 +236,134 @@ bool Jigglypuff::TakeMike()
 	}
 }
 
-void Jigglypuff::SearchMike()
+void Jigglypuff::MoveToMike()
 {
+	float angle=0;
+	if(mPathFinderList.size() != 0)
+		angle = Math::GetAngle(mX, mY, mPathFinderList[0]->GetX() + TileSize / 2, mPathFinderList[0]->GetY() + TileSize / 2);
+
+	mX += cosf(angle) * mSpeed * TIME->DeltaTime();
+	mY += -sinf(angle) * mSpeed * TIME->DeltaTime();
+
+	if ((int)(mX / TileSize) == (int)(((mPathFinderList[0]->GetX() + TileSize / 2) / TileSize))
+		&& (int)(mY / TileSize) == (int)(((mPathFinderList[0]->GetY() + TileSize / 2) / TileSize))
+		&& Math::GetDistance(mX, mY, mPathFinderList[0]->GetX() + TileSize / 2, mPathFinderList[0]->GetY() + TileSize / 2) <= 1.f)
+	{
+		mPathFinderList.erase(mPathFinderList.begin());
+
+		if (mPathFinderList.size() != 0)
+		{
+			if ((int)(mX / 48) > (int)((mPathFinderList[0]->GetX() + TileSize / 2) / TileSize))
+			{
+				if (mState != JigglyState::Move || mDirection != Direction::Left)
+				{
+					mState = JigglyState::Move;
+					mDirection = Direction::Left;
+					SetAnimation();
+				}
+			}
+			else if ((int)(mX / TileSize) < (int)((mPathFinderList[0]->GetX() + TileSize / 2) / TileSize))
+			{
+				if (mState != JigglyState::Move || mDirection != Direction::Right)
+				{
+					mState = JigglyState::Move;
+					mDirection = Direction::Right;
+					SetAnimation();
+				}
+			}
+
+			if ((int)(mY / TileSize) > (int)((mPathFinderList[0]->GetY() + TileSize / 2) / TileSize))
+			{
+				if (mState != JigglyState::Move || mDirection != Direction::Up)
+				{
+					mState = JigglyState::Move;
+					mDirection = Direction::Up;
+					SetAnimation();
+				}
+			}
+			else if ((int)(mY / TileSize < (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48)))
+			{
+				if (mState != JigglyState::Move || mDirection != Direction::Down)
+				{
+					mState = JigglyState::Move;
+					mDirection = Direction::Down;
+					SetAnimation();
+				}
+			}
+		}
+		//길이 더 없으면
+		else
+		{
+			mState = JigglyState::Sing;
+			mDirection = Direction::Down;
+			SetAnimation();
+			mSongRect = RectMakeCenter(mX, mY, mSongRadius, mSongRadius);
+			mMike->PickUpMikeJigglypff();
+			mHoldMike = true;
+		}
+	}
+
+	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
 }
 
-void Jigglypuff::StartSearchingMike()
+//마이크 찾기 시작
+void Jigglypuff::StartSearchingMike(int MikeX, int MikeY)
 {
+	for (int i = 0;i < mPathFinderList.size();i++)
+	{
+		mPathFinderList.erase(mPathFinderList.begin() + i);
+		i--;
+	}
 
+	mIndexX = (mX + (CAMERAMANAGER->GetMainCamera()->GetX() - WINSIZEX / 2)) / TileSize;
+	mIndexY = (mY + (CAMERAMANAGER->GetMainCamera()->GetY() - WINSIZEY / 2)) / TileSize;
+	GameObject* mike = OBJECTMANAGER->FindObject("Mike");
+	mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, mIndexX, mIndexY, MikeX, MikeY);
+
+
+	if ((int)(mX / 48) > (int)((mPathFinderList[0]->GetX() + TileSize / 2) / TileSize))
+	{
+		if (mState != JigglyState::Move || mDirection != Direction::Left)
+		{
+			mState = JigglyState::Move;
+			mDirection = Direction::Left;
+			SetAnimation();
+		}
+	}
+	else if ((int)(mX / TileSize) < (int)((mPathFinderList[0]->GetX() + TileSize / 2) / TileSize))
+	{
+		if (mState != JigglyState::Move || mDirection != Direction::Right)
+		{
+			mState = JigglyState::Move;
+			mDirection = Direction::Right;
+			SetAnimation();
+		}
+	}
+
+	if ((int)(mY / TileSize) > (int)((mPathFinderList[0]->GetY() + TileSize / 2) / TileSize))
+	{
+		if (mState != JigglyState::Move || mDirection != Direction::Up)
+		{
+			mState = JigglyState::Move;
+			mDirection = Direction::Up;
+			SetAnimation();
+		}
+	}
+	else if ((int)(mY / TileSize < (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48)))
+	{
+		if (mState != JigglyState::Move || mDirection != Direction::Down)
+		{
+			mState = JigglyState::Move;
+			mDirection = Direction::Down;
+			SetAnimation();
+		}
+	}
+	
+}
+
+void Jigglypuff::PlaceMike(int indexX, int indexY)
+{
+	mMike->PlaceMike(indexX, indexY);
+	StartSearchingMike(indexX, indexY);
 }
