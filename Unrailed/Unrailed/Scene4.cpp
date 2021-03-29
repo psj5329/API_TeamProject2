@@ -76,6 +76,11 @@ void Scene4::Init()
 	mTempPlayer->SetMapObjectListPtr(mapObjectListPtr);
 
 	mTempPlayer->SetTrailManagerPtr(mTrailManager);
+
+	Jigglypuff* jigglypuff = new Jigglypuff();
+	jigglypuff->Init(TileSize * 4.5, TileSize * 10.5, false);
+	jigglypuff->SetTileListPtr(*tileListPtr);
+	jigglypuff->SetMapObjectListPtr(*mapObjectListPtr);
 }
 
 void Scene4::Release()
@@ -102,9 +107,9 @@ void Scene4::Render(HDC hdc)
 	// {{ 완성본에서 지워야 할 내용 시작
 	wstring strScene = L"이건 4번 씬 / 방향키: 이동 / 이동 중 shift: 대시";
 	TextOut(hdc, 500, 78, strScene.c_str(), (int)strScene.length());
-	strScene = L"c: 변신 / space: 오브젝트 공격 / z: 광물,기찻길 줍기";
+	strScene = L"c: 변신 / space: 오브젝트 공격, 깜까미 공격, 푸린 공격(마이크 얻기) / z: 광물,기찻길 줍기";
 	TextOut(hdc, 500, 100, strScene.c_str(), (int)strScene.length());
-	strScene = L"x: 광물,기찻길 놓기, 알통몬에게 광물 주기 / v: 기찻길 방향 돌리기";
+	strScene = L"x: 광물,기찻길 놓기, 알통몬에게 광물 주기 / v: 기찻길 방향 돌리기 / m: 마이크 버리기";
 	TextOut(hdc, 500, 122, strScene.c_str(), (int)strScene.length());
 	strScene = L"개발자 L: 플레이어 기즈모, 타일 정보 on/off";
 	TextOut(hdc, 500, 144, strScene.c_str(), (int)strScene.length());
