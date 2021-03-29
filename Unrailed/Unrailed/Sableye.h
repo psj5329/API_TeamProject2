@@ -24,6 +24,8 @@ public:
 	void MoveToOre();
 	void ReadyAnimation();
 	void SetAnimation();
+	void SetAnimation(EnemyState state);
+	void StealOre();
 
 public:
 	bool GetExistTarget() { return mIsExistTarget; }

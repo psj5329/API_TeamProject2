@@ -12,3 +12,5 @@ enum class ItemName : int
 	ItemTrail,
 	ItemNameEnd
 };
+
+enum UnitDirection { LEFT, RIGHT, UP, DOWN, DIREND };
