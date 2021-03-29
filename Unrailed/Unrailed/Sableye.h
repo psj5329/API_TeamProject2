@@ -4,7 +4,7 @@
 class Sableye : public Enemy
 {
 	vector<GameObject*> mVecItem;
-	GameObject* mItem;
+	//GameObject* mItem;
 	GameObject* mTarget;
 	bool mIsExistTarget;
 	bool mIsRunAway;
@@ -26,6 +26,7 @@ public:
 	void SetAnimation();
 	void SetAnimation(EnemyState state);
 	void StealOre();
+	void NextDir();
 
 public:
 	bool GetExistTarget() { return mIsExistTarget; }
