@@ -13,7 +13,7 @@
 #include "Inven.h"
 #include "BagItem.h"
 #include "Enemy.h"
-//#include "Sableye.h"
+#include "Sableye.h"
 
 Player::Player(const string& name, float x, float y)
 	: GameObject(name, x, y)
