@@ -28,5 +28,6 @@ public:
 	ItemType PickUp();
 	void Place(int x, int y);
 
-	void PlusCount() { ++mCount; }
+	void PlusOneCount() { ++mCount; }
+	void MinusCount(int count) { mCount -= count; }
 };

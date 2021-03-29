@@ -936,8 +936,11 @@ void Player::InputZKey()
 				{
 					int count = item->GetCount();
 
-					for (int i = 0; i < count; ++i)
+					for (int j = 0; j < count; ++j)
 					{
+						if (j >= 6)////////////////////////////////////////////////////////////////////////// 유찬 수정 중
+							continue;////////////////////////////////////////////////////////////////////////// 유찬 수정 중
+
 						BagItem* bagItem = new BagItem();
 						//bagItem->SetName(ItemName::ItemOre);
 
@@ -955,7 +958,10 @@ void Player::InputZKey()
 						//mBagItemList.push_back(bagItem);
 					}
 
-					(*itemListPtr).erase((*itemListPtr).begin() + i);
+					//if (count <= 6)////////////////////////////////////////////////////////////////////////// 유찬 수정 중
+						(*itemListPtr).erase((*itemListPtr).begin() + i);
+					//else////////////////////////////////////////////////////////////////////////// 유찬 수정 중
+					//	item->MinusCount(-6);////////////////////////////////////////////////////////////////////////// 유찬 수정 중
 
 					mIsGettingItemThisFrame = true;
 				}
@@ -1032,7 +1038,7 @@ void Player::InputXKey()
 				{
 					if (((Ore*)item)->GetOreType() == itemType)
 					{
-						((Ore*)item)->PlusCount();
+						((Ore*)item)->PlusOneCount();
 						mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
 						//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 						return;
