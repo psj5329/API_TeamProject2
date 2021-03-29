@@ -18,19 +18,21 @@ void Ore::Update()
 
 void Ore::Render(HDC hdc)
 {
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mX, mY, mFrameX, 0, mSizeX, mSizeY);
-	//mImage->ScaleFrameRender(hdc, mX, mY, mFrameX, 0, mSizeX, mSizeY);
+	if (mCount == 1)
+		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mX, mY, mFrameX, 0, mSizeX, mSizeY);
+	else if (mCount == 2)
+		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mX, mY, mFrameX, 1, mSizeX, mSizeY);
+	else if (mCount >= 3)
+		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mX, mY, mFrameX, 2, mSizeX, mSizeY);
 
-	// {{ 테스트용 // 유찬 // 폰트랑 위치 수정해야 함
-	wstring strCount = to_wstring(mCount);
-	TextOut(hdc, (int)mX, (int)mY, strCount.c_str(), (int)strCount.length());
-	// 테스트용 // 유찬 }}
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mNumImage, mX + 28, mY + 22, mCount - 1, 0, 8, 16);
 }
 
 void Ore::Drop(int x, int y, ItemType type)
 {
 	//속성정하고
 	mImage = IMAGEMANAGER->FindImage(L"Ore");
+	mNumImage = IMAGEMANAGER->FindImage(L"Num");
 	mType = type;
 	mCount = 1;
 
@@ -50,8 +52,8 @@ void Ore::Drop(int x, int y, ItemType type)
 
 	mX = x + 8;
 	mY = y + 8;
-	mSizeX = mImage->GetFrameWidth()*2.5;
-	mSizeY = mImage->GetFrameHeight()*2.5;
+	mSizeX = mImage->GetFrameWidth() * 2;
+	mSizeY = mImage->GetFrameHeight() * 2;
 }
 
 ItemType Ore::PickUp()

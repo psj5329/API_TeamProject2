@@ -10,6 +10,7 @@ enum class ItemName : int
 {
 	ItemOre,
 	ItemTrail,
+	ItemMic,
 	ItemNameEnd
 };
 
