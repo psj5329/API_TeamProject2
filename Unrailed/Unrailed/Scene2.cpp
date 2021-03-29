@@ -36,7 +36,7 @@ void Scene2::Init()
 	//Çª¸°
 	mJigglypuff = new Jigglypuff;
 	mJigglypuff->Init();
-	mJigglypuff->SetX(WINSIZEX / 2);
+	mJigglypuff->SetX(200);
 	mJigglypuff->SetY(WINSIZEY / 2);
 	//OBJECTMANAGER->AddObject(ObjectLayer::ITEM, mJigglypuff);
 

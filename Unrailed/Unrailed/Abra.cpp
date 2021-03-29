@@ -148,7 +148,7 @@ void Abra::Update()
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 
-	//mBag.Update((int)mX, (int)mY);
+	mBag.Update((int)mX, (int)mY);
 }
 
 void Abra::Render(HDC hdc)
@@ -158,20 +158,20 @@ void Abra::Render(HDC hdc)
 	//CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
-	wstring strTrail;
-	for (int i = 0; i < mCreatedTrailList.size(); ++i)
-	{
-		if (mCreatedTrailList[i]->trailType == ItemType::Green)
-			strTrail = L"그린" + to_wstring(mTrailCount);
-		else if (mCreatedTrailList[i]->trailType == ItemType::Blue)
-			strTrail = L"블루" + to_wstring(mTrailCount);
-		else if (mCreatedTrailList[i]->trailType == ItemType::Red)
-			strTrail = L"레드" + to_wstring(mTrailCount);
+	//wstring strTrail;
+	//for (int i = 0; i < mCreatedTrailList.size(); ++i)
+	//{
+	//	if (mCreatedTrailList[i]->trailType == ItemType::Green)
+	//		strTrail = L"그린" + to_wstring(mTrailCount);
+	//	else if (mCreatedTrailList[i]->trailType == ItemType::Blue)
+	//		strTrail = L"블루" + to_wstring(mTrailCount);
+	//	else if (mCreatedTrailList[i]->trailType == ItemType::Red)
+	//		strTrail = L"레드" + to_wstring(mTrailCount);
+	//
+	//	TextOut(hdc, mX - 20, mY - 40 - i * 15, strTrail.c_str(), strTrail.length());
+	//}
 
-		TextOut(hdc, mX - 20, mY - 40 - i * 15, strTrail.c_str(), strTrail.length());
-	}
-
-	//mBag.Render(hdc);
+	mBag.Render(hdc);
 }
 
 void Abra::ReadyAnimation()
@@ -310,7 +310,6 @@ void Abra::SetAnimation()
 		}
 		if (mDirection == Direction::Up)
 		{
-
 			mCurrentAnimation->Stop();
 			mCurrentAnimation = mUpSynthesis;
 			mCurrentAnimation->Play();
@@ -387,11 +386,11 @@ void Abra::SetAnimation()
 void Abra::SynthesisOre()
 {
 	ItemType type = ItemType::None;
-	if (mState != State::Hurt && mTrailCount <= 2 && mMachop->GetOreList().size() >= 2 && mIsSynthesis == false && mOreBroken == false)
+	if (mState != State::Hurt && mTrailCount <= 2 && mMachop->GetOreCount() >= 2 && mIsSynthesis == false && mOreBroken == false)
 	{
 		mState = State::Synthesis;
 		SetAnimation();
-
+		
 		type = mMachop->OreErase();
 		mMachop->SetOreCount(mMachop->GetOreCount() - 2);
 
@@ -404,11 +403,14 @@ void Abra::SynthesisOre()
 	}
 	if (mOreBroken == true)
 	{
-		CreatedTrail* createdTrail = new CreatedTrail;
-		createdTrail->trailType = type;
-		createdTrail->isCreated = false;
-		//createdTrail->mImage = 
-		mCreatedTrailList.push_back(createdTrail);
+		//CreatedTrail* createdTrail = new CreatedTrail;
+		//createdTrail->trailType = type;
+		//createdTrail->isCreated = false;
+		////createdTrail->mImage = 
+		//mCreatedTrailList.push_back(createdTrail);
+		BagItem* createdTrail = new BagItem();
+		createdTrail->Init(ItemName::ItemTrail, type);
+		mBagItemListPtr->push_back(createdTrail);
 
 		mOreBroken = false;
 	}
@@ -492,8 +494,8 @@ ItemType Abra::Receive()
 
 ItemType Abra::TrailErase()
 {
-	ItemType type = mCreatedTrailList[0]->trailType;
-	mCreatedTrailList.erase(mCreatedTrailList.begin());
+	ItemType type = (*mBagItemListPtr)[0]->GetType();
+	(*mBagItemListPtr).erase((*mBagItemListPtr).begin());
 	mTrailCount -= 1;
 
 	return type;

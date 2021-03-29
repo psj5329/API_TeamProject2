@@ -37,7 +37,7 @@ void Electrode::Init(int x, int y)
 
 
 	mStartTimer = 3.5f;
-	mSleepTimer = 10.f;
+	mSleepTimer = 1000.f;
 }
 
 void Electrode::Release()
@@ -97,7 +97,7 @@ void Electrode::Update()
 	//올라가있는 기차길의 현재 기차길/타일의 중간오면 방향확인
 	//방향이 가리키는 타일의 중간까지이동
 	SetSpeed();
-	if (mState == State::Move)
+	if (mState == State::Move || mState == State::Hurt)
 	{
 		mX += mSpeedX * Time::GetInstance()->DeltaTime() / 2;
 		mY += mSpeedY * Time::GetInstance()->DeltaTime() / 2;
@@ -105,6 +105,34 @@ void Electrode::Update()
 	if (CheckTile() == true)
 	{
 		SetTarget();
+	}
+
+	//푸린
+	if (CheckJigglypuff() == true)
+	{
+		mState = State::Move;
+		SetAnimation();
+
+		mSleepTimer = 10.f;
+
+		SetIsHurt(false);
+	}
+	else
+	{
+		mSleepTimer -= TIME->DeltaTime();
+	}
+	if (mSleepTimer <= 5 && GetIsExplode() == false)
+	{
+		mState = State::Hurt;
+		SetAnimation();
+
+		SetIsHurt(true);
+	}
+	if (GetIsHurt() == true && mSleepTimer <= 0 && GetIsExplode() == false)
+	{
+		mNextTrain->SetState(State::Exploding);
+
+		SetIsExplode(true);
 	}
 
 	//폭발
@@ -129,31 +157,6 @@ void Electrode::Update()
 			SetIsExplode(true);
 		}
 	}
-
-	//푸린
-	if (CheckJigglypuff() == true)
-	{
-		mSleepTimer = 10.f;
-	}
-	else
-	{
-		mSleepTimer -= TIME->DeltaTime();
-	}
-	if (mSleepTimer <= 5)
-	{
-		mState = State::Hurt;
-		SetAnimation();
-	}
-	if (mSleepTimer <= 0)
-	{
-		mState = State::Explode;
-		SetAnimation();
-
-		mNextTrain->SetState(State::Exploding);
-
-		SetIsExplode(true);
-	}
-
 	if (GetIsExplode() == true && mState != State::Explode)
 	{
 		mState = State::Explode;
@@ -316,22 +319,12 @@ void Electrode::SetAnimation()
 	}
 }
 
-//void Electrode::SetImage(int i)
-//{
-//	if (i == 0) // 0은 false
-//	{
-//		mCurrentImage = IMAGEMANAGER->FindImage(L"Electrode");
-//	}
-//	else
-//	{
-//		mCurrentImage = IMAGEMANAGER->FindImage(L"Voltorb");
-//	}
-//}
-
 void Electrode::EndExplode()
 {
 	if (mState == State::Explode)
 	{
-		SetIsDestroy(true);
+		//SetIsDestroy(true); //삭제
+		SetIsActive(false); //렌더 안함
+
 	}
 }
