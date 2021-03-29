@@ -3,6 +3,7 @@
 
 //class Player;
 class TileMap;
+class Jigglypuff;
 class Scene3 : public Scene
 {
 	//Player* mPlayer;
@@ -15,6 +16,7 @@ class Scene3 : public Scene
 	int mTailY;
 
 	class Image* mImage;
+	Jigglypuff* mJigglypuff;
 
 public:
 	void Init()override;

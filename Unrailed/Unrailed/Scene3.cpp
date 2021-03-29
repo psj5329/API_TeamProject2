@@ -7,6 +7,10 @@
 #include "TrailManager.h"
 #include "Image.h" //Hut빼면 빼도 ㄱㅊ
 #include "Player.h"
+#include "Jigglypuff.h"
+#include "Electrode.h"
+#include "Machop.h"
+#include "Abra.h"
 
 void Scene3::Init()
 {
@@ -16,10 +20,10 @@ void Scene3::Init()
 
 	mTileMap = new TileMap();
 	//mTileMap->Init(TileCountX, TileCountY, TileSize);
-	mTileMap->LoadMap(3);
+	mTileMap->LoadMap(2);
 	int x = mTileMap->GetXTileCount();
 	int y = mTileMap->GetYTileCount();
-
+	//플레이어 에게 타일숫자 전달
 
 	mTrailManager = new TrailManager();
 	mTrailManager->Init(y,x);
@@ -40,10 +44,38 @@ void Scene3::Init()
 
 	mTempPlayer->SetTrailManagerPtr(mTrailManager);
 
+
+
+
+	//Electrode* electrode = new Electrode();
+	//electrode->Init(5 * 48 + 24, 72);
+	//electrode->SetTrail(trailListPtr);
+	//
+	//Machop* machop = new Machop();
+	//machop->Init(5 * 48 + 24, 24, 1);
+	//machop->SetTrail(trailListPtr);
+	//
+	//Abra* abra = new Abra();
+	//abra->Init(5 * 48 + 24, -24, 1);
+	//abra->SetTrail(trailListPtr);
+	//
+	//vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
+	//mTempPlayer->SetTileListPtr(tileListPtr);
+	//vector<vector<MapObject*>>* mapObjectListPtr = mTileMap->GetObjectListPtr();
+	//mTempPlayer->SetMapObjectListPtr(mapObjectListPtr);
+
+
+
+
+	//푸린
+	mJigglypuff = new Jigglypuff();
+	mJigglypuff->Init(100, 100, false);
+
 }
 	
 void Scene3::Release()
 {
+	SafeDelete(mJigglypuff);
 }
 
 void Scene3::Update()
