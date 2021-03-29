@@ -16,12 +16,14 @@ void Scene1::Init()
 {
 	mTileMap = new TileMap();
 	mTileMap->Init(TileCountX, TileCountY, TileSize);
-	mTileMap->LoadMap();
+	mTileMap->LoadMap(); 
 
 	mPlayer = new Player("Player_test", 0, 0);
 	mPlayer->SetX(48 * 2);
 	mPlayer->SetY(48 * 5);
 	OBJECTMANAGER->AddObject(ObjectLayer::PLAYER, mPlayer);
+
+	mPlayer->SetTileCount(TileCountX, TileCountY);
 
 	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
 	mPlayer->SetTileListPtr(tileListPtr);
