@@ -29,4 +29,3 @@ public:
 
 	inline void DamagedHp() { mHp -= 1; }
 };
-

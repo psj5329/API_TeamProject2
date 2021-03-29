@@ -2,8 +2,10 @@
 #include "Train.h"
 #include "Electrode.h"
 #include "Ore.h"
+#include "Bag.h"
 
 class Animation;
+class Bag;
 
 class Machop : public Train
 {
@@ -25,6 +27,9 @@ class Machop : public Train
 	Animation* mUpHurt;
 	Animation* mLeftHurt;
 	Animation* mRightHurt;
+
+	Bag mBag;
+	vector<BagItem*>* mBagItemListPtr;
 
 public:
 	void Init()override {};

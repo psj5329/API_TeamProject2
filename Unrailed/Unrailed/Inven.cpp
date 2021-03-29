@@ -21,9 +21,14 @@ void Inven::Render(HDC hdc)
 	for (int i = 0; i < 6; ++i)
 		mImage->AlphaScaleFrameRender(hdc, 4, 128 + 30 * i, 0, 0, mSizeX, mSizeY, 0.5f);
 
-	if (mBagItemList.size() && (mBagItemList[0]->GetName() == ItemName::ItemTrail))
-		for (int i = 0; i < 3; ++i)
-			mImage->ScaleFrameRender(hdc, 10, 224 + 30 * i, 1, 1, mSizeX, mSizeY);
+	if (mBagItemList.size())
+	{
+		mImage->ScaleFrameRender(hdc, 4, 128 + 30 * (mBagItemList.size() - 1), 2, 0, mSizeX, mSizeY);
+
+		if (mBagItemList[0]->GetName() == ItemName::ItemTrail)
+			for (int i = 0; i < 3; ++i)
+				mImage->ScaleFrameRender(hdc, 10, 224 + 30 * i, 1, 1, mSizeX, mSizeY);
+	}
 
 	if (mHiddenItem) // 0: not find 1: find 2: used
 		mImage->AlphaScaleFrameRender(hdc, 4, 308, 1, 0, mSizeX, mSizeY, 0.5f);
