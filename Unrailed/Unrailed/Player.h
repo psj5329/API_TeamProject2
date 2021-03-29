@@ -20,6 +20,7 @@ enum PlayerState
 	Idle,
 	Move,
 	Attack,
+	Change,
 	PlayerStateEnd
 };
 	
@@ -88,6 +89,11 @@ class Player : public GameObject
 	Animation* mLUAttackCharAnimation;
 	Animation* mRUAttackCharAnimation;
 
+	Animation* mChangeDittoAnimation;
+	Animation* mChangeChikoAnimation;
+	Animation* mChangeTotoAnimation;
+	Animation* mChangeCharAnimation;
+
 	Animation* mCurrentAnimation;
 
 	RECT mColBox;
@@ -115,16 +121,9 @@ class Player : public GameObject
 	float mSpeed;
 
 	int mInputType;
-
-	float mChangeT;
-
-	float mIsDirectionKeyDown;
-
-	bool mIsAttackingTemp;
+	bool mIsDirectionKeyDown;
 
 	bool mIsGettingItemThisFrame;
-
-	bool mIsChangable;
 
 	bool mIsInfoOn;
 
@@ -140,12 +139,13 @@ public:
 
 	void InitAnimation();
 	void SetIdleAnimation();
+	void ChangeForm();
 
 	void SafeDeleteAnimation();
 
 	void InputDirectionKey();
 	void Move();
-	void InputSpaceKey(); // Space key: attack
+	void InputSpaceKey(); // Space key: attack(enemy, jigglypuff, mapobject)
 	void CheckNextTile();
 	void InputZKey(); // 'Z' key: pick up item 
 	void InputXKey(); // 'X' key: throw item

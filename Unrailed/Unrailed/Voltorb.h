@@ -1,10 +1,13 @@
 #pragma once
 #include "Train.h"
+#include "Electrode.h"
 
 class Animation;
 
 class Voltorb : public Train
 {
+	Electrode* mElectrode;
+
 	Animation* mDownMove;
 	Animation* mUpMove;
 	Animation* mLeftMove;

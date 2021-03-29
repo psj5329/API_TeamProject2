@@ -19,7 +19,7 @@ void Sableye::Init()
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 	mHitBox = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 	mState = EnemyState::IDLE;
-	mSpeed = 100.f;
+	mSpeed = 90.f;
 
 	mDustImage = IMAGEMANAGER->FindImage(L"Dust");
 
@@ -142,21 +142,21 @@ void Sableye::MoveToOre()
 	if (mTarget != nullptr)
 		mDistance = Math::GetDistance(mX, mY, mTarget->GetX(), mTarget->GetY());
 
-	if (!mIsRunAway)	// ÇÃ·¹ÀÌ¾îÇÑÅ× ÂÑ±æ ¶§¿¡´Â ¾ÆÀÌÅÛ ÈÉÄ¡·¯ ¾È°¡!
+	if (!mIsRunAway)	// í”Œë ˆì´ì–´í•œí…Œ ì«“ê¸¸ ë•Œì—ëŠ” ì•„ì´í…œ í›”ì¹˜ëŸ¬ ì•ˆê°€!
 	{
-		if (mTarget == nullptr)	// ¾ÆÀÌÅÛ ¾ÈÈÉÃÆÀ» ¶§
+		//if (mItem == nullptr)// && mState != EnemyState::ATTACK)	// ì•„ì´í…œ ì•ˆí›”ì³¤ê³  í›”ì¹˜ëŠ” ëª¨ì…˜ë„ ì•„ë‹ë•Œ
 		{
 			for (int i = 0; i < mItemCount; ++i)
 			{
 				float x = mVecItem[i]->GetX();
 				float y = mVecItem[i]->GetY();
 
-				if (Math::GetDistance(mX, mY, x, y) < TileSize * 5)	// Å×½ºÆ®¿ë °Å¸®
+				if (Math::GetDistance(mX, mY, x, y) < TileSize * 5)	// í…ŒìŠ¤íŠ¸ìš© ê±°ë¦¬
 				{
 					/*if ((int)(mX / 48) == (int)(x / 48) && (int)(mY / 48) == (int)(y / 48))
 						break;*/
 
-					if (!mIsExistTarget)		// Ã³À½ ¸ñÇ¥¸¦ ¹ß°ß!
+					if (!mIsExistTarget)		// ì²˜ìŒ ëª©í‘œë¥¼ ë°œê²¬!
 					{
 						mDistance = Math::GetDistance(mX, mY, x, y);
 
@@ -168,47 +168,34 @@ void Sableye::MoveToOre()
 						int x2 = x / TileSize;
 						int y2 = y / TileSize;
 
-						mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, x1, y1, x2, y2);
+						if (x1 != x2 && y1 != y2)	// ê°™ì€ ìë¦¬ë©´ ì•ˆë¼
+						{
+							mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, x1, y1, x2, y2);
 
-						if ((int)(mX / 48) > (int)(mPathFinderList[0]->GetX() / 48))		// ¹æÇâ Æ²¾îÁÖ±â
-						{
-							if (mState != EnemyState::WALK || mDirection != Direction::Left)
-							{
-								mState = EnemyState::WALK;
-								mDirection = Direction::Left;
-								SetAnimation();
-							}
+							NextDir();
 						}
-						else if ((int)(mX / 48) < (int)(mPathFinderList[0]->GetX() / 48))
+						else	// ì´ë¯¸ ê·¸ ìë¦¬ì¸ê±¸
 						{
-							if (mState != EnemyState::WALK || mDirection != Direction::Right)
+							if (mState != EnemyState::ATTACK && !mIsRunAway)
 							{
-								mState = EnemyState::WALK;
-								mDirection = Direction::Right;
-								SetAnimation();
-							}
-						}
+								int x1 = mX / TileSize;
+								int y1 = mY / TileSize;
+								int x2 = mTarget->GetX() / TileSize;
+								int y2 = mTarget->GetY() / TileSize;
 
-						if ((int)(mY / 48) > (int)(mPathFinderList[0]->GetY() / 48))
-						{
-							if (mState != EnemyState::WALK || mDirection != Direction::Up)
-							{
-								mState = EnemyState::WALK;
-								mDirection = Direction::Up;
-								SetAnimation();
-							}
-						}
-						else if ((int)(mY / 48) < (int)(mPathFinderList[0]->GetY() / 48))
-						{
-							if (mState != EnemyState::WALK || mDirection != Direction::Down)
-							{
-								mState = EnemyState::WALK;
-								mDirection = Direction::Down;
-								SetAnimation();
+								if (x1 == x2 && y1 == y2)
+								{
+									//mIsExistTarget = false;
+									mState = EnemyState::ATTACK;
+									SetAnimation();
+									return;
+								}
+								else
+									mIsExistTarget = false;
 							}
 						}
 					}
-					else		// ¸ñÇ¥´Â ÀÖÁö¸¸ ¾ÆÁ÷ ÁİÁö ¾Ê¾Æ¼­ °¡Àå °¡±î¿î°Å °»½ÅÇÒ ¼ö ÀÕÀ½
+					else		// ëª©í‘œëŠ” ìˆì§€ë§Œ ì•„ì§ ì¤ì§€ ì•Šì•„ì„œ ê°€ì¥ ê°€ê¹Œìš´ê±° ê°±ì‹ í•  ìˆ˜ ì‡ìŒ
 					{
 						if (mDistance > Math::GetDistance(mX, mY, x, y) && mTarget != mVecItem[i])
 						{
@@ -225,7 +212,7 @@ void Sableye::MoveToOre()
 		}
 	}
 
-	// ÇÃ·¹ÀÌ¾î°¡ ÀÏÁ¤ ¹üÀ§ ¾È¿¡ µé¾î¿À¸é µµ¸Á°¡ÀÚ
+	// í”Œë ˆì´ì–´ê°€ ì¼ì • ë²”ìœ„ ì•ˆì— ë“¤ì–´ì˜¤ë©´ ë„ë§ê°€ì
 	if (Math::GetDistance(mX, mY, OBJECTMANAGER->GetPlayer()->GetX(), OBJECTMANAGER->GetPlayer()->GetY()) <= TileSize * 3 && !mIsRunAway)
 	{
 		mTarget = nullptr;
@@ -235,11 +222,11 @@ void Sableye::MoveToOre()
 		
 		while (1)
 		{
-			// ·£´ı Ä­ °í¸£±â
+			// ëœë¤ ì¹¸ ê³ ë¥´ê¸°
 			int x = rand() % 7 - 3;
 			int y = rand() % 7 - 3;
 
-			if (x == -3 || x == 3 || y == -3 || y == 3)	// °¡»ıÀÌ Ä­ ¼±ÅÃ
+			if (x == -3 || x == 3 || y == -3 || y == 3)	// ê°€ìƒì´ ì¹¸ ì„ íƒ
 			{
 				x += mX / TileSize;
 				y += mY / TileSize;
@@ -250,10 +237,11 @@ void Sableye::MoveToOre()
 				if (abs(OBJECTMANAGER->GetPlayer()->GetX() / TileSize - x) + abs(OBJECTMANAGER->GetPlayer()->GetY() / TileSize - y) <= 3)
 					continue;
 
-				// °¥ ¼ö ÀÖ´Â Å¸ÀÏ && ¿ÀºêÁ§Æ® ¾øÀ½ÀÎ »óÅÂÀÎ °Í¸¸ ¸ñÇ¥ ÁöÁ¡À¸·Î ¼³Á¤ÇÒ ¼ö ÀÕ´Ù
+				// ê°ˆ ìˆ˜ ìˆëŠ” íƒ€ì¼ && ì˜¤ë¸Œì íŠ¸ ì—†ìŒì¸ ìƒíƒœì¸ ê²ƒë§Œ ëª©í‘œ ì§€ì ìœ¼ë¡œ ì„¤ì •í•  ìˆ˜ ì‡ë‹¤
 				if (mTileList[y][x]->GetTileType() == TileType::Normal && mMapObjectList[y][x]->GetIntType() == 0)
 				{
 					mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, mX / TileSize, mY / TileSize, x, y);
+					NextDir();
 					break;
 				}
 			}
@@ -262,18 +250,19 @@ void Sableye::MoveToOre()
 	else if (Math::GetDistance(mX, mY, OBJECTMANAGER->GetPlayer()->GetX(), OBJECTMANAGER->GetPlayer()->GetY()) > TileSize * 3 && mIsRunAway)
 	{
 		mIsRunAway = false;
+		mIsExistTarget = false;
 		mPathFinderList.clear();
 	}
 
-	// ¾ÆÀÌÅÛ º¤ÅÍ ´Ù µ¹°í Å¸°ÙÀÌ ÀÖÀ¸´Ï±î ¿òÁ÷¿©¾ßÁö? ¶Ç´Â µµ¸ÁÃÄ¾ßÇØ¼­ µµÂøÁöÁ¡ÀÌ ÀÖ¾î¼­ ¿òÁ÷¿©¾ßÇÏÁö?
-	if (mIsExistTarget || mIsRunAway)
+	// ì•„ì´í…œ ë²¡í„° ë‹¤ ëŒê³  íƒ€ê²Ÿì´ ìˆìœ¼ë‹ˆê¹Œ ì›€ì§ì—¬ì•¼ì§€? ë˜ëŠ” ë„ë§ì³ì•¼í•´ì„œ ë„ì°©ì§€ì ì´ ìˆì–´ì„œ ì›€ì§ì—¬ì•¼í•˜ì§€?
+	if ((mIsExistTarget || mIsRunAway) && mState != EnemyState::ATTACK)
 	{
 		float angle = Math::GetAngle(mX, mY, mPathFinderList[0]->GetX() + TileSize / 2, mPathFinderList[0]->GetY() + TileSize / 2);
 
 		mX += cosf(angle) * mSpeed * TIME->DeltaTime();
 		mY += -sinf(angle) * mSpeed * TIME->DeltaTime();
 
-		// ¸ñÇ¥ ÁöÁ¡ º¤ÅÍÀÇ 0¹øÄ­¿¡ µµÂøÇßÀ¸¸é Áö¿ì°í ÇÑ Ä­¾¿ ¾ÕÀ¸·Î
+		// ëª©í‘œ ì§€ì  ë²¡í„°ì˜ 0ë²ˆì¹¸ì— ë„ì°©í–ˆìœ¼ë©´ ì§€ìš°ê³  í•œ ì¹¸ì”© ì•ìœ¼ë¡œ
 		
 		if ((int)(mX / 48) == (int)(((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
 			&& (int)(mY / 48) == (int)(((mPathFinderList[0]->GetY() + TileSize / 2) / 48)))
@@ -283,61 +272,34 @@ void Sableye::MoveToOre()
 
 			if (mPathFinderList.size() != 0)
 			{
-				if ((int)(mX / 48) > (int)((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
-				{
-					if (mState != EnemyState::WALK || mDirection != Direction::Left)
-					{
-						mState = EnemyState::WALK;
-						mDirection = Direction::Left;
-						SetAnimation();
-					}
-				}
-				else if ((int)(mX / 48) < (int)((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
-				{
-					if (mState != EnemyState::WALK || mDirection != Direction::Right)
-					{
-						mState = EnemyState::WALK;
-						mDirection = Direction::Right;
-						SetAnimation();
-					}
-				}
-
-				if ((int)(mY / 48) > (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
-				{
-					if (mState != EnemyState::WALK || mDirection != Direction::Up)
-					{
-						mState = EnemyState::WALK;
-						mDirection = Direction::Up;
-						SetAnimation();
-					}
-				}
-				else if ((int)(mY / 48) < (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
-				{
-					if (mState != EnemyState::WALK || mDirection != Direction::Down)
-					{
-						mState = EnemyState::WALK;
-						mDirection = Direction::Down;
-						SetAnimation();
-					}
-				}
+				NextDir();
 			}
 			else
 			{
-				// µµÂøÇßÀ¸´Ï±î ¾ÆÀÌÅÛ ÈÉÄ¡°Ô °ø°İ ¸ğ¼Ç
-				if (mState != EnemyState::ATTACK && !mIsRunAway)
+				// ë„ì°©í–ˆìœ¼ë‹ˆê¹Œ ì•„ì´í…œ í›”ì¹˜ê²Œ ê³µê²© ëª¨ì…˜
+				if (mState != EnemyState::ATTACK && !mIsRunAway && mTarget != nullptr)
 				{
-					mIsExistTarget = false;
-					mState = EnemyState::ATTACK;
-					SetAnimation();
+					int x1 = mX / TileSize;
+					int y1 = mY / TileSize;
+					int x2 = mTarget->GetX() / TileSize;
+					int y2 = mTarget->GetY() / TileSize;
+
+					if (x1 == x2 && y1 == y2)
+					{
+						//mIsExistTarget = false;
+						mState = EnemyState::ATTACK;
+						SetAnimation();
+					}
+					else
+						mIsExistTarget = false;
 				}
 
-				// µµ¸ÁÄ¡´ø »óÅÂ¿¡¼­´Â »ç¶óÁöÁö ¾Ê°í »õ·Î¿î ¸ñÇ¥·Î!
-				if(mIsRunAway)
+				// ë„ë§ì¹˜ë˜ ìƒíƒœì—ì„œëŠ” ì‚¬ë¼ì§€ì§€ ì•Šê³  ìƒˆë¡œìš´ ëª©í‘œë¡œ!
+				if (mIsRunAway)
 					mIsRunAway = false;
 			}
 		}
 	}
-
 
 }
 
@@ -581,13 +543,14 @@ void Sableye::StealOre()
 		if (mState == EnemyState::ATTACK)
 		{
 			vector<GameObject*>* itemPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
-
+			
 			for (int i = 0; i < (*itemPtr).size(); ++i)
 			{
 				if ((*itemPtr)[i] == mTarget)
 				{
-					mItem = mTarget;
+					//mItem = mTarget;
 					mTarget = nullptr;
+					mIsExistTarget = false;
 
 					(*itemPtr).erase((*itemPtr).begin() + i);
 				}
@@ -597,5 +560,46 @@ void Sableye::StealOre()
 
 		mState = EnemyState::IDLE;
 		SetAnimation();
+	}
+}
+
+void Sableye::NextDir()
+{
+	if ((int)(mX / 48) > (int)((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
+	{
+		if (mState != EnemyState::WALK || mDirection != Direction::Left)
+		{
+			mState = EnemyState::WALK;
+			mDirection = Direction::Left;
+			SetAnimation();
+		}
+	}
+	else if ((int)(mX / 48) < (int)((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
+	{
+		if (mState != EnemyState::WALK || mDirection != Direction::Right)
+		{
+			mState = EnemyState::WALK;
+			mDirection = Direction::Right;
+			SetAnimation();
+		}
+	}
+
+	if ((int)(mY / 48) > (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
+	{
+		if (mState != EnemyState::WALK || mDirection != Direction::Up)
+		{
+			mState = EnemyState::WALK;
+			mDirection = Direction::Up;
+			SetAnimation();
+		}
+	}
+	else if ((int)(mY / 48) < (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
+	{
+		if (mState != EnemyState::WALK || mDirection != Direction::Down)
+		{
+			mState = EnemyState::WALK;
+			mDirection = Direction::Down;
+			SetAnimation();
+		}
 	}
 }

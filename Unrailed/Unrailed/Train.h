@@ -32,6 +32,7 @@ protected:
 	int mCurrentY;
 	float mSynthesisCoolTime;
 	bool mIsExplode;
+	bool mIsHurt;
 	bool mIsSynthesis;
 	int mTrailCount;
 	int mOreCount;
@@ -63,14 +64,17 @@ public:
 	void SetTrail(vector <vector <Trail*>>* trail) { mTrailList = *trail; }
 	void SetNextTrain(Train* next) { mNextTrain = next; }
 	void SetTarget();
-	bool CheckTile();
-	bool CheckTileEdge();
 	void SetSpeed();
+	void SetIsExplode(bool explode) { mIsExplode = explode; }
+	void SetIsHurt(bool hurt) { mIsHurt = hurt; }
+	void SetJigglypuff(GameObject* object) { mJigglypuff = dynamic_cast<Jigglypuff*>(object); }
+	
 	bool CheckNextIsPassed();
 	bool CheckNextTrailType();
+	bool CheckTile();
+	bool CheckTileEdge();
 	bool CheckJigglypuff();
 	
+	bool GetIsHurt() { return mIsHurt; }
 	bool GetIsExplode() { return mIsExplode; }
-	void SetIsExplode(bool explode) { mIsExplode = explode; }
-	void SetJigglypuff(GameObject* object) { mJigglypuff = dynamic_cast<Jigglypuff*>(object); }
 };

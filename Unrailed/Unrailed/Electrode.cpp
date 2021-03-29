@@ -15,14 +15,14 @@ void Electrode::Init(int x, int y)
 
 	ReadyAnimation();
 
-	//ºÎ¸ğ Å¬·¡½º (GameObject) º¯¼ö
+	//ë¶€ëª¨ í´ë˜ìŠ¤ (GameObject) ë³€ìˆ˜
 	mX = x;
 	mY = y;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Electrode º¯¼ö
+	//Electrode ë³€ìˆ˜
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 	mSpeed = 100.f;
@@ -36,8 +36,8 @@ void Electrode::Init(int x, int y)
 	mCurrentAnimation->Play();
 
 
-	mStartTimer = 60.5f;
-	mSleepTimer = 10.f;
+	mStartTimer = 3.5f;
+	mSleepTimer = 1000.f;
 }
 
 void Electrode::Release()
@@ -52,11 +52,11 @@ void Electrode::Release()
 
 void Electrode::Update()
 {
-	//ÀÎµ¦½º °¡Á®¿À±â
+	//ì¸ë±ìŠ¤ ê°€ì ¸ì˜¤ê¸°
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
-	//½ÃÀÛ ÄğÅ¸ÀÓ
+	//ì‹œì‘ ì¿¨íƒ€ì„
 	if (mStartTimer == 3.5)
 	{
 		if (mState == State::Sleep)
@@ -94,10 +94,10 @@ void Electrode::Update()
 		}
 	}
 
-	//¿Ã¶ó°¡ÀÖ´Â ±âÂ÷±æÀÇ ÇöÀç ±âÂ÷±æ/Å¸ÀÏÀÇ Áß°£¿À¸é ¹æÇâÈ®ÀÎ
-	//¹æÇâÀÌ °¡¸®Å°´Â Å¸ÀÏÀÇ Áß°£±îÁöÀÌµ¿
+	//ì˜¬ë¼ê°€ìˆëŠ” ê¸°ì°¨ê¸¸ì˜ í˜„ì¬ ê¸°ì°¨ê¸¸/íƒ€ì¼ì˜ ì¤‘ê°„ì˜¤ë©´ ë°©í–¥í™•ì¸
+	//ë°©í–¥ì´ ê°€ë¦¬í‚¤ëŠ” íƒ€ì¼ì˜ ì¤‘ê°„ê¹Œì§€ì´ë™
 	SetSpeed();
-	if (mState == State::Move)
+	if (mState == State::Move || mState == State::Hurt)
 	{
 		mX += mSpeedX * Time::GetInstance()->DeltaTime() / 2;
 		mY += mSpeedY * Time::GetInstance()->DeltaTime() / 2;
@@ -107,11 +107,39 @@ void Electrode::Update()
 		SetTarget();
 	}
 
-	//Æø¹ß
+	//í‘¸ë¦°
+	if (CheckJigglypuff() == true)
+	{
+		mState = State::Move;
+		SetAnimation();
+
+		mSleepTimer = 10.f;
+
+		SetIsHurt(false);
+	}
+	else
+	{
+		mSleepTimer -= TIME->DeltaTime();
+	}
+	if (mSleepTimer <= 5 && GetIsExplode() == false)
+	{
+		mState = State::Hurt;
+		SetAnimation();
+
+		SetIsHurt(true);
+	}
+	if (GetIsHurt() == true && mSleepTimer <= 0 && GetIsExplode() == false)
+	{
+		mNextTrain->SetState(State::Exploding);
+
+		SetIsExplode(true);
+	}
+
+	//í­ë°œ
 	if (CheckTileEdge() == true)
 	{
-		//´ÙÀ½ ³à¼®ÀÌ Æ®·¹ÀÏÀÎÁö ¾Æ´ÑÁö ºÒ°ªÀ» ¹ñ´Â ÇÔ¼ö
-		//false¸é isexplode	
+		//ë‹¤ìŒ ë…€ì„ì´ íŠ¸ë ˆì¼ì¸ì§€ ì•„ë‹Œì§€ ë¶ˆê°’ì„ ë±‰ëŠ” í•¨ìˆ˜
+		//falseë©´ isexplode	
 		if (CheckNextTrailType() == false)
 		{
 			mNextTrain->SetState(State::Exploding);
@@ -119,9 +147,9 @@ void Electrode::Update()
 			SetIsExplode(true);
 		}
 
-		//ispassed¸¦ true·Î ÇØÁÖ´Â ÇÔ¼ö
-		//´ÙÀ½ (³Ñ¾î°¡·Á´Â) Æ®·¹ÀÏ¿¡ ispassed¸¦ Ã¼Å©ÇÏ´Â ÇÔ¼ö
-		//±× À§¿¡ ÇÔ¼ö°¡ true¸é »óÅÂ¸¦ isexplode·Î
+		//ispassedë¥¼ trueë¡œ í•´ì£¼ëŠ” í•¨ìˆ˜
+		//ë‹¤ìŒ (ë„˜ì–´ê°€ë ¤ëŠ”) íŠ¸ë ˆì¼ì— ispassedë¥¼ ì²´í¬í•˜ëŠ” í•¨ìˆ˜
+		//ê·¸ ìœ„ì— í•¨ìˆ˜ê°€ trueë©´ ìƒíƒœë¥¼ isexplodeë¡œ
 		if (CheckNextIsPassed() == true)
 		{
 			mNextTrain->SetState(State::Exploding);
@@ -129,31 +157,6 @@ void Electrode::Update()
 			SetIsExplode(true);
 		}
 	}
-
-	//Çª¸°
-	if (CheckJigglypuff() == true)
-	{
-		mSleepTimer = 10.f;
-	}
-	else
-	{
-		mSleepTimer -= TIME->DeltaTime();
-	}
-	if (mSleepTimer <= 5)
-	{
-		mState = State::Hurt;
-		SetAnimation();
-	}
-	if (mSleepTimer <= 0)
-	{
-		mState = State::Explode;
-		SetAnimation();
-
-		mNextTrain->SetState(State::Exploding);
-
-		SetIsExplode(true);
-	}
-
 	if (GetIsExplode() == true && mState != State::Explode)
 	{
 		mState = State::Explode;
@@ -316,22 +319,12 @@ void Electrode::SetAnimation()
 	}
 }
 
-//void Electrode::SetImage(int i)
-//{
-//	if (i == 0) // 0Àº false
-//	{
-//		mCurrentImage = IMAGEMANAGER->FindImage(L"Electrode");
-//	}
-//	else
-//	{
-//		mCurrentImage = IMAGEMANAGER->FindImage(L"Voltorb");
-//	}
-//}
-
 void Electrode::EndExplode()
 {
 	if (mState == State::Explode)
 	{
-		SetIsDestroy(true);
+		//SetIsDestroy(true); //ì‚­ì œ
+		SetIsActive(false); //ë Œë” ì•ˆí•¨
+
 	}
 }
