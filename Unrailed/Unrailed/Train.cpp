@@ -160,6 +160,18 @@ bool Train::CheckNextTrailType()
 	}
 }
 
+bool Train::CheckJigglypuff()
+{
+	if (mJigglypuff->IsInSongRange(mRect))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void Train::SetSpeed()
 {
 	if (mDirection == Direction::Down)

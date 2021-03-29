@@ -24,7 +24,7 @@ void Voltorb::Init(int x, int y)
 
 	//Electrode 변수
 	mDirection = Direction::Right;
-	mState = State::Move;
+	mState = State::Sleep;
 	mSpeed = 100.f;
 
 	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, this);
@@ -36,6 +36,8 @@ void Voltorb::Init(int x, int y)
 	mCurrentAnimation->Play();
 
 	mExplosionTimer = 0.3;
+	mStartTimer = 3.5f;
+	mSleepTimer = 10.f;
 }
 
 void Voltorb::Release()
@@ -54,22 +56,24 @@ void Voltorb::Update()
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
-	//상태정하기
-	//if (mTimer == 0)
-	//{
-	//	if (mState == State::Sleep)
-	//	{
-	//		SetAnimation();
-	//	}
-	//}
-	//if (mTimer >= 2 && mState == State::Sleep)
-	//{
-	//	mDirection = Direction::Right;
-	//	mState = State::Move;
-	//	SetAnimation();
-	//
-	//	mTimer = 0;
-	//}
+	//시작 쿨타임
+	if (mStartTimer == 3.5)
+	{
+		if (mState == State::Sleep)
+		{
+			SetAnimation();
+		}
+	}
+	if (mState == State::Sleep)
+	{
+		mStartTimer -= TIME->DeltaTime();
+	}
+	if (mStartTimer < 0 && mState == State::Sleep)
+	{
+		mState = State::Move;
+		SetAnimation();
+	}
+
 
 	if (mState == State::Move)
 	{
@@ -90,16 +94,9 @@ void Voltorb::Update()
 			SetAnimation();
 		}
 	}
-	//움직임
-	//if (mState == State::Sleep)
-	//{
-	//	mTimer += Time::GetInstance()->DeltaTime();
-	//}
-
-	//올라가있는 기차길의 현재 기차길/타일의 중간오면 방향확인
-	//방향이 가리키는 타일의 중간까지이동
+	
 	SetSpeed();
-	if (mState == State::Move|| mState == State::Exploding)
+	if (mState == State::Move || mState == State::Exploding)
 	{
 		mX += mSpeedX * Time::GetInstance()->DeltaTime() / 2;
 		mY += mSpeedY * Time::GetInstance()->DeltaTime() / 2;
@@ -120,13 +117,27 @@ void Voltorb::Update()
 				mNextTrain->SetState(State::Exploding);
 		}
 	}
+	
+	//푸린
+	if (CheckJigglypuff() == true)
+	{
+		mSleepTimer = 10.f;
+	}
+	else
+	{
+		mSleepTimer -= TIME->DeltaTime();
+	}
+	if (mSleepTimer <= 5)
+	{
+		mState = State::Hurt;
+		SetAnimation();
+	}
 
 	if (GetIsExplode() == true && mState != State::Explode)
 	{
 		mState = State::Explode;
 		SetAnimation();
 	}
-	
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);

@@ -4,6 +4,7 @@
 #include "Electrode.h"
 #include "Machop.h"
 #include "Abra.h"
+#include "Jigglypuff.h"
 
 class TrailManager;
 class TileMap;
@@ -17,6 +18,7 @@ class Scene2 : public Scene
 	Electrode* mElectrode;
 	Abra* mAbra;
 	Machop* mMachop;
+	Jigglypuff* mJigglypuff;
 
 public:
 	void Init()override;

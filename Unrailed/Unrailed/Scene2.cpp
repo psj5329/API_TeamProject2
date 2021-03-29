@@ -33,12 +33,20 @@ void Scene2::Init()
 	mTrailManager->InsertTrail(7, 4, ItemType::Green, 1);
 
 
+	//Çª¸°
+	mJigglypuff = new Jigglypuff;
+	mJigglypuff->Init();
+	mJigglypuff->SetX(WINSIZEX / 2);
+	mJigglypuff->SetY(WINSIZEY / 2);
+	//OBJECTMANAGER->AddObject(ObjectLayer::ITEM, mJigglypuff);
+
 	//¿­Â÷
 	vector <vector <Trail*>>* temp = mTrailManager->GetTrailListPtr();
 
 	mElectrode = new Electrode;
 	mElectrode->Init(120, WINSIZEY / 2 - 50);
 	mElectrode->SetTrail(temp);
+	mElectrode->SetJigglypuff(mJigglypuff);
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -56,10 +64,12 @@ void Scene2::Init()
 		if (i != 2)
 		{
 			mVoltorbVec[i]->SetNextTrain(mVoltorbVec[i + 1]);
+			mVoltorbVec[i]->SetJigglypuff(mJigglypuff);
 		}
 		else
 		{
 			mVoltorbVec[i]->SetNextTrain(nullptr);
+			mVoltorbVec[i]->SetJigglypuff(mJigglypuff);
 		}
 	}
 

@@ -25,7 +25,7 @@ void Machop::Init(int x, int y, int image)
 
 	//Machop 변수
 	mDirection = Direction::Right;
-	mState = State::Move;
+	mState = State::Sleep;
 	mSpeed = 100.f;
 	mOreCount = 0;
 
@@ -38,6 +38,8 @@ void Machop::Init(int x, int y, int image)
 	mCurrentAnimation->Play();
 
 	mBagItemListPtr = mBag.GetBagItemListPtr();
+
+	mStartTimer = 3.5f;
 }
 
 void Machop::Release()
@@ -62,20 +64,23 @@ void Machop::Update()
 
 	InterceptOre();
 
-	//상태정하기
-	//if (mTimer == 0)
-	//{
-	//	if (mState == State::Sleep)
-	//	{
-	//		SetAnimation();
-	//	}
-	//}
-	//if (mTimer >= 5 && mState == State::Sleep)
-	//{
-	//	mDirection = Direction::Right;
-	//	mState = State::Move;
-	//	SetAnimation();
-	//}
+	//시작 쿨타임
+	if (mStartTimer == 3.5)
+	{
+		if (mState == State::Sleep)
+		{
+			SetAnimation();
+		}
+	}
+	if (mState == State::Sleep)
+	{
+		mStartTimer -= TIME->DeltaTime();
+	}
+	if (mStartTimer < 0 && mState == State::Sleep)
+	{
+		mState = State::Move;
+		SetAnimation();
+	}
 
 	if (mState == State::Move)
 	{
@@ -97,11 +102,7 @@ void Machop::Update()
 		}
 	}
 
-	//움직임
-	//if (mState == State::Sleep)
-	//{
-	//	mTimer += Time::GetInstance()->DeltaTime();
-	//}
+
 
 	SetSpeed();
 	if (mState == State::Move || mState == State::Intercept)
