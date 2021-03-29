@@ -5,7 +5,6 @@
 #include "MapToolScene.h"
 #include "Camera.h"
 #include "TrailManager.h"
-#include "Image.h" //Hut빼면 빼도 ㄱㅊ
 #include "Player.h"
 #include "Jigglypuff.h"
 #include "Electrode.h"
@@ -20,10 +19,12 @@ void Scene3::Init()
 
 	mTileMap = new TileMap();
 	//mTileMap->Init(TileCountX, TileCountY, TileSize);
-	mTileMap->LoadMap(2);
+	mTileMap->LoadMap(1);
 	int x = mTileMap->GetXTileCount();
 	int y = mTileMap->GetYTileCount();
 	//플레이어 에게 타일숫자 전달
+
+	mTempPlayer->SetTileCount(x, y);
 
 	mTrailManager = new TrailManager();
 	mTrailManager->Init(y,x);
@@ -43,7 +44,6 @@ void Scene3::Init()
 	mTempPlayer->SetMapObjectListPtr(mapObjectListPtr);
 
 	mTempPlayer->SetTrailManagerPtr(mTrailManager);
-
 
 
 
@@ -69,7 +69,11 @@ void Scene3::Init()
 
 	//푸린
 	mJigglypuff = new Jigglypuff();
-	mJigglypuff->Init(100, 100, false);
+	mJigglypuff->Init(200, 500, false);
+	vector<vector<Tile*>> tileList = *mTileMap->GetTileListPtr();
+	mJigglypuff->SetTileListPtr(tileList);
+	vector<vector<MapObject*>> mapObjectList = *mTileMap->GetObjectListPtr();
+	mJigglypuff->SetMapObjectListPtr(mapObjectList);
 
 }
 	
@@ -93,8 +97,10 @@ void Scene3::Update()
 		if (indexX >= 0 && indexX < mTrailManager->GetXTileCount() &&
 			indexY >= 0 && indexY < mTrailManager->GetYTileCount())
 		{
-			mTrailManager->PlaceTrail(indexY, indexX, ItemType::Green, 3);
-			mTrailManager->FindTail(&mTailY, &mTailX);
+			//mTrailManager->PlaceTrail(indexY, indexX, ItemType::Green, 3);
+			//mTrailManager->FindTail(&mTailY, &mTailX);
+			mJigglypuff->PlaceMike(indexX, indexY);
+			
 		}
 	}
 	//돌리기
@@ -106,8 +112,9 @@ void Scene3::Update()
 		if (indexX >= 0 && indexX < mTrailManager->GetXTileCount() &&
 			indexY >= 0 && indexY < mTrailManager->GetYTileCount())
 		{
-			mTrailManager->TurnTrail(indexY, indexX);
-			mTrailManager->FindTail(&mTailY, &mTailX);
+			//mTrailManager->TurnTrail(indexY, indexX);
+			//mTrailManager->FindTail(&mTailY, &mTailX);
+			mJigglypuff->TakeMike();
 		}
 	}	
 	//빼기

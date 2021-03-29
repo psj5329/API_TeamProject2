@@ -110,8 +110,9 @@ void Scene1::Update()
 	{
 		OBJECTMANAGER->Update();
 		mTileMap->Update();
-		COLLISIONMANAGER->TileCollision(mPlayer, mTileMap);
-		COLLISIONMANAGER->MapObjectCollision(mPlayer, mTileMap);
+		POINT tilecount = mPlayer->GetTileCount();
+		COLLISIONMANAGER->TileCollision(mPlayer, mTileMap, tilecount.x, tilecount.y);
+		COLLISIONMANAGER->MapObjectCollision(mPlayer, mTileMap, tilecount.x, tilecount.y);
 		CAMERAMANAGER->Update();
 	}
 }

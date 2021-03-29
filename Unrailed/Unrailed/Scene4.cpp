@@ -12,7 +12,7 @@
 void Scene4::Init()
 {
 	// 플레이어도 사실 메인게임으로 가야 함
-	mTempPlayer = new Player("Player", TileSize * 4.5, TileSize * 4.5);
+	mTempPlayer = new Player("Player", TileSize * 4.5, TileSize * 9.5);
 	OBJECTMANAGER->AddObject(ObjectLayer::PLAYER, mTempPlayer);
 
 	// 각 씬에서는 얘를 사용해야 함
@@ -30,9 +30,10 @@ void Scene4::Init()
 	OBJECTMANAGER->Init();
 
 	mTileMap = new TileMap();
-	mTileMap->Init(TileCountX, TileCountY, TileSize);
-	mTileMap->LoadMap();
-	mTempPlayer->SetTileCount(TileCountX, TileCountY); // 이 함수 매개변수로 타일 개수 넣어주면 됨
+	//mTileMap->Init(TileCountX, TileCountY, TileSize);
+	//mTileMap->LoadMap();
+	mTileMap->LoadMap(5);
+	mTempPlayer->SetTileCount(mTileMap->GetXTileCount(), mTileMap->GetYTileCount()); // 이 함수 매개변수로 타일 개수 넣어주면 됨
 
 	mTrailManager = new TrailManager();
 	mTrailManager->Init(mTileMap->GetYTileCount(), mTileMap->GetXTileCount());
@@ -40,20 +41,20 @@ void Scene4::Init()
 	mTrailManager->PlaceTrail(1, 5, ItemType::Green, 0);
 	mTrailManager->SetStartIndex(0, 5);
 
-	mTrailManager->PlaceTrail(2, 5, ItemType::Green, 0);
-	mTrailManager->PlaceTrail(3, 5, ItemType::Green, 0);
-	mTrailManager->PlaceTrail(4, 5, ItemType::Green, 3);
-	mTrailManager->PlaceTrail(4, 6, ItemType::Green, 3);
-	mTrailManager->PlaceTrail(4, 7, ItemType::Green, 0);
-	mTrailManager->PlaceTrail(5, 7, ItemType::Green, 0);
-	mTrailManager->PlaceTrail(6, 7, ItemType::Green, 0);
-	mTrailManager->PlaceTrail(7, 7, ItemType::Green, 2);
-	mTrailManager->PlaceTrail(7, 6, ItemType::Green, 2);
-	mTrailManager->PlaceTrail(7, 5, ItemType::Green, 2);
-	mTrailManager->PlaceTrail(7, 4, ItemType::Green, 2);
-	mTrailManager->PlaceTrail(7, 3, ItemType::Green, 1);
-	mTrailManager->PlaceTrail(6, 3, ItemType::Green, 1);
-	mTrailManager->PlaceTrail(5, 3, ItemType::Green, 1);
+//	mTrailManager->PlaceTrail(2, 5, ItemType::Green, 0);
+//	mTrailManager->PlaceTrail(3, 5, ItemType::Green, 0);
+//	mTrailManager->PlaceTrail(4, 5, ItemType::Green, 3);
+//	mTrailManager->PlaceTrail(4, 6, ItemType::Green, 3);
+//	mTrailManager->PlaceTrail(4, 7, ItemType::Green, 0);
+//	mTrailManager->PlaceTrail(5, 7, ItemType::Green, 0);
+//	mTrailManager->PlaceTrail(6, 7, ItemType::Green, 0);
+//	mTrailManager->PlaceTrail(7, 7, ItemType::Green, 2);
+//	mTrailManager->PlaceTrail(7, 6, ItemType::Green, 2);
+//	mTrailManager->PlaceTrail(7, 5, ItemType::Green, 2);
+//	mTrailManager->PlaceTrail(7, 4, ItemType::Green, 2);
+//	mTrailManager->PlaceTrail(7, 3, ItemType::Green, 1);
+//	mTrailManager->PlaceTrail(6, 3, ItemType::Green, 1);
+//	mTrailManager->PlaceTrail(5, 3, ItemType::Green, 1);
 
 	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
 	/*
@@ -89,6 +90,7 @@ void Scene4::Update()
 	mTileMap->Update();
 	mTrailManager->Update();
 	OBJECTMANAGER->Update();
+	CAMERAMANAGER->GetMainCamera()->Update();
 }
 
 void Scene4::Render(HDC hdc)

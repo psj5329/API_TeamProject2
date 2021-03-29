@@ -22,7 +22,7 @@ enum PlayerState
 	Attack,
 	PlayerStateEnd
 };
-
+	
 enum Form
 {
 	Ditto,
@@ -103,6 +103,8 @@ class Player : public GameObject
 	int mNextTileY;
 	int mRangeX;
 	int mRangeY;
+	int mTileCountX;
+	int mTileCountY;
 
 	vector<vector<Tile*>>* mTileListPtr;
 	vector<vector<MapObject*>>* mMapObjectListPtr;
@@ -126,8 +128,7 @@ class Player : public GameObject
 
 	bool mIsInfoOn;
 
-	int mTileCountX;
-	int mTileCountY;
+	int mMic;
 
 public:
 	Player(const string& name, float x, float y);
@@ -150,6 +151,7 @@ public:
 	void InputXKey(); // 'X' key: throw item
 	void InputCKey(); // 'C' key: change form // Loop Order: normal -> leaf -> water -> fire -> normal -> ... //
 	void InputVKey(); // 'V' key: turn item
+	void InputMKey(); // 'M' key: throw mic
 	void InputLKey(); // 'L' key: turn on/off gizmo
 	void InputCheatKey(); // Cheat key for test
 	bool CheckTileType(TileType tileType);
@@ -162,6 +164,7 @@ public:
 	RECT* GetColBoxPtr(void) { return &mColBox; }
 	DirectionEight GetDir(void) const { return mDir; }
 	Form GetForm(void) const { return mForm; }
+	POINT GetTileCount(void) const { return { mTileCountX, mTileCountY }; }
 
 	void SetTileListPtr(vector<vector<Tile*>>* tileListPtr) { mTileListPtr = tileListPtr; }
 	void SetMapObjectListPtr(vector<vector<MapObject*>>* mapObjectListPtr) { mMapObjectListPtr = mapObjectListPtr; }

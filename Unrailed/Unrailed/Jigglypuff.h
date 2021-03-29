@@ -33,6 +33,9 @@ protected:
 	bool mHoldMike;
 	bool mIsUpgraded;
 
+	int mIndexX;
+	int mIndexY;
+
 	vector <Note*> mNoteList;
 	RECT mSongRect;
 	float mSongRadius;
@@ -48,7 +51,16 @@ protected:
 	Animation* mRightMove;
 	Animation* mCurrentAnimation;
 
-	
+	float mSpeed;
+
+	//길찾기
+	vector<vector<Tile*>> mTileList;
+	vector<vector<MapObject*>> mMapObjectList;
+	vector<Tile*> mPathFinderList;
+
+
+	//마이크
+	class Mike* mMike;
 
 public:
 	void Init() override;
@@ -57,15 +69,21 @@ public:
 	void Update() override;
 	void Render(HDC hdc) override;
 
-	bool TakeMike();
+	void SetTileListPtr(vector<vector<Tile*>> tileList) { mTileList = tileList; }
+	void SetMapObjectListPtr(vector<vector<MapObject*>> mapObjectList) { mMapObjectList = mapObjectList; }
+
+	//기차가 쓸
 	bool IsInSongRange(RECT rect);
 
-	void StartSearchingMike();
+	//플레이어가부를
+	void StartSearchingMike(int MikeX, int MikeY);
+	bool TakeMike();
+	void PlaceMike(int indexX, int indexY);
 
 private:
 	void AnimationInit();
 	void SetAnimation();
-	void SearchMike();
+	void MoveToMike();
 	
 	//노래동그라미
 	void InitSongRect();
