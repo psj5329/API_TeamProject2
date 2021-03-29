@@ -1,14 +1,14 @@
 #pragma once
 #include "GameObject.h"
 
-enum Direction { LEFT, RIGHT, UP, DOWN, DIREND };
+enum UnitDirection { LEFT, RIGHT, UP, DOWN, DIREND };
 
 class Image;
 class Unit : public GameObject
 {
 protected:
 	Image* mImage;
-	Direction mDirection;
+	UnitDirection mDirection;
 
 	int mHp;
 
@@ -20,11 +20,11 @@ public:
 
 public:
 	// Get
-	inline Direction GetDirection() { return mDirection; }
+	inline UnitDirection GetDirection() { return mDirection; }
 	inline int GetHp() { return mHp; }
 	
 	//Set
-	inline void SetDirection(Direction dir) { mDirection = dir; }
+	inline void SetDirection(UnitDirection dir) { mDirection = dir; }
 	inline void SetHp(int hp) { mHp = hp; }
 
 	inline void DamagedHp() { mHp -= 1; }

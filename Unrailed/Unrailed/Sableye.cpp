@@ -142,38 +142,38 @@ void Sableye::MoveToOre()
 
 					if ((int)(mX / 48) > (int)(mPathFinderList[0]->GetX() / 48))
 					{
-						if (mState != EnemyState::WALK || mDirection != Direction::LEFT)
+						if (mState != EnemyState::WALK || mDirection != UnitDirection::LEFT)
 						{
 							mState = EnemyState::WALK;
-							mDirection = Direction::LEFT;
+							mDirection = UnitDirection::LEFT;
 							SetAnimation();
 						}
 					}
 					else if ((int)(mX / 48) < (int)(mPathFinderList[0]->GetX() / 48))
 					{
-						if (mState != EnemyState::WALK || mDirection != Direction::RIGHT)
+						if (mState != EnemyState::WALK || mDirection != UnitDirection::RIGHT)
 						{
 							mState = EnemyState::WALK;
-							mDirection = Direction::RIGHT;
+							mDirection = UnitDirection::RIGHT;
 							SetAnimation();
 						}
 					}
 
 					if ((int)(mY / 48) > (int)(mPathFinderList[0]->GetY() / 48))
 					{
-						if (mState != EnemyState::WALK || mDirection != Direction::UP)
+						if (mState != EnemyState::WALK || mDirection != UnitDirection::UP)
 						{
 							mState = EnemyState::WALK;
-							mDirection = Direction::UP;
+							mDirection = UnitDirection::UP;
 							SetAnimation();
 						}
 					}
 					else if ((int)(mY / 48) < (int)(mPathFinderList[0]->GetY() / 48))
 					{
-						if (mState != EnemyState::WALK || mDirection != Direction::DOWN)
+						if (mState != EnemyState::WALK || mDirection != UnitDirection::DOWN)
 						{
 							mState = EnemyState::WALK;
-							mDirection = Direction::DOWN;
+							mDirection = UnitDirection::DOWN;
 							SetAnimation();
 						}
 					}
@@ -211,38 +211,38 @@ void Sableye::MoveToOre()
 				{
 					if ((int)(mX / 48) > (int)((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
 					{
-						if (mState != EnemyState::WALK || mDirection != Direction::LEFT)
+						if (mState != EnemyState::WALK || mDirection != UnitDirection::LEFT)
 						{
 							mState = EnemyState::WALK;
-							mDirection = Direction::LEFT;
+							mDirection = UnitDirection::LEFT;
 							SetAnimation();
 						}
 					}
 					else if ((int)(mX / 48) < (int)((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
 					{
-						if (mState != EnemyState::WALK || mDirection != Direction::RIGHT)
+						if (mState != EnemyState::WALK || mDirection != UnitDirection::RIGHT)
 						{
 							mState = EnemyState::WALK;
-							mDirection = Direction::RIGHT;
+							mDirection = UnitDirection::RIGHT;
 							SetAnimation();
 						}
 					}
 
 					if ((int)(mY / 48) > (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
 					{
-						if (mState != EnemyState::WALK || mDirection != Direction::UP)
+						if (mState != EnemyState::WALK || mDirection != UnitDirection::UP)
 						{
 							mState = EnemyState::WALK;
-							mDirection = Direction::UP;
+							mDirection = UnitDirection::UP;
 							SetAnimation();
 						}
 					}
 					else if ((int)(mY / 48) < (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
 					{
-						if (mState != EnemyState::WALK || mDirection != Direction::DOWN)
+						if (mState != EnemyState::WALK || mDirection != UnitDirection::DOWN)
 						{
 							mState = EnemyState::WALK;
-							mDirection = Direction::DOWN;
+							mDirection = UnitDirection::DOWN;
 							SetAnimation();
 						}
 					}
@@ -347,22 +347,22 @@ void Sableye::SetAnimation()
 	if (mState == EnemyState::IDLE)
 	{
 		mIdleAnimation->InitFrameByVector(vector<pair<int, int>>());
-		if (mDirection == Direction::DOWN)
+		if (mDirection == UnitDirection::DOWN)
 		{
 			mIdleAnimation->InitFrameByStartEnd(0, 0, 0, 0, false);
 			mCurrentAnimation = mIdleAnimation;
 		}
-		else if (mDirection == Direction::UP)
+		else if (mDirection == UnitDirection::UP)
 		{
 			mIdleAnimation->InitFrameByStartEnd(0, 1, 0, 1, false);
 			mCurrentAnimation = mIdleAnimation;
 		}
-		else if (mDirection == Direction::LEFT)
+		else if (mDirection == UnitDirection::LEFT)
 		{
 			mIdleAnimation->InitFrameByStartEnd(0, 2, 0, 2, false);
 			mCurrentAnimation = mIdleAnimation;
 		}
-		else if (mDirection == Direction::RIGHT)
+		else if (mDirection == UnitDirection::RIGHT)
 		{
 			mIdleAnimation->InitFrameByStartEnd(0, 3, 0, 3, false);
 			mCurrentAnimation = mIdleAnimation;
@@ -371,22 +371,22 @@ void Sableye::SetAnimation()
 	else if (mState == EnemyState::WALK)
 	{
 		mWalkAnimation->InitFrameByVector(vector<pair<int, int>>());
-		if (mDirection == Direction::DOWN)
+		if (mDirection == UnitDirection::DOWN)
 		{
 			mWalkAnimation->InitFrameByStartEnd(2, 0, 3, 0, false);
 			mCurrentAnimation = mWalkAnimation;
 		}
-		else if (mDirection == Direction::UP)
+		else if (mDirection == UnitDirection::UP)
 		{
 			mWalkAnimation->InitFrameByStartEnd(2, 1, 3, 1, false);
 			mCurrentAnimation = mWalkAnimation;
 		}
-		else if (mDirection == Direction::LEFT)
+		else if (mDirection == UnitDirection::LEFT)
 		{
 			mWalkAnimation->InitFrameByStartEnd(2, 2, 3, 2, false);
 			mCurrentAnimation = mWalkAnimation;
 		}
-		else if (mDirection == Direction::RIGHT)
+		else if (mDirection == UnitDirection::RIGHT)
 		{
 			mWalkAnimation->InitFrameByStartEnd(2, 3, 3, 3, false);
 			mCurrentAnimation = mWalkAnimation;
@@ -395,22 +395,22 @@ void Sableye::SetAnimation()
 	else if (mState == EnemyState::ATTACK)
 	{
 		mAttackAnimation->InitFrameByVector(vector<pair<int, int>>());
-		if (mDirection == Direction::DOWN)
+		if (mDirection == UnitDirection::DOWN)
 		{
 			mAttackAnimation->InitFrameByStartEnd(0, 0, 1, 0, false);
 			mCurrentAnimation = mAttackAnimation;
 		}
-		else if (mDirection == Direction::UP)
+		else if (mDirection == UnitDirection::UP)
 		{
 			mAttackAnimation->InitFrameByStartEnd(0, 1, 1, 1, false);
 			mCurrentAnimation = mAttackAnimation;
 		}
-		else if (mDirection == Direction::LEFT)
+		else if (mDirection == UnitDirection::LEFT)
 		{
 			mAttackAnimation->InitFrameByStartEnd(0, 2, 1, 2, false);
 			mCurrentAnimation = mAttackAnimation;
 		}
-		else if (mDirection == Direction::RIGHT)
+		else if (mDirection == UnitDirection::RIGHT)
 		{
 			mAttackAnimation->InitFrameByStartEnd(0, 3, 1, 3, true);
 			mCurrentAnimation = mAttackAnimation;
@@ -419,22 +419,22 @@ void Sableye::SetAnimation()
 	else if (mState == EnemyState::DEAD)
 	{
 		mDeadAnimation->InitFrameByVector(vector<pair<int, int>>());
-		if (mDirection == Direction::DOWN)
+		if (mDirection == UnitDirection::DOWN)
 		{
 			mDeadAnimation->InitFrameByStartEnd(4, 0, 4, 0, false);
 			mCurrentAnimation = mDeadAnimation;
 		}
-		else if (mDirection == Direction::UP)
+		else if (mDirection == UnitDirection::UP)
 		{
 			mDeadAnimation->InitFrameByStartEnd(4, 0, 4, 1, false);
 			mCurrentAnimation = mDeadAnimation;
 		}
-		else if (mDirection == Direction::LEFT)
+		else if (mDirection == UnitDirection::LEFT)
 		{
 			mDeadAnimation->InitFrameByStartEnd(4, 0, 4, 2, false);
 			mCurrentAnimation = mDeadAnimation;
 		}
-		else if (mDirection == Direction::RIGHT)
+		else if (mDirection == UnitDirection::RIGHT)
 		{
 			mDeadAnimation->InitFrameByStartEnd(4, 0, 4, 3, false);
 			mCurrentAnimation = mDeadAnimation;
