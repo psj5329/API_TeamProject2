@@ -82,6 +82,7 @@ void Machop::Update()
 		SetAnimation();
 	}
 
+
 	if (mState == State::Move)
 	{
 		if (mDirection == Direction::Down)
@@ -101,7 +102,6 @@ void Machop::Update()
 			SetAnimation();
 		}
 	}
-
 
 
 	SetSpeed();

@@ -35,6 +35,7 @@ void Electrode::Init(int x, int y)
 	mCurrentAnimation = mRightMove;
 	mCurrentAnimation->Play();
 
+
 	mStartTimer = 3.5f;
 	mSleepTimer = 10.f;
 }
@@ -92,7 +93,6 @@ void Electrode::Update()
 			SetAnimation();
 		}
 	}
-
 
 	//올라가있는 기차길의 현재 기차길/타일의 중간오면 방향확인
 	//방향이 가리키는 타일의 중간까지이동

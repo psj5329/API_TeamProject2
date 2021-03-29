@@ -69,10 +69,6 @@ void Abra::Update()
 
 	SynthesisOre();
 
-	if (INPUT->GetKeyDown('R'))
-	{
-		mState = State::Sleep;
-	}
 
 	//시작 쿨타임
 	if (mStartTimer == 3.5)

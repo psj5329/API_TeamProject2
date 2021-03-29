@@ -56,6 +56,7 @@ void Voltorb::Update()
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
+
 	//시작 쿨타임
 	if (mStartTimer == 3.5)
 	{
@@ -71,7 +72,6 @@ void Voltorb::Update()
 	if (mStartTimer < 0 && mState == State::Sleep)
 	{
 		mState = State::Move;
-		SetAnimation();
 	}
 
 
@@ -94,7 +94,11 @@ void Voltorb::Update()
 			SetAnimation();
 		}
 	}
-	
+
+
+	//올라가있는 기차길의 현재 기차길/타일의 중간오면 방향확인
+	//방향이 가리키는 타일의 중간까지이동
+
 	SetSpeed();
 	if (mState == State::Move || mState == State::Exploding)
 	{
