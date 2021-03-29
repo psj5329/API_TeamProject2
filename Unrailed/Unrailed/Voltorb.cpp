@@ -15,7 +15,7 @@ void Voltorb::Init(int x, int y)
 
 	ReadyAnimation();
 
-	//Î∂ÄÎ™® ÌÅ¥ÎûòÏä§ (GameObject) Î≥ÄÏàò
+	//∫Œ∏ ≈¨∑°Ω∫ (GameObject) ∫Øºˆ
 	mX = x;
 	mY = y;
 	mSizeX = mImage->GetFrameWidth() * 2;
@@ -23,13 +23,13 @@ void Voltorb::Init(int x, int y)
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 	//SetImage(image);
 
-	//Electrode Î≥ÄÏàò
+	//Electrode ∫Øºˆ
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 	mSpeed = 100.f;
 
 	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, this);
-	
+
 	mCurrentX = mX / TileSize;
 	mCurrentY = mY / TileSize;
 	mCurrentImage = mImage;
@@ -53,12 +53,12 @@ void Voltorb::Release()
 
 void Voltorb::Update()
 {
-	//Ïù∏Îç±Ïä§ Í∞ÄÏ†∏Ïò§Í∏∞
+	//¿Œµ¶Ω∫ ∞°¡Æø¿±‚
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
 
-	//ÏãúÏûë Ïø®ÌÉÄÏûÑ
+	//Ω√¿€ ƒ≈∏¿”
 	if (mStartTimer == 3.5)
 	{
 		if (mState == State::Sleep)
@@ -97,8 +97,8 @@ void Voltorb::Update()
 	}
 
 
-	//Ïò¨ÎùºÍ∞ÄÏûàÎäî Í∏∞Ï∞®Í∏∏Ïùò ÌòÑÏû¨ Í∏∞Ï∞®Í∏∏/ÌÉÄÏùºÏùò Ï§ëÍ∞ÑÏò§Î©¥ Î∞©Ìñ•ÌôïÏù∏
-	//Î∞©Ìñ•Ïù¥ Í∞ÄÎ¶¨ÌÇ§Îäî ÌÉÄÏùºÏùò Ï§ëÍ∞ÑÍπåÏßÄÏù¥Îèô
+	//ø√∂Û∞°¿÷¥¬ ±‚¬˜±Ê¿« «ˆ¿Á ±‚¬˜±Ê/≈∏¿œ¿« ¡ﬂ∞£ø¿∏È πÊ«‚»Æ¿Œ
+	//πÊ«‚¿Ã ∞°∏Æ≈∞¥¬ ≈∏¿œ¿« ¡ﬂ∞£±Ó¡ˆ¿Ãµø
 
 	SetSpeed();
 	if (mState == State::Move || mState == State::Exploding || mState == State::Hurt)
@@ -111,7 +111,7 @@ void Voltorb::Update()
 		SetTarget();
 	}
 
-	//Ìë∏Î¶∞
+	//«™∏∞
 	if (mElectrode->GetIsHurt() == true && mState != State::Exploding && mState != State::Explode)
 	{
 		mState = State::Hurt;
@@ -123,14 +123,14 @@ void Voltorb::Update()
 		SetAnimation();
 	}
 
-	//Ìè≠Î∞ú
+	//∆¯πﬂ
 	if (mState == State::Exploding)
 	{
 		mExplosionTimer -= TIME->DeltaTime();
 		if (mExplosionTimer < 0)
 		{
 			mIsExplode = true;
-			if(mNextTrain != nullptr)
+			if (mNextTrain != nullptr)
 				mNextTrain->SetState(State::Exploding);
 		}
 	}
@@ -302,7 +302,7 @@ void Voltorb::EndExplode()
 {
 	if (mState == State::Explode)
 	{
-		//SetIsDestroy(true); //ÏÇ≠Ï†ú
-		SetIsActive(false); //Î†åÎçî ÏïàÌï®
+		//SetIsDestroy(true); //ªË¡¶
+		SetIsActive(false); //∑ª¥ı æ»«‘
 	}
 }
