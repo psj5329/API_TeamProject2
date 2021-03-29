@@ -459,7 +459,7 @@ void Player::SafeDeleteAnimation()
 
 void Player::InputDirectionKey()
 {
-	if (mState == PlayerState::Attack)
+	if ((mState == PlayerState::Attack) || (mState == PlayerState::Change))
 		return;
 
 	if (INPUT->GetKeyDown(VK_DOWN))
