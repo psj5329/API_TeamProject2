@@ -6,7 +6,7 @@ class Unit : public GameObject
 {
 protected:
 	Image* mImage;
-	UnitDirection mDirection;
+	Direction mDirection;
 
 	int mHp;
 
@@ -18,11 +18,11 @@ public:
 
 public:
 	// Get
-	inline UnitDirection GetDirection() { return mDirection; }
+	inline Direction GetDirection() { return mDirection; }
 	inline int GetHp() { return mHp; }
 	
 	//Set
-	inline void SetDirection(UnitDirection dir) { mDirection = dir; }
+	inline void SetDirection(Direction dir) { mDirection = dir; }
 	inline void SetHp(int hp) { mHp = hp; }
 
 	inline void DamagedHp() { mHp -= 1; }
