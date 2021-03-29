@@ -11,6 +11,8 @@ class Ore :
 	int mCount;
 	int mFrameX;
 
+	Image* mNumImage;
+
 public:
 	void Init()override;
 	void Release()override;

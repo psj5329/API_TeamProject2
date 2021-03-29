@@ -61,7 +61,7 @@ void Player::Init()
 
 	mIsChangable = true;
 
-	mIsInfoOn = true;
+	mIsInfoOn = false;
 
 	mInven = new Inven();
 	mInven->Init();
@@ -75,6 +75,8 @@ void Player::Init()
 	//	mBagItemListPtr->push_back(bagItem);
 	//}
 	// 트레일 줍기 불가능해서 임시로 세팅 // 여기까지 }}
+
+	mMic = 0;
 }
 
 void Player::Release()
@@ -96,6 +98,7 @@ void Player::Update()
 	InputXKey();
 	InputCKey();
 	InputVKey();
+	InputMKey();
 	InputLKey(); // on/off gizmo
 	InputCheatKey(); // for test
 
@@ -115,12 +118,19 @@ void Player::Render(HDC hdc)
 	// {{ 현재 타일, 다음 타일 확인용 // 유찬
 	if (mIsInfoOn)
 	{
+		RECT camRc = CAMERAMANAGER->GetMainCamera()->GetRect();
+		int camX = (int)(camRc.left);
+		int camY = (int)(camRc.top);
 		RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
 		RECT nextRc = (*mTileListPtr)[mNextTileY][mNextTileX]->GetRect();
+		currentRc = { currentRc.left - camX, currentRc.top - camY, currentRc.right - camX, currentRc.bottom - camY };
+		nextRc = { nextRc.left - camX, nextRc.top - camY, nextRc.right - camX, nextRc.bottom - camY };
+		RECT rangeRc = { mRangeBox.left - camX, mRangeBox.top - camY, mRangeBox.right - camX, mRangeBox.bottom - camY };
+		RECT colRc = { mColBox.left - camX, mColBox.top - camY, mColBox.right - camX, mColBox.bottom - camY };
 		GIZMO->DrawRect(hdc, currentRc, Gizmo::Color::Yellow);
 		GIZMO->DrawRect(hdc, nextRc, Gizmo::Color::Cyan);
-		GIZMO->DrawRect(hdc, mRangeBox, Gizmo::Color::Purple);
-		GIZMO->DrawRect(hdc, mColBox, Gizmo::Color::Violet);
+		GIZMO->DrawRect(hdc, rangeRc, Gizmo::Color::Purple);
+		GIZMO->DrawRect(hdc, colRc, Gizmo::Color::Violet);
 	}
 	// 현재 타일, 다음 타일 확인용 }}
 
@@ -690,7 +700,7 @@ void Player::InputDirectionKey()
 
 void Player::Move()
 {
-	COLLISIONMANAGER->TileMapObjectCollision(this, &mColBox, mTileListPtr, mMapObjectListPtr, mTileX, mTileY);
+	COLLISIONMANAGER->TileMapObjectCollision(this, &mColBox, mTileListPtr, mMapObjectListPtr, mTileX, mTileY, mTileCountX, mTileCountY);
 
 	mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 	mColBox = RectMakeCenter((int)mX, (int)mY, TileSize, TileSize);
@@ -953,6 +963,13 @@ void Player::InputZKey()
 					continue;
 			}
 		}
+
+		// 마이크 조건
+		//if ()
+		//{
+		// mMic = 1; // 가지고 있다
+		//mInven->SetHiddenItem(1);
+		//}
 	}
 }
 
@@ -1159,10 +1176,20 @@ void Player::InputVKey()
 		vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
 		Trail* currentTrail = (*trailListPtr)[mTileY][mTileX];
 
-		if (currentTrail->GetTrailType() == ItemType::None)
+		if (currentTrail->GetTrailType() == ItemType::None) 
 			return;
 
 		mTrailManager->TurnTrail(mTileY, mTileX);
+	}
+}
+
+void Player::InputMKey()
+{
+	if (INPUT->GetKeyDown('V'))
+	{
+		// 해당 타일이 비었을 때 바닥에 마이크를 놓고 푸린 소환 함수를 호출한다.
+		//mMic = 2; // 사용했다
+		//mInven->SetHiddenItem(2);
 	}
 }
 

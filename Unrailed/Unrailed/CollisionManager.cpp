@@ -7,7 +7,6 @@ Singleton_NULL(CollisionManager)
 
 void CollisionManager::Update()
 {
-
 }
 
 bool CollisionManager::IsCollision(RECT * rc1, RECT * rc2)
@@ -25,7 +24,7 @@ bool CollisionManager::IsCollision(RECT * rc1, RECT * rc2)
 	return true;*/
 }
 
-void CollisionManager::TileMapObjectCollision(Player* player, RECT* rc, vector<vector<Tile*>>* tileList, vector<vector<MapObject*>>* mapObjectList, int indexX, int indexY)
+void CollisionManager::TileMapObjectCollision(Player* player, RECT* rc, vector<vector<Tile*>>* tileList, vector<vector<MapObject*>>* mapObjectList, int indexX, int indexY, int tileCountX, int tileCountY)
 {
 	bool isCorrected = false;
 
@@ -40,7 +39,7 @@ void CollisionManager::TileMapObjectCollision(Player* player, RECT* rc, vector<v
 	{
 		for (int i = indexX - 1; i <= indexX + 1; ++i)
 		{
-			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
+			if (i >= 0 && i < tileCountX && j >= 0 && j < tileCountY)
 			{
 				Tile* tile = (*tileList)[j][i];
 				RECT tileRc = tile->GetRect();
@@ -86,7 +85,7 @@ void CollisionManager::TileMapObjectCollision(Player* player, RECT* rc, vector<v
 	{
 		for (int i = indexX - 1; i <= indexX + 1; ++i)
 		{
-			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
+			if (i >= 0 && i < tileCountX && j >= 0 && j < tileCountY)
 			{
 				MapObject* mapObject = (*mapObjectList)[j][i];
 				RECT mapObjectRc = mapObject->GetRect();
@@ -122,7 +121,7 @@ void CollisionManager::TileMapObjectCollision(Player* player, RECT* rc, vector<v
 	}
 }
 
-void CollisionManager::TileCollision(Player* player, TileMap* tileMap)
+void CollisionManager::TileCollision(Player* player, TileMap* tileMap, int tileCountX, int tileCountY)
 {
 	vector <vector <Tile*>>* tileList = tileMap->GetTileListPtr();
 
@@ -135,7 +134,7 @@ void CollisionManager::TileCollision(Player* player, TileMap* tileMap)
 		for (int i = x - 1; i <= x + 1; ++i)
 		{
 			// 범위 안일 때
-			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
+			if (i >= 0 && i < tileCountX && j >= 0 && j < tileCountY)
 			{
 				RECT temp;
 				RECT playerRc = player->GetRect();
@@ -167,29 +166,29 @@ void CollisionManager::TileCollision(Player* player, TileMap* tileMap)
 			}
 			else
 			{
-				if (j >= 0 && j < TileCountY)
+				if (j >= 0 && j < tileCountY)
 				{
 					// x축 방향으로 넘어갈 때
 					if (player->GetX() < (*tileList)[j][0]->GetRect().left + player->GetSizeX() / 2)
 						player->SetX((*tileList)[j][0]->GetRect().left + player->GetSizeX() / 2);
-					else if (player->GetX() > (*tileList)[j][TileCountX - 1]->GetRect().right - player->GetSizeX() / 2)
-						player->SetX((*tileList)[j][TileCountX - 1]->GetRect().right - player->GetSizeX() / 2);
+					else if (player->GetX() > (*tileList)[j][tileCountX - 1]->GetRect().right - player->GetSizeX() / 2)
+						player->SetX((*tileList)[j][tileCountX - 1]->GetRect().right - player->GetSizeX() / 2);
 				}
 
-				if (i >= 0 && i < TileCountX)
+				if (i >= 0 && i < tileCountX)
 				{
 					// y축 방향으로 넘어갈 때
 					if (player->GetY() < (*tileList)[0][i]->GetRect().top + player->GetSizeY() / 2)
 						player->SetY((*tileList)[0][i]->GetRect().top + player->GetSizeY() / 2);
-					else if (player->GetY() > (*tileList)[TileCountY - 1][i]->GetRect().bottom - player->GetSizeY() / 2)
-						player->SetY((*tileList)[TileCountY - 1][i]->GetRect().bottom - player->GetSizeY() / 2);
+					else if (player->GetY() > (*tileList)[tileCountY - 1][i]->GetRect().bottom - player->GetSizeY() / 2)
+						player->SetY((*tileList)[tileCountY - 1][i]->GetRect().bottom - player->GetSizeY() / 2);
 				}
 			}
 		}
 	}
 }
 
-void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
+void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap, int tileCountX, int tileCountY)
 {
 	vector <vector <Tile*>>* tileList = tileMap->GetTileListPtr();
 	vector <vector <MapObject*>>* mapObjectList = tileMap->GetObjectListPtr();
@@ -203,7 +202,7 @@ void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 		for (int i = x - 1; i <= x + 1; ++i)
 		{
 			// 범위 안일 때
-			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
+			if (i >= 0 && i < tileCountX && j >= 0 && j < tileCountY)
 			{
 				RECT temp;
 				RECT playerRc = player->GetRect();
@@ -261,7 +260,7 @@ void CollisionManager::MapObjectCollision(Player * player, TileMap * tileMap)
 	}
 }
 
-void CollisionManager::MapObjectCollision(Player* player, RECT* rc, TileMap* tileMap)
+void CollisionManager::MapObjectCollision(Player* player, RECT* rc, TileMap* tileMap, int tileCountX, int tileCountY)
 {
 	vector<vector<Tile*>>* tileList = tileMap->GetTileListPtr();
 	vector<vector<MapObject*>>* mapObjectList = tileMap->GetObjectListPtr();
@@ -277,7 +276,7 @@ void CollisionManager::MapObjectCollision(Player* player, RECT* rc, TileMap* til
 		for (int i = x - 1; i <= x + 1; ++i)
 		{
 			// 범위 안일 때
-			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
+			if (i >= 0 && i < tileCountX && j >= 0 && j < tileCountY)
 			{
 				RECT temp;
 				RECT mapObjectRc = (*tileList)[j][i]->GetRect();
