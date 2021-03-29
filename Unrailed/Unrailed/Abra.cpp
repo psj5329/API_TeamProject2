@@ -26,7 +26,7 @@ void Abra::Init(int x, int y, int image)
 
 	//Abra 변수
 	mDirection = Direction::Right;
-	mState = State::Move;
+	mState = State::Sleep;
 	mSpeed = 100.f;
 	mSynthesisCoolTime = 0;
 	mIsSynthesis = false;
@@ -43,6 +43,8 @@ void Abra::Init(int x, int y, int image)
 	mOreBroken = false;
 
 	mBagItemListPtr = mBag.GetBagItemListPtr();
+
+	mStartTimer = 3.5f;
 }
 
 void Abra::Release()
@@ -67,20 +69,24 @@ void Abra::Update()
 
 	SynthesisOre();
 
-	//상태정하기
-	//if (mTimer == 0)
-	//{
-	//	if (mState == State::Sleep)
-	//	{
-	//		SetAnimation();
-	//	}
-	//}
-	//if (mTimer >= 5 && mState == State::Sleep)
-	//{
-	//	mDirection = Direction::Right;
-	//	mState = State::Move;
-	//	SetAnimation();
-	//}
+
+	//시작 쿨타임
+	if (mStartTimer == 3.5)
+	{
+		if (mState == State::Sleep)
+		{
+			SetAnimation();
+		}
+	}
+	if (mState == State::Sleep)
+	{
+		mStartTimer -= TIME->DeltaTime();
+	}
+	if (mStartTimer < 0 && mState == State::Sleep)
+	{
+		mState = State::Move;
+		SetAnimation();
+	}
 
 	if (mState == State::Move)
 	{
@@ -102,11 +108,6 @@ void Abra::Update()
 		}
 	}
 
-	//움직임
-	//if (mState == State::Sleep)
-	//{
-	//	mTimer += Time::GetInstance()->DeltaTime();
-	//}
 
 	SetSpeed();
 	if (mState == State::Move || mState == State::Synthesis)

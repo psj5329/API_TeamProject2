@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Trail.h"
+#include "Jigglypuff.h"
 
 enum class State : int
 {
@@ -18,6 +19,8 @@ class Train : public GameObject
 protected:
 	vector <vector <Trail*>> mTrailList;
 
+	Jigglypuff* mJigglypuff;
+
 	State mState;
 	Direction mDirection;
 	float mSpeed;
@@ -34,6 +37,7 @@ protected:
 	int mOreCount;
 	bool mOreBroken;
 	float mExplosionTimer;
+	float mStartTimer;
 	float mSleepTimer;
 
 	class Image* mCurrentImage;
@@ -64,7 +68,9 @@ public:
 	void SetSpeed();
 	bool CheckNextIsPassed();
 	bool CheckNextTrailType();
+	bool CheckJigglypuff();
 	
 	bool GetIsExplode() { return mIsExplode; }
 	void SetIsExplode(bool explode) { mIsExplode = explode; }
+	void SetJigglypuff(GameObject* object) { mJigglypuff = dynamic_cast<Jigglypuff*>(object); }
 };
