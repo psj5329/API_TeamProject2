@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "Tile.h"
 #include "Player.h"
+#include "MapObject.h"
 
 void Sableye::Init()
 {
@@ -141,160 +142,83 @@ void Sableye::MoveToOre()
 	if (mTarget != nullptr)
 		mDistance = Math::GetDistance(mX, mY, mTarget->GetX(), mTarget->GetY());
 
-	if (mItem == nullptr)	// 아이템 안훔쳤을 때
+	if (!mIsRunAway)	// 플레이어한테 쫓길 때에는 아이템 훔치러 안가!
 	{
-		for (int i = 0; i < mItemCount; ++i)
+		if (mItem == nullptr)	// 아이템 안훔쳤을 때
 		{
-			float x = mVecItem[i]->GetX();
-			float y = mVecItem[i]->GetY();
-
-			if (Math::GetDistance(mX, mY, x, y) < TileSize * 5)	// 테스트용 거리
+			for (int i = 0; i < mItemCount; ++i)
 			{
-				if ((int)(mX / 48) == (int)(x / 48) && (int)(mY / 48) == (int)(y / 48))
-					break;
+				float x = mVecItem[i]->GetX();
+				float y = mVecItem[i]->GetY();
 
-				if (!mIsExistTarget)
+				if (Math::GetDistance(mX, mY, x, y) < TileSize * 5)	// 테스트용 거리
 				{
-					mDistance = Math::GetDistance(mX, mY, x, y);
+					/*if ((int)(mX / 48) == (int)(x / 48) && (int)(mY / 48) == (int)(y / 48))
+						break;*/
 
-					mTarget = mVecItem[i];
-					mIsExistTarget = true;
-
-					int x1 = mX / TileSize;
-					int y1 = mY / TileSize;
-					int x2 = x / TileSize;
-					int y2 = y / TileSize;
-
-					mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, x1, y1, x2, y2);
-
-					if ((int)(mX / 48) > (int)(mPathFinderList[0]->GetX() / 48))
-					{
-						if (mState != EnemyState::WALK || mDirection != Direction::Left)
-						{
-							mState = EnemyState::WALK;
-							mDirection = Direction::Left;
-							SetAnimation();
-						}
-					}
-					else if ((int)(mX / 48) < (int)(mPathFinderList[0]->GetX() / 48))
-					{
-						if (mState != EnemyState::WALK || mDirection != Direction::Right)
-						{
-							mState = EnemyState::WALK;
-							mDirection = Direction::Right;
-							SetAnimation();
-						}
-					}
-
-					if ((int)(mY / 48) > (int)(mPathFinderList[0]->GetY() / 48))
-					{
-						if (mState != EnemyState::WALK || mDirection != Direction::Up)
-						{
-							mState = EnemyState::WALK;
-							mDirection = Direction::Up;
-							SetAnimation();
-						}
-					}
-					else if ((int)(mY / 48) < (int)(mPathFinderList[0]->GetY() / 48))
-					{
-						if (mState != EnemyState::WALK || mDirection != Direction::Down)
-						{
-							mState = EnemyState::WALK;
-							mDirection = Direction::Down;
-							SetAnimation();
-						}
-					}
-				}
-				else
-				{
-					if (mDistance > Math::GetDistance(mX, mY, x, y) && mTarget != mVecItem[i])
+					if (!mIsExistTarget)		// 처음 목표를 발견!
 					{
 						mDistance = Math::GetDistance(mX, mY, x, y);
 
-						mPathFinderList.clear();
-						mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, mX / TileSize, mY / TileSize, x / TileSize, y / TileSize);
 						mTarget = mVecItem[i];
 						mIsExistTarget = true;
-					}
-				}
-			}
-		}
 
-		if (mIsExistTarget || mIsRunAway)
-		{
-			float angle = Math::GetAngle(mX, mY, mPathFinderList[0]->GetX() + TileSize / 2, mPathFinderList[0]->GetY() + TileSize / 2);
+						int x1 = mX / TileSize;
+						int y1 = mY / TileSize;
+						int x2 = x / TileSize;
+						int y2 = y / TileSize;
 
-			mX += cosf(angle) * mSpeed * TIME->DeltaTime();
-			mY += -sinf(angle) * mSpeed * TIME->DeltaTime();
+						mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, x1, y1, x2, y2);
 
-			if ((int)(mX / 48) == (int)(((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
-				&& (int)(mY / 48) == (int)(((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
-				&& Math::GetDistance(mX, mY, mPathFinderList[0]->GetX() + TileSize / 2, mPathFinderList[0]->GetY() + TileSize / 2) <= 1.f)
-				//if(Math::GetDistance(mX, mY, mPathFinderList[0]->GetX(), mPathFinderList[0]->GetY()) <= 1.f)
-			{
-				mPathFinderList.erase(mPathFinderList.begin());
-
- 				if (mPathFinderList.size() != 0)
-				{
-					if ((int)(mX / 48) > (int)((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
-					{
-						if (mState != EnemyState::WALK || mDirection != Direction::Left)
+						if ((int)(mX / 48) > (int)(mPathFinderList[0]->GetX() / 48))		// 방향 틀어주기
 						{
-							mState = EnemyState::WALK;
-							mDirection = Direction::Left;
-							SetAnimation();
-						}
-					}
-					else if ((int)(mX / 48) < (int)((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
-					{
-						if (mState != EnemyState::WALK || mDirection != Direction::Right)
-						{
-							mState = EnemyState::WALK;
-							mDirection = Direction::Right;
-							SetAnimation();
-						}
-					}
-
-					if ((int)(mY / 48) > (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
-					{
-						if (mState != EnemyState::WALK || mDirection != Direction::Up)
-						{
-							mState = EnemyState::WALK;
-							mDirection = Direction::Up;
-							SetAnimation();
-						}
-					}
-					else if ((int)(mY / 48) < (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
-					{
-						if (mState != EnemyState::WALK || mDirection != Direction::Down)
-						{
-							mState = EnemyState::WALK;
-							mDirection = Direction::Down;
-							SetAnimation();
-						}
-					}
-				}
-				else
-				{
-					// 도착했으니까 아이템 훔치게 공격 모션
-					if (mState != EnemyState::ATTACK)
-					{
-						/*vector<GameObject*>* itemPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
-
-						for (int i = 0; i < (*itemPtr).size(); ++i)
-						{
-							if ((*itemPtr)[i] == mTarget)
+							if (mState != EnemyState::WALK || mDirection != Direction::Left)
 							{
-								mItem = mTarget;
-								mTarget = nullptr;
-
-								(*itemPtr).erase((*itemPtr).begin() + i);
+								mState = EnemyState::WALK;
+								mDirection = Direction::Left;
+								SetAnimation();
 							}
-						}*/
+						}
+						else if ((int)(mX / 48) < (int)(mPathFinderList[0]->GetX() / 48))
+						{
+							if (mState != EnemyState::WALK || mDirection != Direction::Right)
+							{
+								mState = EnemyState::WALK;
+								mDirection = Direction::Right;
+								SetAnimation();
+							}
+						}
 
-						mIsExistTarget = false;
-						mState = EnemyState::ATTACK;
-						SetAnimation();
+						if ((int)(mY / 48) > (int)(mPathFinderList[0]->GetY() / 48))
+						{
+							if (mState != EnemyState::WALK || mDirection != Direction::Up)
+							{
+								mState = EnemyState::WALK;
+								mDirection = Direction::Up;
+								SetAnimation();
+							}
+						}
+						else if ((int)(mY / 48) < (int)(mPathFinderList[0]->GetY() / 48))
+						{
+							if (mState != EnemyState::WALK || mDirection != Direction::Down)
+							{
+								mState = EnemyState::WALK;
+								mDirection = Direction::Down;
+								SetAnimation();
+							}
+						}
+					}
+					else		// 목표는 있지만 아직 줍지 않아서 가장 가까운거 갱신할 수 잇음
+					{
+						if (mDistance > Math::GetDistance(mX, mY, x, y) && mTarget != mVecItem[i])
+						{
+							mDistance = Math::GetDistance(mX, mY, x, y);
+
+							mPathFinderList.clear();
+							mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, mX / TileSize, mY / TileSize, x / TileSize, y / TileSize);
+							mTarget = mVecItem[i];
+							mIsExistTarget = true;
+						}
 					}
 				}
 			}
@@ -302,21 +226,118 @@ void Sableye::MoveToOre()
 	}
 
 	// 플레이어가 일정 범위 안에 들어오면 도망가자
-	if (Math::GetDistance(mX, mY, OBJECTMANAGER->GetPlayer()->GetX(), OBJECTMANAGER->GetPlayer()->GetY()) <= TileSize * 2 && !mIsRunAway)
+	if (Math::GetDistance(mX, mY, OBJECTMANAGER->GetPlayer()->GetX(), OBJECTMANAGER->GetPlayer()->GetY()) <= TileSize * 3 && !mIsRunAway)
 	{
 		mTarget = nullptr;
 		mIsExistTarget = false;
 		mIsRunAway = true;
 		mPathFinderList.clear();
-		float x = mX + (mX - OBJECTMANAGER->GetPlayer()->GetX());		// 해당 위치가 맵 크기 밖이면 안돼!
-		float y = mY + (mY - OBJECTMANAGER->GetPlayer()->GetY());
-		mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, mX / TileSize, mY / TileSize, x / TileSize, y / TileSize);
+		
+		while (1)
+		{
+			// 랜덤 칸 고르기
+			int x = rand() % 7 - 3;
+			int y = rand() % 7 - 3;
+
+			if (x == 0 || x == 6 || y == 0 || y == 6)	// 가생이 칸 선택
+			{
+				x += mX / TileSize;
+				y += mY / TileSize;
+
+				if (x < 0 || x >= TileCountX || y < 0 || y >= TileCountY)
+					continue;
+
+				if (abs(OBJECTMANAGER->GetPlayer()->GetX() / TileSize - x) + abs(OBJECTMANAGER->GetPlayer()->GetY() / TileSize - y) <= 3)
+					continue;
+
+				// 갈 수 있는 타일 && 오브젝트 없음인 상태인 것만 목표 지점으로 설정할 수 잇다
+				if (mTileList[y][x]->GetTileType() == TileType::Normal && mMapObjectList[y][x]->GetIntType() == 0)
+				{
+					mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, mX / TileSize, mY / TileSize, x, y);
+					break;
+				}
+			}
+		}
 	}
-	else if (Math::GetDistance(mX, mY, OBJECTMANAGER->GetPlayer()->GetX(), OBJECTMANAGER->GetPlayer()->GetY()) > TileSize * 2 && mIsRunAway)
+	else if (Math::GetDistance(mX, mY, OBJECTMANAGER->GetPlayer()->GetX(), OBJECTMANAGER->GetPlayer()->GetY()) > TileSize * 3 && mIsRunAway)
 	{
-		if (!mIsExistTarget)
-			mPathFinderList.clear();
+		mIsRunAway = false;
+		mPathFinderList.clear();
 	}
+
+	// 아이템 벡터 다 돌고 타겟이 있으니까 움직여야지? 또는 도망쳐야해서 도착지점이 있어서 움직여야하지?
+	if (mIsExistTarget || mIsRunAway)
+	{
+		float angle = Math::GetAngle(mX, mY, mPathFinderList[0]->GetX() + TileSize / 2, mPathFinderList[0]->GetY() + TileSize / 2);
+
+		mX += cosf(angle) * mSpeed * TIME->DeltaTime();
+		mY += -sinf(angle) * mSpeed * TIME->DeltaTime();
+
+		// 목표 지점 벡터의 0번칸에 도착했으면 지우고 한 칸씩 앞으로
+		if ((int)(mX / 48) == (int)(((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
+			&& (int)(mY / 48) == (int)(((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
+			&& Math::GetDistance(mX, mY, mPathFinderList[0]->GetX() + TileSize / 2, mPathFinderList[0]->GetY() + TileSize / 2) <= 1.f)
+		{
+			mPathFinderList.erase(mPathFinderList.begin());
+
+			if (mPathFinderList.size() != 0)
+			{
+				if ((int)(mX / 48) > (int)((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
+				{
+					if (mState != EnemyState::WALK || mDirection != Direction::Left)
+					{
+						mState = EnemyState::WALK;
+						mDirection = Direction::Left;
+						SetAnimation();
+					}
+				}
+				else if ((int)(mX / 48) < (int)((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
+				{
+					if (mState != EnemyState::WALK || mDirection != Direction::Right)
+					{
+						mState = EnemyState::WALK;
+						mDirection = Direction::Right;
+						SetAnimation();
+					}
+				}
+
+				if ((int)(mY / 48) > (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
+				{
+					if (mState != EnemyState::WALK || mDirection != Direction::Up)
+					{
+						mState = EnemyState::WALK;
+						mDirection = Direction::Up;
+						SetAnimation();
+					}
+				}
+				else if ((int)(mY / 48) < (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
+				{
+					if (mState != EnemyState::WALK || mDirection != Direction::Down)
+					{
+						mState = EnemyState::WALK;
+						mDirection = Direction::Down;
+						SetAnimation();
+					}
+				}
+			}
+			else
+			{
+				// 도착했으니까 아이템 훔치게 공격 모션
+				if (mState != EnemyState::ATTACK && !mIsRunAway)
+				{
+					mIsExistTarget = false;
+					mState = EnemyState::ATTACK;
+					SetAnimation();
+				}
+
+				// 도망치던 상태에서는 사라지지 않고 새로운 목표로!
+				if(mIsRunAway)
+					mIsRunAway = false;
+			}
+		}
+	}
+
+
 }
 
 void Sableye::ReadyAnimation()
