@@ -62,10 +62,8 @@ void Player::Init()
 
 	mIsInfoOn = true;
 
-	//mBag = new Bag();
 	mInven = new Inven();
 	mInven->Init();
-	//mBagItemListPtr = mBag->GetBagItemListPtr();
 	mBagItemListPtr = mInven->GetBagItemListPtr();
 
 	// {{ 트레일 줍기 불가능해서 임시로 세팅
@@ -106,7 +104,6 @@ void Player::Update()
 
 	mCurrentAnimation->Update();
 
-	//mBag->Update((int)mX, (int)mY);
 	mInven->Update();
 }
 
@@ -218,6 +215,158 @@ void Player::InitAnimation()
 	mRUMoveAnimation->InitFrameByStartEnd(0, 15, 2, 15, false);
 	mRUMoveAnimation->SetIsLoop(true);
 	mRUMoveAnimation->SetFrameUpdateTime(0.3f);
+
+
+	mDownAttackChikoAnimation = new Animation();
+	mDownAttackChikoAnimation->InitFrameByStartEnd(0, 25, 2, 25, false);
+	mDownAttackChikoAnimation->SetIsLoop(true);
+	mDownAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mDownAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mUpAttackChikoAnimation = new Animation();
+	mUpAttackChikoAnimation->InitFrameByStartEnd(0, 26, 2, 26, false);
+	mUpAttackChikoAnimation->SetIsLoop(true);
+	mUpAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mUpAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mLeftAttackChikoAnimation = new Animation();
+	mLeftAttackChikoAnimation->InitFrameByStartEnd(0, 27, 2, 27, false);
+	mLeftAttackChikoAnimation->SetIsLoop(true);
+	mLeftAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mLeftAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mRightAttackChikoAnimation = new Animation();
+	mRightAttackChikoAnimation->InitFrameByStartEnd(0, 28, 2, 28, false);
+	mRightAttackChikoAnimation->SetIsLoop(true);
+	mRightAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mRightAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mLDAttackChikoAnimation = new Animation();
+	mLDAttackChikoAnimation->InitFrameByStartEnd(0, 29, 2, 29, false);
+	mLDAttackChikoAnimation->SetIsLoop(true);
+	mLDAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mLDAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mRDAttackChikoAnimation = new Animation();
+	mRDAttackChikoAnimation->InitFrameByStartEnd(0, 30, 2, 30, false);
+	mRDAttackChikoAnimation->SetIsLoop(true);
+	mRDAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mRDAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mLUAttackChikoAnimation = new Animation();
+	mLUAttackChikoAnimation->InitFrameByStartEnd(0, 31, 2, 31, false);
+	mLUAttackChikoAnimation->SetIsLoop(true);
+	mLUAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mLUAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mRUAttackChikoAnimation = new Animation();
+	mRUAttackChikoAnimation->InitFrameByStartEnd(0, 32, 2, 32, false);
+	mRUAttackChikoAnimation->SetIsLoop(true);
+	mRUAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mRUAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+
+	mDownAttackTotoAnimation = new Animation();
+	mDownAttackTotoAnimation->InitFrameByStartEnd(1, 25, 4, 25, false);
+	mDownAttackTotoAnimation->SetIsLoop(true);
+	mDownAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mDownAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mUpAttackTotoAnimation = new Animation();
+	mUpAttackTotoAnimation->InitFrameByStartEnd(1, 26, 4, 26, false);
+	mUpAttackTotoAnimation->SetIsLoop(true);
+	mUpAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mUpAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mLeftAttackTotoAnimation = new Animation();
+	mLeftAttackTotoAnimation->InitFrameByStartEnd(1, 27, 4, 27, false);
+	mLeftAttackTotoAnimation->SetIsLoop(true);
+	mLeftAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mLeftAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mRightAttackTotoAnimation = new Animation();
+	mRightAttackTotoAnimation->InitFrameByStartEnd(1, 28, 4, 28, false);
+	mRightAttackTotoAnimation->SetIsLoop(true);
+	mRightAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mRightAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mLDAttackTotoAnimation = new Animation();
+	mLDAttackTotoAnimation->InitFrameByStartEnd(1, 29, 4, 29, false);
+	mLDAttackTotoAnimation->SetIsLoop(true);
+	mLDAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mLDAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mRDAttackTotoAnimation = new Animation();
+	mRDAttackTotoAnimation->InitFrameByStartEnd(1, 30, 4, 30, false);
+	mRDAttackTotoAnimation->SetIsLoop(true);
+	mRDAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mRDAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mLUAttackTotoAnimation = new Animation();
+	mLUAttackTotoAnimation->InitFrameByStartEnd(1, 31, 4, 31, false);
+	mLUAttackTotoAnimation->SetIsLoop(true);
+	mLUAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mLUAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mRUAttackTotoAnimation = new Animation();
+	mRUAttackTotoAnimation->InitFrameByStartEnd(1, 32, 4, 32, false);
+	mRUAttackTotoAnimation->SetIsLoop(true);
+	mRUAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mRUAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+
+	mDownAttackCharAnimation = new Animation();
+	mDownAttackCharAnimation->InitFrameByStartEnd(0, 25, 3, 25, false);
+	mDownAttackCharAnimation->SetIsLoop(true);
+	mDownAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mDownAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mUpAttackCharAnimation = new Animation();
+	mUpAttackCharAnimation->InitFrameByStartEnd(0, 26, 3, 26, false);
+	mUpAttackCharAnimation->SetIsLoop(true);
+	mUpAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mUpAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mLeftAttackCharAnimation = new Animation();
+	mLeftAttackCharAnimation->InitFrameByStartEnd(0, 27, 3, 27, false);
+	mLeftAttackCharAnimation->SetIsLoop(true);
+	mLeftAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mLeftAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mRightAttackCharAnimation = new Animation();
+	mRightAttackCharAnimation->InitFrameByStartEnd(0, 28, 3, 28, false);
+	mRightAttackCharAnimation->SetIsLoop(true);
+	mRightAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mRightAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mLDAttackCharAnimation = new Animation();
+	mLDAttackCharAnimation->InitFrameByStartEnd(0, 29, 3, 29, false);
+	mLDAttackCharAnimation->SetIsLoop(true);
+	mLDAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mLDAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mRDAttackCharAnimation = new Animation();
+	mRDAttackCharAnimation->InitFrameByStartEnd(0, 30, 3, 30, false);
+	mRDAttackCharAnimation->SetIsLoop(true);
+	mRDAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mRDAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mLUAttackCharAnimation = new Animation();
+	mLUAttackCharAnimation->InitFrameByStartEnd(0, 31, 3, 31, false);
+	mLUAttackCharAnimation->SetIsLoop(true);
+	mLUAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mLUAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+
+	mRUAttackCharAnimation = new Animation();
+	mRUAttackCharAnimation->InitFrameByStartEnd(0, 32, 3, 32, false);
+	mRUAttackCharAnimation->SetIsLoop(true);
+	mRUAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mRUAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
+}
+
+void Player::SetIdleAnimation()
+{
+	mState = PlayerState::Idle;
 }
 
 void Player::SafeDeleteAnimation()
@@ -238,10 +387,38 @@ void Player::SafeDeleteAnimation()
 	SafeDelete(mRDMoveAnimation);
 	SafeDelete(mLUMoveAnimation);
 	SafeDelete(mRUMoveAnimation);
+
+	SafeDelete(mDownAttackChikoAnimation);
+	SafeDelete(mUpAttackChikoAnimation);
+	SafeDelete(mLeftAttackChikoAnimation);
+	SafeDelete(mRightAttackChikoAnimation);
+	SafeDelete(mLDAttackChikoAnimation);
+	SafeDelete(mRDAttackChikoAnimation);
+	SafeDelete(mLUAttackChikoAnimation);
+	SafeDelete(mRUAttackChikoAnimation);
+	SafeDelete(mDownAttackTotoAnimation);
+	SafeDelete(mUpAttackTotoAnimation);
+	SafeDelete(mLeftAttackTotoAnimation);
+	SafeDelete(mRightAttackTotoAnimation);
+	SafeDelete(mLDAttackTotoAnimation);
+	SafeDelete(mRDAttackTotoAnimation);
+	SafeDelete(mLUAttackTotoAnimation);
+	SafeDelete(mRUAttackTotoAnimation);
+	SafeDelete(mDownAttackCharAnimation);
+	SafeDelete(mUpAttackCharAnimation);
+	SafeDelete(mLeftAttackCharAnimation);
+	SafeDelete(mRightAttackCharAnimation);
+	SafeDelete(mLDAttackCharAnimation);
+	SafeDelete(mRDAttackCharAnimation);
+	SafeDelete(mLUAttackCharAnimation);
+	SafeDelete(mRUAttackCharAnimation);
 }
 
 void Player::InputDirectionKey()
 {
+	if (mState == PlayerState::Attack)
+		return;
+
 	if (INPUT->GetKeyDown(VK_DOWN))
 	{
 		mDir = DirectionEight::Down;
@@ -451,13 +628,13 @@ void Player::InputDirectionKey()
 		mState = PlayerState::Move;
 
 		mNextTileX = mTileX;
-		if (mTileY == TileCountY - 1)
+		if (mTileY == mTileCountY - 1)
 			mNextTileY = mTileY;
 		else
 			mNextTileY = mTileY + 1;
 
-		if (mY >= TileSize * TileCountY - TileSize / 2)
-			mY = TileSize * TileCountY - TileSize / 2;
+		if (mY >= TileSize * mTileCountY - TileSize / 2)
+			mY = TileSize * mTileCountY - TileSize / 2;
 		else
 			mY += mSpeed * Time::GetInstance()->DeltaTime();
 	}
@@ -495,14 +672,14 @@ void Player::InputDirectionKey()
 	{
 		mState = PlayerState::Move;
 
-		if (mTileX == TileCountX - 1)
+		if (mTileX == mTileCountX - 1)
 			mNextTileX = mTileX;
 		else
 			mNextTileX = mTileX + 1;
 		mNextTileY = mTileY;
 
-		if (mX >= TileSize * TileCountX - TileSize / 2)
-			mX = TileSize * TileCountX - TileSize / 2;
+		if (mX >= TileSize * mTileCountX - TileSize / 2)
+			mX = TileSize * mTileCountX - TileSize / 2;
 		else
 			mX += mSpeed * Time::GetInstance()->DeltaTime();
 	}
@@ -526,6 +703,12 @@ void Player::InputSpaceKey()
 	{
 		CheckNextTile();
 
+		if (mState == PlayerState::Attack)
+			return;
+
+		if (mForm == Form::Ditto)
+			return;
+
 		vector<GameObject*>* enemyListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ENEMY);
 		if((*enemyListPtr).size())
 		{
@@ -536,6 +719,7 @@ void Player::InputSpaceKey()
 				RECT enemyRc = ((*enemyListPtr)[i])->GetRect();
 				if (IntersectRect(&temp, &mRangeBox, &enemyRc))
 				{
+					mState = PlayerState::Attack;
 					((Enemy*)(*enemyListPtr)[i])->DamagedHp();
 					return;
 				}
@@ -544,16 +728,19 @@ void Player::InputSpaceKey()
 
 		if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Green))
 		{
+			mState = PlayerState::Attack;
 			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
 			mIsAttackingTemp = true;
 		}
 		else if ((mForm == Form::Totodile) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Blue))
 		{
+			mState = PlayerState::Attack;
 			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
 			mIsAttackingTemp = true;
 		}
 		else if ((mForm == Form::Charmander) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Red))
 		{
+			mState = PlayerState::Attack;
 			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
 			mIsAttackingTemp = true;
 		}
@@ -658,11 +845,16 @@ void Player::InputZKey()
 {
 	if (INPUT->GetKeyDown('Z'))
 	{
+		if (mState == PlayerState::Attack)
+			return;
+
 		//int bagSize = mBag->GetBagItemSize();
 		int bagSize = mInven->GetBagItemSize();
 
 		if (!bagSize || (mInven->GetBagItemName() == ItemName::ItemTrail))//mBag->GetBagItemName() == ItemName::ItemTrail))
 		{
+			if (bagSize >= 3)
+				return;
 			RECT temp;
 			vector<GameObject*> trainList = OBJECTMANAGER->GetObjectList(ObjectLayer::TRAIN);
 
@@ -717,6 +909,9 @@ void Player::InputZKey()
 
 		if (!bagSize || (mInven->GetBagItemName() == ItemName::ItemOre))//mBag->GetBagItemName() == ItemName::ItemOre))
 		{
+			if (bagSize >= 6)
+				return;
+
 			RECT currentRc = (*mTileListPtr)[mTileY][mTileX]->GetRect();
 			vector<GameObject*>* itemListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
 
@@ -763,6 +958,9 @@ void Player::InputXKey()
 {
 	if (INPUT->GetKeyDown('X'))
 	{
+		if (mState == PlayerState::Attack)
+			return;
+
 		//int bagSize = mBag->GetBagItemSize();
 		if (!mInven->GetBagItemSize())//mBag->GetBagItemSize())
 			return;
@@ -882,6 +1080,9 @@ void Player::InputCKey()
 {
 	if (INPUT->GetKeyDown('C')) // Loop Order: normal -> leaf -> water -> fire -> normal -> ...
 	{
+		if (mState == PlayerState::Attack)
+			return;
+
 		if (mForm == Form::Ditto)
 		{
 			mIsChangable = true;
@@ -950,6 +1151,9 @@ void Player::InputVKey()
 {
 	if (INPUT->GetKeyDown('V'))
 	{
+		if (mState == PlayerState::Attack)
+			return;
+
 		vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
 		Trail* currentTrail = (*trailListPtr)[mTileY][mTileX];
 
@@ -966,7 +1170,7 @@ bool Player::CheckTileType(TileType tileType)
 	{
 		for (int i = mTileX - 1; i <= mTileX + 1; ++i)
 		{
-			if (i >= 0 && i < TileCountX && j >= 0 && j < TileCountY)
+			if (i >= 0 && i < mTileCountX && j >= 0 && j < mTileCountY)
 			{
 				TileType currentTileType = (*mTileListPtr)[j][i]->GetTileType();
 
@@ -988,6 +1192,7 @@ bool Player::CheckTileType(TileType tileType)
 void Player::CheckRange()
 {
 	int dir = 0;
+
 	if (mDir == DirectionEight::LeftDown)
 	{
 		dir = 1;
@@ -1004,7 +1209,6 @@ void Player::CheckRange()
 	{
 		dir = 2;
 	}
-
 
 	if (mDir == DirectionEight::Down || dir == 1)
 	{
@@ -1132,6 +1336,177 @@ void Player::ChangeCurrentAnimation()
 			mCurrentAnimation->Stop();
 			mCurrentAnimation = mRUMoveAnimation;
 			mCurrentAnimation->Play();
+		}
+	}
+	else if (mState == PlayerState::Attack)
+	{
+		if (mDir == DirectionEight::Down)
+		{
+			if (mForm == Form::Chikorita && mCurrentAnimation != mDownAttackChikoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mDownAttackChikoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Totodile && mCurrentAnimation != mDownAttackTotoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mDownAttackTotoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Charmander && mCurrentAnimation != mDownAttackCharAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mDownAttackCharAnimation;
+				mCurrentAnimation->Play();
+			}
+		}
+		else if (mDir == DirectionEight::Up)
+		{
+			if (mForm == Form::Chikorita && mCurrentAnimation != mUpAttackChikoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mUpAttackChikoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Totodile && mCurrentAnimation != mUpAttackTotoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mUpAttackTotoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Charmander && mCurrentAnimation != mUpAttackCharAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mUpAttackCharAnimation;
+				mCurrentAnimation->Play();
+			}
+		}
+		else if (mDir == DirectionEight::Left)
+		{
+			if (mForm == Form::Chikorita && mCurrentAnimation != mLeftAttackChikoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLeftAttackChikoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Totodile && mCurrentAnimation != mLeftAttackTotoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLeftAttackTotoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Charmander && mCurrentAnimation != mLeftAttackCharAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLeftAttackCharAnimation;
+				mCurrentAnimation->Play();
+			}
+		}
+		else if (mDir == DirectionEight::Right)
+		{
+			if (mForm == Form::Chikorita && mCurrentAnimation != mRightAttackChikoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRightAttackChikoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Totodile && mCurrentAnimation != mRightAttackTotoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRightAttackTotoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Charmander && mCurrentAnimation != mRightAttackCharAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRightAttackCharAnimation;
+				mCurrentAnimation->Play();
+			}
+		}
+		else if (mDir == DirectionEight::LeftDown)
+		{
+			if (mForm == Form::Chikorita && mCurrentAnimation != mLDAttackChikoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLDAttackChikoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Totodile && mCurrentAnimation != mLDAttackTotoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLDAttackTotoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Charmander && mCurrentAnimation != mLDAttackCharAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLDAttackCharAnimation;
+				mCurrentAnimation->Play();
+			}
+		}
+		else if (mDir == DirectionEight::RightDown)
+		{
+			if (mForm == Form::Chikorita && mCurrentAnimation != mRDAttackChikoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRDAttackChikoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Totodile && mCurrentAnimation != mRDAttackTotoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRDAttackTotoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Charmander && mCurrentAnimation != mRDAttackCharAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRDAttackCharAnimation;
+				mCurrentAnimation->Play();
+			}
+		}
+		else if (mDir == DirectionEight::LeftUp)
+		{
+			if (mForm == Form::Chikorita && mCurrentAnimation != mLUAttackChikoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLUAttackChikoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Totodile && mCurrentAnimation != mLUAttackTotoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLUAttackTotoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Charmander && mCurrentAnimation != mLUAttackCharAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mLUAttackCharAnimation;
+				mCurrentAnimation->Play();
+			}
+		}
+		else if (mDir == DirectionEight::RightUp)
+		{
+			if (mForm == Form::Chikorita && mCurrentAnimation != mRUAttackChikoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRUAttackChikoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Totodile && mCurrentAnimation != mRUAttackTotoAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRUAttackTotoAnimation;
+				mCurrentAnimation->Play();
+			}
+			else if (mForm == Form::Charmander && mCurrentAnimation != mRUAttackCharAnimation)
+			{
+				mCurrentAnimation->Stop();
+				mCurrentAnimation = mRUAttackCharAnimation;
+				mCurrentAnimation->Play();
+			}
 		}
 	}
 }
