@@ -27,6 +27,7 @@ protected:
 	Animation* mCurrentAnimation;
 
 	bool mIsDead;
+	bool mIsHit;
 
 public:
 	virtual void Init() override;
@@ -50,6 +51,7 @@ public:
 	void SetTileList(vector<vector<Tile*>> tile) { mTileList = tile; }
 	void SetTileListPtr(vector<vector<Tile*>> tileList) { mTileList = tileList; }
 	void SetMapObjectListPtr(vector<vector<MapObject*>> mapObjectList) { mMapObjectList = mapObjectList; }
+	void SetHit(bool b) { mIsHit = b; }
 
 	void DamagedHp() { mHp -= 1; }
 };

@@ -13,6 +13,7 @@
 #include "Inven.h"
 #include "BagItem.h"
 #include "Enemy.h"
+#include "Sableye.h"
 
 Player::Player(const string& name, float x, float y)
 	: GameObject(name, x, y)
@@ -721,6 +722,7 @@ void Player::InputSpaceKey()
 				{
 					mState = PlayerState::Attack;
 					((Enemy*)(*enemyListPtr)[i])->DamagedHp();
+					dynamic_cast<Sableye*>((*enemyListPtr)[i])->SetHit(true);
 					return;
 				}
 			}

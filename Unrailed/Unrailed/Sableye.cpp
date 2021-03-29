@@ -51,12 +51,40 @@ void Sableye::Release()
 void Sableye::Update()
 {
 	mVecItem = OBJECTMANAGER->GetObjectList(ObjectLayer::ITEM);
+	mItemCount = mVecItem.size();
 
-	if (mHp <= 0)
+	if (mIsHit)
 	{
-		mIsDead = true;
-		mState = EnemyState::DEAD;
-		SetAnimation();
+		if (mHp <= 0)
+		{
+			mIsDead = true;
+			mState = EnemyState::DEAD;
+			SetAnimation();
+		}
+		else
+		{
+			mDustFrameTime += TIME->DeltaTime();
+
+			if (mDustFrameTime >= 0.1f)
+			{
+				mDustFrameTime = 0.f;
+				mAlpha -= 0.15f;
+
+				if(mAlpha <= 0.5f)
+					mIsHit = false;
+			}
+
+		}
+	}
+	else
+	{
+		if (mAlpha < 1.f)
+		{
+			mAlpha += 0.15;
+
+			if (mAlpha >= 1.f)
+				mAlpha = 1.f;
+		}
 	}
 
 	if (mIsDead)
@@ -80,7 +108,10 @@ void Sableye::Update()
 		}
 	}
 	else
+	{
 		MoveToOre();
+		StealOre();
+	}
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -107,21 +138,17 @@ void Sableye::Render(HDC hdc)
 
 void Sableye::MoveToOre()
 {
-	//mIsExistTarget = false;	// 돌기 전에 false 해두고 다 돌았는데 false면 근처에 없다
-							// 가다가 더 가까운 새로운게 나타나면 그리로 가게?
-	//if (mItemCount != mVecItem.size() && mState != EnemyState::ATTACK && mState != EnemyState::DEAD)
+	if (mTarget != nullptr)
+		mDistance = Math::GetDistance(mX, mY, mTarget->GetX(), mTarget->GetY());
 
-	mItemCount = mVecItem.size();
-
-	if (mItem == nullptr)
+	if (mItem == nullptr)	// 아이템 안훔쳤을 때
 	{
-
 		for (int i = 0; i < mItemCount; ++i)
 		{
 			float x = mVecItem[i]->GetX();
 			float y = mVecItem[i]->GetY();
 
-			if (Math::GetDistance(mX, mY, x, y) < TileSize * 4)	// 테스트용 거리
+			if (Math::GetDistance(mX, mY, x, y) < TileSize * 5)	// 테스트용 거리
 			{
 				if ((int)(mX / 48) == (int)(x / 48) && (int)(mY / 48) == (int)(y / 48))
 					break;
@@ -290,29 +317,6 @@ void Sableye::MoveToOre()
 		if (!mIsExistTarget)
 			mPathFinderList.clear();
 	}
-
-	if (!mCurrentAnimation->GetIsPlay())
-	{
-		if (mState == EnemyState::ATTACK)
-		{
-			vector<GameObject*>* itemPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
-
-			for (int i = 0; i < (*itemPtr).size(); ++i)
-			{
-				if ((*itemPtr)[i] == mTarget)
-				{
-					mItem = mTarget;
-					mTarget = nullptr;
-
-					(*itemPtr).erase((*itemPtr).begin() + i);
-				}
-			}
-			mIsDead = true;
-		}
-
-		mState = EnemyState::IDLE;
-		SetAnimation();
-	}
 }
 
 void Sableye::ReadyAnimation()
@@ -430,6 +434,110 @@ void Sableye::SetAnimation()
 			mCurrentAnimation = mDeadAnimation;
 		}
 		else if (mDirection == UnitDirection::LEFT)
+		{ 
+			mDeadAnimation->InitFrameByStartEnd(4, 0, 4, 2, false);
+			mCurrentAnimation = mDeadAnimation;
+		}
+		else if (mDirection == UnitDirection::RIGHT)
+		{
+			mDeadAnimation->InitFrameByStartEnd(4, 0, 4, 3, false);
+			mCurrentAnimation = mDeadAnimation;
+		}
+	}
+
+	mCurrentAnimation->Play();
+}
+
+void Sableye::SetAnimation(EnemyState state)
+{
+	mCurrentAnimation->Stop();
+
+	if (mState == EnemyState::IDLE)
+	{
+		mIdleAnimation->InitFrameByVector(vector<pair<int, int>>());
+		if (mDirection == UnitDirection::DOWN)
+		{
+			mIdleAnimation->InitFrameByStartEnd(0, 0, 0, 0, false);
+			mCurrentAnimation = mIdleAnimation;
+		}
+		else if (mDirection == UnitDirection::UP)
+		{
+			mIdleAnimation->InitFrameByStartEnd(0, 1, 0, 1, false);
+			mCurrentAnimation = mIdleAnimation;
+		}
+		else if (mDirection == UnitDirection::LEFT)
+		{
+			mIdleAnimation->InitFrameByStartEnd(0, 2, 0, 2, false);
+			mCurrentAnimation = mIdleAnimation;
+		}
+		else if (mDirection == UnitDirection::RIGHT)
+		{
+			mIdleAnimation->InitFrameByStartEnd(0, 3, 0, 3, false);
+			mCurrentAnimation = mIdleAnimation;
+		}
+	}
+	else if (mState == EnemyState::WALK)
+	{
+		mWalkAnimation->InitFrameByVector(vector<pair<int, int>>());
+		if (mDirection == UnitDirection::DOWN)
+		{
+			mWalkAnimation->InitFrameByStartEnd(2, 0, 3, 0, false);
+			mCurrentAnimation = mWalkAnimation;
+		}
+		else if (mDirection == UnitDirection::UP)
+		{
+			mWalkAnimation->InitFrameByStartEnd(2, 1, 3, 1, false);
+			mCurrentAnimation = mWalkAnimation;
+		}
+		else if (mDirection == UnitDirection::LEFT)
+		{
+			mWalkAnimation->InitFrameByStartEnd(2, 2, 3, 2, false);
+			mCurrentAnimation = mWalkAnimation;
+		}
+		else if (mDirection == UnitDirection::RIGHT)
+		{
+			mWalkAnimation->InitFrameByStartEnd(2, 3, 3, 3, false);
+			mCurrentAnimation = mWalkAnimation;
+		}
+	}
+	else if (mState == EnemyState::ATTACK)
+	{
+		mAttackAnimation->InitFrameByVector(vector<pair<int, int>>());
+		if (mDirection == UnitDirection::DOWN)
+		{
+			mAttackAnimation->InitFrameByStartEnd(0, 0, 1, 0, false);
+			mCurrentAnimation = mAttackAnimation;
+		}
+		else if (mDirection == UnitDirection::UP)
+		{
+			mAttackAnimation->InitFrameByStartEnd(0, 1, 1, 1, false);
+			mCurrentAnimation = mAttackAnimation;
+		}
+		else if (mDirection == UnitDirection::LEFT)
+		{
+			mAttackAnimation->InitFrameByStartEnd(0, 2, 1, 2, false);
+			mCurrentAnimation = mAttackAnimation;
+		}
+		else if (mDirection == UnitDirection::RIGHT)
+		{
+			mAttackAnimation->InitFrameByStartEnd(0, 3, 1, 3, true);
+			mCurrentAnimation = mAttackAnimation;
+		}
+	}
+	else if (mState == EnemyState::DEAD)
+	{
+		mDeadAnimation->InitFrameByVector(vector<pair<int, int>>());
+		if (mDirection == UnitDirection::DOWN)
+		{
+			mDeadAnimation->InitFrameByStartEnd(4, 0, 4, 0, false);
+			mCurrentAnimation = mDeadAnimation;
+		}
+		else if (mDirection == UnitDirection::UP)
+		{
+			mDeadAnimation->InitFrameByStartEnd(4, 0, 4, 1, false);
+			mCurrentAnimation = mDeadAnimation;
+		}
+		else if (mDirection == UnitDirection::LEFT)
 		{
 			mDeadAnimation->InitFrameByStartEnd(4, 0, 4, 2, false);
 			mCurrentAnimation = mDeadAnimation;
@@ -442,4 +550,30 @@ void Sableye::SetAnimation()
 	}
 
 	mCurrentAnimation->Play();
+}
+
+void Sableye::StealOre()
+{
+	if (!mCurrentAnimation->GetIsPlay())
+	{
+		if (mState == EnemyState::ATTACK)
+		{
+			vector<GameObject*>* itemPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ITEM);
+
+			for (int i = 0; i < (*itemPtr).size(); ++i)
+			{
+				if ((*itemPtr)[i] == mTarget)
+				{
+					mItem = mTarget;
+					mTarget = nullptr;
+
+					(*itemPtr).erase((*itemPtr).begin() + i);
+				}
+			}
+			mIsDead = true;
+		}
+
+		mState = EnemyState::IDLE;
+		SetAnimation();
+	}
 }
