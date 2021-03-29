@@ -157,6 +157,9 @@
     <Filter Include="MainGame\Object\Unit\Jigglypuff">
       <UniqueIdentifier>{09b23719-35b9-4288-8486-6dd84b9745bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Object\Item\Mike">
+      <UniqueIdentifier>{2a517eab-46bd-4b45-a419-ac28b728f135}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -357,6 +360,9 @@
     <ClInclude Include="Jigglypuff.h">
       <Filter>MainGame\Object\Unit\Jigglypuff</Filter>
     </ClInclude>
+    <ClInclude Include="Mike.h">
+      <Filter>MainGame\Object\Item\Mike</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -544,6 +550,9 @@
     </ClCompile>
     <ClCompile Include="Jigglypuff.cpp">
       <Filter>MainGame\Object\Unit\Jigglypuff</Filter>
+    </ClCompile>
+    <ClCompile Include="Mike.cpp">
+      <Filter>MainGame\Object\Item\Mike</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
