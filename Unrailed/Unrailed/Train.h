@@ -2,14 +2,6 @@
 #include "GameObject.h"
 #include "Trail.h"
 
-enum class Direction : int
-{
-	Down,
-	Up,
-	Left,
-	Right
-};
-
 enum class State : int
 {
 	Move,
