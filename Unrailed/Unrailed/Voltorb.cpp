@@ -15,7 +15,7 @@ void Voltorb::Init(int x, int y)
 
 	ReadyAnimation();
 
-	//ºÎ¸ğ Å¬·¡½º (GameObject) º¯¼ö
+	//ë¶€ëª¨ í´ë˜ìŠ¤ (GameObject) ë³€ìˆ˜
 	mX = x;
 	mY = y;
 	mSizeX = mImage->GetFrameWidth() * 2;
@@ -23,7 +23,7 @@ void Voltorb::Init(int x, int y)
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 	//SetImage(image);
 
-	//Electrode º¯¼ö
+	//Electrode ë³€ìˆ˜
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 	mSpeed = 100.f;
@@ -53,12 +53,12 @@ void Voltorb::Release()
 
 void Voltorb::Update()
 {
-	//ÀÎµ¦½º °¡Á®¿À±â
+	//ì¸ë±ìŠ¤ ê°€ì ¸ì˜¤ê¸°
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
 
-	//½ÃÀÛ ÄğÅ¸ÀÓ
+	//ì‹œì‘ ì¿¨íƒ€ì„
 	if (mStartTimer == 3.5)
 	{
 		if (mState == State::Sleep)
@@ -97,8 +97,8 @@ void Voltorb::Update()
 	}
 
 
-	//¿Ã¶ó°¡ÀÖ´Â ±âÂ÷±æÀÇ ÇöÀç ±âÂ÷±æ/Å¸ÀÏÀÇ Áß°£¿À¸é ¹æÇâÈ®ÀÎ
-	//¹æÇâÀÌ °¡¸®Å°´Â Å¸ÀÏÀÇ Áß°£±îÁöÀÌµ¿
+	//ì˜¬ë¼ê°€ìˆëŠ” ê¸°ì°¨ê¸¸ì˜ í˜„ì¬ ê¸°ì°¨ê¸¸/íƒ€ì¼ì˜ ì¤‘ê°„ì˜¤ë©´ ë°©í–¥í™•ì¸
+	//ë°©í–¥ì´ ê°€ë¦¬í‚¤ëŠ” íƒ€ì¼ì˜ ì¤‘ê°„ê¹Œì§€ì´ë™
 
 	SetSpeed();
 	if (mState == State::Move || mState == State::Exploding || mState == State::Hurt)
@@ -111,7 +111,7 @@ void Voltorb::Update()
 		SetTarget();
 	}
 
-	//Çª¸°
+	//í‘¸ë¦°
 	if (mElectrode->GetIsHurt() == true && mState != State::Exploding && mState != State::Explode)
 	{
 		mState = State::Hurt;
@@ -123,7 +123,7 @@ void Voltorb::Update()
 		SetAnimation();
 	}
 
-	//Æø¹ß
+	//í­ë°œ
 	if (mState == State::Exploding)
 	{
 		mExplosionTimer -= TIME->DeltaTime();
@@ -302,7 +302,7 @@ void Voltorb::EndExplode()
 {
 	if (mState == State::Explode)
 	{
-		//SetIsDestroy(true); //»èÁ¦
-		SetIsActive(false); //·»´õ ¾ÈÇÔ
+		//SetIsDestroy(true); //ì‚­ì œ
+		SetIsActive(false); //ë Œë” ì•ˆí•¨
 	}
 }

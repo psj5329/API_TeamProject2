@@ -16,14 +16,14 @@ void Machop::Init(int x, int y, int image)
 	ReadyAnimation();
 	SetImage(image);
 
-	//ºÎ¸ð Å¬·¡½º (GameObject) º¯¼ö
+	//ë¶€ëª¨ í´ëž˜ìŠ¤ (GameObject) ë³€ìˆ˜
 	mX = x;
 	mY = y;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Machop º¯¼ö
+	//Machop ë³€ìˆ˜
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 	mSpeed = 100.f;
@@ -39,7 +39,7 @@ void Machop::Init(int x, int y, int image)
 
 	mBagItemListPtr = mBag.GetBagItemListPtr();
 
-	mStartTimer = 3.5f;
+	mStartTimer = 60.5f;
 }
 
 void Machop::Release()
@@ -64,7 +64,7 @@ void Machop::Update()
 
 	InterceptOre();
 
-	//½ÃÀÛ ÄðÅ¸ÀÓ
+	//ì‹œìž‘ ì¿¨íƒ€ìž„
 	if (mStartTimer == 3.5)
 	{
 		if (mState == State::Sleep)
@@ -116,30 +116,30 @@ void Machop::Update()
 	}
 
 
-	//Æø¹ß
+	//í­ë°œ
 	if (mElectrode->GetIsExplode() == true)
 	{
 		mState = State::Hurt;
 		SetAnimation();
 	}
 
-	//ÁøÈ­
-	int level = 1;
-	if (INPUT->GetKeyDown('Q'))
-	{
-		level = 1;
-		SetImage(level);
-	}
-	if (INPUT->GetKeyDown('W'))
-	{
-		level = 2;
-		SetImage(level);
-	}
-	if (INPUT->GetKeyDown('E'))
-	{
-		level = 3;
-		SetImage(level);
-	}
+	//ì§„í™”
+	//int level = 1;
+	//if (INPUT->GetKeyDown('Q'))
+	//{
+	//	level = 1;
+	//	SetImage(level);
+	//}
+	//if (INPUT->GetKeyDown('W'))
+	//{
+	//	level = 2;
+	//	SetImage(level);
+	//}
+	//if (INPUT->GetKeyDown('E'))
+	//{
+	//	level = 3;
+	//	SetImage(level);
+	//}
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -158,21 +158,21 @@ void Machop::Render(HDC hdc)
 	//for (int i = 0; i < mOreList.size(); ++i)
 	//{
 	//	if (mOreList[i]->GetOreType() == ItemType::Green)
-	//		strOre = L"±×¸°" + to_wstring(mOreCount);
+	//		strOre = L"ê·¸ë¦°" + to_wstring(mOreCount);
 	//	else if (mOreList[i]->GetOreType() == ItemType::Blue)
-	//		strOre = L"ºí·ç" + to_wstring(mOreCount);
+	//		strOre = L"ë¸”ë£¨" + to_wstring(mOreCount);
 	//	else if (mOreList[i]->GetOreType() == ItemType::Red)
-	//		strOre = L"·¹µå" + to_wstring(mOreCount);
+	//		strOre = L"ë ˆë“œ" + to_wstring(mOreCount);
 	//
 	//	TextOut(hdc, mX - 20, mY - 40 - i * 15, strOre.c_str(), strOre.length());
 	//}
 
 	mBag.Render(hdc);
 
-	/*	wstring strBlue = L"ºí·ç:" + to_wstring(mOreCount);
+	/*	wstring strBlue = L"ë¸”ë£¨:" + to_wstring(mOreCount);
 		TextOut(hdc, mX - 20, mY - 55, strBlue.c_str(), strBlue.length());
 
-		wstring strRed = L"·¹µå:" + to_wstring(mOreCount);
+		wstring strRed = L"ë ˆë“œ:" + to_wstring(mOreCount);
 		TextOut(hdc, mX - 20, mY - 70, strRed.c_str(), strRed.length());*/
 }
 
@@ -396,7 +396,7 @@ void Machop::InterceptOre()
 
 			mOreCount++;
 
-			//ore->SetOreType(ItemType::Green);//±×¸°
+			//ore->SetOreType(ItemType::Green);//ê·¸ë¦°
 			bagItem->Init(ItemName::ItemOre, ItemType::Green);
 
 			//mOreList.push_back(ore);
@@ -418,7 +418,7 @@ void Machop::InterceptOre()
 
 			mOreCount++;
 
-			//ore->SetOreType(ItemType::Blue);//ºí·ç
+			//ore->SetOreType(ItemType::Blue);//ë¸”ë£¨
 			bagItem->Init(ItemName::ItemOre, ItemType::Blue);
 
 			//mOreList.push_back(ore);
@@ -440,7 +440,7 @@ void Machop::InterceptOre()
 
 			mOreCount++;
 
-			//ore->SetOreType(ItemType::Red);//·¹µå
+			//ore->SetOreType(ItemType::Red);//ë ˆë“œ
 			bagItem->Init(ItemName::ItemOre, ItemType::Red);
 
 			//mOreList.push_back(ore);

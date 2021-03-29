@@ -18,6 +18,11 @@ class Scene3 : public Scene
 	class Image* mImage;
 	Jigglypuff* mJigglypuff;
 
+	vector <class Voltorb*> mVoltorbVec;
+	class Electrode* mElectrode;
+	class Abra* mAbra;
+	class Machop* mMachop;
+
 public:
 	void Init()override;
 	void Release()override;

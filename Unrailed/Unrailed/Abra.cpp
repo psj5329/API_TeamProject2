@@ -44,7 +44,7 @@ void Abra::Init(int x, int y, int image)
 
 	mBagItemListPtr = mBag.GetBagItemListPtr();
 
-	mStartTimer = 3.5f;
+	mStartTimer = 60.5f;
 }
 
 void Abra::Release()

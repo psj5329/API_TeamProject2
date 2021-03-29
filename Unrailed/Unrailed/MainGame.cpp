@@ -119,7 +119,6 @@ void MainGame::RenderTime(HDC hdc)
 	TextOut(hdc, 10, 25, strDeltaTime.c_str(), (int)strDeltaTime.length());
 	TextOut(hdc, 10, 40, strFPS.c_str(), (int)strFPS.length());
 
-
 	/*wstring strScene = L"여긴 메인, 1~4 눌러서 씬 넘어가자";
 	TextOut(hdc, WINSIZEX / 2 - 50, WINSIZEY / 2, strScene.c_str(), strScene.length());*/
 }

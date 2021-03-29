@@ -26,7 +26,7 @@ void Jigglypuff::Init(int x, int y, bool isUpgraded)
 	if (!mIsUpgraded)
 	{
 		mImage = IMAGEMANAGER->FindImage(L"Jigglypuff");
-		mSpeed = 40;
+		mSpeed = 50;
 		mSongRadius = 180;
 	}
 	else
