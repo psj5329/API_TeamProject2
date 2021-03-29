@@ -36,7 +36,7 @@ void Voltorb::Init(int x, int y)
 	mCurrentAnimation->Play();
 
 	mExplosionTimer = 0.3;
-	mStartTimer = 3.5f;
+	mStartTimer = 60.5f;
 	mSleepTimer = 10.f;
 }
 

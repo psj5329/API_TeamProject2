@@ -144,7 +144,7 @@ void Sableye::MoveToOre()
 
 	if (!mIsRunAway)	// 플레이어한테 쫓길 때에는 아이템 훔치러 안가!
 	{
-		if (mItem == nullptr)	// 아이템 안훔쳤을 때
+		if (mTarget == nullptr)	// 아이템 안훔쳤을 때
 		{
 			for (int i = 0; i < mItemCount; ++i)
 			{
@@ -239,7 +239,7 @@ void Sableye::MoveToOre()
 			int x = rand() % 7 - 3;
 			int y = rand() % 7 - 3;
 
-			if (x == 0 || x == 6 || y == 0 || y == 6)	// 가생이 칸 선택
+			if (x == -3 || x == 3 || y == -3 || y == 3)	// 가생이 칸 선택
 			{
 				x += mX / TileSize;
 				y += mY / TileSize;
@@ -274,9 +274,10 @@ void Sableye::MoveToOre()
 		mY += -sinf(angle) * mSpeed * TIME->DeltaTime();
 
 		// 목표 지점 벡터의 0번칸에 도착했으면 지우고 한 칸씩 앞으로
+		
 		if ((int)(mX / 48) == (int)(((mPathFinderList[0]->GetX() + TileSize / 2) / 48))
-			&& (int)(mY / 48) == (int)(((mPathFinderList[0]->GetY() + TileSize / 2) / 48))
-			&& Math::GetDistance(mX, mY, mPathFinderList[0]->GetX() + TileSize / 2, mPathFinderList[0]->GetY() + TileSize / 2) <= 1.f)
+			&& (int)(mY / 48) == (int)(((mPathFinderList[0]->GetY() + TileSize / 2) / 48)))
+			//&& Math::GetDistance(mX, mY, mPathFinderList[0]->GetX() + TileSize / 2, mPathFinderList[0]->GetY() + TileSize / 2) <= 1.f)
 		{
 			mPathFinderList.erase(mPathFinderList.begin());
 

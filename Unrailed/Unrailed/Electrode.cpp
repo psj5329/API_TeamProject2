@@ -36,7 +36,7 @@ void Electrode::Init(int x, int y)
 	mCurrentAnimation->Play();
 
 
-	mStartTimer = 3.5f;
+	mStartTimer = 60.5f;
 	mSleepTimer = 10.f;
 }
 

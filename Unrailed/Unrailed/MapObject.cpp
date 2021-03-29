@@ -16,7 +16,7 @@ MapObject::MapObject(class Image* image, float x, float y, float sizeX, float si
 	mFrameIndexX = frameIndexX;
 	mFrameIndexY = frameIndexY;
 	mType = type;
-	mHp = 3;
+	mHp = 1;
 	mTimer = 0;
 	mActive = true;
 }
@@ -55,7 +55,6 @@ void MapObject::Render(HDC hdc)
 					mIsShaking = false;
 				}
 			}
-
 
 			CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, (int)mSizeX, (int)mSizeY);
 		}

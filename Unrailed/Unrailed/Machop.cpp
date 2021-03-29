@@ -39,7 +39,7 @@ void Machop::Init(int x, int y, int image)
 
 	mBagItemListPtr = mBag.GetBagItemListPtr();
 
-	mStartTimer = 3.5f;
+	mStartTimer = 60.5f;
 }
 
 void Machop::Release()
@@ -124,22 +124,22 @@ void Machop::Update()
 	}
 
 	//진화
-	int level = 1;
-	if (INPUT->GetKeyDown('Q'))
-	{
-		level = 1;
-		SetImage(level);
-	}
-	if (INPUT->GetKeyDown('W'))
-	{
-		level = 2;
-		SetImage(level);
-	}
-	if (INPUT->GetKeyDown('E'))
-	{
-		level = 3;
-		SetImage(level);
-	}
+	//int level = 1;
+	//if (INPUT->GetKeyDown('Q'))
+	//{
+	//	level = 1;
+	//	SetImage(level);
+	//}
+	//if (INPUT->GetKeyDown('W'))
+	//{
+	//	level = 2;
+	//	SetImage(level);
+	//}
+	//if (INPUT->GetKeyDown('E'))
+	//{
+	//	level = 3;
+	//	SetImage(level);
+	//}
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -389,63 +389,63 @@ void Machop::InterceptOre()
 {
 	if (mOreCount <= 5 && mState != State::Hurt)
 	{
-		if (INPUT->GetKeyDown('A'))
-		{
-			Ore* ore = new Ore;
-
-			mOreCount++;
-
-			ore->SetOreType(ItemType::Green);//그린
-
-			mOreList.push_back(ore);
-
-			mState = State::Intercept;
-			SetAnimation();
-
-			/////
-			///BagItem* bagItem = new BagItem();
-			///bagItem->Init(ItemName::ItemOre, ItemType::Green);
-			///mBagItemListPtr->push_back(bagItem);
-			/////
-		}
-		if (INPUT->GetKeyDown('S'))
-		{
-			Ore* ore = new Ore;
-
-			mOreCount++;
-
-			ore->SetOreType(ItemType::Blue);//블루
-
-			mOreList.push_back(ore);
-
-			mState = State::Intercept;
-			SetAnimation();
-
-			/////
-			///BagItem* bagItem = new BagItem();
-			///bagItem->Init(ItemName::ItemOre, ItemType::Blue);
-			///mBagItemListPtr->push_back(bagItem);
-			/////
-		}
-		if (INPUT->GetKeyDown('D'))
-		{
-			Ore* ore = new Ore;
-
-			mOreCount++;
-
-			ore->SetOreType(ItemType::Red);//레드
-
-			mOreList.push_back(ore);
-
-			mState = State::Intercept;
-			SetAnimation();
-
-			/////
-			///BagItem* bagItem = new BagItem();
-			///bagItem->Init(ItemName::ItemOre, ItemType::Red);
-			///mBagItemListPtr->push_back(bagItem);
-			/////
-		}
+		//if (INPUT->GetKeyDown('A'))
+		//{
+		//	Ore* ore = new Ore;
+		//
+		//	mOreCount++;
+		//
+		//	ore->SetOreType(ItemType::Green);//그린
+		//
+		//	mOreList.push_back(ore);
+		//
+		//	mState = State::Intercept;
+		//	SetAnimation();
+		//
+		//	/////
+		//	///BagItem* bagItem = new BagItem();
+		//	///bagItem->Init(ItemName::ItemOre, ItemType::Green);
+		//	///mBagItemListPtr->push_back(bagItem);
+		//	/////
+		//}
+		//if (INPUT->GetKeyDown('S'))
+		//{
+		//	Ore* ore = new Ore;
+		//
+		//	mOreCount++;
+		//
+		//	ore->SetOreType(ItemType::Blue);//블루
+		//
+		//	mOreList.push_back(ore);
+		//
+		//	mState = State::Intercept;
+		//	SetAnimation();
+		//
+		//	/////
+		//	///BagItem* bagItem = new BagItem();
+		//	///bagItem->Init(ItemName::ItemOre, ItemType::Blue);
+		//	///mBagItemListPtr->push_back(bagItem);
+		//	/////
+		//}
+		//if (INPUT->GetKeyDown('D'))
+		//{
+		//	Ore* ore = new Ore;
+		//
+		//	mOreCount++;
+		//
+		//	ore->SetOreType(ItemType::Red);//레드
+		//
+		//	mOreList.push_back(ore);
+		//
+		//	mState = State::Intercept;
+		//	SetAnimation();
+		//
+		//	/////
+		//	///BagItem* bagItem = new BagItem();
+		//	///bagItem->Init(ItemName::ItemOre, ItemType::Red);
+		//	///mBagItemListPtr->push_back(bagItem);
+		//	/////
+		//}
 	}
 }
 
