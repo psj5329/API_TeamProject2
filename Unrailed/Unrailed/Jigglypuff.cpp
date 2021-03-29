@@ -321,9 +321,44 @@ void Jigglypuff::StartSearchingMike(int MikeX, int MikeY)
 	GameObject* mike = OBJECTMANAGER->FindObject("Mike");
 	mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, mIndexX, mIndexY, MikeX, MikeY);
 
-	mState = JigglyState::Move;
-	SetAnimation();
 
+	if ((int)(mX / 48) > (int)((mPathFinderList[0]->GetX() + TileSize / 2) / TileSize))
+	{
+		if (mState != JigglyState::Move || mDirection != Direction::Left)
+		{
+			mState = JigglyState::Move;
+			mDirection = Direction::Left;
+			SetAnimation();
+		}
+	}
+	else if ((int)(mX / TileSize) < (int)((mPathFinderList[0]->GetX() + TileSize / 2) / TileSize))
+	{
+		if (mState != JigglyState::Move || mDirection != Direction::Right)
+		{
+			mState = JigglyState::Move;
+			mDirection = Direction::Right;
+			SetAnimation();
+		}
+	}
+
+	if ((int)(mY / TileSize) > (int)((mPathFinderList[0]->GetY() + TileSize / 2) / TileSize))
+	{
+		if (mState != JigglyState::Move || mDirection != Direction::Up)
+		{
+			mState = JigglyState::Move;
+			mDirection = Direction::Up;
+			SetAnimation();
+		}
+	}
+	else if ((int)(mY / TileSize < (int)((mPathFinderList[0]->GetY() + TileSize / 2) / 48)))
+	{
+		if (mState != JigglyState::Move || mDirection != Direction::Down)
+		{
+			mState = JigglyState::Move;
+			mDirection = Direction::Down;
+			SetAnimation();
+		}
+	}
 	
 }
 
