@@ -25,7 +25,6 @@ void Electrode::Init(int x, int y)
 	//Electrode 변수
 	mDirection = Direction::Right;
 	mState = State::Sleep;
-	mSpeed = 100.f;
 
 	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, this);
 
@@ -36,7 +35,7 @@ void Electrode::Init(int x, int y)
 	mCurrentAnimation->Play();
 
 
-	mStartTimer = 10.5f;
+	mStartTimer = 30.f;
 	mSleepTimer = 100.f;
 
 	//mDustFrameTime = 0;
@@ -60,7 +59,7 @@ void Electrode::Update()
 	int indexY = mY / TileSize;
 
 	//시작 쿨타임
-	if (mStartTimer == 10.5)
+	if (mStartTimer == 30)
 	{
 		if (mState == State::Sleep)
 		{
@@ -212,7 +211,7 @@ void Electrode::Render(HDC hdc)
 	
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
-	GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);
+	//GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);
 }
 
 void Electrode::ReadyAnimation()

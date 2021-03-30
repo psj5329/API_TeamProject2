@@ -27,7 +27,6 @@ void Abra::Init(int x, int y, int image)
 	//Abra 변수
 	mDirection = Direction::Right;
 	mState = State::Sleep;
-	mSpeed = 100.f;
 	mSynthesisCoolTime = 0;
 	mIsSynthesis = false;
 	mTrailCount = 0;
@@ -44,7 +43,7 @@ void Abra::Init(int x, int y, int image)
 
 	mBagItemListPtr = mBag.GetBagItemListPtr();
 
-	mStartTimer = 10.5f;
+	mStartTimer = 30.f;
 }
 
 void Abra::Release()
@@ -71,7 +70,7 @@ void Abra::Update()
 
 
 	//시작 쿨타임
-	if (mStartTimer == 10.5)
+	if (mStartTimer == 30)
 	{
 		if (mState == State::Sleep)
 		{
@@ -386,7 +385,7 @@ void Abra::SetAnimation()
 void Abra::SynthesisOre()
 {
 	ItemType type = ItemType::None;
-	if (mState != State::Hurt && mTrailCount <= 2 && mMachop->GetOreCount() >= 2 && mIsSynthesis == false && mOreBroken == false)
+	if (mState != State::Sleep && mState != State::Hurt && mTrailCount <= 2 && mMachop->GetOreCount() >= 2 && mIsSynthesis == false && mOreBroken == false)
 	{
 		mState = State::Synthesis;
 		SetAnimation();

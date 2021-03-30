@@ -177,21 +177,21 @@ void Train::SetSpeed()
 	if (mDirection == Direction::Down)
 	{
 		mSpeedX = 0;
-		mSpeedY = 20.f;// 100.f;
+		mSpeedY = 10.f;// 100.f;
 	}
 	if (mDirection == Direction::Up)
 	{
 		mSpeedX = 0;
-		mSpeedY = -20.f;// 100.f;
+		mSpeedY = -10.f;// -100.f;
 	}
 	if (mDirection == Direction::Left)
 	{
-		mSpeedX = -20.f;// 100.f;
+		mSpeedX = -10.f;// -100.f;
 		mSpeedY = 0;
 	}
 	if (mDirection == Direction::Right)
 	{
-		mSpeedX = 20.f;// 100.f;
+		mSpeedX = 10.f;// 100.f;
 		mSpeedY = 0;
 	}
 }

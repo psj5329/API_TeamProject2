@@ -26,7 +26,6 @@ void Machop::Init(int x, int y, int image)
 	//Machop 변수
 	mDirection = Direction::Right;
 	mState = State::Sleep;
-	mSpeed = 100.f;
 	mOreCount = 0;
 
 	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, this);
@@ -39,7 +38,7 @@ void Machop::Init(int x, int y, int image)
 
 	mBagItemListPtr = mBag.GetBagItemListPtr();
 
-	mStartTimer = 10.5f;
+	mStartTimer = 30.f;
 }
 
 void Machop::Release()
@@ -62,10 +61,10 @@ void Machop::Update()
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
-	InterceptOre();
+	//InterceptOre();
 
 	//시작 쿨타임
-	if (mStartTimer == 10.5)
+	if (mStartTimer == 30)
 	{
 		if (mState == State::Sleep)
 		{
@@ -385,7 +384,7 @@ void Machop::SetAnimation()
 	}
 }
 
-void Machop::InterceptOre()
+/*void Machop::InterceptOre()
 {
 	if (mOreCount <= 5 && mState != State::Hurt)
 	{
@@ -456,7 +455,7 @@ void Machop::InterceptOre()
 			/////
 		}
 	}
-}
+}*/
 
 void Machop::InterceptOre(ItemType itemType)
 {
@@ -472,9 +471,12 @@ void Machop::InterceptOre(ItemType itemType)
 
 		//mOreList.push_back(ore);
 		mBagItemListPtr->push_back(bagItem);
-
-		mState = State::Intercept;
-		SetAnimation();
+		
+		if (mState != State::Sleep)
+		{
+			mState = State::Intercept;
+			SetAnimation();
+		}
 
 		/////
 		///BagItem* bagItem = new BagItem();

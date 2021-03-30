@@ -23,7 +23,6 @@ protected:
 
 	State mState;
 	Direction mDirection;
-	float mSpeed;
 	float mSpeedX;
 	float mSpeedY;
 	float mSynthesisCoolTime;
