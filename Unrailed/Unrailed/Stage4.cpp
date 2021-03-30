@@ -63,6 +63,7 @@ void Stage4::Init()
 
 void Stage4::Release()
 {
+	OBJECTMANAGER->GetPlayer()->EmptyInven();
 	OBJECTMANAGER->ReleaseInScene();
 	mJigglypuff = NULL;
 	SOUNDMANAGER->Stop(L"Steampipe Sonata");

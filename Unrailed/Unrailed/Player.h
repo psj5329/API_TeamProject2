@@ -160,6 +160,8 @@ public:
 	void CheckRange();
 	void ChangeCurrentAnimation();
 
+	void EmptyInven();
+
 	void RenderTestText(HDC hdc);
 
 public:

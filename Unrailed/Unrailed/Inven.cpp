@@ -10,6 +10,15 @@ void Inven::Init()
 	mHiddenItem = 0;
 }
 
+void Inven::Release()
+{
+	for (int i = 0; i < mBagItemList.size(); ++i)
+	{
+		mBagItemList.erase(mBagItemList.begin() + i);
+		--i;
+	}
+}
+
 void Inven::Update()
 {
 	for (int i = 0; i < mBagItemList.size(); ++i)

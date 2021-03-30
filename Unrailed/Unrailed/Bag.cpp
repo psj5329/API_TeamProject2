@@ -2,6 +2,15 @@
 #include "Bag.h"
 #include "BagItem.h"
 
+void Bag::Release()
+{
+	for (int i = 0; i < mBagItemList.size(); ++i)
+	{
+		mBagItemList.erase(mBagItemList.begin() + i);
+		--i;
+	}
+}
+
 void Bag::Update(int ownerX, int ownerY)
 {
 	for (int i = 0; i < mBagItemList.size(); ++i)

@@ -70,6 +70,7 @@ void Stage5::Init()
 
 void Stage5::Release()
 {
+	OBJECTMANAGER->GetPlayer()->EmptyInven();
 	OBJECTMANAGER->ReleaseInScene();
 	mJigglypuff = NULL;
 	SOUNDMANAGER->Stop(L"Have an Ice Day");

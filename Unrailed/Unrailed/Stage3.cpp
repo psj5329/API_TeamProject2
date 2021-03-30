@@ -43,6 +43,7 @@ void Stage3::Init()
 
 void Stage3::Release()
 {
+	OBJECTMANAGER->GetPlayer()->EmptyInven();
 	OBJECTMANAGER->ReleaseInScene();
 	mJigglypuff = NULL;
 	SOUNDMANAGER->Stop(L"Blazing Beats");

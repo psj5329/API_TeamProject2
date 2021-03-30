@@ -47,6 +47,7 @@ void Stage1::Init()
 
 void Stage1::Release()
 {
+	OBJECTMANAGER->GetPlayer()->EmptyInven();
 	OBJECTMANAGER->ReleaseInScene();
 	SOUNDMANAGER->Stop(L"The First Track");
 }
@@ -162,12 +163,6 @@ void Stage1::Update()
 			if (GAMEEVENTMANAGER->GetEventCount() == 0)
 				SCENEMANAGER->LoadScene(L"SceneSelect");
 		}
-	}
-
-	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
-	if ((*trailListPtr)[9][20]->GetIsTail())
-	{
-		mIsClear = true;
 	}
 
 	GAMEEVENTMANAGER->Update();
