@@ -17,6 +17,11 @@
 #include "MapToolReady.h"
 #include "MainScene.h"
 #include "SceneSelect.h"
+#include "Stage1.h"
+#include "Stage2.h"
+#include "Stage3.h"
+#include "Stage4.h"
+#include "Stage5.h"
 
 #include "FileSystemHelper.h"
 
@@ -140,6 +145,12 @@ void MainGame::AddScene()
 	SceneManager::GetInstance()->AddScene(L"Scene6", new Scene6);
 	SceneManager::GetInstance()->AddScene(L"MapToolReady", new MapToolReady);
 
+	SCENEMANAGER->AddScene(L"Stage1", new Stage1);
+	SCENEMANAGER->AddScene(L"Stage2", new Stage2);
+	SCENEMANAGER->AddScene(L"Stage3", new Stage3);
+	SCENEMANAGER->AddScene(L"Stage4", new Stage4);
+	SCENEMANAGER->AddScene(L"Stage5", new Stage5);
+
 	SCENEMANAGER->LoadScene(L"LoadingScene");
 }
 
@@ -220,7 +231,7 @@ void MainGame::LoadSoundResources(LoadingScene* scene)
 		//wstring str = wcstok_s(&strPath[0], L"2", &ptr);
 		size_t strSize = strPath.find(L"2\\Unrailed\\Unrailed");
 		strPath.erase(strSize);
-		strPath.append(L"2\\Unrailed\\Resources\\*.*");
+		strPath.append(L"2\\Unrailed\\Sound\\*.*");
 		FileSystemHelper::GetAllFile(strPath, FileType::SOUND);
 	}
 

@@ -26,20 +26,24 @@ protected:
 	float mSpeed;
 	float mSpeedX;
 	float mSpeedY;
+	float mSynthesisCoolTime;
+	float mExplosionTimer;
+	float mStartTimer;
+	float mSleepTimer;
+	float mDustFrameTime;
+	float mAlpha;
+
 	int mTargetX;
 	int mTargetY;
 	int mCurrentX;
 	int mCurrentY;
-	float mSynthesisCoolTime;
+	int mTrailCount;
+	int mOreCount;
+	
+	bool mOreBroken;
 	bool mIsExplode;
 	bool mIsHurt;
 	bool mIsSynthesis;
-	int mTrailCount;
-	int mOreCount;
-	bool mOreBroken;
-	float mExplosionTimer;
-	float mStartTimer;
-	float mSleepTimer;
 
 	class Image* mCurrentImage;
 	class Image* mImage;

@@ -51,6 +51,7 @@ public:
 	void Render(HDC hdc, int x, int y);
 	void Render(HDC hdc, int x, int y, int tempX, int tempY, int tempWidth, int tempHeight);
 	void FrameRender(HDC hdc, int x, int y, int frameX, int frameY);
+	void FrameRender(HDC hdc, int x, int y, int frameX1, int frameY1, int frameX2, int frameY2);
 	void AlphaRender(HDC hdc,int x, int y, float alpha);
 	void AlphaFrameRender(HDC hdc, int x, int y, int frameX, int frameY, float alpha);
 	void ScaleRender(HDC hdc, int x, int y, int width, int height);

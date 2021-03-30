@@ -41,5 +41,9 @@ public:
 	void VolumeEffectBar();
 	void VolumeBackgroundButton();
 	void VolumeBackgroundBar();
+
+	virtual void InitTrain() {};
+	virtual void PlaceTrail() {};
+	virtual void InitJigglypuff() {};
 };
 

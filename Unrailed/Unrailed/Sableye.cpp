@@ -12,8 +12,8 @@ void Sableye::Init()
 {
 	mImage = IMAGEMANAGER->FindImage(L"Sableye");
 	mName = "Sableye";
-	mX = 48 * 8 + 24;
-	mY = 48 * 8 + 24;
+	mX = 48 * 14 + 24;
+	mY = 48 * 14 + 24;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
