@@ -46,6 +46,7 @@ void Stage2::Init()
 
 void Stage2::Release()
 {
+	OBJECTMANAGER->GetPlayer()->EmptyInven();
 	OBJECTMANAGER->ReleaseInScene();
 	mJigglypuff = NULL;
 	SOUNDMANAGER->Stop(L"Jolly Jolting");
