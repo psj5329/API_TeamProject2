@@ -17,10 +17,6 @@ class Scene1 : public Scene
 	Voltorb* mVoltorb;
 	Jigglypuff* mJigglypuff;
 
-	bool mIsClear;
-	bool mIsClearFont;
-	bool mIsGameOver;
-	bool mIsGameOverFont;
 
 public:
 	void Init()override;

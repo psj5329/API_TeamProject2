@@ -12,6 +12,9 @@ protected:
 	Mode mMode;
 	GameObject* mTarget;		//쫓아가야할 타겟
 
+	float mMaxX;	// 카메라가 맵 밖으로 못나가게...
+	float mMaxY;
+
 	float mMoveSpeed;
 public:
 	void Init()override; 
@@ -19,7 +22,7 @@ public:
 	void Update()override; 
 	void Render(HDC hdc)override;
 
-	void SetTarget(GameObject* target) { mTarget = target; }
+	void SetTarget(GameObject* target) { mTarget = target; mY = mTarget->GetY(); }
 	void ChangeMode(Mode mode) { mMode = mode; }
 public:
 	void Render(HDC hdc, class Image* image, int x, int y);
