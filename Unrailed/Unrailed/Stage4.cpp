@@ -28,6 +28,7 @@ void Stage4::Init()
 	OBJECTMANAGER->GetPlayer()->SetTileCount(x, y);
 	OBJECTMANAGER->GetPlayer()->SetTileListPtr(mTileMap->GetTileListPtr());
 	OBJECTMANAGER->GetPlayer()->SetMapObjectListPtr(mTileMap->GetObjectListPtr());
+	OBJECTMANAGER->GetPlayer()->SetTrailManagerPtr(mTrailManager);
 
 	Sableye* sableye1 = new Sableye;
 	sableye1->Init();
@@ -78,6 +79,16 @@ void Stage4::Update()
 
 	if (INPUT->GetKeyDown(VK_ESCAPE))
 		mIsPause = !mIsPause;
+
+	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+	int x = mElectrode->GetX() / TileSize;
+	int y = mElectrode->GetY() / TileSize;
+
+	Trail* currentTrail = (*trailListPtr)[y][x];
+	if (currentTrail->GetisFinish())
+		mIsClear = true;
+	else if (!mElectrode->CheckNextTrailType())
+		mIsGameOver = true;
 
 	if (mIsPause && !mIsOption)
 	{

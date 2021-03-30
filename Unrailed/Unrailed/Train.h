@@ -81,4 +81,5 @@ public:
 	
 	bool GetIsHurt() { return mIsHurt; }
 	bool GetIsExplode() { return mIsExplode; }
+	Direction GetDirection() { return mDirection; }
 };
