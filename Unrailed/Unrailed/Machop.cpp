@@ -39,7 +39,7 @@ void Machop::Init(int x, int y, int image)
 
 	mBagItemListPtr = mBag.GetBagItemListPtr();
 
-	mStartTimer = 3.5f;
+	mStartTimer = 10.5f;
 }
 
 void Machop::Release()
@@ -65,7 +65,7 @@ void Machop::Update()
 	InterceptOre();
 
 	//시작 쿨타임
-	if (mStartTimer == 3.5)
+	if (mStartTimer == 10.5)
 	{
 		if (mState == State::Sleep)
 		{

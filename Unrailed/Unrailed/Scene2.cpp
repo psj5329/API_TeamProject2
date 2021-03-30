@@ -18,7 +18,7 @@ void Scene2::Init()
 	mTrailManager->InsertTrail(6, 0, ItemType::Green, 3);
 	mTrailManager->InsertTrail(6, 1, ItemType::Green, 3);
 	mTrailManager->InsertTrail(6, 2, ItemType::Green, 3);
-	mTrailManager->InsertTrail(6, 3, ItemType::Green, 3);
+	//mTrailManager->InsertTrail(6, 3, ItemType::Green, 3);//¹Ù·Î ¿· Å¸ÀÏ
 	mTrailManager->InsertTrail(6, 4, ItemType::Green, 1);
 	mTrailManager->InsertTrail(5, 4, ItemType::Green, 1);
 	mTrailManager->InsertTrail(4, 4, ItemType::Green, 3);
@@ -35,10 +35,7 @@ void Scene2::Init()
 
 	//Çª¸°
 	mJigglypuff = new Jigglypuff;
-	mJigglypuff->Init();
-	mJigglypuff->SetX(200);
-	mJigglypuff->SetY(WINSIZEY / 2);
-	//OBJECTMANAGER->AddObject(ObjectLayer::ITEM, mJigglypuff);
+	mJigglypuff->Init(200, WINSIZEY / 2, false);
 
 	//¿­Â÷
 	vector <vector <Trail*>>* temp = mTrailManager->GetTrailListPtr();

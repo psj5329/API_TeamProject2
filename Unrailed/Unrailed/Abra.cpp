@@ -44,7 +44,7 @@ void Abra::Init(int x, int y, int image)
 
 	mBagItemListPtr = mBag.GetBagItemListPtr();
 
-	mStartTimer = 3.5f;
+	mStartTimer = 10.5f;
 }
 
 void Abra::Release()
@@ -71,7 +71,7 @@ void Abra::Update()
 
 
 	//시작 쿨타임
-	if (mStartTimer == 3.5)
+	if (mStartTimer == 10.5)
 	{
 		if (mState == State::Sleep)
 		{
