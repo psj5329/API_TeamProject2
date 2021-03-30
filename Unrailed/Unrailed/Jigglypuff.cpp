@@ -316,8 +316,10 @@ void Jigglypuff::StartSearchingMike(int MikeX, int MikeY)
 		i--;
 	}
 
-	mIndexX = (mX + (CAMERAMANAGER->GetMainCamera()->GetX() - WINSIZEX / 2)) / TileSize;
-	mIndexY = (mY + (CAMERAMANAGER->GetMainCamera()->GetY() - WINSIZEY / 2)) / TileSize;
+	/*mIndexX = (mX + (CAMERAMANAGER->GetMainCamera()->GetX() - WINSIZEX / 2)) / TileSize;
+	mIndexY = (mY + (CAMERAMANAGER->GetMainCamera()->GetY() - WINSIZEY / 2)) / TileSize;*/
+	mIndexX = mX / TileSize;
+	mIndexY = mY / TileSize;
 	GameObject* mike = OBJECTMANAGER->FindObject("Mike");
 	mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, mIndexX, mIndexY, MikeX, MikeY);
 

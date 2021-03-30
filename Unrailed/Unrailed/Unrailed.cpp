@@ -9,6 +9,9 @@ wstring _className = L"Unrailed";	//유니코드는 아스키코드랑 다르게
 
 POINT _mousePosition;	//마우스 좌표
 
+float _BackgroundSound;
+float _EffectSound;
+
 MainGame* _mainGame = NULL;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

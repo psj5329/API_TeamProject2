@@ -22,6 +22,9 @@ void Stage4::Init()
 	mTrailManager = new TrailManager();
 	mTrailManager->Init(y, x);
 
+	mSizeX = x * TileSize;
+	mSizeY = y * TileSize;
+
 	//플레이어 설정
 	OBJECTMANAGER->GetPlayer()->SetX(9.5 * TileSize);
 	OBJECTMANAGER->GetPlayer()->SetY(11.5 * TileSize);
@@ -58,7 +61,7 @@ void Stage4::Init()
 	camera->ChangeMode(Camera::Mode::Follow);
 	camera->SetTarget(mElectrode);
 
-	SOUNDMANAGER->Play(L"Steampipe Sonata", 0.2f);
+	SOUNDMANAGER->Play(L"Steampipe Sonata", _BackgroundSound);
 }
 
 void Stage4::Release()
@@ -74,7 +77,7 @@ void Stage4::Update()
 	if (SOUNDMANAGER->GetPosition(L"Steampipe Sonata") >= SOUNDMANAGER->GetWholePosition(L"Steampipe Sonata"))
 	{
 		SOUNDMANAGER->Stop(L"Steampipe Sonata");
-		SOUNDMANAGER->Play(L"Steampipe Sonata", 0.2f);
+		SOUNDMANAGER->Play(L"Steampipe Sonata", _BackgroundSound);
 	}
 
 	if (INPUT->GetKeyDown(VK_ESCAPE))
@@ -89,6 +92,14 @@ void Stage4::Update()
 		mIsClear = true;
 	else if (!mElectrode->CheckNextTrailType())
 		mIsGameOver = true;
+
+	if (!mIsPause && !mIsClear && !mIsGameOver)
+	{
+		mTileMap->Update();
+		mTrailManager->Update();
+		OBJECTMANAGER->Update();
+		CAMERAMANAGER->GetMainCamera()->Update();
+	}
 
 	if (mIsPause && !mIsOption)
 	{
@@ -118,14 +129,6 @@ void Stage4::Update()
 		}
 		if (mVolumeBackgroundButton != nullptr)
 			mVolumeBackgroundButton->Update();
-	}
-
-	if (!mIsPause && !mIsClear && !mIsGameOver)
-	{
-		mTileMap->Update();
-		mTrailManager->Update();
-		OBJECTMANAGER->Update();
-		CAMERAMANAGER->GetMainCamera()->Update();
 	}
 
 	if (mIsClear)
@@ -169,14 +172,14 @@ void Stage4::Render(HDC hdc)
 	{
 		if (!mIsOption)
 		{
-			CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mPauseWindow, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
+			mPauseWindow->ScaleRender(hdc, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
 			mContinueButton->ScaleRender(hdc, 0.9f, 0.9f);
 			mOptionButton->ScaleRender(hdc, 0.9f, 0.9f);
 			mMainButton->ScaleRender(hdc, 0.9f, 0.9f);
 		}
 		else
 		{
-			CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mPauseOptionWindow, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
+			mPauseOptionWindow->ScaleRender(hdc, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
 			mXButton->ScaleRender(hdc, 0.9f, 0.9f);
 			mVolumeEffectBar->Render(hdc);
 			mVolumeEffectButton->Render(hdc);

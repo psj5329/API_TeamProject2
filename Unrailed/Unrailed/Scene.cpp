@@ -91,10 +91,14 @@ void Scene::VolumeBackgroundButton()
 	{
 		mVolumeBackgroundButton->SetX(_mousePosition.x);
 
-		if (mVolumeBackgroundButton->GetX() <= mVolumeBackgroundBar->GetX() - mVolumeBackgroundBar->GetSizeX() / 2 + mVolumeBackgroundButton->GetSizeX() / 2)
-			mVolumeBackgroundButton->SetX(mVolumeBackgroundBar->GetX() - mVolumeBackgroundBar->GetSizeX() / 2 + mVolumeBackgroundButton->GetSizeX() / 2);
-		else if (mVolumeBackgroundButton->GetX() >= mVolumeBackgroundBar->GetX() + mVolumeBackgroundBar->GetSizeX() / 2 - mVolumeBackgroundButton->GetSizeX() / 2)
-			mVolumeBackgroundButton->SetX(mVolumeBackgroundBar->GetX() + mVolumeBackgroundBar->GetSizeX() / 2 - mVolumeBackgroundButton->GetSizeX() / 2);
+		if (mVolumeBackgroundButton->GetX() <= mVolumeBackgroundBar->GetX() - mVolumeBackgroundBar->GetSizeX() / 2/* + mVolumeBackgroundButton->GetSizeX() / 2*/)
+			mVolumeBackgroundButton->SetX(mVolumeBackgroundBar->GetX() - mVolumeBackgroundBar->GetSizeX() / 2/* + mVolumeBackgroundButton->GetSizeX() / 2*/);
+		else if (mVolumeBackgroundButton->GetX() >= mVolumeBackgroundBar->GetX() + mVolumeBackgroundBar->GetSizeX() / 2/* - mVolumeBackgroundButton->GetSizeX() / 2*/)
+			mVolumeBackgroundButton->SetX(mVolumeBackgroundBar->GetX() + mVolumeBackgroundBar->GetSizeX() / 2/* - mVolumeBackgroundButton->GetSizeX() / 2*/);
+
+		_BackgroundSound = (mVolumeBackgroundButton->GetX() - (mVolumeBackgroundBar->GetX() - mVolumeBackgroundBar->GetSizeX() / 2)) / mVolumeBackgroundBar->GetSizeX();
+		wstring name = SOUNDMANAGER->GetNowPlaying();
+		SOUNDMANAGER->SetVolume(name, _BackgroundSound);
 	}
 }
 

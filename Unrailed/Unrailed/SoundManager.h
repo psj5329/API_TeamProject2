@@ -34,6 +34,7 @@ public:		// 메뉴랑 일시정지 만들면 옵션에서 사운드 조절 시 필요할 것
 	float GetVolume(const wstring& keyName);
 	float GetPosition(const wstring& keyName);			// 현재 위치
 	float GetWholePosition(const wstring& keyName);		// 전체 길이
+	wstring GetNowPlaying() { return mActiveChannels.begin()->SoundName; }
 
 	void SetVolume(const wstring& keyName, float volume);
 	void SetPosition(const wstring& keyName, float time);

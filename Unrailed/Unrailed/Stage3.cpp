@@ -18,6 +18,9 @@ void Stage3::Init()
 	int x = mTileMap->GetXTileCount();
 	int y = mTileMap->GetYTileCount();
 
+	mSizeX = x * TileSize;
+	mSizeY = y * TileSize;
+
 	mTrailManager = new TrailManager();
 	mTrailManager->Init(y, x);
 
@@ -38,7 +41,7 @@ void Stage3::Init()
 	camera->ChangeMode(Camera::Mode::Follow);
 	camera->SetTarget(mElectrode);
 
-	SOUNDMANAGER->Play(L"Blazing Beats", 0.2f);
+	SOUNDMANAGER->Play(L"Blazing Beats", _BackgroundSound);
 }
 
 void Stage3::Release()
@@ -51,10 +54,10 @@ void Stage3::Release()
 void Stage3::Update()
 {
 	SOUNDMANAGER->Update();
-	if (SOUNDMANAGER->GetPosition(L"Blazing Beats") >= SOUNDMANAGER->GetWholePosition(L"Roll Mart"))
+	if (SOUNDMANAGER->GetPosition(L"Blazing Beats") >= SOUNDMANAGER->GetWholePosition(L"Blazing Beats"))
 	{
 		SOUNDMANAGER->Stop(L"Blazing Beats");
-		SOUNDMANAGER->Play(L"Blazing Beats", 0.2f);
+		SOUNDMANAGER->Play(L"Blazing Beats", _BackgroundSound);
 	}
 
 	if (INPUT->GetKeyDown(VK_ESCAPE))
@@ -69,6 +72,14 @@ void Stage3::Update()
 		mIsClear = true;
 	else if (!mElectrode->CheckNextTrailType())
 		mIsGameOver = true;
+
+	if (!mIsPause && !mIsClear && !mIsGameOver)
+	{
+		mTileMap->Update();
+		mTrailManager->Update();
+		OBJECTMANAGER->Update();
+		CAMERAMANAGER->GetMainCamera()->Update();
+	}
 
 	if (mIsPause && !mIsOption)
 	{
@@ -98,14 +109,6 @@ void Stage3::Update()
 		}
 		if (mVolumeBackgroundButton != nullptr)
 			mVolumeBackgroundButton->Update();
-	}
-
-	if (!mIsPause && !mIsClear && !mIsGameOver)
-	{
-		mTileMap->Update();
-		mTrailManager->Update();
-		OBJECTMANAGER->Update();
-		CAMERAMANAGER->GetMainCamera()->Update();
 	}
 
 	if (mIsClear)
@@ -149,14 +152,14 @@ void Stage3::Render(HDC hdc)
 	{
 		if (!mIsOption)
 		{
-			CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mPauseWindow, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
+			mPauseWindow->ScaleRender(hdc, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
 			mContinueButton->ScaleRender(hdc, 0.9f, 0.9f);
 			mOptionButton->ScaleRender(hdc, 0.9f, 0.9f);
 			mMainButton->ScaleRender(hdc, 0.9f, 0.9f);
 		}
 		else
 		{
-			CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mPauseOptionWindow, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
+			mPauseOptionWindow->ScaleRender(hdc, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
 			mXButton->ScaleRender(hdc, 0.9f, 0.9f);
 			mVolumeEffectBar->Render(hdc);
 			mVolumeEffectButton->Render(hdc);

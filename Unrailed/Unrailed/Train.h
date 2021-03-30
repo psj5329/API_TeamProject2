@@ -81,4 +81,9 @@ public:
 	bool GetIsHurt() { return mIsHurt; }
 	bool GetIsExplode() { return mIsExplode; }
 	Direction GetDirection() { return mDirection; }
+
+	float GetSpeedX() { return mSpeedX; }
+	float GetSpeedY() { return mSpeedY; }
+	void SetSpeedX(float speedX) { mSpeedX = speedX; }
+	void SetSpeedY(float speedY) { mSpeedY = speedY; }
 };

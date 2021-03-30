@@ -26,7 +26,10 @@ void MainScene::Init()
 
 	mIsShowWindow = false;
 
-	SOUNDMANAGER->Play(L"Roll Mart", 0.05f);
+	_BackgroundSound = 0.2f;
+	_EffectSound = 0.2f;
+
+	SOUNDMANAGER->Play(L"Roll Mart", _BackgroundSound);
 }
 
 void MainScene::Release()
@@ -44,7 +47,7 @@ void MainScene::Update()
 	if (SOUNDMANAGER->GetPosition(L"Roll Mart") >= SOUNDMANAGER->GetWholePosition(L"Roll Mart"))
 	{
 		SOUNDMANAGER->Stop(L"Roll Mart");
-		SOUNDMANAGER->Play(L"Roll Mart", 0.05f);
+		SOUNDMANAGER->Play(L"Roll Mart", _BackgroundSound);
 	}
 
 	if (!mIsShowWindow)
