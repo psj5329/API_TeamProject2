@@ -453,6 +453,11 @@ void Player::SafeDeleteAnimation()
 	SafeDelete(mRDAttackCharAnimation);
 	SafeDelete(mLUAttackCharAnimation);
 	SafeDelete(mRUAttackCharAnimation);
+
+	SafeDelete(mChangeDittoAnimation);
+	SafeDelete(mChangeChikoAnimation);
+	SafeDelete(mChangeTotoAnimation);
+	SafeDelete(mChangeCharAnimation);
 }
 
 void Player::InputDirectionKey()
@@ -1628,6 +1633,11 @@ void Player::ChangeCurrentAnimation()
 			mCurrentAnimation->Play();
 		}
 	}
+}
+
+void Player::EmptyInven()
+{
+	mInven->Release();
 }
 
 void Player::InputLKey()

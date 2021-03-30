@@ -47,6 +47,7 @@ void Stage1::Init()
 
 void Stage1::Release()
 {
+	OBJECTMANAGER->GetPlayer()->EmptyInven();
 	OBJECTMANAGER->ReleaseInScene();
 	SOUNDMANAGER->Stop(L"The First Track");
 }
