@@ -1670,7 +1670,7 @@ void Player::RenderTestText(HDC hdc)
 {
 	RECT cam = CAMERAMANAGER->GetMainCamera()->GetRect();
 
-	if (mIsInfoOn)
+	/*if (mIsInfoOn)
 	{
 		wstring strTile = L"tile x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
 		TextOut(hdc, (int)mX + 25 - cam.left, (int)mY - cam.top, strTile.c_str(), (int)strTile.length());
@@ -1726,5 +1726,5 @@ void Player::RenderTestText(HDC hdc)
 		wstring strActive = to_wstring(i) + L": " + strName + strType;
 
 		TextOut(hdc, 550, (int)372 + 22 * i, strActive.c_str(), (int)strActive.length());
-	}
+	}*/
 }

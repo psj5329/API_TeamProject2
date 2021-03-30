@@ -3,6 +3,7 @@
 
 #include "Image.h"
 #include "Animation.h"
+#include "Player.h"
 
 void LoadingScene::AddLoadFunc(const function<void(void)>& func)
 {
@@ -48,7 +49,7 @@ void LoadingScene::Update()
 
 	if (mIsEndLoading)
 	{
-		//if (INPUT->GetKeyDown(VK_RETURN))
+		if (INPUT->GetKeyDown(VK_RETURN))
 			SCENEMANAGER->LoadScene(L"MainScene");
 	}
 
@@ -57,6 +58,14 @@ void LoadingScene::Update()
 		if(!mIsEndLoading)
 			mImage = IMAGEMANAGER->FindImage(L"LoadingEndTrain");
 		mIsEndLoading = true;
+
+		if (OBJECTMANAGER->GetObjectList(ObjectLayer::PLAYER).size() == 0)
+		{
+			Player* player = new Player("Player", TileSize * 5.5, TileSize * 9.5);
+			player->Init();
+			OBJECTMANAGER->AddObject(ObjectLayer::PLAYER, player);
+		}
+
 		return;
 	}
 

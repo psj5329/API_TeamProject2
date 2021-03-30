@@ -21,6 +21,15 @@ protected:
 	static float mVolumeEffect;
 	static float mVolumeBackground;
 
+	// 스테이지 종료 관련
+	bool mIsClear;
+	bool mIsClearFont;
+	bool mIsGameOver;
+	bool mIsGameOverFont;
+
+	float mSizeX;
+	float mSizeY;
+
 public:
 	virtual void Init() = 0;
 	virtual void Release() = 0;
@@ -45,5 +54,10 @@ public:
 	virtual void InitTrain() {};
 	virtual void PlaceTrail() {};
 	virtual void InitJigglypuff() {};
+
+	float GetSizeX() { return mSizeX; }
+	float GetSizeY() { return mSizeY; }
+	void SetSizeX(float x) { mSizeX = x; }
+	void SetSizeY(float y) { mSizeY = y; }
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+class Sableye;
 class Stage5 :
 	public Scene
 {
@@ -13,6 +14,7 @@ class Stage5 :
 	class Electrode* mElectrode;
 	class Abra* mAbra;
 	class Machop* mMachop;
+	vector<Sableye*> mEnemyVec;
 
 public:
 	void Init()override;

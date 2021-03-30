@@ -19,7 +19,7 @@ void SceneSelect::Init()
 	mBackButton = new Button(BackButton, WINSIZEX / 2 + 590, WINSIZEY / 2 - 310, BackButton->GetWidth(), BackButton->GetHeight(), bind(&SceneSelect::BackButton, this));
 
 	mRound = 1;
-	mMaxRound = 4;
+	mMaxRound = 5;
 }
 
 void SceneSelect::Release()

@@ -65,7 +65,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 
 	_mainGame = new MainGame;
 	_mainGame->Init();
-	Time::GetInstance()->Start();
+	TIME->Start();
 
 	while (true)
 	{
@@ -81,9 +81,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		}
 		else
 		{
-			Time::GetInstance()->Update();
-			SoundManager::GetInstance()->Update();
-			Input::GetInstance()->Update();
+			TIME->Update();
+			SOUNDMANAGER->Update();
+			INPUT->Update();
 
 			_mainGame->Update();
 			_mainGame->Render(hdc);
@@ -93,6 +93,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	//여기까지 왔다면 프로그램이 끝났다는 얘기
 	_mainGame->Release();
 	delete _mainGame;
+	_mainGame = NULL;
 
 	return (int)message.wParam;
 }
