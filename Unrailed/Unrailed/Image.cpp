@@ -312,6 +312,44 @@ void Image::FrameRender(HDC hdc, int x, int y, int frameX, int frameY)
 	}
 }
 
+void Image::FrameRender(HDC hdc, int x, int y, int frameX1, int frameY1, int frameX2, int frameY2)
+{
+	// 원하는 프레임만 그리게!
+	// frameX1은 시작 프레임, X2는 끝 프레임으로 할 것
+	if (mIsTrans)
+	{
+		GdiTransparentBlt
+		(
+			hdc,
+			x,
+			y,
+			mImageBuffer->frameWidth * (frameX2 - frameX1),
+			mImageBuffer->frameHeight * (frameY2 - frameY1),
+			mImageBuffer->hdc,
+			mImageBuffer->frameWidth * frameX1,
+			mImageBuffer->frameHeight * frameY1,
+			mImageBuffer->frameWidth * (frameX2 - frameX1),
+			mImageBuffer->frameHeight * (frameY2 - frameY1),
+			mTransColor
+		);
+	}
+	else
+	{
+		BitBlt
+		(
+			hdc,
+			x,
+			y,
+			mImageBuffer->frameWidth * (frameX2 - frameX1),
+			mImageBuffer->frameHeight * (frameY2 - frameY1),
+			mImageBuffer->hdc,
+			mImageBuffer->frameWidth * frameX1,
+			mImageBuffer->frameHeight * frameY1,
+			SRCCOPY
+		);
+	}
+}
+
 void Image::AlphaRender(HDC hdc,int x, int y, float alpha)
 {
 	mBlendFunc->SourceConstantAlpha = (BYTE)(alpha * 255.f);

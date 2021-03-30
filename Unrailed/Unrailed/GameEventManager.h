@@ -15,7 +15,11 @@ public:
 
 	void RemoveAllEvent();
 	void Update();
+	void Render(HDC hdc);
 
 	void PushEvent(IEvent* event);
+	
+	int GetEventCount() { return mEventQueue.size(); }
 };
 
+#define GAMEEVENTMANAGER GameEventManager::GetInstance()
