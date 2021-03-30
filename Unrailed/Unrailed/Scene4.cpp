@@ -41,35 +41,21 @@ void Scene4::Init()
 	mTrailManager->PlaceTrail(1, 5, ItemType::Green, 0);
 	mTrailManager->SetStartIndex(0, 5);
 
-//	mTrailManager->PlaceTrail(2, 5, ItemType::Green, 0);
-//	mTrailManager->PlaceTrail(3, 5, ItemType::Green, 0);
-//	mTrailManager->PlaceTrail(4, 5, ItemType::Green, 3);
-//	mTrailManager->PlaceTrail(4, 6, ItemType::Green, 3);
-//	mTrailManager->PlaceTrail(4, 7, ItemType::Green, 0);
-//	mTrailManager->PlaceTrail(5, 7, ItemType::Green, 0);
-//	mTrailManager->PlaceTrail(6, 7, ItemType::Green, 0);
-//	mTrailManager->PlaceTrail(7, 7, ItemType::Green, 2);
-//	mTrailManager->PlaceTrail(7, 6, ItemType::Green, 2);
-//	mTrailManager->PlaceTrail(7, 5, ItemType::Green, 2);
-//	mTrailManager->PlaceTrail(7, 4, ItemType::Green, 2);
-//	mTrailManager->PlaceTrail(7, 3, ItemType::Green, 1);
-//	mTrailManager->PlaceTrail(6, 3, ItemType::Green, 1);
-//	mTrailManager->PlaceTrail(5, 3, ItemType::Green, 1);
+	mTrailManager->PlaceTrail(2, 5, ItemType::Green, 0);
+	mTrailManager->PlaceTrail(3, 5, ItemType::Green, 0);
+	mTrailManager->PlaceTrail(4, 5, ItemType::Green, 3);
+	mTrailManager->PlaceTrail(4, 6, ItemType::Green, 3);
+	mTrailManager->PlaceTrail(4, 7, ItemType::Green, 0);
+	mTrailManager->PlaceTrail(5, 7, ItemType::Green, 0);
+	mTrailManager->PlaceTrail(6, 7, ItemType::Green, 0);
+	mTrailManager->PlaceTrail(7, 7, ItemType::Green, 2);
+	mTrailManager->PlaceTrail(7, 6, ItemType::Green, 2);
+	mTrailManager->PlaceTrail(7, 5, ItemType::Green, 2);
+	mTrailManager->PlaceTrail(7, 4, ItemType::Green, 2);
+	mTrailManager->PlaceTrail(7, 3, ItemType::Green, 1);
+	mTrailManager->PlaceTrail(6, 3, ItemType::Green, 1);
+	mTrailManager->PlaceTrail(5, 3, ItemType::Green, 1);
 
-	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
-	/*
-	Electrode* electrode = new Electrode();
-	electrode->Init(5 * 48 + 24, 72);
-	electrode->SetTrail(trailListPtr);
-
-	Machop* machop = new Machop();
-	machop->Init(5 * 48 + 24, 24, 1);
-	machop->SetTrail(trailListPtr);
-
-	Abra* abra = new Abra();
-	abra->Init(5 * 48 + 24, -24, 1);
-	abra->SetTrail(trailListPtr);
-	*/
 	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
 	mTempPlayer->SetTileListPtr(tileListPtr);
 	vector<vector<MapObject*>>* mapObjectListPtr = mTileMap->GetObjectListPtr();
@@ -81,6 +67,21 @@ void Scene4::Init()
 	jigglypuff->Init(TileSize * 4.5, TileSize * 10.5, false);
 	jigglypuff->SetTileListPtr(*tileListPtr);
 	jigglypuff->SetMapObjectListPtr(*mapObjectListPtr);
+
+	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+
+	Electrode* electrode = new Electrode();
+	electrode->Init(5 * 48 + 24, 72);
+	electrode->SetTrail(trailListPtr);
+	electrode->SetJigglypuff(jigglypuff);
+
+	Machop* machop = new Machop();
+	machop->Init(5 * 48 + 24, 24, 1);
+	machop->SetTrail(trailListPtr);
+
+	Abra* abra = new Abra();
+	abra->Init(5 * 48 + 24, -24, 1);
+	abra->SetTrail(trailListPtr);
 }
 
 void Scene4::Release()

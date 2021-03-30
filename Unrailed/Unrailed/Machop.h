@@ -9,7 +9,7 @@ class Bag;
 
 class Machop : public Train
 {
-	vector <Ore*> mOreList;
+	//vector <Ore*> mOreList;
 
 	Electrode* mElectrode;
 
@@ -49,6 +49,6 @@ public:
 	void InterceptOre(ItemType itemType);
 	int GetOreCount() { return mOreCount; }
 	void SetOreCount(int i) { mOreCount = i; }
-	vector <Ore*> GetOreList() { return mOreList; }
+	//vector <Ore*> GetOreList() { return mOreList; }
 	ItemType OreErase();
 };

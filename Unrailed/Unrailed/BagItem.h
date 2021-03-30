@@ -9,9 +9,11 @@ class BagItem : public UI
 	int mFrameIndexX;
 	int mFrameIndexY;
 
+	bool mIsCamRender;
+
 public:
 	void Init()override;
-	void Init(ItemName name, ItemType type); // 반드시 해줘야 함
+	void Init(ItemName name, ItemType type, bool isCamRender = true); // 반드시 해줘야 함
 	void Release()override;
 	void Update()override;
 	void Render(HDC hdc)override;

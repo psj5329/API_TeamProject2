@@ -478,7 +478,7 @@ void Abra::EndExplode()
 		SetIsDestroy(true);
 	}
 }
-
+/*
 ItemType Abra::Receive()
 {
 	if (mCreatedTrailList.size() > 0)
@@ -490,7 +490,7 @@ ItemType Abra::Receive()
 	}
 	else
 		return ItemType::None;
-}
+}*/
 
 ItemType Abra::TrailErase()
 {
