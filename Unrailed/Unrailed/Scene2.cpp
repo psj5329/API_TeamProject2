@@ -18,7 +18,7 @@ void Scene2::Init()
 	mTrailManager->InsertTrail(6, 0, ItemType::Green, 3);
 	mTrailManager->InsertTrail(6, 1, ItemType::Green, 3);
 	mTrailManager->InsertTrail(6, 2, ItemType::Green, 3);
-	//mTrailManager->InsertTrail(6, 3, ItemType::Green, 3);//¹Ù·Î ¿· Å¸ÀÏ
+	mTrailManager->InsertTrail(6, 3, ItemType::Green, 3);//¹Ù·Î ¿· Å¸ÀÏ
 	mTrailManager->InsertTrail(6, 4, ItemType::Green, 1);
 	mTrailManager->InsertTrail(5, 4, ItemType::Green, 1);
 	mTrailManager->InsertTrail(4, 4, ItemType::Green, 3);

@@ -87,6 +87,16 @@ void Stage5::Update()
 	if (INPUT->GetKeyDown(VK_ESCAPE))
 		mIsPause = !mIsPause;
 
+	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+	int x = mElectrode->GetX() / TileSize;
+	int y = mElectrode->GetY() / TileSize;
+
+	Trail* currentTrail = (*trailListPtr)[y][x];
+	if (currentTrail->GetisFinish())
+		mIsClear = true;
+	else if (!mElectrode->CheckNextTrailType())
+		mIsGameOver = true;
+
 	if (mIsPause && !mIsOption)
 	{
 		if (mContinueButton != nullptr)
