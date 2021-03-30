@@ -95,8 +95,6 @@ void Player::Update()
 
 void Player::Render(HDC hdc)
 {
-	//RenderRect(hdc, mColBox);
-
 	// {{ 현재 타일, 다음 타일 확인용 // 유찬
 	if (mIsInfoOn)
 	{
@@ -116,8 +114,8 @@ void Player::Render(HDC hdc)
 	}
 	// 현재 타일, 다음 타일 확인용 }}
 
-	// 테스트 텍스트 // 릴리즈 전 지워주세요
-	RenderTestText(hdc);
+	// 테스트 텍스트
+	//RenderTestText(hdc);
 
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
 		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
@@ -775,9 +773,6 @@ void Player::InputSpaceKey()
 					mState = PlayerState::Attack;
 					mSpaceAttack = 6;
 				}
-				//mMic = 1;
-				//mInven->SetHiddenItem(1);
-				//((Jigglypuff*)jigglypuffPtr)->TakeMike();
 			}
 		}
 
@@ -813,11 +808,6 @@ void Player::InputSpaceKey()
 						mSpaceAttack = 9;
 						return;
 					}
-					//mState = PlayerState::Attack;
-					//mAttackedEnemy = (*enemyListPtr)[i];
-					//((Enemy*)mAttackedEnemy)->DamagedHp();
-					//dynamic_cast<Sableye*>(mAttackedEnemy)->SetHit(true);
-					//return;
 				}
 			}
 		}
@@ -1008,7 +998,7 @@ void Player::InputZKey()
 			for (int i = 0; i < trainList.size(); ++i)
 			{
 				if (trainList[i]->GetName() != "Abra")
-					continue; // abra 아니면 continue하게 해야 함
+					continue;
 
 				RECT trainRc = trainList[i]->GetRect();
 
@@ -1119,7 +1109,7 @@ void Player::InputXKey()
 			for (int i = 0; i < trainList.size(); ++i)
 			{
 				if (trainList[i]->GetName() != "Machop")
-					continue; // machop 아니면 continue하게 해야 함
+					continue;
 
 				RECT trainRc = trainList[i]->GetRect();
 
@@ -1668,7 +1658,7 @@ void Player::InputCheatKey()
 
 void Player::RenderTestText(HDC hdc)
 {
-	RECT cam = CAMERAMANAGER->GetMainCamera()->GetRect();
+	//RECT cam = CAMERAMANAGER->GetMainCamera()->GetRect();
 
 	/*if (mIsInfoOn)
 	{

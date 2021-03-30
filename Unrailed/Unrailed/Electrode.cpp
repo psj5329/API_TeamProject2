@@ -15,14 +15,14 @@ void Electrode::Init(int x, int y)
 
 	ReadyAnimation();
 
-	//∫Œ∏ ≈¨∑°Ω∫ (GameObject) ∫Øºˆ
+	//Î∂ÄÎ™® ÌÅ¥ÎûòÏä§ (GameObject) Î≥ÄÏàò
 	mX = x;
 	mY = y;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Electrode ∫Øºˆ
+	//Electrode Î≥ÄÏàò
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 
@@ -51,11 +51,11 @@ void Electrode::Release()
 
 void Electrode::Update()
 {
-	//¿Œµ¶Ω∫ ∞°¡Æø¿±‚
+	//Ïù∏Îç±Ïä§ Í∞ÄÏ†∏Ïò§Í∏∞
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
-	//Ω√¿€ ƒ≈∏¿”
+	//ÏãúÏûë Ïø®ÌÉÄÏûÑ
 	if (mStartTimer == 30)
 	{
 		if (mState == State::Sleep)
@@ -93,8 +93,8 @@ void Electrode::Update()
 		}
 	}
 
-	//ø√∂Û∞°¿÷¥¬ ±‚¬˜±Ê¿« «ˆ¿Á ±‚¬˜±Ê/≈∏¿œ¿« ¡ﬂ∞£ø¿∏È πÊ«‚»Æ¿Œ
-	//πÊ«‚¿Ã ∞°∏Æ≈∞¥¬ ≈∏¿œ¿« ¡ﬂ∞£±Ó¡ˆ¿Ãµø
+	//Ïò¨ÎùºÍ∞ÄÏûàÎäî Í∏∞Ï∞®Í∏∏Ïùò ÌòÑÏû¨ Í∏∞Ï∞®Í∏∏/ÌÉÄÏùºÏùò Ï§ëÍ∞ÑÏò§Î©¥ Î∞©Ìñ•ÌôïÏù∏
+	//Î∞©Ìñ•Ïù¥ Í∞ÄÎ¶¨ÌÇ§Îäî ÌÉÄÏùºÏùò Ï§ëÍ∞ÑÍπåÏßÄÏù¥Îèô
 	SetSpeed();
 	if (mState == State::Move || mState == State::Hurt)
 	{
@@ -106,7 +106,7 @@ void Electrode::Update()
 		SetTarget();
 	}
 
-	//«™∏∞
+	//Ìë∏Î¶∞
 	if (CheckJigglypuff() == true && (mState == State::Move || mState == State::Hurt))
 	{
 		if (mState != State::Move)
@@ -136,11 +136,11 @@ void Electrode::Update()
 		SetIsExplode(true);
 	}
 
-	//∆¯πﬂ
+	//Ìè≠Î∞ú
 	if (CheckTileEdge() == true)
 	{
-		//¥Ÿ¿Ω ≥‡ºÆ¿Ã ∆Æ∑π¿œ¿Œ¡ˆ æ∆¥—¡ˆ ∫“∞™¿ª πÒ¥¬ «‘ºˆ
-		//false∏È isexplode	
+		//Îã§Ïùå ÎÖÄÏÑùÏù¥ Ìä∏Î†àÏùºÏù∏ÏßÄ ÏïÑÎãåÏßÄ Î∂àÍ∞íÏùÑ Î±âÎäî Ìï®Ïàò
+		//falseÎ©¥ isexplode	
 		if (CheckNextTrailType() == false)
 		{
 			mNextTrain->SetState(State::Exploding);
@@ -148,9 +148,9 @@ void Electrode::Update()
 			SetIsExplode(true);
 		}
 
-		//ispassed∏¶ true∑Œ «ÿ¡÷¥¬ «‘ºˆ
-		//¥Ÿ¿Ω (≥—æÓ∞°∑¡¥¬) ∆Æ∑π¿œø° ispassed∏¶ √º≈©«œ¥¬ «‘ºˆ
-		//±◊ ¿ßø° «‘ºˆ∞° true∏È ªÛ≈¬∏¶ isexplode∑Œ
+		//ispassedÎ•º trueÎ°ú Ìï¥Ï£ºÎäî Ìï®Ïàò
+		//Îã§Ïùå (ÎÑòÏñ¥Í∞ÄÎ†§Îäî) Ìä∏Î†àÏùºÏóê ispassedÎ•º Ï≤¥ÌÅ¨ÌïòÎäî Ìï®Ïàò
+		//Í∑∏ ÏúÑÏóê Ìï®ÏàòÍ∞Ä trueÎ©¥ ÏÉÅÌÉúÎ•º isexplodeÎ°ú
 		if (CheckNextIsPassed() == true)
 		{
 			mNextTrain->SetState(State::Exploding);
@@ -172,6 +172,8 @@ void Electrode::Update()
 void Electrode::Render(HDC hdc)
 {
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+
+	//GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);
 }
 
 void Electrode::ReadyAnimation()
@@ -319,8 +321,8 @@ void Electrode::EndExplode()
 {
 	if (mState == State::Explode)
 	{
-		//SetIsDestroy(true); //ªË¡¶
-		SetIsActive(false); //∑ª¥ı æ»«‘
+		//SetIsDestroy(true); //ÏÇ≠Ï†ú
+		SetIsActive(false); //Î†åÎçî ÏïàÌï®
 
 	}
 }

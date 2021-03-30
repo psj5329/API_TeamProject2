@@ -15,7 +15,7 @@ void Voltorb::Init(int x, int y)
 
 	ReadyAnimation();
 
-	//∫Œ∏ ≈¨∑°Ω∫ (GameObject) ∫Øºˆ
+	//Î∂ÄÎ™® ÌÅ¥ÎûòÏä§ (GameObject) Î≥ÄÏàò
 	mX = x;
 	mY = y;
 	mSizeX = mImage->GetFrameWidth() * 2;
@@ -23,7 +23,7 @@ void Voltorb::Init(int x, int y)
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 	//SetImage(image);
 
-	//Electrode ∫Øºˆ
+	//Electrode Î≥ÄÏàò
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 
@@ -52,12 +52,12 @@ void Voltorb::Release()
 
 void Voltorb::Update()
 {
-	//¿Œµ¶Ω∫ ∞°¡Æø¿±‚
+	//Ïù∏Îç±Ïä§ Í∞ÄÏ†∏Ïò§Í∏∞
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
 
-	//Ω√¿€ ƒ≈∏¿”
+	//ÏãúÏûë Ïø®ÌÉÄÏûÑ
 	if (mStartTimer == 30)
 	{
 		if (mState == State::Sleep)
@@ -96,8 +96,8 @@ void Voltorb::Update()
 	}
 
 
-	//ø√∂Û∞°¿÷¥¬ ±‚¬˜±Ê¿« «ˆ¿Á ±‚¬˜±Ê/≈∏¿œ¿« ¡ﬂ∞£ø¿∏È πÊ«‚»Æ¿Œ
-	//πÊ«‚¿Ã ∞°∏Æ≈∞¥¬ ≈∏¿œ¿« ¡ﬂ∞£±Ó¡ˆ¿Ãµø
+	//Ïò¨ÎùºÍ∞ÄÏûàÎäî Í∏∞Ï∞®Í∏∏Ïùò ÌòÑÏû¨ Í∏∞Ï∞®Í∏∏/ÌÉÄÏùºÏùò Ï§ëÍ∞ÑÏò§Î©¥ Î∞©Ìñ•ÌôïÏù∏
+	//Î∞©Ìñ•Ïù¥ Í∞ÄÎ¶¨ÌÇ§Îäî ÌÉÄÏùºÏùò Ï§ëÍ∞ÑÍπåÏßÄÏù¥Îèô
 
 	SetSpeed();
 	if (mState == State::Move || mState == State::Exploding || mState == State::Hurt)
@@ -110,7 +110,7 @@ void Voltorb::Update()
 		SetTarget();
 	}
 
-	//«™∏∞
+	//Ìë∏Î¶∞
 	if (mIsHurt == false && mElectrode->GetIsHurt() == true && mState != State::Exploding && mState != State::Explode)
 	{
 		mState = State::Hurt;
@@ -126,7 +126,7 @@ void Voltorb::Update()
 		mIsHurt = false;
 	}
 
-	//∆¯πﬂ
+	//Ìè≠Î∞ú
 	if (mState == State::Exploding)
 	{
 		mExplosionTimer -= TIME->DeltaTime();
@@ -151,6 +151,8 @@ void Voltorb::Update()
 void Voltorb::Render(HDC hdc)
 {
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+
+	//GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);
 }
 
 void Voltorb::ReadyAnimation()
@@ -300,7 +302,7 @@ void Voltorb::EndExplode()
 {
 	if (mState == State::Explode)
 	{
-		//SetIsDestroy(true); //ªË¡¶
-		SetIsActive(false); //∑ª¥ı æ»«‘
+		//SetIsDestroy(true); //ÏÇ≠Ï†ú
+		SetIsActive(false); //Î†åÎçî ÏïàÌï®
 	}
 }

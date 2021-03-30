@@ -54,7 +54,7 @@ void Stage1::Release()
 void Stage1::Update()
 {
 	SOUNDMANAGER->Update();
-	if (SOUNDMANAGER->GetPosition(L"The First Track") >= SOUNDMANAGER->GetWholePosition(L"Roll Mart"))
+	if (SOUNDMANAGER->GetPosition(L"The First Track") >= SOUNDMANAGER->GetWholePosition(L"The First Track"))
 	{
 		SOUNDMANAGER->Stop(L"The First Track");
 		SOUNDMANAGER->Play(L"The First Track", 0.2f);
@@ -68,21 +68,30 @@ void Stage1::Update()
 		int x = _mousePosition.x / TileSize;
 		int y = _mousePosition.y / TileSize;
 
-		mTrailManager->PlaceTrail(y, x, ItemType::Green, 0);
+		if (x < 0 || y < 0 || x >= mTileMap->GetXTileCount() || y >= mTileMap->GetYTileCount())	{}
+		else
+			mTrailManager->PlaceTrail(y, x, ItemType::Green, 0);
 	}
 
 	if (INPUT->GetKeyDown(MK_RBUTTON))
 	{
 		int x = _mousePosition.x / TileSize;
 		int y = _mousePosition.y / TileSize;
+		int z = 0;
 
-		vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
-		Trail* currentTrail = (*trailListPtr)[y][x];
+		if (x < 0 || y < 0 || x >= mTileMap->GetXTileCount() || y >= mTileMap->GetYTileCount()) {}
+		else
+			z = 1;
 
-		if (currentTrail->GetTrailType() == ItemType::None)
-			return;
+		if (z)
+		{
+			vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+			Trail* currentTrail = (*trailListPtr)[y][x];
 
-		mTrailManager->TurnTrail(y, x);
+			if (currentTrail->GetTrailType() == ItemType::None)
+				return;
+			mTrailManager->TurnTrail(y, x);
+		}
 	}
 
 	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
@@ -153,6 +162,12 @@ void Stage1::Update()
 			if (GAMEEVENTMANAGER->GetEventCount() == 0)
 				SCENEMANAGER->LoadScene(L"SceneSelect");
 		}
+	}
+
+	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+	if ((*trailListPtr)[9][20]->GetIsTail())
+	{
+		mIsClear = true;
 	}
 
 	GAMEEVENTMANAGER->Update();
