@@ -52,7 +52,7 @@ void SceneSelect::Render(HDC hdc)
 
 void SceneSelect::StageSelectButton()
 {
-	wstring name = L"Scene" + to_wstring(mRound);
+	wstring name = L"Stage" + to_wstring(mRound);
 	SCENEMANAGER->LoadScene(name);
 }
 
