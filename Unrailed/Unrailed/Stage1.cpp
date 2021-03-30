@@ -28,6 +28,7 @@ void Stage1::Init()
 	OBJECTMANAGER->GetPlayer()->SetX(5.5 * TileSize);
 	OBJECTMANAGER->GetPlayer()->SetY(9.5 * TileSize);
 	OBJECTMANAGER->GetPlayer()->SetTileCount(x, y);
+	OBJECTMANAGER->GetPlayer()->SetTrailManagerPtr(mTrailManager);
 	OBJECTMANAGER->GetPlayer()->SetTileListPtr(mTileMap->GetTileListPtr());
 	OBJECTMANAGER->GetPlayer()->SetMapObjectListPtr(mTileMap->GetObjectListPtr());
 	OBJECTMANAGER->GetPlayer()->SetTrailManagerPtr(mTrailManager);
@@ -83,6 +84,10 @@ void Stage1::Update()
 
 		mTrailManager->TurnTrail(y, x);
 	}
+
+	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+	if ((*trailListPtr)[9][20]->GetIsTail())
+		mIsClear = true;
 
 	if (mIsPause && !mIsOption)
 	{
