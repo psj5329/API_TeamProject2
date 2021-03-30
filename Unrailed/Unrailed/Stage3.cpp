@@ -22,24 +22,110 @@ void Stage3::Init()
 	mTrailManager->Init(y, x);
 
 	//플레이어 설정
-	//mTempPlayer->SetTileCount(x, y);
+	OBJECTMANAGER->GetPlayer()->SetX(9.5 * TileSize);
+	OBJECTMANAGER->GetPlayer()->SetY(11.5 * TileSize);
+	OBJECTMANAGER->GetPlayer()->SetTileCount(x, y);
+	OBJECTMANAGER->GetPlayer()->SetTileListPtr(mTileMap->GetTileListPtr());
+	OBJECTMANAGER->GetPlayer()->SetMapObjectListPtr(mTileMap->GetObjectListPtr());
 
 	PlaceTrail();
 	InitJigglypuff();
 	InitTrain();
+	WindowInit();		// 일시정지 창 이닛
+
+	Camera* camera = CAMERAMANAGER->GetMainCamera();
+	camera->ChangeMode(Camera::Mode::Follow);
+	camera->SetTarget(mElectrode);
+
+	SOUNDMANAGER->Play(L"Blazing Beats", 0.2f);
 }
 
 void Stage3::Release()
 {
-
+	OBJECTMANAGER->ReleaseInScene();
+	mJigglypuff = NULL;
+	SOUNDMANAGER->Stop(L"Blazing Beats");
 }
 
 void Stage3::Update()
 {
-	mTileMap->Update();
-	mTrailManager->Update();
-	OBJECTMANAGER->Update();
-	CAMERAMANAGER->GetMainCamera()->Update();
+	SOUNDMANAGER->Update();
+	if (SOUNDMANAGER->GetPosition(L"Blazing Beats") >= SOUNDMANAGER->GetWholePosition(L"Roll Mart"))
+	{
+		SOUNDMANAGER->Stop(L"Blazing Beats");
+		SOUNDMANAGER->Play(L"Blazing Beats", 0.2f);
+	}
+
+	if (INPUT->GetKeyDown(VK_ESCAPE))
+		mIsPause = !mIsPause;
+
+	if (mIsPause && !mIsOption)
+	{
+		if (mContinueButton != nullptr)
+			mContinueButton->Update();
+		if (mOptionButton != nullptr)
+			mOptionButton->Update();
+		if (mMainButton != nullptr)
+			mMainButton->Update();
+	}
+
+	if (mIsPause)
+	{
+		if (mXButton != nullptr)
+			mXButton->Update();
+		if (mVolumeEffectBar != nullptr)
+		{
+			mVolumeEffectBar->Update();
+			mVolumeEffectButton->Update();
+		}
+		if (mVolumeEffectButton != nullptr)
+			mVolumeEffectButton->Update();
+		if (mVolumeBackgroundBar != nullptr)
+		{
+			mVolumeBackgroundBar->Update();
+			mVolumeBackgroundButton->Update();
+		}
+		if (mVolumeBackgroundButton != nullptr)
+			mVolumeBackgroundButton->Update();
+	}
+
+	if (!mIsPause && !mIsClear && !mIsGameOver)
+	{
+		mTileMap->Update();
+		mTrailManager->Update();
+		OBJECTMANAGER->Update();
+		CAMERAMANAGER->GetMainCamera()->Update();
+	}
+
+	if (mIsClear)
+	{
+		if (!mIsClearFont)
+		{
+			mIsClearFont = true;
+			GAMEEVENTMANAGER->PushEvent(new IClearStage());
+		}
+		else
+		{
+			if (GAMEEVENTMANAGER->GetEventCount() == 0)
+				SCENEMANAGER->LoadScene(L"SceneSelect");
+		}
+	}
+
+	if (mIsGameOver)
+	{
+		if (!mIsGameOverFont)
+		{
+			mIsGameOverFont = true;
+			GAMEEVENTMANAGER->PushEvent(new IGameoverStage());
+		}
+		else
+		{
+			if (GAMEEVENTMANAGER->GetEventCount() == 0)
+				SCENEMANAGER->LoadScene(L"SceneSelect");
+		}
+	}
+
+	GAMEEVENTMANAGER->Update();
 }
 
 void Stage3::Render(HDC hdc)
@@ -47,6 +133,28 @@ void Stage3::Render(HDC hdc)
 	mTileMap->Render(hdc);
 	mTrailManager->Render(hdc);
 	OBJECTMANAGER->Render(hdc);
+
+	if (mIsPause)
+	{
+		if (!mIsOption)
+		{
+			CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mPauseWindow, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
+			mContinueButton->ScaleRender(hdc, 0.9f, 0.9f);
+			mOptionButton->ScaleRender(hdc, 0.9f, 0.9f);
+			mMainButton->ScaleRender(hdc, 0.9f, 0.9f);
+		}
+		else
+		{
+			CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mPauseOptionWindow, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
+			mXButton->ScaleRender(hdc, 0.9f, 0.9f);
+			mVolumeEffectBar->Render(hdc);
+			mVolumeEffectButton->Render(hdc);
+			mVolumeBackgroundBar->Render(hdc);
+			mVolumeBackgroundButton->Render(hdc);
+		}
+	}
+
+	GAMEEVENTMANAGER->Render(hdc);
 }
 
 void Stage3::PlaceTrail()

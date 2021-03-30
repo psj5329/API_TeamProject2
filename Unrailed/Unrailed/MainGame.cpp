@@ -53,7 +53,11 @@ void MainGame::Release()
 	ObjectManager::ReleaseInstance();
 	SceneManager::ReleaseInstance();
 	ImageManager::ReleaseInstance();
-
+	CollisionManager::ReleaseInstance();
+	GameEventManager::ReleaseInstance();
+	Gizmo::ReleaseInstance();
+	PathFinder::ReleaseInstance();
+	SoundManager::ReleaseInstance();
 	Input::ReleaseInstance();
 	Random::ReleaseInstance();
 	Time::ReleaseInstance();
@@ -63,34 +67,36 @@ void MainGame::Update()
 {
 	if (Input::GetInstance()->GetKeyDown('1'))
 	{
-		SCENEMANAGER->LoadScene(L"Scene1");
+		SCENEMANAGER->LoadScene(L"Stage1");
 	}
 	else if (Input::GetInstance()->GetKeyDown('2'))
 	{
-		SCENEMANAGER->LoadScene(L"Scene2");
+		SCENEMANAGER->LoadScene(L"Stage2");
 	}
 	else if (Input::GetInstance()->GetKeyDown('3'))
 	{
 		//SCENEMANAGER->LoadScene(L"MapToolScene");
-		SCENEMANAGER->LoadScene(L"Scene3");
+		SCENEMANAGER->LoadScene(L"Stage3");
 	}
 	else if (Input::GetInstance()->GetKeyDown('4'))
 	{
-		SCENEMANAGER->LoadScene(L"Scene4");
+		SCENEMANAGER->LoadScene(L"Stage4");
 	}
 	else if (Input::GetInstance()->GetKeyDown('5'))
 	{
-		SCENEMANAGER->LoadScene(L"MapToolReady");
+		SCENEMANAGER->LoadScene(L"Stage5");
 	}
 	else if (Input::GetInstance()->GetKeyDown('6'))
 	{
-		SCENEMANAGER->LoadScene(L"Scene6");
+		SCENEMANAGER->LoadScene(L"MapToolReady");
 	}
 	else if (Input::GetInstance()->GetKeyDown('7'))
 	{
 		SCENEMANAGER->LoadScene(L"MapToolReady");
 	}
-	SceneManager::GetInstance()->Update();
+
+	//INPUT->Update();
+	SCENEMANAGER->Update();
 }
 
 void MainGame::Render(HDC hdc)
@@ -113,7 +119,7 @@ void MainGame::Render(HDC hdc)
 
 void MainGame::RenderTime(HDC hdc)
 {
-	float worldTime = Time::GetInstance()->GetWorldTime();
+	/*float worldTime = Time::GetInstance()->GetWorldTime();
 	float deltaTime = Time::GetInstance()->DeltaTime();
 	ULONG fps = Time::GetInstance()->GetmFrameRate();
 	wstring strWorldTime = L"WorldTime : " + to_wstring(worldTime);
@@ -122,7 +128,7 @@ void MainGame::RenderTime(HDC hdc)
 
 	TextOut(hdc, 10, 10, strWorldTime.c_str(), (int)strWorldTime.length());
 	TextOut(hdc, 10, 25, strDeltaTime.c_str(), (int)strDeltaTime.length());
-	TextOut(hdc, 10, 40, strFPS.c_str(), (int)strFPS.length());
+	TextOut(hdc, 10, 40, strFPS.c_str(), (int)strFPS.length());*/
 
 	/*wstring strScene = L"여긴 메인, 1~4 눌러서 씬 넘어가자";
 	TextOut(hdc, WINSIZEX / 2 - 50, WINSIZEY / 2, strScene.c_str(), strScene.length());*/

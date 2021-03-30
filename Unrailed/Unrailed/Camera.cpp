@@ -2,6 +2,7 @@
 #include "Camera.h"
 
 #include "Image.h"
+#include "Scene.h"
 
 void Camera::Init()
 {
@@ -23,10 +24,27 @@ void Camera::Update()
 	case Camera::Mode::Follow:
 		if (mTarget)
 		{
-			mX = Math::Lerp(mX, mTarget->GetX(), 2.f * Time::GetInstance()->DeltaTime());
+			//mX = Math::Lerp(mX, mTarget->GetX(), 2.f * Time::GetInstance()->DeltaTime());
 			//mY = Math::Lerp(mY, mTarget->GetY(), 2.f * Time::GetInstance()->DeltaTime());
 
 			mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
+
+			float x = SCENEMANAGER->GetCurrentScene()->GetSizeX();
+			float y = SCENEMANAGER->GetCurrentScene()->GetSizeY();
+
+			if (mX - mSizeX / 2 <= 0)
+				mX = mSizeX / 2;
+			else if (mX >= x - mSizeX / 2)
+				mX = x - mSizeX / 2;
+			else
+				mX = Math::Lerp(mX, mTarget->GetX(), 2.f * Time::GetInstance()->DeltaTime());
+
+			if (mY - mSizeY / 2 <= 0)
+				mY = mSizeY / 2;
+			else if (mY >= y - mSizeY / 2)
+				mY = y - mSizeY / 2;
+			else
+				mY = Math::Lerp(mY, mTarget->GetY(), 2.f * Time::GetInstance()->DeltaTime());
 		}
 		break;
 	case Camera::Mode::Free:

@@ -25,6 +25,8 @@ void MainScene::Init()
 	mVolumeBackgroundButton = new Button(VolumeButton, WINSIZEX / 2 + 120, WINSIZEY / 2 - 90, VolumeButton->GetWidth() * 2, VolumeButton->GetHeight() * 2, bind(&Scene::VolumeBackgroundButton, this));
 
 	mIsShowWindow = false;
+
+	SOUNDMANAGER->Play(L"Roll Mart", 0.05f);
 }
 
 void MainScene::Release()
@@ -33,10 +35,18 @@ void MainScene::Release()
 	SafeDelete(mOptionButton);
 	SafeDelete(mExitButton);
 	SafeDelete(mXButton);
+	SOUNDMANAGER->Stop(L"Roll Mart");
 }
 
 void MainScene::Update()
 {
+	SOUNDMANAGER->Update();
+	if (SOUNDMANAGER->GetPosition(L"Roll Mart") >= SOUNDMANAGER->GetWholePosition(L"Roll Mart"))
+	{
+		SOUNDMANAGER->Stop(L"Roll Mart");
+		SOUNDMANAGER->Play(L"Roll Mart", 0.05f);
+	}
+
 	if (!mIsShowWindow)
 	{
 		if (mStartButton != nullptr)
