@@ -8,6 +8,7 @@
 #include "Electrode.h"
 #include "Machop.h"
 #include "Abra.h"
+#include "Sableye.h"
 
 void Scene4::Init()
 {
@@ -69,7 +70,7 @@ void Scene4::Init()
 	jigglypuff->SetMapObjectListPtr(*mapObjectListPtr);
 
 	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
-
+	/*
 	Electrode* electrode = new Electrode();
 	electrode->Init(5 * 48 + 24, 72);
 	electrode->SetTrail(trailListPtr);
@@ -81,7 +82,15 @@ void Scene4::Init()
 
 	Abra* abra = new Abra();
 	abra->Init(5 * 48 + 24, -24, 1);
-	abra->SetTrail(trailListPtr);
+	abra->SetTrail(trailListPtr);*/
+
+	Sableye* enemy = new Sableye();
+	enemy->Init();
+	enemy->SetX(12.5 * TileSize);
+	enemy->SetY(2.5 * TileSize);
+	OBJECTMANAGER->AddObject(ObjectLayer::ENEMY, enemy);
+	enemy->SetTileListPtr(*tileListPtr);
+	enemy->SetMapObjectListPtr(*mapObjectListPtr);
 }
 
 void Scene4::Release()

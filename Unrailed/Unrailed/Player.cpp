@@ -60,6 +60,7 @@ void Player::Init()
 	mIsInfoOn = false;
 
 	mMic = 0;
+	mSpaceAttack = 0;
 }
 
 void Player::Release()
@@ -759,13 +760,29 @@ void Player::InputSpaceKey()
 			RECT jigglyRc = jigglypuffPtr->GetRect();
 			if (IntersectRect(&temp, &nextRc, &jigglyRc))
 			{
-				mMic = 1;
-				mInven->SetHiddenItem(1);
-				((Jigglypuff*)jigglypuffPtr)->TakeMike();
+				if (mForm == Form::Chikorita)
+				{
+					mState = PlayerState::Attack;
+					mSpaceAttack = 4;
+				}
+				else if (mForm == Form::Totodile)
+				{
+					mState = PlayerState::Attack;
+					mSpaceAttack = 5;
+				}
+				else if (mForm == Form::Charmander)
+				{
+					mState = PlayerState::Attack;
+					mSpaceAttack = 6;
+				}
+				//mMic = 1;
+				//mInven->SetHiddenItem(1);
+				//((Jigglypuff*)jigglypuffPtr)->TakeMike();
 			}
 		}
 
 		vector<GameObject*>* enemyListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ENEMY);
+
 		if((*enemyListPtr).size())
 		{
 			RECT temp;
@@ -775,10 +792,32 @@ void Player::InputSpaceKey()
 				RECT enemyRc = ((*enemyListPtr)[i])->GetRect();
 				if (IntersectRect(&temp, &mRangeBox, &enemyRc))
 				{
-					mState = PlayerState::Attack;
-					((Enemy*)(*enemyListPtr)[i])->DamagedHp();
-					dynamic_cast<Sableye*>((*enemyListPtr)[i])->SetHit(true);
-					return;
+					if (mForm == Form::Chikorita)
+					{
+						mState = PlayerState::Attack;
+						mAttackedEnemy = (*enemyListPtr)[i];
+						mSpaceAttack = 7;
+						return;
+					}
+					else if (mForm == Form::Totodile)
+					{
+						mState = PlayerState::Attack;
+						mAttackedEnemy = (*enemyListPtr)[i];
+						mSpaceAttack = 8;
+						return;
+					}
+					else if (mForm == Form::Charmander)
+					{
+						mState = PlayerState::Attack;
+						mAttackedEnemy = (*enemyListPtr)[i];
+						mSpaceAttack = 9;
+						return;
+					}
+					//mState = PlayerState::Attack;
+					//mAttackedEnemy = (*enemyListPtr)[i];
+					//((Enemy*)mAttackedEnemy)->DamagedHp();
+					//dynamic_cast<Sableye*>(mAttackedEnemy)->SetHit(true);
+					//return;
 				}
 			}
 		}
@@ -786,17 +825,78 @@ void Player::InputSpaceKey()
 		if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Green))
 		{
 			mState = PlayerState::Attack;
-			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
+			mSpaceAttack = 1;
 		}
 		else if ((mForm == Form::Totodile) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Blue))
 		{
 			mState = PlayerState::Attack;
-			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
+			mSpaceAttack = 2;
 		}
 		else if ((mForm == Form::Charmander) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Red))
 		{
 			mState = PlayerState::Attack;
-			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
+			mSpaceAttack = 3;
+		}
+	}
+
+	if (mSpaceAttack > 0)
+	{
+		if ((mSpaceAttack == 1) && (mCurrentAnimation->GetCurrentFrameIndex() == 1))
+		{
+			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY);
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 2) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY);
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 3) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY);
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 4) && (mCurrentAnimation->GetCurrentFrameIndex() == 1))
+		{
+			mMic = 1;
+			mInven->SetHiddenItem(1);
+			GameObject* jigglypuffPtr = OBJECTMANAGER->FindObject("Jigglypuff");
+			((Jigglypuff*)jigglypuffPtr)->TakeMike();
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 5) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			mMic = 1;
+			mInven->SetHiddenItem(1);
+			GameObject* jigglypuffPtr = OBJECTMANAGER->FindObject("Jigglypuff");
+			((Jigglypuff*)jigglypuffPtr)->TakeMike();
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 6) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			mMic = 1;
+			mInven->SetHiddenItem(1);
+			GameObject* jigglypuffPtr = OBJECTMANAGER->FindObject("Jigglypuff");
+			((Jigglypuff*)jigglypuffPtr)->TakeMike();
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 7) && (mCurrentAnimation->GetCurrentFrameIndex() == 1))
+		{
+			((Enemy*)mAttackedEnemy)->DamagedHp();
+			dynamic_cast<Sableye*>(mAttackedEnemy)->SetHit(true);
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 8) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			((Enemy*)mAttackedEnemy)->DamagedHp();
+			dynamic_cast<Sableye*>(mAttackedEnemy)->SetHit(true);
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 9) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			((Enemy*)mAttackedEnemy)->DamagedHp();
+			dynamic_cast<Sableye*>(mAttackedEnemy)->SetHit(true);
+			mSpaceAttack = 0;
 		}
 	}
 }
