@@ -34,8 +34,8 @@ void Stage1::Init()
 	OBJECTMANAGER->GetPlayer()->SetTrailManagerPtr(mTrailManager);
 
 	Camera* camera = CAMERAMANAGER->GetMainCamera();
-	camera->ChangeMode(Camera::Mode::Follow);
-	camera->SetTarget(OBJECTMANAGER->GetPlayer());		// 1스테는 기차가 업서서
+	camera->ChangeMode(Camera::Mode::Free);
+	//camera->SetTarget(OBJECTMANAGER->GetPlayer());		// 1스테는 기차가 업서서
 
 	PlaceTrail();
 	InitJigglypuff();
