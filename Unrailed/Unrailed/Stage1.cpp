@@ -42,7 +42,7 @@ void Stage1::Init()
 	InitTrain();
 	WindowInit();		// 일시정지 창 이닛
 
-	SOUNDMANAGER->Play(L"The First Track", 0.2f);
+	SOUNDMANAGER->Play(L"The First Track", _BackgroundSound);
 }
 
 void Stage1::Release()
@@ -58,7 +58,7 @@ void Stage1::Update()
 	if (SOUNDMANAGER->GetPosition(L"The First Track") >= SOUNDMANAGER->GetWholePosition(L"The First Track"))
 	{
 		SOUNDMANAGER->Stop(L"The First Track");
-		SOUNDMANAGER->Play(L"The First Track", 0.2f);
+		SOUNDMANAGER->Play(L"The First Track", _BackgroundSound);
 	}
 
 	if (INPUT->GetKeyDown(VK_ESCAPE))
@@ -178,14 +178,14 @@ void Stage1::Render(HDC hdc)
 	{
 		if (!mIsOption)
 		{
-			CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mPauseWindow, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
+			mPauseWindow->ScaleRender(hdc, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
 			mContinueButton->ScaleRender(hdc, 0.9f, 0.9f);
 			mOptionButton->ScaleRender(hdc, 0.9f, 0.9f);
 			mMainButton->ScaleRender(hdc, 0.9f, 0.9f);
 		}
 		else
 		{
-			CAMERAMANAGER->GetMainCamera()->ScaleRender(hdc, mPauseOptionWindow, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
+			mPauseOptionWindow->ScaleRender(hdc, WINSIZEX / 2 - mPauseWindow->GetWidth() / 2, WINSIZEY / 2 - mPauseWindow->GetHeight() / 2, mPauseWindow->GetWidth(), mPauseWindow->GetHeight());
 			mXButton->ScaleRender(hdc, 0.9f, 0.9f);
 			mVolumeEffectBar->Render(hdc);
 			mVolumeEffectButton->Render(hdc);

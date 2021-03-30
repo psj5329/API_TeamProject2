@@ -66,3 +66,5 @@ using namespace std;
 extern POINT _mousePosition;	//마우스 좌표
 extern HWND	_hWnd;
 extern HINSTANCE	_hInstance;
+extern float _BackgroundSound;
+extern float _EffectSound;
