@@ -28,6 +28,7 @@ void Stage5::Init()
 	OBJECTMANAGER->GetPlayer()->SetTileCount(x, y);
 	OBJECTMANAGER->GetPlayer()->SetTileListPtr(mTileMap->GetTileListPtr());
 	OBJECTMANAGER->GetPlayer()->SetMapObjectListPtr(mTileMap->GetObjectListPtr());
+	OBJECTMANAGER->GetPlayer()->SetTrailManagerPtr(mTrailManager);
 
 	// 임시로 이렇게 넣엇슴다...
 	Sableye* sableye1 = new Sableye;
