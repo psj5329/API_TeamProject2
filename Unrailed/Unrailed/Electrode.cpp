@@ -15,14 +15,14 @@ void Electrode::Init(int x, int y)
 
 	ReadyAnimation();
 
-	//ë¶€ëª¨ í´ë˜ìŠ¤ (GameObject) ë³€ìˆ˜
+	//ºÎ¸ğ Å¬·¡½º (GameObject) º¯¼ö
 	mX = x;
 	mY = y;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
 
-	//Electrode ë³€ìˆ˜
+	//Electrode º¯¼ö
 	mDirection = Direction::Right;
 	mState = State::Sleep;
 
@@ -51,11 +51,11 @@ void Electrode::Release()
 
 void Electrode::Update()
 {
-	//ì¸ë±ìŠ¤ ê°€ì ¸ì˜¤ê¸°
+	//ÀÎµ¦½º °¡Á®¿À±â
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
-	//ì‹œì‘ ì¿¨íƒ€ì„
+	//½ÃÀÛ ÄğÅ¸ÀÓ
 	if (mStartTimer == 30)
 	{
 		if (mState == State::Sleep)
@@ -93,8 +93,8 @@ void Electrode::Update()
 		}
 	}
 
-	//ì˜¬ë¼ê°€ìˆëŠ” ê¸°ì°¨ê¸¸ì˜ í˜„ì¬ ê¸°ì°¨ê¸¸/íƒ€ì¼ì˜ ì¤‘ê°„ì˜¤ë©´ ë°©í–¥í™•ì¸
-	//ë°©í–¥ì´ ê°€ë¦¬í‚¤ëŠ” íƒ€ì¼ì˜ ì¤‘ê°„ê¹Œì§€ì´ë™
+	//¿Ã¶ó°¡ÀÖ´Â ±âÂ÷±æÀÇ ÇöÀç ±âÂ÷±æ/Å¸ÀÏÀÇ Áß°£¿À¸é ¹æÇâÈ®ÀÎ
+	//¹æÇâÀÌ °¡¸®Å°´Â Å¸ÀÏÀÇ Áß°£±îÁöÀÌµ¿
 	SetSpeed();
 	if (mState == State::Move || mState == State::Hurt)
 	{
@@ -106,7 +106,7 @@ void Electrode::Update()
 		SetTarget();
 	}
 
-	//í‘¸ë¦°
+	//Çª¸°
 	if (CheckJigglypuff() == true && (mState == State::Move || mState == State::Hurt))
 	{
 		if (mState != State::Move)
@@ -136,11 +136,11 @@ void Electrode::Update()
 		SetIsExplode(true);
 	}
 
-	//í­ë°œ
+	//Æø¹ß
 	if (CheckTileEdge() == true)
 	{
-		//ë‹¤ìŒ ë…€ì„ì´ íŠ¸ë ˆì¼ì¸ì§€ ì•„ë‹Œì§€ ë¶ˆê°’ì„ ë±‰ëŠ” í•¨ìˆ˜
-		//falseë©´ isexplode	
+		//´ÙÀ½ ³à¼®ÀÌ Æ®·¹ÀÏÀÎÁö ¾Æ´ÑÁö ºÒ°ªÀ» ¹ñ´Â ÇÔ¼ö
+		//false¸é isexplode	
 		if (CheckNextTrailType() == false)
 		{
 			mNextTrain->SetState(State::Exploding);
@@ -148,9 +148,9 @@ void Electrode::Update()
 			SetIsExplode(true);
 		}
 
-		//ispassedë¥¼ trueë¡œ í•´ì£¼ëŠ” í•¨ìˆ˜
-		//ë‹¤ìŒ (ë„˜ì–´ê°€ë ¤ëŠ”) íŠ¸ë ˆì¼ì— ispassedë¥¼ ì²´í¬í•˜ëŠ” í•¨ìˆ˜
-		//ê·¸ ìœ„ì— í•¨ìˆ˜ê°€ trueë©´ ìƒíƒœë¥¼ isexplodeë¡œ
+		//ispassed¸¦ true·Î ÇØÁÖ´Â ÇÔ¼ö
+		//´ÙÀ½ (³Ñ¾î°¡·Á´Â) Æ®·¹ÀÏ¿¡ ispassed¸¦ Ã¼Å©ÇÏ´Â ÇÔ¼ö
+		//±× À§¿¡ ÇÔ¼ö°¡ true¸é »óÅÂ¸¦ isexplode·Î
 		if (CheckNextIsPassed() == true)
 		{
 			mNextTrain->SetState(State::Exploding);
@@ -321,8 +321,8 @@ void Electrode::EndExplode()
 {
 	if (mState == State::Explode)
 	{
-		//SetIsDestroy(true); //ì‚­ì œ
-		SetIsActive(false); //ë Œë” ì•ˆí•¨
+		//SetIsDestroy(true); //»èÁ¦
+		SetIsActive(false); //·»´õ ¾ÈÇÔ
 
 	}
 }
