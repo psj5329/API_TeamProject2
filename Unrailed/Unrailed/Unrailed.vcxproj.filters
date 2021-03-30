@@ -160,6 +160,24 @@
     <Filter Include="MainGame\Object\Item\Mike">
       <UniqueIdentifier>{2a517eab-46bd-4b45-a419-ac28b728f135}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Stages">
+      <UniqueIdentifier>{43db1f69-0aee-49be-ae03-45cb0d3a27b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Stages\Stage1">
+      <UniqueIdentifier>{bad84d57-9cf5-491a-8a69-cacabda01cf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Stages\Stage2">
+      <UniqueIdentifier>{f3206ba1-05a6-45ea-819e-a5f858a3ba21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Stages\Stage3">
+      <UniqueIdentifier>{3c068fb5-6a20-4633-a073-c5cdd0232e45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Stages\Stage4">
+      <UniqueIdentifier>{2629e84e-7f09-47a7-a50d-38fd205d4471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Stages\Stage5">
+      <UniqueIdentifier>{46870c36-40f7-41e9-8bc4-a25325d32c57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -363,6 +381,21 @@
     <ClInclude Include="Mike.h">
       <Filter>MainGame\Object\Item\Mike</Filter>
     </ClInclude>
+    <ClInclude Include="Stage1.h">
+      <Filter>MainGame\Scene\Stages\Stage1</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage2.h">
+      <Filter>MainGame\Scene\Stages\Stage2</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage3.h">
+      <Filter>MainGame\Scene\Stages\Stage3</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage4.h">
+      <Filter>MainGame\Scene\Stages\Stage4</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage5.h">
+      <Filter>MainGame\Scene\Stages\Stage5</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Unrailed.cpp">
@@ -553,6 +586,21 @@
     </ClCompile>
     <ClCompile Include="Mike.cpp">
       <Filter>MainGame\Object\Item\Mike</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1.cpp">
+      <Filter>MainGame\Scene\Stages\Stage1</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage2.cpp">
+      <Filter>MainGame\Scene\Stages\Stage2</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage3.cpp">
+      <Filter>MainGame\Scene\Stages\Stage3</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage4.cpp">
+      <Filter>MainGame\Scene\Stages\Stage4</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage5.cpp">
+      <Filter>MainGame\Scene\Stages\Stage5</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

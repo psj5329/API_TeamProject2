@@ -36,6 +36,7 @@ public:
 	Animation* GetCurrentAnimation() { return mCurrentAnimation; }
 
 	void SetStartIndex(int y, int x) { mStartX = x; mStartY = y; }
+	void SetEndIndex(int y, int x);
 	void InsertTrail(int indexY, int indexX, ItemType type, int dir);	//맵에서 트레일인잇
 	void TurnTrail(int indexY, int indexX);		//플레이어가 트레일 돌리기
 	//void TurnTrail2(int indexY, int indexX);
