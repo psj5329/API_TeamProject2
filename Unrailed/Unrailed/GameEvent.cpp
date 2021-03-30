@@ -180,3 +180,83 @@ bool IPlaySoundEffect::Update()
 void IPlaySoundEffect::Render(HDC hdc)
 {
 }
+
+IClearStage::IClearStage()
+{
+}
+
+void IClearStage::Start()
+{
+	mImage = IMAGEMANAGER->FindImage(L"Clear");
+	mX = WINSIZEX / 2 - mImage->GetWidth() / 2;
+	mY = WINSIZEY / 2 - mImage->GetHeight() / 2;
+	mDelayTime = 0.f;
+	mCount = 0;
+}
+
+bool IClearStage::Update()
+{
+	mDelayTime += TIME->DeltaTime();
+	
+	if (mDelayTime >= 0.3f)
+	{
+		mDelayTime = 0.f;
+		// 효과음 내고시파 한 글자마다
+		mCount++;
+
+		if (mCount >= 7)
+			mCount = 5;
+	}
+
+	//mCount++;
+
+	if (INPUT->GetKeyDown(VK_SPACE) && mCount >= 5)
+		return true;
+
+	return false;
+}
+
+void IClearStage::Render(HDC hdc)
+{
+	mImage->FrameRender(hdc, mX, mY, 0, 0, mCount, 1);
+}
+
+IGameoverStage::IGameoverStage()
+{
+}
+
+void IGameoverStage::Start()
+{
+	mImage = IMAGEMANAGER->FindImage(L"Gameover");
+	mX = WINSIZEX / 2 - mImage->GetWidth() / 2;
+	mY = WINSIZEY / 2 - mImage->GetHeight() / 2;
+	mDelayTime = 0.f;
+	mCount = 0;
+}
+
+bool IGameoverStage::Update()
+{
+	mDelayTime += TIME->DeltaTime();
+
+	if (mDelayTime >= 0.2f)
+	{
+		mDelayTime = 0.f;
+		// 효과음 내고시파 한 글자마다
+		mCount++;
+
+		if (mCount >= 9)
+			mCount = 8;
+	}
+
+	//mCount++;
+
+	if (INPUT->GetKeyDown(VK_SPACE) && mCount >= 8)
+		return true;
+
+	return false;
+}
+
+void IGameoverStage::Render(HDC hdc)
+{
+	mImage->FrameRender(hdc, mX, mY, 0, 0, mCount, 1);
+}

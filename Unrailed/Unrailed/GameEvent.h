@@ -74,6 +74,38 @@ public:
 	void Render(HDC hdc)override;
 };
 
+class IClearStage : public IEvent
+{
+	Image* mImage;
+	float mX;
+	float mY;
+	float mDelayTime;
+	int mCount;
+
+public:
+	IClearStage();
+
+	void Start()override;
+	bool Update()override;
+	void Render(HDC hdc)override;
+};
+
+class IGameoverStage : public IEvent
+{
+	Image* mImage;
+	float mX;
+	float mY;
+	float mDelayTime;
+	int mCount;
+
+public:
+	IGameoverStage();
+
+	void Start()override;
+	bool Update()override;
+	void Render(HDC hdc)override;
+};
+
 //class IChangeAnimation : public IEvent
 //{
 //	class GameObject* mObject;

@@ -3,6 +3,8 @@
 
 #include "GameEvent.h"
 
+Singleton_NULL(GameEventManager)
+
 GameEventManager::GameEventManager()
 {
 }
@@ -37,6 +39,14 @@ void GameEventManager::Update()
 			mEventQueue.front()->Start();
 		}
 	}
+}
+
+void GameEventManager::Render(HDC hdc)
+{
+	if (mEventQueue.size() == 0)
+		return;
+
+	mEventQueue.front()->Render(hdc);
 }
 
 void GameEventManager::PushEvent(IEvent* event)
