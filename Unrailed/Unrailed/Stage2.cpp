@@ -30,6 +30,7 @@ void Stage2::Init()
 	OBJECTMANAGER->GetPlayer()->SetTileCount(x, y);
 	OBJECTMANAGER->GetPlayer()->SetTileListPtr(mTileMap->GetTileListPtr());
 	OBJECTMANAGER->GetPlayer()->SetMapObjectListPtr(mTileMap->GetObjectListPtr());
+	OBJECTMANAGER->GetPlayer()->SetTrailManagerPtr(mTrailManager);
 
 	PlaceTrail();
 	InitJigglypuff();

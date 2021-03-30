@@ -28,6 +28,7 @@ void Stage4::Init()
 	OBJECTMANAGER->GetPlayer()->SetTileCount(x, y);
 	OBJECTMANAGER->GetPlayer()->SetTileListPtr(mTileMap->GetTileListPtr());
 	OBJECTMANAGER->GetPlayer()->SetMapObjectListPtr(mTileMap->GetObjectListPtr());
+	OBJECTMANAGER->GetPlayer()->SetTrailManagerPtr(mTrailManager);
 
 	Sableye* sableye1 = new Sableye;
 	sableye1->Init();
