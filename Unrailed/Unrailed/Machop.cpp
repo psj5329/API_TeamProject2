@@ -61,8 +61,6 @@ void Machop::Update()
 	int indexX = mX / TileSize;
 	int indexY = mY / TileSize;
 
-	//InterceptOre();
-
 	//시작 쿨타임
 	if (mStartTimer == 30)
 	{
@@ -123,22 +121,22 @@ void Machop::Update()
 	}
 
 	//진화
-	//int level = 1;
-	//if (INPUT->GetKeyDown('Q'))
-	//{
-	//	level = 1;
-	//	SetImage(level);
-	//}
-	//if (INPUT->GetKeyDown('W'))
-	//{
-	//	level = 2;
-	//	SetImage(level);
-	//}
-	//if (INPUT->GetKeyDown('E'))
-	//{
-	//	level = 3;
-	//	SetImage(level);
-	//}
+	int level = 1;
+	if (INPUT->GetKeyDown('I'))
+	{
+		level = 1;
+		SetImage(level);
+	}
+	if (INPUT->GetKeyDown('O'))
+	{
+		level = 2;
+		SetImage(level);
+	}
+	if (INPUT->GetKeyDown('P'))
+	{
+		level = 3;
+		SetImage(level);
+	}
 
 	mCurrentAnimation->Update();
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -148,31 +146,9 @@ void Machop::Update()
 
 void Machop::Render(HDC hdc)
 {
-	//RenderRect(hdc, mRect);
-	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-	//CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
-	//wstring strOre;
-	//for (int i = 0; i < mOreList.size(); ++i)
-	//{
-	//	if (mOreList[i]->GetOreType() == ItemType::Green)
-	//		strOre = L"그린" + to_wstring(mOreCount);
-	//	else if (mOreList[i]->GetOreType() == ItemType::Blue)
-	//		strOre = L"블루" + to_wstring(mOreCount);
-	//	else if (mOreList[i]->GetOreType() == ItemType::Red)
-	//		strOre = L"레드" + to_wstring(mOreCount);
-	//
-	//	TextOut(hdc, mX - 20, mY - 40 - i * 15, strOre.c_str(), strOre.length());
-	//}
-
 	mBag.Render(hdc);
-
-	/*	wstring strBlue = L"블루:" + to_wstring(mOreCount);
-		TextOut(hdc, mX - 20, mY - 55, strBlue.c_str(), strBlue.length());
-
-		wstring strRed = L"레드:" + to_wstring(mOreCount);
-		TextOut(hdc, mX - 20, mY - 70, strRed.c_str(), strRed.length());*/
 }
 
 void Machop::ReadyAnimation()
@@ -384,92 +360,16 @@ void Machop::SetAnimation()
 	}
 }
 
-/*void Machop::InterceptOre()
-{
-	if (mOreCount <= 5 && mState != State::Hurt)
-	{
-		if (INPUT->GetKeyDown('A'))
-		{
-			//Ore* ore = new Ore;
-			BagItem* bagItem = new BagItem();
-
-			mOreCount++;
-
-			//ore->SetOreType(ItemType::Green);//그린
-			bagItem->Init(ItemName::ItemOre, ItemType::Green);
-
-			//mOreList.push_back(ore);
-			mBagItemListPtr->push_back(bagItem);
-
-			mState = State::Intercept;
-			SetAnimation();
-
-			/////
-			///BagItem* bagItem = new BagItem();
-			///bagItem->Init(ItemName::ItemOre, ItemType::Green);
-			///mBagItemListPtr->push_back(bagItem);
-			/////
-		}
-		if (INPUT->GetKeyDown('S'))
-		{
-			//Ore* ore = new Ore;
-			BagItem* bagItem = new BagItem();
-
-			mOreCount++;
-
-			//ore->SetOreType(ItemType::Blue);//블루
-			bagItem->Init(ItemName::ItemOre, ItemType::Blue);
-
-			//mOreList.push_back(ore);
-			mBagItemListPtr->push_back(bagItem);
-
-			mState = State::Intercept;
-			SetAnimation();
-
-			/////
-			///BagItem* bagItem = new BagItem();
-			///bagItem->Init(ItemName::ItemOre, ItemType::Blue);
-			///mBagItemListPtr->push_back(bagItem);
-			/////
-		}
-		if (INPUT->GetKeyDown('D'))
-		{
-			//Ore* ore = new Ore;
-			BagItem* bagItem = new BagItem();
-
-			mOreCount++;
-
-			//ore->SetOreType(ItemType::Red);//레드
-			bagItem->Init(ItemName::ItemOre, ItemType::Red);
-
-			//mOreList.push_back(ore);
-			mBagItemListPtr->push_back(bagItem);
-
-			mState = State::Intercept;
-			SetAnimation();
-
-			/////
-			///BagItem* bagItem = new BagItem();
-			///bagItem->Init(ItemName::ItemOre, ItemType::Red);
-			///mBagItemListPtr->push_back(bagItem);
-			/////
-		}
-	}
-}*/
-
 void Machop::InterceptOre(ItemType itemType)
 {
 	if (mOreCount <= 5)
 	{
-		//Ore* ore = new Ore();
 		BagItem* bagItem = new BagItem();
 
 		++mOreCount;
 
-		//ore->SetOreType(itemType);
 		bagItem->Init(ItemName::ItemOre, itemType);
 
-		//mOreList.push_back(ore);
 		mBagItemListPtr->push_back(bagItem);
 		
 		if (mState != State::Sleep)
@@ -477,12 +377,6 @@ void Machop::InterceptOre(ItemType itemType)
 			mState = State::Intercept;
 			SetAnimation();
 		}
-
-		/////
-		///BagItem* bagItem = new BagItem();
-		///bagItem->Init(ItemName::ItemOre, itemType);
-		///mBagItemListPtr->push_back(bagItem);
-		/////
 	}
 }
 
