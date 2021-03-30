@@ -9,7 +9,7 @@ void BagItem::Init()
 	mImage = IMAGEMANAGER->FindImage(L"ItemUI");
 }
 
-void BagItem::Init(ItemName name, ItemType type)
+void BagItem::Init(ItemName name, ItemType type, bool isCamRender)
 {
 	mItemName = name;
 	mItemType = type;
@@ -31,6 +31,8 @@ void BagItem::Init(ItemName name, ItemType type)
 		mFrameIndexY = 0;
 	else if (mItemName == ItemName::ItemTrail)
 		mFrameIndexY = 1;
+	
+	mIsCamRender = isCamRender;
 }
 
 void BagItem::Release()
@@ -43,5 +45,8 @@ void BagItem::Update()
 
 void BagItem::Render(HDC hdc)
 {
-	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mX, mY, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+	if (mIsCamRender)
+		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mX, mY, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
+	else
+		mImage->ScaleFrameRender(hdc, mX, mY, mFrameIndexX, mFrameIndexY, mSizeX, mSizeY);
 }

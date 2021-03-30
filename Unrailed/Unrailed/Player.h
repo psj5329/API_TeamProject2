@@ -128,6 +128,8 @@ class Player : public GameObject
 	bool mIsInfoOn;
 
 	int mMic;
+	int mSpaceAttack;
+	GameObject* mAttackedEnemy;
 
 public:
 	Player(const string& name, float x, float y);
