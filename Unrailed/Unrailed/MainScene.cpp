@@ -26,9 +26,6 @@ void MainScene::Init()
 
 	mIsShowWindow = false;
 
-	_BackgroundSound = 0.2f;
-	_EffectSound = 0.2f;
-
 	SOUNDMANAGER->Play(L"Roll Mart", _BackgroundSound);
 }
 
