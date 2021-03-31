@@ -38,7 +38,7 @@ void MainGame::Init()
 	mainCamera->Init();
 	//mainCamera->SetX(0);
 	//mainCamera->SetY(0);
-	
+
 	CAMERAMANAGER->SetMainCamera(mainCamera);
 
 	_BackgroundSound = 1.f;
@@ -106,7 +106,7 @@ void MainGame::Render(HDC hdc)
 {
 	HDC backDC = mBackBuffer->GetHDC();
 
-	if(SCENEMANAGER->GetCurrentSceneName() == L"LoadingScene")
+	if (SCENEMANAGER->GetCurrentSceneName() == L"LoadingScene")
 		PatBlt(backDC, 0, 0, WINSIZEX, WINSIZEY, BLACKNESS);
 	else
 		PatBlt(backDC, 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
@@ -238,9 +238,9 @@ void MainGame::LoadSoundResources(LoadingScene* scene)
 		wchar_t* ptr = nullptr;
 		wstring strPath = path;
 		//wstring str = wcstok_s(&strPath[0], L"2", &ptr);
-		size_t strSize = strPath.find(L"2\\Unrailed\\Unrailed");
+		size_t strSize = strPath.find(L"\\Unrailed\\Unrailed");
 		strPath.erase(strSize);
-		strPath.append(L"2\\Unrailed\\Sound\\*.*");
+		strPath.append(L"\\Unrailed\\Sound\\*.*");
 		FileSystemHelper::GetAllFile(strPath, FileType::SOUND);
 	}
 
