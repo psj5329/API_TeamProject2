@@ -7,7 +7,7 @@ void MapToolReady::Init()
 {
 	mBackgroundImg = IMAGEMANAGER->FindImage(L"MapReady");
 	Image* newi = IMAGEMANAGER->FindImage(L"New");
-	Image* load = IMAGEMANAGER->FindImage(L"Load");
+	Image* load = IMAGEMANAGER->FindImage(L"load");
 	Image* numbers = IMAGEMANAGER->FindImage(L"Numbers");
 	mSetArrow = IMAGEMANAGER->FindImage(L"RightArrow");
 	mBackground = RectMake(0, 0, mBackgroundImg->GetFrameWidth() * 2, mBackgroundImg->GetFrameHeight() * 2);
