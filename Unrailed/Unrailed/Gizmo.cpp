@@ -10,7 +10,7 @@ Gizmo::Gizmo()
 
 
 	HPEN greenPen = CreatePen(PS_SOLID, 1, RGB(0, 128, 0));
-	HPEN bluePen = CreatePen(PS_SOLID, 3, RGB(0, 0, 255));
+	HPEN bluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
 	HPEN redPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
 	HPEN blackPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
 	HPEN grayPen = CreatePen(PS_SOLID, 1, RGB(128, 128, 128));
@@ -31,7 +31,7 @@ Gizmo::Gizmo()
 	HPEN darkOrangePen = CreatePen(PS_SOLID, 1, RGB(255, 140, 0));
 	HPEN orangeRedPen = CreatePen(PS_SOLID, 1, RGB(255, 69, 0));
 	HPEN cyanPen = CreatePen(PS_SOLID, 3, RGB(0, 255, 255)); // 플레이어 사용 중
-	HPEN deepSkyBluePen = CreatePen(PS_SOLID, 1, RGB(0, 191, 255));
+	HPEN deepSkyBluePen = CreatePen(PS_SOLID, 3, RGB(0, 191, 255)); // 트레일 테일 사용 중
 	HPEN skyBluePen = CreatePen(PS_SOLID, 1, RGB(135, 206, 235));
 	HPEN darkCyanPen = CreatePen(PS_SOLID, 1, RGB(0, 139, 139));
 	HPEN purplePen = CreatePen(PS_SOLID, 3, RGB(128, 0, 128)); // 플레이어 사용 중

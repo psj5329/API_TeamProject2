@@ -69,7 +69,7 @@ void Trail::Render(HDC hdc)
             //²¿¸®¸é
             if (mIsTail)
             {
-                GIZMO->DrawRectInCamera(hdc, mRect, Gizmo::Color::Blue);
+				GIZMO->DrawRectInCamera(hdc, mRect, Gizmo::Color::DeepSkyBlue);
             }
         }
         else

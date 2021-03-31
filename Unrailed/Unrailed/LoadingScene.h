@@ -16,8 +16,6 @@ class LoadingScene : public Scene
 	int mFontColor;
 	bool mIsColorChange;
 
-	thread* mLoadingImageThread;
-
 public:
 	void AddLoadFunc(const function<void(void)>& func);
 

@@ -4,6 +4,7 @@
 #include "Image.h"
 #include "Animation.h"
 #include "Player.h"
+#include <thread>
 
 void LoadingScene::AddLoadFunc(const function<void(void)>& func)
 {
@@ -27,8 +28,7 @@ void LoadingScene::Init()
 	mLoadIndex = 0;
 	mIsEndLoading = false;
 
-	function<void(void)> threadFunc = bind(&LoadingScene::LoadingImageThread, this);
-	mLoadingImageThread = new thread(threadFunc);
+	LoadingImageThread();
 
 	mFontColor = 255;
 	mIsColorChange = false;
@@ -68,6 +68,10 @@ void LoadingScene::Update()
 
 		return;
 	}
+	function<void(void)> threadFunc = bind(&LoadingScene::LoadingImageThread, this);
+	//mLoadingImageThread = new thread(threadFunc);
+	//mLoadingImageThread->join();
+	threadFunc();
 
 	function<void(void)> func = mLoadList[mLoadIndex];
 	func();

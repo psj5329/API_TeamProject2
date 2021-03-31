@@ -8,6 +8,7 @@ class Bag
 	int mOwnery;
 
 public:
+	void Release();
 	void Update(int ownerX, int ownerY);
 	void Render(HDC hdc);
 
