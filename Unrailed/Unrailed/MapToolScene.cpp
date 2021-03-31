@@ -737,9 +737,9 @@ void MapToolScene::ImageLoad()
 
  void MapToolScene::InitButtons()
  {
-	 Image* save = ImageManager::GetInstance()->FindImage(L"Save");
-	 Image* load = ImageManager::GetInstance()->FindImage(L"Load");
-	 Image* undo = ImageManager::GetInstance()->FindImage(L"Undo");
+	 Image* save = ImageManager::GetInstance()->FindImage(L"save");
+	 Image* load = ImageManager::GetInstance()->FindImage(L"load");
+	 Image* undo = ImageManager::GetInstance()->FindImage(L"undo");
 	 Image* eraser = ImageManager::GetInstance()->FindImage(L"XTile");
 	 Image* rightArrow = ImageManager::GetInstance()->FindImage(L"RightArrow");
 	 Image* brownLArrow = ImageManager::GetInstance()->FindImage(L"BrownLeftArrow");
@@ -759,7 +759,7 @@ void MapToolScene::ImageLoad()
 
 	 for (int i = 0;i < 5;i++)
 	 {
-		 wstring str = L"Save" + to_wstring(i + 1);
+		 wstring str = L"save" + to_wstring(i + 1);
 		 Image* save = ImageManager::GetInstance()->FindImage(str);
 		 Button* tempButton = new Button(save, WINSIZEX / 2 + 20 + 80 * i, WINSIZEY - 140, save->GetFrameWidth(), save->GetFrameHeight(), bind(&MapToolScene::Save, this, i));
 		 mSaveButtons.push_back(tempButton);
