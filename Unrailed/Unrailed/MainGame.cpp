@@ -40,6 +40,9 @@ void MainGame::Init()
 	//mainCamera->SetY(0);
 	
 	CAMERAMANAGER->SetMainCamera(mainCamera);
+
+	_BackgroundSound = 1.f;
+	_EffectSound = 1.f;
 }
 
 void MainGame::Release()

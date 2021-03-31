@@ -226,13 +226,13 @@ void Sableye::MoveToOre()
 			int x = rand() % 7 - 3;
 			int y = rand() % 7 - 3;
 
-			//if (x == -3 || x == 3 || y == -3 || y == 3)	// 가생이 칸 선택
-			if (x != 0 || y != 0 )
+			if (x == -3 || x == 3 || y == -3 || y == 3)	// 가생이 칸 선택
+			//if (!(x == 0 && y == 0 ))
 			{
 				x += mX / TileSize;
 				y += mY / TileSize;
 
-				if (x < 0 || x >= TileCountX || y < 0 || y >= TileCountY)
+				if (x < 0 || x >= mTileList[0].size() || y < 0 || y >= mTileList.size())
 					continue;
 
 				if (abs(OBJECTMANAGER->GetPlayer()->GetX() / TileSize - x) + abs(OBJECTMANAGER->GetPlayer()->GetY() / TileSize - y) <= 3)
