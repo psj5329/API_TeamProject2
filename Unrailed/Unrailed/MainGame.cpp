@@ -215,6 +215,7 @@ void MainGame::LoadImageResources(LoadingScene* scene)
 			IWICBitmapDecoder* ipDecoder = nullptr;
 			wicFactory->CreateDecoderFromFilename(strFull.c_str(), NULL, GENERIC_READ,
 				WICDecodeMetadataCacheOnDemand, &ipDecoder);
+
 			// 디코더에서 프레임얻음
 			IWICBitmapFrameDecode* ipFrame = nullptr;
 			ipDecoder->GetFrame(0, &ipFrame);
