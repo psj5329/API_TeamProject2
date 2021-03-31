@@ -133,7 +133,7 @@ void MainGame::RenderTime(HDC hdc)
 	TextOut(hdc, 10, 25, strDeltaTime.c_str(), (int)strDeltaTime.length());
 	TextOut(hdc, 10, 40, strFPS.c_str(), (int)strFPS.length());*/
 
-	/*wstring strScene = L"¿©±ä ¸ÞÀÎ, 1~4 ´­·¯¼­ ¾À ³Ñ¾î°¡ÀÚ";
+	/*wstring strScene = L"ì—¬ê¸´ ë©”ì¸, 1~4 ëˆŒëŸ¬ì„œ ì”¬ ë„˜ì–´ê°€ìž";
 	TextOut(hdc, WINSIZEX / 2 - 50, WINSIZEY / 2, strScene.c_str(), strScene.length());*/
 }
 
@@ -179,7 +179,7 @@ void MainGame::LoadImageResources(LoadingScene* scene)
 		//wstring str = wcstok_s(&strPath[0], L"2", &ptr);
 		size_t strSize = strPath.find(L"\\Unrailed\\Unrailed");
 		strPath.erase(strSize);
-		strPath.append(L"\\Unrailed\\Resources\\*.*");		// ¤¿ ÁøÂ¥ ³Ñ ¸¾¿¡ ¾Èµç´Ù
+		strPath.append(L"\\Unrailed\\Resources\\*.*");		// ã… ì§„ì§œ ë„˜ ë§˜ì— ì•ˆë“ ë‹¤
 		FileSystemHelper::GetAllFile(strPath, FileType::IMAGE);
 	}
 
@@ -198,24 +198,24 @@ void MainGame::LoadImageResources(LoadingScene* scene)
 			frameY = 0;
 
 			wstring strKey = FileSystemHelper::mVecFileInfo[i].FileName.c_str();
-			strKey = wcstok_s(&strKey[0], L".", &ptr);	// ¿ì¼± .bmp ¶¼°í
+			strKey = wcstok_s(&strKey[0], L".", &ptr);	// ìš°ì„  .bmp ë–¼ê³ 
 
 			if (wcsstr(strKey.c_str(), L"-") != NULL)
 			{
 				wstring strFrameX = wcstok_s(&strKey[0], L"-", &ptr);
 				strFrameX = wcstok_s(nullptr, L"-", &ptr);
 				frameX = _wtoi(strFrameX.c_str());
-				wstring strFrameY = wcstok_s(nullptr, L"-", &ptr);			// xÇÁ·¹ÀÓ ¶¼°í
+				wstring strFrameY = wcstok_s(nullptr, L"-", &ptr);			// xí”„ë ˆìž„ ë–¼ê³ 
 				frameY = _wtoi(strFrameY.c_str());
 			}
 
 			wstring strFull = FileSystemHelper::mVecFileInfo[i].FilePath + FileSystemHelper::mVecFileInfo[i].FileName;
 
-			// µðÄÚ´õ »ý¼º
+			// ë””ì½”ë” ìƒì„±
 			IWICBitmapDecoder* ipDecoder = nullptr;
 			wicFactory->CreateDecoderFromFilename(strFull.c_str(), NULL, GENERIC_READ,
 				WICDecodeMetadataCacheOnDemand, &ipDecoder);
-			// µðÄÚ´õ¿¡¼­ ÇÁ·¹ÀÓ¾òÀ½
+			// ë””ì½”ë”ì—ì„œ í”„ë ˆìž„ì–»ìŒ
 			IWICBitmapFrameDecode* ipFrame = nullptr;
 			ipDecoder->GetFrame(0, &ipFrame);
 			ipFrame->GetSize(&width, &height);
