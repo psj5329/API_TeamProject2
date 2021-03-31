@@ -91,7 +91,7 @@ void Stage4::Update()
 	Trail* currentTrail = (*trailListPtr)[y][x];
 	if (currentTrail->GetisFinish())
 		mIsClear = true;
-	else if (!mElectrode->CheckNextTrailType())
+	else if (!mVoltorbVec.back()->GetIsActive())
 		mIsGameOver = true;
 
 	if (!mIsPause && !mIsClear && !mIsGameOver)
