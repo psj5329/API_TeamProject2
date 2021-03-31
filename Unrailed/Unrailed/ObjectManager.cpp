@@ -82,13 +82,14 @@ void ObjectManager::ReleaseInScene()
 	ObjectIter iter = mObjectList.begin();
 	for (; iter != mObjectList.end(); ++iter)
 	{
-		if (iter->first != ObjectLayer::PLAYER && iter->first != ObjectLayer::TRAIN)
+		if (iter->first != ObjectLayer::PLAYER)// && iter->first != ObjectLayer::ITEM)
 		{
 			for (int i = 0; i < iter->second.size(); ++i)
 			{
 				iter->second[i]->Release();
 				SafeDelete(iter->second[i]);
 				iter->second.erase(iter->second.begin() + i);
+				--i;
 			}
 		}
 	}

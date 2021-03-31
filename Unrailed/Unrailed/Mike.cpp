@@ -9,8 +9,8 @@ void Mike::Init()
 	mImage = IMAGEMANAGER->FindImage(L"Mic");
 	
 	mState = MikeState::Jigglypuff;
-	mSizeX = mImage->GetFrameWidth();
-	mSizeY = mImage->GetFrameHeight();
+	mSizeX = mImage->GetFrameWidth() * 2;
+	mSizeY = mImage->GetFrameHeight() * 2;
 	
 	OBJECTMANAGER->AddObject(ObjectLayer::ITEM, this);
 	
@@ -39,8 +39,8 @@ bool Mike::PlaceMikeFloat(float x, float y)
 	if (mState == MikeState::OnGround)
 		return false;
 
-	mX = x;
-	mY = y;
+	mX = x + 8;
+	mY = y + 8;
 	mRect = RectMake(mX, mY, mSizeX, mSizeY);
 	mState = MikeState::OnGround;
 	mIsActive = true;
@@ -57,8 +57,8 @@ bool Mike::PlaceMike(int indexX, int indexY)
 	//mIndexX = (mX + (CAMERAMANAGER->GetMainCamera()->GetX() - WINSIZEX / 2)) / TileSize;
 	//mIndexY = (mY + (CAMERAMANAGER->GetMainCamera()->GetY() - WINSIZEY / 2)) / TileSize;
 
-	mX = indexX * TileSize;
-	mY = indexY * TileSize;
+	mX = indexX * TileSize + 8;
+	mY = indexY * TileSize + 8;
 
 	mRect = RectMake(mX, mY, mSizeX, mSizeY);
 	mState = MikeState::OnGround;

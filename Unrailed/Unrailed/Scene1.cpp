@@ -11,19 +11,24 @@
 #include "Player.h"
 #include "Sableye.h"
 #include "Button.h"
+#include "TrailManager.h"
+#include "Electrode.h"
+#include "Voltorb.h"
+#include "Trail.h"
+#include "GameEvent.h"
 
 void Scene1::Init()
 {
 	mTileMap = new TileMap();
-	mTileMap->Init(TileCountX, TileCountY, TileSize);
-	mTileMap->LoadMap(); 
+	mTileMap->Init(mTileMap->GetXTileCount(), mTileMap->GetYTileCount(), TileSize);
+	mTileMap->LoadMap(1); 
 
-	mPlayer = new Player("Player_test", 0, 0);
-	mPlayer->SetX(48 * 2);
-	mPlayer->SetY(48 * 5);
+	mPlayer = new Player("Player_test", TileSize * 5.5, TileSize * 9.5);
+	/*mPlayer->SetX(48 * 5);
+	mPlayer->SetY(48 * 5);*/
 	OBJECTMANAGER->AddObject(ObjectLayer::PLAYER, mPlayer);
 
-	mPlayer->SetTileCount(TileCountX, TileCountY);
+	mPlayer->SetTileCount(mTileMap->GetXTileCount(), mTileMap->GetYTileCount());
 
 	vector<vector<Tile*>>* tileListPtr = mTileMap->GetTileListPtr();
 	mPlayer->SetTileListPtr(tileListPtr);
@@ -54,6 +59,36 @@ void Scene1::Init()
 	for (int i = 0; i < object.size(); ++i)
 		dynamic_cast<Enemy*>(object[i])->SetTileList(*mTileMap->GetTileListPtr());
 
+	mTrailManager = new TrailManager();
+	mTrailManager->Init(mTileMap->GetYTileCount(), mTileMap->GetXTileCount());
+	mTrailManager->PlaceTrail(10, 5, ItemType::Green, 3); // 0: down 1: up 2: left 3: right
+	mTrailManager->PlaceTrail(10, 4, ItemType::Green, 3);
+	mTrailManager->PlaceTrail(10, 7, ItemType::Green, 1);
+	//mTrailManager->PlaceTrail(12, 24, ItemType::Green, 1);
+	mTrailManager->SetStartIndex(10, 5);
+	vector <vector <Trail*>>* temp = mTrailManager->GetTrailListPtr();
+	(*temp)[10][7]->SetisFinish(true);
+
+
+
+	//푸린
+	mJigglypuff = new Jigglypuff;
+	mJigglypuff->Init();
+	mJigglypuff->SetX(200);
+	mJigglypuff->SetY(WINSIZEY / 2);
+
+	// 열차
+	mElectrode = new Electrode;
+	mElectrode->Init(TileSize * 5.5, TileSize * 10.5);
+	mElectrode->SetTrail(temp);
+	mElectrode->SetJigglypuff(mJigglypuff);
+
+	mVoltorb = new Voltorb;
+	mVoltorb->Init(TileSize * 4.5, TileSize * 10.5);
+	mVoltorb->SetTrail(temp);
+	mVoltorb->SetJigglypuff(mJigglypuff);
+
+	mElectrode->SetNextTrain(mVoltorb);
 
 	WindowInit();		// 일시정지 창 이닛
 }
@@ -75,6 +110,38 @@ void Scene1::Update()
 
 	if (INPUT->GetKeyDown(VK_ESCAPE))
 		mIsPause = !mIsPause;
+
+	if (INPUT->GetKeyDown(MK_LBUTTON))
+	{
+		int x = _mousePosition.x / TileSize;
+		int y = _mousePosition.y / TileSize;
+
+		mTrailManager->PlaceTrail(y, x, ItemType::Green, 0);
+	}
+
+	if (INPUT->GetKeyDown(MK_RBUTTON))
+	{
+		int x = _mousePosition.x / TileSize;
+		int y = _mousePosition.y / TileSize;
+
+		vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+		Trail* currentTrail = (*trailListPtr)[y][x];
+
+		if (currentTrail->GetTrailType() == ItemType::None)
+			return;
+
+		mTrailManager->TurnTrail(y, x);
+	}
+
+	vector<vector<Trail*>>* trailListPtr = mTrailManager->GetTrailListPtr();
+	int x = mElectrode->GetX() / TileSize;
+	int y = mElectrode->GetY() / TileSize;
+	
+	Trail* currentTrail = (*trailListPtr)[y][x];
+	if (currentTrail->GetisFinish())
+		mIsClear = true;
+	else if (!mElectrode->CheckNextTrailType())
+		mIsGameOver = true;
 
 	if (mIsPause && !mIsOption)
 	{
@@ -106,22 +173,53 @@ void Scene1::Update()
 			mVolumeBackgroundButton->Update();
 	}
 
-	if (!mIsPause)
+	if (!mIsPause && !mIsClear && !mIsGameOver)
 	{
 		OBJECTMANAGER->Update();
 		mTileMap->Update();
 		POINT tilecount = mPlayer->GetTileCount();
+		mTrailManager->Update();
 		COLLISIONMANAGER->TileCollision(mPlayer, mTileMap, tilecount.x, tilecount.y);
 		COLLISIONMANAGER->MapObjectCollision(mPlayer, mTileMap, tilecount.x, tilecount.y);
 		CAMERAMANAGER->Update();
 	}
+
+	if (mIsClear)
+	{
+		if (!mIsClearFont)
+		{
+			mIsClearFont = true;
+			GAMEEVENTMANAGER->PushEvent(new IClearStage());
+		}
+		else
+		{
+			if (GAMEEVENTMANAGER->GetEventCount() == 0)
+				SCENEMANAGER->LoadScene(L"SceneSelect");
+		}
+	}
+
+	if (mIsGameOver)
+	{
+		if (!mIsGameOverFont)
+		{
+			mIsGameOverFont = true;
+			GAMEEVENTMANAGER->PushEvent(new IGameoverStage());
+		}
+		else
+		{
+			if (GAMEEVENTMANAGER->GetEventCount() == 0)
+				SCENEMANAGER->LoadScene(L"SceneSelect");
+		}
+	}
+
+	GAMEEVENTMANAGER->Update();
 }
 
 void Scene1::Render(HDC hdc)
 {
 	mTileMap->Render(hdc);
+	mTrailManager->Render(hdc);
 	OBJECTMANAGER->Render(hdc);
-
 
 	if (mIsPause)
 	{
@@ -142,5 +240,7 @@ void Scene1::Render(HDC hdc)
 			mVolumeBackgroundButton->Render(hdc);
 		}
 	}
+
+	GAMEEVENTMANAGER->Render(hdc);
 }
 

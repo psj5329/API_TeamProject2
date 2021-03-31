@@ -23,7 +23,6 @@ protected:
 
 	State mState;
 	Direction mDirection;
-	float mSpeed;
 	float mSpeedX;
 	float mSpeedY;
 	float mSynthesisCoolTime;
@@ -81,4 +80,5 @@ public:
 	
 	bool GetIsHurt() { return mIsHurt; }
 	bool GetIsExplode() { return mIsExplode; }
+	Direction GetDirection() { return mDirection; }
 };

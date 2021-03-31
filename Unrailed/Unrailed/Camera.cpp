@@ -2,6 +2,8 @@
 #include "Camera.h"
 
 #include "Image.h"
+#include "Scene.h"
+#include "Electrode.h"
 
 void Camera::Init()
 {
@@ -23,8 +25,50 @@ void Camera::Update()
 	case Camera::Mode::Follow:
 		if (mTarget)
 		{
-			mX = Math::Lerp(mX, mTarget->GetX(), 2.f * Time::GetInstance()->DeltaTime());
+			//mX = Math::Lerp(mX, mTarget->GetX(), 2.f * Time::GetInstance()->DeltaTime());
 			//mY = Math::Lerp(mY, mTarget->GetY(), 2.f * Time::GetInstance()->DeltaTime());
+
+			float x = SCENEMANAGER->GetCurrentScene()->GetSizeX();
+			float y = SCENEMANAGER->GetCurrentScene()->GetSizeY();
+
+			// 오른쪽으로
+			if (dynamic_cast<Electrode*>(mTarget)->GetDirection() == Direction::Right)
+			{
+				if (mTarget->GetX() <= WINSIZEX / 2 - WINSIZEX / 10)
+					mX = Math::Lerp(mX, WINSIZEX / 2, 2.f * Time::GetInstance()->DeltaTime());
+				else if (mTarget->GetX() >= x - WINSIZEX / 2 - WINSIZEX / 10)
+					mX = Math::Lerp(mX, x - WINSIZEX / 2, 2.f * Time::GetInstance()->DeltaTime());
+				else	mX = Math::Lerp(mX, mTarget->GetX() + WINSIZEX / 10, 2.f * Time::GetInstance()->DeltaTime());
+			}
+			else if (dynamic_cast<Electrode*>(mTarget)->GetDirection() == Direction::Left) // 왼쪽
+			{
+				if (mTarget->GetX() <= WINSIZEX / 2 + WINSIZEX / 10)
+					mX = Math::Lerp(mX, WINSIZEX / 2, 2.f * Time::GetInstance()->DeltaTime());
+				else if (mTarget->GetX() >= x - WINSIZEX / 2 + WINSIZEX / 10)
+					mX = Math::Lerp(mX, x - WINSIZEX / 2, 2.f * Time::GetInstance()->DeltaTime());
+				else
+					mX = Math::Lerp(mX, mTarget->GetX() - WINSIZEX / 10, 2.f * Time::GetInstance()->DeltaTime());
+			}
+
+			// 위쪽으로
+			//if (dynamic_cast<Electrode*>(mTarget)->GetDirection() == Direction::Up)
+			{
+				if (mTarget->GetY() <= WINSIZEY / 2 - WINSIZEY / 10)
+					mY = Math::Lerp(mY, WINSIZEY / 2, 2.f * Time::GetInstance()->DeltaTime());
+				else if (mTarget->GetY() >= y - WINSIZEY / 2 - WINSIZEY / 10)
+					mY = Math::Lerp(mY, y - WINSIZEY / 2, 2.f * Time::GetInstance()->DeltaTime());
+				else
+					mY = Math::Lerp(mY, mTarget->GetY() + WINSIZEY / 10, 2.f * Time::GetInstance()->DeltaTime());
+			}
+			//else if (dynamic_cast<Electrode*>(mTarget)->GetDirection() == Direction::Down)	// 아래쪽
+			{
+				if (mTarget->GetY() <= WINSIZEY / 2 + WINSIZEY / 10)
+					mY = Math::Lerp(mY, WINSIZEY / 2, 2.f * Time::GetInstance()->DeltaTime());
+				else if (mTarget->GetY() >= y - WINSIZEY / 2 + WINSIZEY / 10)
+					mY = Math::Lerp(mY, y - WINSIZEY / 2, 2.f * Time::GetInstance()->DeltaTime());
+				else
+					mY = Math::Lerp(mY, mTarget->GetY() - WINSIZEY / 10, 2.f * Time::GetInstance()->DeltaTime());
+			}
 
 			mRect = RectMakeCenter((int)mX, (int)mY, (int)mSizeX, (int)mSizeY);
 		}

@@ -27,7 +27,6 @@ void Abra::Init(int x, int y, int image)
 	//Abra 변수
 	mDirection = Direction::Right;
 	mState = State::Sleep;
-	mSpeed = 100.f;
 	mSynthesisCoolTime = 0;
 	mIsSynthesis = false;
 	mTrailCount = 0;
@@ -44,7 +43,7 @@ void Abra::Init(int x, int y, int image)
 
 	mBagItemListPtr = mBag.GetBagItemListPtr();
 
-	mStartTimer = 3.5f;
+	mStartTimer = 30.f;
 }
 
 void Abra::Release()
@@ -71,7 +70,7 @@ void Abra::Update()
 
 
 	//시작 쿨타임
-	if (mStartTimer == 3.5)
+	if (mStartTimer == 30)
 	{
 		if (mState == State::Sleep)
 		{
@@ -129,17 +128,17 @@ void Abra::Update()
 
 	//진화
 	int level = 1;
-	if (INPUT->GetKeyDown('Q'))
+	if (INPUT->GetKeyDown('I'))
 	{
 		level = 1;
 		SetImage(level);
 	}
-	if (INPUT->GetKeyDown('W'))
+	if (INPUT->GetKeyDown('O'))
 	{
 		level = 2;
 		SetImage(level);
 	}
-	if (INPUT->GetKeyDown('E'))
+	if (INPUT->GetKeyDown('P'))
 	{
 		level = 3;
 		SetImage(level);
@@ -153,23 +152,7 @@ void Abra::Update()
 
 void Abra::Render(HDC hdc)
 {
-	//RenderRect(hdc, mRect);
-	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-	//CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-
-	//wstring strTrail;
-	//for (int i = 0; i < mCreatedTrailList.size(); ++i)
-	//{
-	//	if (mCreatedTrailList[i]->trailType == ItemType::Green)
-	//		strTrail = L"그린" + to_wstring(mTrailCount);
-	//	else if (mCreatedTrailList[i]->trailType == ItemType::Blue)
-	//		strTrail = L"블루" + to_wstring(mTrailCount);
-	//	else if (mCreatedTrailList[i]->trailType == ItemType::Red)
-	//		strTrail = L"레드" + to_wstring(mTrailCount);
-	//
-	//	TextOut(hdc, mX - 20, mY - 40 - i * 15, strTrail.c_str(), strTrail.length());
-	//}
 
 	mBag.Render(hdc);
 }
@@ -386,7 +369,7 @@ void Abra::SetAnimation()
 void Abra::SynthesisOre()
 {
 	ItemType type = ItemType::None;
-	if (mState != State::Hurt && mTrailCount <= 2 && mMachop->GetOreCount() >= 2 && mIsSynthesis == false && mOreBroken == false)
+	if (mState != State::Sleep && mState != State::Hurt && mTrailCount <= 2 && mMachop->GetOreCount() >= 2 && mIsSynthesis == false && mOreBroken == false)
 	{
 		mState = State::Synthesis;
 		SetAnimation();
@@ -403,11 +386,6 @@ void Abra::SynthesisOre()
 	}
 	if (mOreBroken == true)
 	{
-		//CreatedTrail* createdTrail = new CreatedTrail;
-		//createdTrail->trailType = type;
-		//createdTrail->isCreated = false;
-		////createdTrail->mImage = 
-		//mCreatedTrailList.push_back(createdTrail);
 		BagItem* createdTrail = new BagItem();
 		createdTrail->Init(ItemName::ItemTrail, type);
 		mBagItemListPtr->push_back(createdTrail);
@@ -420,11 +398,6 @@ void Abra::SynthesisOre()
 		mSynthesisCoolTime = 0;
 
 		mTrailCount += 1;
-	}
-
-	if (INPUT->GetKeyDown('F'))
-	{
-		TrailErase();
 	}
 }
 
@@ -477,19 +450,6 @@ void Abra::EndExplode()
 	{
 		SetIsDestroy(true);
 	}
-}
-
-ItemType Abra::Receive()
-{
-	if (mCreatedTrailList.size() > 0)
-	{
-		ItemType type = mCreatedTrailList[0]->trailType;
-		//벡터에서 첫번째 제거
-
-		return type;
-	}
-	else
-		return ItemType::None;
 }
 
 ItemType Abra::TrailErase()

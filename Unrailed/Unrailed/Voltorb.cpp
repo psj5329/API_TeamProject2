@@ -26,7 +26,6 @@ void Voltorb::Init(int x, int y)
 	//Electrode º¯¼ö
 	mDirection = Direction::Right;
 	mState = State::Sleep;
-	mSpeed = 100.f;
 
 	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, this);
 
@@ -37,11 +36,8 @@ void Voltorb::Init(int x, int y)
 	mCurrentAnimation->Play();
 
 	mExplosionTimer = 0.3;
-	mStartTimer = 3.5f;
-	mSleepTimer = 10.f;
+	mStartTimer = 30.f;
 
-	mDustFrameTime = 0;
-	mAlpha = 1.f;
 }
 
 void Voltorb::Release()
@@ -62,7 +58,7 @@ void Voltorb::Update()
 
 
 	//½ÃÀÛ ÄðÅ¸ÀÓ
-	if (mStartTimer == 3.5)
+	if (mStartTimer == 30)
 	{
 		if (mState == State::Sleep)
 		{
@@ -115,15 +111,19 @@ void Voltorb::Update()
 	}
 
 	//Çª¸°
-	if (mElectrode->GetIsHurt() == true && mState != State::Exploding && mState != State::Explode)
+	if (mIsHurt == false && mElectrode->GetIsHurt() == true && mState != State::Exploding && mState != State::Explode)
 	{
 		mState = State::Hurt;
 		SetAnimation();
+
+		mIsHurt = true;
 	}
-	else if (mElectrode->GetIsHurt() == false && mState != State::Sleep)
+	else if (mElectrode->GetIsHurt() == false && mState != State::Sleep && mState != State::Exploding && mState != State::Explode)
 	{
 		mState = State::Move;
 		SetAnimation();
+
+		mIsHurt = false;
 	}
 
 	//Æø¹ß
@@ -150,12 +150,9 @@ void Voltorb::Update()
 
 void Voltorb::Render(HDC hdc)
 {
-	//RenderRect(hdc, mRect);
-	//mCurrentImage->ScaleFrameRender(hdc, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
-	//CAMERAMANAGER->GetMainCamera()->RenderRectCam(hdc, mRect);
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
-	GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);
+	//GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);
 }
 
 void Voltorb::ReadyAnimation()
@@ -192,24 +189,24 @@ void Voltorb::ReadyAnimation()
 	mExplode->SetCallbackFunc(bind(&Train::EndExplode, this));
 
 	mDownHurt = new Animation();
-	mDownHurt->InitFrameByStartEnd(0, 4, 0, 4, false);
-	mDownHurt->SetIsLoop(false);
-	mDownHurt->SetFrameUpdateTime(0.8f);
+	mDownHurt->InitFrameByStartEnd(0, 4, 1, 4, false);
+	mDownHurt->SetIsLoop(true);
+	mDownHurt->SetFrameUpdateTime(0.2f);
 
 	mUpHurt = new Animation();
-	mUpHurt->InitFrameByStartEnd(1, 4, 1, 4, false);
-	mUpHurt->SetIsLoop(false);
-	mUpHurt->SetFrameUpdateTime(0.8f);
+	mUpHurt->InitFrameByStartEnd(2, 4, 3, 4, false);
+	mUpHurt->SetIsLoop(true);
+	mUpHurt->SetFrameUpdateTime(0.2f);
 
 	mLeftHurt = new Animation();
-	mLeftHurt->InitFrameByStartEnd(0, 5, 0, 5, false);
-	mLeftHurt->SetIsLoop(false);
-	mLeftHurt->SetFrameUpdateTime(0.8f);
+	mLeftHurt->InitFrameByStartEnd(0, 5, 1, 5, false);
+	mLeftHurt->SetIsLoop(true);
+	mLeftHurt->SetFrameUpdateTime(0.2f);
 
 	mRightHurt = new Animation();
-	mRightHurt->InitFrameByStartEnd(1, 5, 1, 5, false);
-	mRightHurt->SetIsLoop(false);
-	mRightHurt->SetFrameUpdateTime(0.8f);
+	mRightHurt->InitFrameByStartEnd(2, 5, 3, 5, false);
+	mRightHurt->SetIsLoop(true);
+	mRightHurt->SetFrameUpdateTime(0.2f);
 }
 
 void Voltorb::SetAnimation()

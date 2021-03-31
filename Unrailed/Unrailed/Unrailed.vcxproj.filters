@@ -81,18 +81,6 @@
     <Filter Include="MainGame\Object\Unit\Player">
       <UniqueIdentifier>{8ecce340-2cd4-4f92-b178-9c30c4da888d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\Scene\Scene1">
-      <UniqueIdentifier>{6dfac4f5-fb19-44e0-be86-a02af50030d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MainGame\Scene\Scene2">
-      <UniqueIdentifier>{58d43f4c-f38e-4e90-8574-eed6a4ba6669}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MainGame\Scene\Scene3">
-      <UniqueIdentifier>{00a6dd87-9bdb-40a2-94ef-bc9d5fad7bdc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MainGame\Scene\Scene4">
-      <UniqueIdentifier>{f21fbff4-7488-4660-ad35-df0c856e45d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\Object\Unit\Train">
       <UniqueIdentifier>{265683f0-bda7-4a75-b0bb-975a3479a146}</UniqueIdentifier>
     </Filter>
@@ -126,9 +114,6 @@
     <Filter Include="Framework\Path">
       <UniqueIdentifier>{a9fcc723-4467-479e-91d1-6b81e40cd708}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\Scene\Scene6">
-      <UniqueIdentifier>{16c0818b-f8ed-4820-98ba-43aa3b7ecd4a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\Scene\Menu">
       <UniqueIdentifier>{4eb80d5b-aa25-4219-be92-7b6f48ca6048}</UniqueIdentifier>
     </Filter>
@@ -159,6 +144,42 @@
     </Filter>
     <Filter Include="MainGame\Object\Item\Mike">
       <UniqueIdentifier>{2a517eab-46bd-4b45-a419-ac28b728f135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Stages">
+      <UniqueIdentifier>{43db1f69-0aee-49be-ae03-45cb0d3a27b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Stages\Stage1">
+      <UniqueIdentifier>{bad84d57-9cf5-491a-8a69-cacabda01cf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Stages\Stage2">
+      <UniqueIdentifier>{f3206ba1-05a6-45ea-819e-a5f858a3ba21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Stages\Stage3">
+      <UniqueIdentifier>{3c068fb5-6a20-4633-a073-c5cdd0232e45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Stages\Stage4">
+      <UniqueIdentifier>{2629e84e-7f09-47a7-a50d-38fd205d4471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Stages\Stage5">
+      <UniqueIdentifier>{46870c36-40f7-41e9-8bc4-a25325d32c57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\TestScene">
+      <UniqueIdentifier>{01b8706d-d2ff-4b64-88f5-434739b2b593}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\TestScene\Scene1">
+      <UniqueIdentifier>{6dfac4f5-fb19-44e0-be86-a02af50030d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\TestScene\Scene2">
+      <UniqueIdentifier>{58d43f4c-f38e-4e90-8574-eed6a4ba6669}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\TestScene\Scene3">
+      <UniqueIdentifier>{00a6dd87-9bdb-40a2-94ef-bc9d5fad7bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\TestScene\Scene4">
+      <UniqueIdentifier>{f21fbff4-7488-4660-ad35-df0c856e45d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\TestScene\Scene6">
+      <UniqueIdentifier>{16c0818b-f8ed-4820-98ba-43aa3b7ecd4a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -244,16 +265,16 @@
       <Filter>MainGame\Object\Unit</Filter>
     </ClInclude>
     <ClInclude Include="Scene1.h">
-      <Filter>MainGame\Scene\Scene1</Filter>
+      <Filter>MainGame\Scene\TestScene\Scene1</Filter>
     </ClInclude>
     <ClInclude Include="Scene2.h">
-      <Filter>MainGame\Scene\Scene2</Filter>
+      <Filter>MainGame\Scene\TestScene\Scene2</Filter>
     </ClInclude>
     <ClInclude Include="Scene3.h">
-      <Filter>MainGame\Scene\Scene3</Filter>
+      <Filter>MainGame\Scene\TestScene\Scene3</Filter>
     </ClInclude>
     <ClInclude Include="Scene4.h">
-      <Filter>MainGame\Scene\Scene4</Filter>
+      <Filter>MainGame\Scene\TestScene\Scene4</Filter>
     </ClInclude>
     <ClInclude Include="Sableye.h">
       <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
@@ -319,7 +340,7 @@
       <Filter>Framework\Path</Filter>
     </ClInclude>
     <ClInclude Include="Scene6.h">
-      <Filter>MainGame\Scene\Scene6</Filter>
+      <Filter>MainGame\Scene\TestScene\Scene6</Filter>
     </ClInclude>
     <ClInclude Include="MainScene.h">
       <Filter>MainGame\Scene\Menu</Filter>
@@ -362,6 +383,21 @@
     </ClInclude>
     <ClInclude Include="Mike.h">
       <Filter>MainGame\Object\Item\Mike</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1.h">
+      <Filter>MainGame\Scene\Stages\Stage1</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage2.h">
+      <Filter>MainGame\Scene\Stages\Stage2</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage3.h">
+      <Filter>MainGame\Scene\Stages\Stage3</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage4.h">
+      <Filter>MainGame\Scene\Stages\Stage4</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage5.h">
+      <Filter>MainGame\Scene\Stages\Stage5</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -435,16 +471,16 @@
       <Filter>MainGame\Object\Unit</Filter>
     </ClCompile>
     <ClCompile Include="Scene1.cpp">
-      <Filter>MainGame\Scene\Scene1</Filter>
+      <Filter>MainGame\Scene\TestScene\Scene1</Filter>
     </ClCompile>
     <ClCompile Include="Scene2.cpp">
-      <Filter>MainGame\Scene\Scene2</Filter>
+      <Filter>MainGame\Scene\TestScene\Scene2</Filter>
     </ClCompile>
     <ClCompile Include="Scene3.cpp">
-      <Filter>MainGame\Scene\Scene3</Filter>
+      <Filter>MainGame\Scene\TestScene\Scene3</Filter>
     </ClCompile>
     <ClCompile Include="Scene4.cpp">
-      <Filter>MainGame\Scene\Scene4</Filter>
+      <Filter>MainGame\Scene\TestScene\Scene4</Filter>
     </ClCompile>
     <ClCompile Include="Sableye.cpp">
       <Filter>MainGame\Object\Unit\Enemy\Sableye</Filter>
@@ -510,7 +546,7 @@
       <Filter>Framework\Path</Filter>
     </ClCompile>
     <ClCompile Include="Scene6.cpp">
-      <Filter>MainGame\Scene\Scene6</Filter>
+      <Filter>MainGame\Scene\TestScene\Scene6</Filter>
     </ClCompile>
     <ClCompile Include="Abra.cpp">
       <Filter>MainGame\Object\Unit\Train</Filter>
@@ -553,6 +589,21 @@
     </ClCompile>
     <ClCompile Include="Mike.cpp">
       <Filter>MainGame\Object\Item\Mike</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1.cpp">
+      <Filter>MainGame\Scene\Stages\Stage1</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage2.cpp">
+      <Filter>MainGame\Scene\Stages\Stage2</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage3.cpp">
+      <Filter>MainGame\Scene\Stages\Stage3</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage4.cpp">
+      <Filter>MainGame\Scene\Stages\Stage4</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage5.cpp">
+      <Filter>MainGame\Scene\Stages\Stage5</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

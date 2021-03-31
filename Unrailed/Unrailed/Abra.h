@@ -16,7 +16,7 @@ struct CreatedTrail
 
 class Abra : public Train
 {
-	vector <CreatedTrail*> mCreatedTrailList;
+	//vector <CreatedTrail*> mCreatedTrailList;
 
 	Machop* mMachop;
 	Electrode* mElectrode;
@@ -55,9 +55,9 @@ public:
 
 	void SynthesisOre();
 
-	ItemType Receive();
+	//ItemType Receive();
 
 	ItemType TrailErase();
 
-	int GetTrailCount() { return mCreatedTrailList.size(); }
+	int GetTrailCount() { return mTrailCount; } //return mCreatedTrailList.size(); }
 };

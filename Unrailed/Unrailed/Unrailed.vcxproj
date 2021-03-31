@@ -35,7 +35,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -48,7 +48,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -210,6 +210,11 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneSelect.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="Stage1.h" />
+    <ClInclude Include="Stage2.h" />
+    <ClInclude Include="Stage3.h" />
+    <ClInclude Include="Stage4.h" />
+    <ClInclude Include="Stage5.h" />
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="Struct.h" />
     <ClInclude Include="targetver.h" />
@@ -279,6 +284,11 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneSelect.cpp" />
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="Stage1.cpp" />
+    <ClCompile Include="Stage2.cpp" />
+    <ClCompile Include="Stage3.cpp" />
+    <ClCompile Include="Stage4.cpp" />
+    <ClCompile Include="Stage5.cpp" />
     <ClCompile Include="StringHelper.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMap.cpp" />

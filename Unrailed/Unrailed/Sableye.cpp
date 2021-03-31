@@ -12,8 +12,8 @@ void Sableye::Init()
 {
 	mImage = IMAGEMANAGER->FindImage(L"Sableye");
 	mName = "Sableye";
-	mX = 48 * 8 + 24;
-	mY = 48 * 8 + 24;
+	mX = 48 * 14 + 24;
+	mY = 48 * 14 + 24;
 	mSizeX = mImage->GetFrameWidth() * 2;
 	mSizeY = mImage->GetFrameHeight() * 2;
 	mRect = RectMakeCenter(mX, mY, mSizeX, mSizeY);
@@ -226,7 +226,8 @@ void Sableye::MoveToOre()
 			int x = rand() % 7 - 3;
 			int y = rand() % 7 - 3;
 
-			if (x == -3 || x == 3 || y == -3 || y == 3)	// 가생이 칸 선택
+			//if (x == -3 || x == 3 || y == -3 || y == 3)	// 가생이 칸 선택
+			if (x != 0 || y != 0 )
 			{
 				x += mX / TileSize;
 				y += mY / TileSize;

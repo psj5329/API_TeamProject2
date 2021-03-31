@@ -25,7 +25,6 @@ void Electrode::Init(int x, int y)
 	//Electrode º¯¼ö
 	mDirection = Direction::Right;
 	mState = State::Sleep;
-	mSpeed = 100.f;
 
 	OBJECTMANAGER->AddObject(ObjectLayer::TRAIN, this);
 
@@ -36,11 +35,8 @@ void Electrode::Init(int x, int y)
 	mCurrentAnimation->Play();
 
 
-	mStartTimer = 3.5f;
-	mSleepTimer = 10.f;
-
-	mDustFrameTime = 0;
-	mAlpha = 1.f;
+	mStartTimer = 30.f;
+	mSleepTimer = 100.f;
 }
 
 void Electrode::Release()
@@ -60,7 +56,7 @@ void Electrode::Update()
 	int indexY = mY / TileSize;
 
 	//½ÃÀÛ ÄðÅ¸ÀÓ
-	if (mStartTimer == 3.5)
+	if (mStartTimer == 30)
 	{
 		if (mState == State::Sleep)
 		{
@@ -111,12 +107,14 @@ void Electrode::Update()
 	}
 
 	//Çª¸°
-	if (CheckJigglypuff() == true)
+	if (CheckJigglypuff() == true && (mState == State::Move || mState == State::Hurt))
 	{
-		mState = State::Move;
-		SetAnimation();
-
-		mSleepTimer = 10.f;
+		if (mState != State::Move)
+		{
+			mState = State::Move;
+			SetAnimation();
+		}
+		mSleepTimer = 100.f;
 
 		SetIsHurt(false);
 	}
@@ -124,7 +122,7 @@ void Electrode::Update()
 	{
 		mSleepTimer -= TIME->DeltaTime();
 	}
-	if (mSleepTimer <= 5 && GetIsExplode() == false)
+	if (mSleepTimer <= 20 && GetIsExplode() == false && GetIsHurt() == false)
 	{
 		mState = State::Hurt;
 		SetAnimation();
@@ -137,36 +135,6 @@ void Electrode::Update()
 
 		SetIsExplode(true);
 	}
-
-	//¼îÅ© ÁßÀÏ¶§ ±ôºý°Å¸²
-	if (GetIsHurt() == true)
-	{
-		mDustFrameTime += TIME->DeltaTime();
-
-		if (mDustFrameTime >= 0.2f)
-		{
-			mDustFrameTime = 0.f;
-			mAlpha -= 0.2f;
-
-			if (mAlpha <= 0.5f)
-			{
-				SetIsHurt(false);
-			}
-		}
-	}
-	else
-	{
-		if (mAlpha < 1.f)
-		{
-			mAlpha += 0.2f;
-
-			if (mAlpha >= 1.f)
-			{
-				mAlpha = 1.f;
-			}
-		}
-	}
-
 
 	//Æø¹ß
 	if (CheckTileEdge() == true)
@@ -203,12 +171,9 @@ void Electrode::Update()
 
 void Electrode::Render(HDC hdc)
 {
-	//CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
+	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mCurrentImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 
-	CAMERAMANAGER->GetMainCamera()->AlphaScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
-		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY, mAlpha);
-
-	GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);
+	//GIZMO->DrawRectInCamera(hdc, mTrailList[mTargetY][mTargetX]->GetRect(), Gizmo::Color::Blue);
 }
 
 void Electrode::ReadyAnimation()
@@ -245,24 +210,24 @@ void Electrode::ReadyAnimation()
 	mExplode->SetCallbackFunc(bind(&Train::EndExplode, this));
 
 	mDownHurt = new Animation();
-	mDownHurt->InitFrameByStartEnd(0, 4, 0, 4, false);
-	mDownHurt->SetIsLoop(false);
-	mDownHurt->SetFrameUpdateTime(0.8f);
+	mDownHurt->InitFrameByStartEnd(0, 4, 1, 4, false);
+	mDownHurt->SetIsLoop(true);
+	mDownHurt->SetFrameUpdateTime(0.2f);
 
 	mUpHurt = new Animation();
-	mUpHurt->InitFrameByStartEnd(1, 4, 1, 4, false);
-	mUpHurt->SetIsLoop(false);
-	mUpHurt->SetFrameUpdateTime(0.8f);
+	mUpHurt->InitFrameByStartEnd(2, 4, 3, 4, false);
+	mUpHurt->SetIsLoop(true);
+	mUpHurt->SetFrameUpdateTime(0.2f);
 
 	mLeftHurt = new Animation();
-	mLeftHurt->InitFrameByStartEnd(0, 5, 0, 5, false);
-	mLeftHurt->SetIsLoop(false);
-	mLeftHurt->SetFrameUpdateTime(0.8f);
+	mLeftHurt->InitFrameByStartEnd(0, 5, 1, 5, false);
+	mLeftHurt->SetIsLoop(true);
+	mLeftHurt->SetFrameUpdateTime(0.2f);
 
 	mRightHurt = new Animation();
-	mRightHurt->InitFrameByStartEnd(1, 5, 1, 5, false);
-	mRightHurt->SetIsLoop(false);
-	mRightHurt->SetFrameUpdateTime(0.8f);
+	mRightHurt->InitFrameByStartEnd(2, 5, 3, 5, false);
+	mRightHurt->SetIsLoop(true);
+	mRightHurt->SetFrameUpdateTime(0.2f);
 }
 
 void Electrode::SetAnimation()

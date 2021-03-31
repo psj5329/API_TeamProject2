@@ -17,6 +17,11 @@
 #include "MapToolReady.h"
 #include "MainScene.h"
 #include "SceneSelect.h"
+#include "Stage1.h"
+#include "Stage2.h"
+#include "Stage3.h"
+#include "Stage4.h"
+#include "Stage5.h"
 
 #include "FileSystemHelper.h"
 
@@ -48,7 +53,11 @@ void MainGame::Release()
 	ObjectManager::ReleaseInstance();
 	SceneManager::ReleaseInstance();
 	ImageManager::ReleaseInstance();
-
+	CollisionManager::ReleaseInstance();
+	GameEventManager::ReleaseInstance();
+	Gizmo::ReleaseInstance();
+	PathFinder::ReleaseInstance();
+	SoundManager::ReleaseInstance();
 	Input::ReleaseInstance();
 	Random::ReleaseInstance();
 	Time::ReleaseInstance();
@@ -58,34 +67,36 @@ void MainGame::Update()
 {
 	if (Input::GetInstance()->GetKeyDown('1'))
 	{
-		SCENEMANAGER->LoadScene(L"Scene1");
+		SCENEMANAGER->LoadScene(L"Stage1");
 	}
 	else if (Input::GetInstance()->GetKeyDown('2'))
 	{
-		SCENEMANAGER->LoadScene(L"Scene2");
+		SCENEMANAGER->LoadScene(L"Stage2");
 	}
 	else if (Input::GetInstance()->GetKeyDown('3'))
 	{
 		//SCENEMANAGER->LoadScene(L"MapToolScene");
-		SCENEMANAGER->LoadScene(L"Scene3");
+		SCENEMANAGER->LoadScene(L"Stage3");
 	}
 	else if (Input::GetInstance()->GetKeyDown('4'))
 	{
-		SCENEMANAGER->LoadScene(L"Scene4");
+		SCENEMANAGER->LoadScene(L"Stage4");
 	}
 	else if (Input::GetInstance()->GetKeyDown('5'))
 	{
-		SCENEMANAGER->LoadScene(L"MapToolReady");
+		SCENEMANAGER->LoadScene(L"Stage5");
 	}
 	else if (Input::GetInstance()->GetKeyDown('6'))
 	{
-		SCENEMANAGER->LoadScene(L"Scene6");
+		SCENEMANAGER->LoadScene(L"MapToolReady");
 	}
 	else if (Input::GetInstance()->GetKeyDown('7'))
 	{
 		SCENEMANAGER->LoadScene(L"MapToolReady");
 	}
-	SceneManager::GetInstance()->Update();
+
+	//INPUT->Update();
+	SCENEMANAGER->Update();
 }
 
 void MainGame::Render(HDC hdc)
@@ -108,7 +119,7 @@ void MainGame::Render(HDC hdc)
 
 void MainGame::RenderTime(HDC hdc)
 {
-	float worldTime = Time::GetInstance()->GetWorldTime();
+	/*float worldTime = Time::GetInstance()->GetWorldTime();
 	float deltaTime = Time::GetInstance()->DeltaTime();
 	ULONG fps = Time::GetInstance()->GetmFrameRate();
 	wstring strWorldTime = L"WorldTime : " + to_wstring(worldTime);
@@ -117,7 +128,7 @@ void MainGame::RenderTime(HDC hdc)
 
 	TextOut(hdc, 10, 10, strWorldTime.c_str(), (int)strWorldTime.length());
 	TextOut(hdc, 10, 25, strDeltaTime.c_str(), (int)strDeltaTime.length());
-	TextOut(hdc, 10, 40, strFPS.c_str(), (int)strFPS.length());
+	TextOut(hdc, 10, 40, strFPS.c_str(), (int)strFPS.length());*/
 
 	/*wstring strScene = L"여긴 메인, 1~4 눌러서 씬 넘어가자";
 	TextOut(hdc, WINSIZEX / 2 - 50, WINSIZEY / 2, strScene.c_str(), strScene.length());*/
@@ -139,6 +150,12 @@ void MainGame::AddScene()
 	SceneManager::GetInstance()->AddScene(L"MapToolScene", new MapToolScene);
 	SceneManager::GetInstance()->AddScene(L"Scene6", new Scene6);
 	SceneManager::GetInstance()->AddScene(L"MapToolReady", new MapToolReady);
+
+	SCENEMANAGER->AddScene(L"Stage1", new Stage1);
+	SCENEMANAGER->AddScene(L"Stage2", new Stage2);
+	SCENEMANAGER->AddScene(L"Stage3", new Stage3);
+	SCENEMANAGER->AddScene(L"Stage4", new Stage4);
+	SCENEMANAGER->AddScene(L"Stage5", new Stage5);
 
 	SCENEMANAGER->LoadScene(L"LoadingScene");
 }
@@ -220,7 +237,7 @@ void MainGame::LoadSoundResources(LoadingScene* scene)
 		//wstring str = wcstok_s(&strPath[0], L"2", &ptr);
 		size_t strSize = strPath.find(L"2\\Unrailed\\Unrailed");
 		strPath.erase(strSize);
-		strPath.append(L"2\\Unrailed\\Resources\\*.*");
+		strPath.append(L"2\\Unrailed\\Sound\\*.*");
 		FileSystemHelper::GetAllFile(strPath, FileType::SOUND);
 	}
 

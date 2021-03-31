@@ -60,6 +60,7 @@ void Player::Init()
 	mIsInfoOn = false;
 
 	mMic = 0;
+	mSpaceAttack = 0;
 }
 
 void Player::Release()
@@ -94,8 +95,6 @@ void Player::Update()
 
 void Player::Render(HDC hdc)
 {
-	//RenderRect(hdc, mColBox);
-
 	// {{ 현재 타일, 다음 타일 확인용 // 유찬
 	if (mIsInfoOn)
 	{
@@ -115,13 +114,12 @@ void Player::Render(HDC hdc)
 	}
 	// 현재 타일, 다음 타일 확인용 }}
 
-	// 테스트 텍스트 // 릴리즈 전 지워주세요
-	RenderTestText(hdc);
+	// 테스트 텍스트
+	//RenderTestText(hdc);
 
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
 		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
 
-	//mBag->Render(hdc);
 	mInven->Render(hdc);
 }
 
@@ -212,172 +210,172 @@ void Player::InitAnimation()
 	mDownAttackChikoAnimation = new Animation();
 	mDownAttackChikoAnimation->InitFrameByStartEnd(0, 25, 2, 25, false);
 	mDownAttackChikoAnimation->SetIsLoop(true);
-	mDownAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mDownAttackChikoAnimation->SetFrameUpdateTime(0.1f);
 	mDownAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mUpAttackChikoAnimation = new Animation();
 	mUpAttackChikoAnimation->InitFrameByStartEnd(0, 26, 2, 26, false);
 	mUpAttackChikoAnimation->SetIsLoop(true);
-	mUpAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mUpAttackChikoAnimation->SetFrameUpdateTime(0.1f);
 	mUpAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mLeftAttackChikoAnimation = new Animation();
 	mLeftAttackChikoAnimation->InitFrameByStartEnd(0, 27, 2, 27, false);
 	mLeftAttackChikoAnimation->SetIsLoop(true);
-	mLeftAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mLeftAttackChikoAnimation->SetFrameUpdateTime(0.1f);
 	mLeftAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mRightAttackChikoAnimation = new Animation();
 	mRightAttackChikoAnimation->InitFrameByStartEnd(0, 28, 2, 28, false);
 	mRightAttackChikoAnimation->SetIsLoop(true);
-	mRightAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mRightAttackChikoAnimation->SetFrameUpdateTime(0.1f);
 	mRightAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mLDAttackChikoAnimation = new Animation();
 	mLDAttackChikoAnimation->InitFrameByStartEnd(0, 29, 2, 29, false);
 	mLDAttackChikoAnimation->SetIsLoop(true);
-	mLDAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mLDAttackChikoAnimation->SetFrameUpdateTime(0.1f);
 	mLDAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mRDAttackChikoAnimation = new Animation();
 	mRDAttackChikoAnimation->InitFrameByStartEnd(0, 30, 2, 30, false);
 	mRDAttackChikoAnimation->SetIsLoop(true);
-	mRDAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mRDAttackChikoAnimation->SetFrameUpdateTime(0.1f);
 	mRDAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mLUAttackChikoAnimation = new Animation();
 	mLUAttackChikoAnimation->InitFrameByStartEnd(0, 31, 2, 31, false);
 	mLUAttackChikoAnimation->SetIsLoop(true);
-	mLUAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mLUAttackChikoAnimation->SetFrameUpdateTime(0.1f);
 	mLUAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mRUAttackChikoAnimation = new Animation();
 	mRUAttackChikoAnimation->InitFrameByStartEnd(0, 32, 2, 32, false);
 	mRUAttackChikoAnimation->SetIsLoop(true);
-	mRUAttackChikoAnimation->SetFrameUpdateTime(0.3f);
+	mRUAttackChikoAnimation->SetFrameUpdateTime(0.1f);
 	mRUAttackChikoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 
 	mDownAttackTotoAnimation = new Animation();
 	mDownAttackTotoAnimation->InitFrameByStartEnd(1, 25, 4, 25, false);
 	mDownAttackTotoAnimation->SetIsLoop(true);
-	mDownAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mDownAttackTotoAnimation->SetFrameUpdateTime(0.1f);
 	mDownAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mUpAttackTotoAnimation = new Animation();
 	mUpAttackTotoAnimation->InitFrameByStartEnd(1, 26, 4, 26, false);
 	mUpAttackTotoAnimation->SetIsLoop(true);
-	mUpAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mUpAttackTotoAnimation->SetFrameUpdateTime(0.1f);
 	mUpAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mLeftAttackTotoAnimation = new Animation();
 	mLeftAttackTotoAnimation->InitFrameByStartEnd(1, 27, 4, 27, false);
 	mLeftAttackTotoAnimation->SetIsLoop(true);
-	mLeftAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mLeftAttackTotoAnimation->SetFrameUpdateTime(0.1f);
 	mLeftAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mRightAttackTotoAnimation = new Animation();
 	mRightAttackTotoAnimation->InitFrameByStartEnd(1, 28, 4, 28, false);
 	mRightAttackTotoAnimation->SetIsLoop(true);
-	mRightAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mRightAttackTotoAnimation->SetFrameUpdateTime(0.1f);
 	mRightAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mLDAttackTotoAnimation = new Animation();
 	mLDAttackTotoAnimation->InitFrameByStartEnd(1, 29, 4, 29, false);
 	mLDAttackTotoAnimation->SetIsLoop(true);
-	mLDAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mLDAttackTotoAnimation->SetFrameUpdateTime(0.1f);
 	mLDAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mRDAttackTotoAnimation = new Animation();
 	mRDAttackTotoAnimation->InitFrameByStartEnd(1, 30, 4, 30, false);
 	mRDAttackTotoAnimation->SetIsLoop(true);
-	mRDAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mRDAttackTotoAnimation->SetFrameUpdateTime(0.1f);
 	mRDAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mLUAttackTotoAnimation = new Animation();
 	mLUAttackTotoAnimation->InitFrameByStartEnd(1, 31, 4, 31, false);
 	mLUAttackTotoAnimation->SetIsLoop(true);
-	mLUAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mLUAttackTotoAnimation->SetFrameUpdateTime(0.1f);
 	mLUAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mRUAttackTotoAnimation = new Animation();
 	mRUAttackTotoAnimation->InitFrameByStartEnd(1, 32, 4, 32, false);
 	mRUAttackTotoAnimation->SetIsLoop(true);
-	mRUAttackTotoAnimation->SetFrameUpdateTime(0.3f);
+	mRUAttackTotoAnimation->SetFrameUpdateTime(0.1f);
 	mRUAttackTotoAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 
 	mDownAttackCharAnimation = new Animation();
 	mDownAttackCharAnimation->InitFrameByStartEnd(0, 25, 3, 25, false);
 	mDownAttackCharAnimation->SetIsLoop(true);
-	mDownAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mDownAttackCharAnimation->SetFrameUpdateTime(0.1f);
 	mDownAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mUpAttackCharAnimation = new Animation();
 	mUpAttackCharAnimation->InitFrameByStartEnd(0, 26, 3, 26, false);
 	mUpAttackCharAnimation->SetIsLoop(true);
-	mUpAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mUpAttackCharAnimation->SetFrameUpdateTime(0.1f);
 	mUpAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mLeftAttackCharAnimation = new Animation();
 	mLeftAttackCharAnimation->InitFrameByStartEnd(0, 27, 3, 27, false);
 	mLeftAttackCharAnimation->SetIsLoop(true);
-	mLeftAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mLeftAttackCharAnimation->SetFrameUpdateTime(0.1f);
 	mLeftAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mRightAttackCharAnimation = new Animation();
 	mRightAttackCharAnimation->InitFrameByStartEnd(0, 28, 3, 28, false);
 	mRightAttackCharAnimation->SetIsLoop(true);
-	mRightAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mRightAttackCharAnimation->SetFrameUpdateTime(0.1f);
 	mRightAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mLDAttackCharAnimation = new Animation();
 	mLDAttackCharAnimation->InitFrameByStartEnd(0, 29, 3, 29, false);
 	mLDAttackCharAnimation->SetIsLoop(true);
-	mLDAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mLDAttackCharAnimation->SetFrameUpdateTime(0.1f);
 	mLDAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mRDAttackCharAnimation = new Animation();
 	mRDAttackCharAnimation->InitFrameByStartEnd(0, 30, 3, 30, false);
 	mRDAttackCharAnimation->SetIsLoop(true);
-	mRDAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mRDAttackCharAnimation->SetFrameUpdateTime(0.1f);
 	mRDAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mLUAttackCharAnimation = new Animation();
 	mLUAttackCharAnimation->InitFrameByStartEnd(0, 31, 3, 31, false);
 	mLUAttackCharAnimation->SetIsLoop(true);
-	mLUAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mLUAttackCharAnimation->SetFrameUpdateTime(0.1f);
 	mLUAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 	mRUAttackCharAnimation = new Animation();
 	mRUAttackCharAnimation->InitFrameByStartEnd(0, 32, 3, 32, false);
 	mRUAttackCharAnimation->SetIsLoop(true);
-	mRUAttackCharAnimation->SetFrameUpdateTime(0.3f);
+	mRUAttackCharAnimation->SetFrameUpdateTime(0.1f);
 	mRUAttackCharAnimation->SetCallbackFunc(bind(&Player::SetIdleAnimation, this));
 
 
 	mChangeDittoAnimation = new Animation();
 	mChangeDittoAnimation->InitFrameByStartEnd(0, 25, 4, 25, false);
 	mChangeDittoAnimation->SetIsLoop(true);
-	mChangeDittoAnimation->SetFrameUpdateTime(0.3f);
+	mChangeDittoAnimation->SetFrameUpdateTime(0.15f);
 	mChangeDittoAnimation->SetCallbackFunc(bind(&Player::ChangeForm, this));
 
 	mChangeChikoAnimation = new Animation();
 	mChangeChikoAnimation->InitFrameByStartEnd(0, 41, 4, 41, false);
 	mChangeChikoAnimation->SetIsLoop(true);
-	mChangeChikoAnimation->SetFrameUpdateTime(0.3f);
+	mChangeChikoAnimation->SetFrameUpdateTime(0.15f);
 	mChangeChikoAnimation->SetCallbackFunc(bind(&Player::ChangeForm, this));
 
 	mChangeTotoAnimation = new Animation();
 	mChangeTotoAnimation->InitFrameByStartEnd(0, 41, 4, 41, false);
 	mChangeTotoAnimation->SetIsLoop(true);
-	mChangeTotoAnimation->SetFrameUpdateTime(0.3f);
+	mChangeTotoAnimation->SetFrameUpdateTime(0.15f);
 	mChangeTotoAnimation->SetCallbackFunc(bind(&Player::ChangeForm, this));
 
 	mChangeCharAnimation = new Animation();
 	mChangeCharAnimation->InitFrameByStartEnd(0, 41, 4, 41, false);
 	mChangeCharAnimation->SetIsLoop(true);
-	mChangeCharAnimation->SetFrameUpdateTime(0.3f);
+	mChangeCharAnimation->SetFrameUpdateTime(0.15f);
 	mChangeCharAnimation->SetCallbackFunc(bind(&Player::ChangeForm, this));
 }
 
@@ -760,13 +758,26 @@ void Player::InputSpaceKey()
 			RECT jigglyRc = jigglypuffPtr->GetRect();
 			if (IntersectRect(&temp, &nextRc, &jigglyRc))
 			{
-				mMic = 1;
-				mInven->SetHiddenItem(1);
-				((Jigglypuff*)jigglypuffPtr)->TakeMike();
+				if (mForm == Form::Chikorita)
+				{
+					mState = PlayerState::Attack;
+					mSpaceAttack = 4;
+				}
+				else if (mForm == Form::Totodile)
+				{
+					mState = PlayerState::Attack;
+					mSpaceAttack = 5;
+				}
+				else if (mForm == Form::Charmander)
+				{
+					mState = PlayerState::Attack;
+					mSpaceAttack = 6;
+				}
 			}
 		}
 
 		vector<GameObject*>* enemyListPtr = OBJECTMANAGER->GetObjectListPtr(ObjectLayer::ENEMY);
+
 		if((*enemyListPtr).size())
 		{
 			RECT temp;
@@ -776,10 +787,27 @@ void Player::InputSpaceKey()
 				RECT enemyRc = ((*enemyListPtr)[i])->GetRect();
 				if (IntersectRect(&temp, &mRangeBox, &enemyRc))
 				{
-					mState = PlayerState::Attack;
-					((Enemy*)(*enemyListPtr)[i])->DamagedHp();
-					dynamic_cast<Sableye*>((*enemyListPtr)[i])->SetHit(true);
-					return;
+					if (mForm == Form::Chikorita)
+					{
+						mState = PlayerState::Attack;
+						mAttackedEnemy = (*enemyListPtr)[i];
+						mSpaceAttack = 7;
+						return;
+					}
+					else if (mForm == Form::Totodile)
+					{
+						mState = PlayerState::Attack;
+						mAttackedEnemy = (*enemyListPtr)[i];
+						mSpaceAttack = 8;
+						return;
+					}
+					else if (mForm == Form::Charmander)
+					{
+						mState = PlayerState::Attack;
+						mAttackedEnemy = (*enemyListPtr)[i];
+						mSpaceAttack = 9;
+						return;
+					}
 				}
 			}
 		}
@@ -787,17 +815,78 @@ void Player::InputSpaceKey()
 		if ((mForm == Form::Chikorita) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Green))
 		{
 			mState = PlayerState::Attack;
-			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
+			mSpaceAttack = 1;
 		}
 		else if ((mForm == Form::Totodile) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Blue))
 		{
 			mState = PlayerState::Attack;
-			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
+			mSpaceAttack = 2;
 		}
 		else if ((mForm == Form::Charmander) && ((*mMapObjectListPtr)[mNextTileY][mNextTileX]->GetMapObjectType() == ItemType::Red))
 		{
 			mState = PlayerState::Attack;
-			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY); // 일부러 사정거리 늘려놓음, 마음에 안 들면 mRect를 mColBox로 바꾸고 확인하기
+			mSpaceAttack = 3;
+		}
+	}
+
+	if (mSpaceAttack > 0)
+	{
+		if ((mSpaceAttack == 1) && (mCurrentAnimation->GetCurrentFrameIndex() == 1))
+		{
+			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY);
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 2) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY);
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 3) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			COLLISIONMANAGER->MapObjectCollision(&mRect, mMapObjectListPtr, mNextTileX, mNextTileY);
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 4) && (mCurrentAnimation->GetCurrentFrameIndex() == 1))
+		{
+			mMic = 1;
+			mInven->SetHiddenItem(1);
+			GameObject* jigglypuffPtr = OBJECTMANAGER->FindObject("Jigglypuff");
+			((Jigglypuff*)jigglypuffPtr)->TakeMike();
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 5) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			mMic = 1;
+			mInven->SetHiddenItem(1);
+			GameObject* jigglypuffPtr = OBJECTMANAGER->FindObject("Jigglypuff");
+			((Jigglypuff*)jigglypuffPtr)->TakeMike();
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 6) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			mMic = 1;
+			mInven->SetHiddenItem(1);
+			GameObject* jigglypuffPtr = OBJECTMANAGER->FindObject("Jigglypuff");
+			((Jigglypuff*)jigglypuffPtr)->TakeMike();
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 7) && (mCurrentAnimation->GetCurrentFrameIndex() == 1))
+		{
+			((Enemy*)mAttackedEnemy)->DamagedHp();
+			dynamic_cast<Sableye*>(mAttackedEnemy)->SetHit(true);
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 8) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			((Enemy*)mAttackedEnemy)->DamagedHp();
+			dynamic_cast<Sableye*>(mAttackedEnemy)->SetHit(true);
+			mSpaceAttack = 0;
+		}
+		else if ((mSpaceAttack == 9) && (mCurrentAnimation->GetCurrentFrameIndex() == 2))
+		{
+			((Enemy*)mAttackedEnemy)->DamagedHp();
+			dynamic_cast<Sableye*>(mAttackedEnemy)->SetHit(true);
+			mSpaceAttack = 0;
 		}
 	}
 }
@@ -897,10 +986,9 @@ void Player::InputZKey()
 		if ((mState == PlayerState::Attack) || (mState == PlayerState::Change))
 			return;
 
-		//int bagSize = mBag->GetBagItemSize();
 		int bagSize = mInven->GetBagItemSize();
 
-		if (!bagSize || (mInven->GetBagItemName() == ItemName::ItemTrail))//mBag->GetBagItemName() == ItemName::ItemTrail))
+		if (!bagSize || (mInven->GetBagItemName() == ItemName::ItemTrail))
 		{
 			if (bagSize >= 3)
 				return;
@@ -910,9 +998,9 @@ void Player::InputZKey()
 			for (int i = 0; i < trainList.size(); ++i)
 			{
 				if (trainList[i]->GetName() != "Abra")
-					continue; // abra 아니면 continue하게 해야 함
+					continue;
 
-				RECT trainRc = trainList[i]->GetRect(); // 추후에 렉트 종류 새로 따면 바꾸기
+				RECT trainRc = trainList[i]->GetRect();
 
 				if (IntersectRect(&temp, &mRangeBox, &trainRc))
 				{
@@ -923,7 +1011,7 @@ void Player::InputZKey()
 					ItemType itemType = ((Abra*)trainList[i])->TrailErase();
 
 					BagItem* bagItem = new BagItem();
-					bagItem->Init(ItemName::ItemTrail, itemType);
+					bagItem->Init(ItemName::ItemTrail, itemType, false);
 					mBagItemListPtr->push_back(bagItem);
 					return;
 				}
@@ -935,20 +1023,15 @@ void Player::InputZKey()
 			if ((currentTrail->GetIsTail()) || ((currentTrail->GetTrailType() != ItemType::None) && (!currentTrail->GetIsConnected())))
 			{
 				BagItem* bagItem = new BagItem();
-				//bagItem->SetName(ItemName::ItemTrail);
 
 				if (currentTrail->GetTrailType() == ItemType::Green)
-					bagItem->Init(ItemName::ItemTrail, ItemType::Green);
-					//bagItem->SetType(ItemType::Green);
+					bagItem->Init(ItemName::ItemTrail, ItemType::Green, false);
 				else if (currentTrail->GetTrailType() == ItemType::Blue)
-					bagItem->Init(ItemName::ItemTrail, ItemType::Blue);
-					//bagItem->SetType(ItemType::Blue);
+					bagItem->Init(ItemName::ItemTrail, ItemType::Blue, false);
 				else if (currentTrail->GetTrailType() == ItemType::Red)
-					bagItem->Init(ItemName::ItemTrail, ItemType::Red);
-					//bagItem->SetType(ItemType::Red);
+					bagItem->Init(ItemName::ItemTrail, ItemType::Red, false);
 
 				mBagItemListPtr->push_back(bagItem);
-				//mBagItemList.push_back(bagItem);
 
 				mTrailManager->PickUpTrail(mTileY, mTileX);
 
@@ -956,7 +1039,7 @@ void Player::InputZKey()
 			}
 		}
 
-		if (!bagSize || (mInven->GetBagItemName() == ItemName::ItemOre))//mBag->GetBagItemName() == ItemName::ItemOre))
+		if (!bagSize || (mInven->GetBagItemName() == ItemName::ItemOre))
 		{
 			if (bagSize >= 6)
 				return;
@@ -979,20 +1062,15 @@ void Player::InputZKey()
 							continue;
 
 						BagItem* bagItem = new BagItem();
-						//bagItem->SetName(ItemName::ItemOre);
 
 						if (item->GetOreType() == ItemType::Green)
-							bagItem->Init(ItemName::ItemOre, ItemType::Green);
-							//bagItem->SetType(ItemType::Green);
+							bagItem->Init(ItemName::ItemOre, ItemType::Green, false);
 						else if (item->GetOreType() == ItemType::Blue)
-							bagItem->Init(ItemName::ItemOre, ItemType::Blue);
-							//bagItem->SetType(ItemType::Blue);
+							bagItem->Init(ItemName::ItemOre, ItemType::Blue, false);
 						else if (item->GetOreType() == ItemType::Red)
-							bagItem->Init(ItemName::ItemOre, ItemType::Red);
-							//bagItem->SetType(ItemType::Red);
+							bagItem->Init(ItemName::ItemOre, ItemType::Red, false);
 
 						mBagItemListPtr->push_back(bagItem);
-						//mBagItemList.push_back(bagItem);
 					}
 
 					if (count <= 6 - bagSize)
@@ -1016,26 +1094,24 @@ void Player::InputXKey()
 		if ((mState == PlayerState::Attack) || (mState == PlayerState::Change))
 			return;
 
-		//int bagSize = mBag->GetBagItemSize();
-		if (!mInven->GetBagItemSize())//mBag->GetBagItemSize())
+		if (!mInven->GetBagItemSize())
 			return;
 
-		ItemName itemName = mInven->GetBagItemName();//mBag->GetBagItemName();
+		ItemName itemName = mInven->GetBagItemName();
 
 		if (itemName == ItemName::ItemOre)
 		{
 			RECT temp;
 
-			ItemType itemType = mInven->GetBagItemType(mInven->GetBagItemSize() - 1);//mBag->GetBagItemType(mBag->GetBagItemSize() - 1);
-			//ItemType itemType = mBagItemList[mBagItemList.size() - 1]->GetType();
+			ItemType itemType = mInven->GetBagItemType(mInven->GetBagItemSize() - 1);
 			vector<GameObject*> trainList = OBJECTMANAGER->GetObjectList(ObjectLayer::TRAIN);
 
 			for (int i = 0; i < trainList.size(); ++i)
 			{
 				if (trainList[i]->GetName() != "Machop")
-					continue; // machop 아니면 continue하게 해야 함
+					continue;
 
-				RECT trainRc = trainList[i]->GetRect(); // 추후에 렉트 종류 새로 따면 바꾸기
+				RECT trainRc = trainList[i]->GetRect();
 
 				if (IntersectRect(&temp, &mRangeBox, &trainRc))
 				{
@@ -1045,7 +1121,6 @@ void Player::InputXKey()
 
 					((Machop*)trainList[i])->InterceptOre(itemType);
 					mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
-					//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 					return;
 				}
 			}
@@ -1070,7 +1145,6 @@ void Player::InputXKey()
 					{
 						((Ore*)item)->PlusOneCount();
 						mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
-						//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 						return;
 					}
 					else
@@ -1088,14 +1162,12 @@ void Player::InputXKey()
 			ore->Drop(TileSize * mTileX, TileSize * mTileY, itemType);
 			OBJECTMANAGER->AddObject(ObjectLayer::ITEM, ore);
 			mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
-			//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 		}
 		else if (itemName == ItemName::ItemTrail)
 		{
 			Tile* currentTile = (*mTileListPtr)[mTileY][mTileX];
 			TileType currentTileType = currentTile->GetTileType();
-			ItemType itemType = mInven->GetBagItemType(mInven->GetBagItemSize() - 1);//mBag->GetBagItemType(mBag->GetBagItemSize() - 1);
-			//ItemType itemType = mBagItemList[mBagItemList.size() - 1]->GetType();
+			ItemType itemType = mInven->GetBagItemType(mInven->GetBagItemSize() - 1);
 
 			if (currentTileType == TileType::ice)
 				return;
@@ -1126,7 +1198,6 @@ void Player::InputXKey()
 
 			mTrailManager->PlaceTrail(mTileY, mTileX, itemType, 0); // 0: down 1: up 2: left 3: right
 			mBagItemListPtr->erase(mBagItemListPtr->begin() + mBagItemListPtr->size() - 1);
-			//mBagItemList.erase(mBagItemList.begin() + mBagItemList.size() - 1);
 		}
 	}
 }
@@ -1587,18 +1658,13 @@ void Player::InputCheatKey()
 
 void Player::RenderTestText(HDC hdc)
 {
-	RECT cam = CAMERAMANAGER->GetMainCamera()->GetRect();
-	//wstring strInput = L"InputType : " + to_wstring(mInputType);
-	//TextOut(hdc, 10, 100, strInput.c_str(), (int)strInput.length());
+	//RECT cam = CAMERAMANAGER->GetMainCamera()->GetRect();
 
-	if (mIsInfoOn)
+	/*if (mIsInfoOn)
 	{
 		wstring strTile = L"tile x: " + to_wstring(mTileX) + L", y: " + to_wstring(mTileY);
 		TextOut(hdc, (int)mX + 25 - cam.left, (int)mY - cam.top, strTile.c_str(), (int)strTile.length());
 	}
-
-	//wstring strInven = L"Inven size: " + to_wstring(mBagItemList.size());
-	//TextOut(hdc, (int)mX + 25 - cam.left, (int)mY + 25 - cam.top, strInven.c_str(), (int)strInven.length());
 
 	wstring strObj = L"========== 바닥 오브젝트 ==========";
 	TextOut(hdc, 520, 178, strObj.c_str(), (int)strObj.length());
@@ -1629,8 +1695,8 @@ void Player::RenderTestText(HDC hdc)
 	TextOut(hdc, 520, 350, strInv.c_str(), (int)strInv.length());
 	for (int i = 0; i < mBagItemListPtr->size(); ++i)
 	{
-		ItemName name = mInven->GetBagItemName();//mBag->GetBagItemName();// mBagItemList[i]->GetName();
-		ItemType type = mInven->GetBagItemType(i);//mBag->GetBagItemType(i);// ItemList[i]->GetType();
+		ItemName name = mInven->GetBagItemName();
+		ItemType type = mInven->GetBagItemType(i);
 
 		wstring strName = L"";
 		if (name == ItemName::ItemOre)
@@ -1650,5 +1716,5 @@ void Player::RenderTestText(HDC hdc)
 		wstring strActive = to_wstring(i) + L": " + strName + strType;
 
 		TextOut(hdc, 550, (int)372 + 22 * i, strActive.c_str(), (int)strActive.length());
-	}
+	}*/
 }
