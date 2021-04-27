@@ -26,6 +26,4 @@ public:
 
 	void SetType(HutType type);
 	int GetHutTypeInt() { return (int)mType; }
-private:
 };
-

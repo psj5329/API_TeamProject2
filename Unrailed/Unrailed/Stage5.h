@@ -22,9 +22,7 @@ public:
 	void Update()override;
 	void Render(HDC hdc)override;
 
-
 	void InitTrain()override;
 	void InitJigglypuff()override;
 	void PlaceTrail() override;
 };
-

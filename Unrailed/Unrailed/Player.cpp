@@ -114,9 +114,6 @@ void Player::Render(HDC hdc)
 	}
 	// 현재 타일, 다음 타일 확인용 }}
 
-	// 테스트 텍스트
-	//RenderTestText(hdc);
-
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top,
 		mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), (int)mSizeX, (int)mSizeY);
 

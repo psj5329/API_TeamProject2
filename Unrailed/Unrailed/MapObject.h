@@ -1,11 +1,4 @@
 #pragma once
-//enum class MapObjectType 
-//{
-//	None,
-//	Green,
-//	Blue,
-//	Red
-//};
 
 class MapObject
 {
@@ -21,11 +14,10 @@ class MapObject
 	bool mActive;
 	int mHp;
 
-
 	int mTimer; //Èçµé±â¿ë
 	bool mIsShaking;
-public:
 
+public:
 	MapObject(class Image* image, float x, float y, float sizeX, float sizeY,
 		int frameIndexX, int frameIndexY, ItemType type);
 	virtual void Release();
@@ -64,6 +56,4 @@ public:
 
 private:
 	void Shake();
-
 };
-

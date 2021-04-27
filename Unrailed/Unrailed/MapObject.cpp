@@ -27,7 +27,6 @@ void MapObject::Release()
 
 void MapObject::Update()
 {
-
 }
 
 void MapObject::Render(HDC hdc)
@@ -58,7 +57,6 @@ void MapObject::Render(HDC hdc)
 
 			CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mFrameIndexX, mFrameIndexY, (int)mSizeX, (int)mSizeY);
 		}
-
 	}
 }
 

@@ -8,7 +8,6 @@ Gizmo::Gizmo()
 {
 	mNullBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
 
-
 	HPEN greenPen = CreatePen(PS_SOLID, 1, RGB(0, 128, 0));
 	HPEN bluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
 	HPEN redPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
