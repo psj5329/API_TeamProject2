@@ -8,12 +8,10 @@
 
 void Jigglypuff::Init()
 {
-
 }
 
 void Jigglypuff::Init(int x, int y, bool isUpgraded)
 {
-
 	mX = x;
 	mY = y;
 	mIsUpgraded = isUpgraded;
@@ -47,8 +45,7 @@ void Jigglypuff::Init(int x, int y, bool isUpgraded)
 	mCurrentAnimation = mSing;
 	mCurrentAnimation->Play();
 
-
-	//ÎßàÏù¥ÌÅ¨
+	//∏∂¿Ã≈©
 	mMike = new Mike();
 	mMike->Init();
 }
@@ -71,8 +68,8 @@ void Jigglypuff::Update()
 	{
 		UpdateSongRect();
 	}
-	
-	//ÎßàÏù¥ÌÅ¨Î°úÍ∞Ä
+
+	//∏∂¿Ã≈©∑Œ∞°
 	if (mState == JigglyState::Move)
 	{
 		MoveToMike();
@@ -89,7 +86,6 @@ void Jigglypuff::Render(HDC hdc)
 
 	CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, mImage, mRect.left, mRect.top, mCurrentAnimation->GetNowFrameX(), mCurrentAnimation->GetNowFrameY(), mSizeX, mSizeY);
 }
-
 
 void Jigglypuff::AnimationInit()
 {
@@ -171,7 +167,7 @@ void Jigglypuff::SetAnimation()
 void Jigglypuff::InitSongRect()
 {
 	int size = 14;
-	for (int i = 0;i < size;i++)
+	for (int i = 0; i < size; i++)
 	{
 		Note* tempNote = new Note();
 		tempNote->image = IMAGEMANAGER->FindImage(L"Notes");
@@ -188,7 +184,7 @@ void Jigglypuff::InitSongRect()
 
 void Jigglypuff::UpdateSongRect()
 {
-	for (int i = 0;i < mNoteList.size();i++)
+	for (int i = 0; i < mNoteList.size(); i++)
 	{
 		UpdateNotes(mNoteList[i]);
 	}
@@ -196,13 +192,11 @@ void Jigglypuff::UpdateSongRect()
 
 void Jigglypuff::RenderSongRect(HDC hdc)
 {
-	for (int i = 0;i < mNoteList.size();i++)
+	for (int i = 0; i < mNoteList.size(); i++)
 	{
 		Note* temp = mNoteList[i];
 		CAMERAMANAGER->GetMainCamera()->ScaleFrameRender(hdc, temp->image, temp->rect.left, temp->rect.top, temp->frameX, temp->frameY, temp->sizeX, temp->sizeY);
 	}
-
-	//CAMERAMANAGER->GetMainCamera()->RenderEllipseCam(hdc, mX, mY, mSongRadius);
 }
 
 void Jigglypuff::UpdateNotes(Note* note)
@@ -238,8 +232,8 @@ bool Jigglypuff::TakeMike()
 
 void Jigglypuff::MoveToMike()
 {
-	float angle=0;
-	if(mPathFinderList.size() != 0)
+	float angle = 0;
+	if (mPathFinderList.size() != 0)
 		angle = Math::GetAngle(mX, mY, mPathFinderList[0]->GetX() + TileSize / 2, mPathFinderList[0]->GetY() + TileSize / 2);
 
 	mX += cosf(angle) * mSpeed * TIME->DeltaTime();
@@ -291,7 +285,7 @@ void Jigglypuff::MoveToMike()
 				}
 			}
 		}
-		//Í∏∏Ïù¥ Îçî ÏóÜÏúºÎ©¥
+		//±Ê¿Ã ¥ı æ¯¿∏∏È
 		else
 		{
 			mState = JigglyState::Sing;
@@ -307,20 +301,18 @@ void Jigglypuff::MoveToMike()
 
 }
 
-//ÎßàÏù¥ÌÅ¨ Ï∞æÍ∏∞ ÏãúÏûë
+//∏∂¿Ã≈© √£±‚ Ω√¿€
 void Jigglypuff::StartSearchingMike(int MikeX, int MikeY)
 {
-	for (int i = 0;i < mPathFinderList.size();i++)
+	for (int i = 0; i < mPathFinderList.size(); i++)
 	{
 		mPathFinderList.erase(mPathFinderList.begin() + i);
 		i--;
 	}
 
-	/*mIndexX = (mX + (CAMERAMANAGER->GetMainCamera()->GetX() - WINSIZEX / 2)) / TileSize;
-	mIndexY = (mY + (CAMERAMANAGER->GetMainCamera()->GetY() - WINSIZEY / 2)) / TileSize;*/
 	mIndexX = mX / TileSize;
 	mIndexY = mY / TileSize;
-  
+
 	GameObject* mike = OBJECTMANAGER->FindObject("Mike");
 	mPathFinderList = PATHFINDER->FindPath(mTileList, mMapObjectList, mIndexX, mIndexY, MikeX, MikeY);
 
@@ -362,7 +354,6 @@ void Jigglypuff::StartSearchingMike(int MikeX, int MikeY)
 			SetAnimation();
 		}
 	}
-	
 }
 
 void Jigglypuff::PlaceMike(int indexX, int indexY)

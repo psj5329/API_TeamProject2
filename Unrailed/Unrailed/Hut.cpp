@@ -15,13 +15,10 @@ void Hut::Init(float x, float y, HutType type)
 
 void Hut::Release()
 {
-
 }
-
 
 void Hut::Update()
 {
-
 }
 
 void Hut::Render(HDC hdc)

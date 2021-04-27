@@ -122,19 +122,6 @@ void MainGame::Render(HDC hdc)
 
 void MainGame::RenderTime(HDC hdc)
 {
-	/*float worldTime = Time::GetInstance()->GetWorldTime();
-	float deltaTime = Time::GetInstance()->DeltaTime();
-	ULONG fps = Time::GetInstance()->GetmFrameRate();
-	wstring strWorldTime = L"WorldTime : " + to_wstring(worldTime);
-	wstring strDeltaTime = L"DeltaTime : " + to_wstring(deltaTime);
-	wstring strFPS = L"FPS : " + to_wstring(fps);
-
-	TextOut(hdc, 10, 10, strWorldTime.c_str(), (int)strWorldTime.length());
-	TextOut(hdc, 10, 25, strDeltaTime.c_str(), (int)strDeltaTime.length());
-	TextOut(hdc, 10, 40, strFPS.c_str(), (int)strFPS.length());*/
-
-	/*wstring strScene = L"여긴 메인, 1~4 눌러서 씬 넘어가자";
-	TextOut(hdc, WINSIZEX / 2 - 50, WINSIZEY / 2, strScene.c_str(), strScene.length());*/
 }
 
 void MainGame::AddScene()
@@ -179,7 +166,7 @@ void MainGame::LoadImageResources(LoadingScene* scene)
 		//wstring str = wcstok_s(&strPath[0], L"2", &ptr);
 		size_t strSize = strPath.find(L"\\Unrailed\\Unrailed");
 		strPath.erase(strSize);
-		strPath.append(L"\\Unrailed\\Resources\\*.*");		// ㅏ 진짜 넘 맘에 안든다
+		strPath.append(L"\\Unrailed\\Resources\\*.*");
 		FileSystemHelper::GetAllFile(strPath, FileType::IMAGE);
 	}
 

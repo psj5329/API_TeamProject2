@@ -24,9 +24,6 @@
     <Filter Include="MainGame\Object\Item">
       <UniqueIdentifier>{e6d51275-99f9-4395-acdf-8969d0a05a37}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\Object\Effect">
-      <UniqueIdentifier>{2e48b76a-dad6-45a8-a022-14ed06f0fc6f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MainGame\UI">
       <UniqueIdentifier>{da73f517-364b-4421-bc02-a1e0d7ece762}</UniqueIdentifier>
     </Filter>
